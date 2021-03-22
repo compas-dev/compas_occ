@@ -1,17 +1,48 @@
-from compas.geometry import Frame
-from compas.datastructures import Mesh
+import compas
 
-from compas_view2.app import App
+from OCC.Core.BRep import BRep_Builder
+from OCC.Core.BRepBuilderAPI import (
+    BRepBuilderAPI_MakePolygon,
+    BRepBuilderAPI_MakeVertex,
+    BRepBuilderAPI_MakeFace,
+    BRepBuilderAPI_MakeEdge,
+    BRepBuilderAPI_MakeWire
+)
+from OCC.Core.TopoDS import TopoDS_Shell, TopoDS_Vertex
+from OCC.Core.gp import gp_Pnt
 
 from OCC.Core.BRep import BRep_Tool
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import topods_Vertex, topods_Wire
 from OCC.Core.TopAbs import TopAbs_WIRE, TopAbs_VERTEX
 
-from compas_occ.shapes.box import Box
+from compas.datastructures import Mesh
+from compas_view2.app import App
 
-box = Box(Frame.worldXY(), 1, 1, 1)
-shell = box.to_occ()
+tubemesh = Mesh.from_obj(compas.get('tubemesh.obj'))
+tubemesh.quads_to_triangles()
+
+print(tubemesh.number_of_vertices())
+print(tubemesh.number_of_faces())
+
+# ==============================================================================
+# To OCC
+# ==============================================================================
+
+shell = TopoDS_Shell()
+builder = BRep_Builder()
+builder.MakeShell(shell)
+
+points = tubemesh.vertices_attributes('xyz')
+
+for face in tubemesh.faces():
+    polygon = BRepBuilderAPI_MakePolygon()
+    for vertex in tubemesh.face_vertices(face):
+        polygon.Add(gp_Pnt(* points[vertex]))
+    polygon.Close()
+    wire = polygon.Wire()
+    face = BRepBuilderAPI_MakeFace(wire).Face()
+    builder.Add(shell, face)
 
 # ==============================================================================
 # Explore
@@ -46,7 +77,6 @@ while wires.More():
 mesh = Mesh.from_polygons(polygons)
 
 print(mesh.number_of_vertices())
-print(mesh.number_of_edges())
 print(mesh.number_of_faces())
 
 viewer = App()
