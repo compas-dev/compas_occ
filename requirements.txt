@@ -1,0 +1,3 @@
+git+https://github.com/jf---/AFEM@pythonocc
+git+https://github.com/tpaviot/pythonocc-utils
+git+https://github.com/compas-dev/compas_view2.git#egg=compas_view2
