@@ -1,43 +1,16 @@
-from OCC.Core.BRep import BRep_Tool
-from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopoDS import topods_Face, topods_Vertex
-from OCC.Core.TopAbs import TopAbs_FACE, TopAbs_VERTEX
-
+from afem.topology.create import BoxBySize
 from compas.datastructures import Mesh
-from compas_view2.app import App
+from compas.geometry import Point
 
-box = BRepPrimAPI_MakeBox(1, 1, 1).Shape()
-
-print(box.NbChildren())
-print(box.ShapeType())
-
-tool = BRep_Tool()
-
+box = BoxBySize(1, 1, 1)
 polygons = []
 
-faces = TopExp_Explorer(box, TopAbs_FACE)
-
-while faces.More():
-    face = topods_Face(faces.Current())
-    vertices = TopExp_Explorer(face, TopAbs_VERTEX)
+for f in box.solid.faces:
     points = []
+    for v in f.vertices:
+        pt = Point(*v.point.XYZ().Coord())
+        points.append(pt)
 
-    while vertices.More():
-        vertex = topods_Vertex(vertices.Current())
-        point = tool.Pnt(vertex)
-        x = point.X()
-        y = point.Y()
-        z = point.Z()
-        points.append([x, y, z])
-        vertices.Next()
-
-    polygons.append(points[:4])
-    polygons.append(points[4:])
-    faces.Next()
+    polygons.append(points)
 
 mesh = Mesh.from_polygons(polygons)
-
-viewer = App()
-viewer.add(mesh)
-viewer.run()
