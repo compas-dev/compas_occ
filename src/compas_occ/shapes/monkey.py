@@ -27,6 +27,10 @@ def point_to_occ(self: Point) -> gp_Pnt:
     return gp_Pnt(self.x, self.y, self.z)
 
 
+def gp_pnt_to_point(self: gp_Pnt) -> Point:
+    return Point(self.X(), self.Y(), self.Z())
+
+
 def vec_to_occ_dir(self: Point) -> gp_Pnt:
     return gp_Dir(self.x, self.y, self.z)
 
@@ -38,8 +42,8 @@ def occ_to_frame(self: gp_Ax3) -> Frame:
     return Frame(pt, vX, vY)
 
 
-
 Point.to_occ = point_to_occ
+gp_Pnt.to_compas = gp_pnt_to_point
 Frame.to_occ = frame_to_occ
 Vector.to_occ = point_to_occ
 Vector.to_occ_dir = vec_to_occ_dir
@@ -61,13 +65,15 @@ def box_to_occ(self: Box) -> TopoDS_Solid:
     ax2 = ax3.Ax2()
     box = make_box(ax2, self.xsize, self.ysize, self.zsize)
     # move to the barycenter
-    vec = gp_Vec(-self.xsize/2., -self.ysize/2., -self.zsize/2.)
+    vec = gp_Vec(-self.xsize / 2., -self.ysize / 2., -self.zsize / 2.)
     box_trns = translate_topods_from_vector(box, vec)
     return box_trns
+
 
 def occ_vertex_to_point(self: TopoDS_Vertex) -> Point:
     pnt = vertex2pnt(self)
     return pnt.to_compas()
+
 
 Box.to_occ = box_to_occ
 TopoDS_Vertex.to_compas = occ_vertex_to_point
