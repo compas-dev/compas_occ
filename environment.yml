@@ -4,13 +4,10 @@ channels:
   - defaults
 dependencies:
   - python=3.8
-  - anaconda
   - pip
   - COMPAS
 #  - compas_view2 # could not find a channel that hosts this
   - pythonocc-core
-  - cython # compas_view2, really
-  - python.app # compas_view2, really
   - pip:
     # note extra points for -e developer install, yeaaaah
     - -r file:requirements.txt # pip & conda happily go together
