@@ -1,19 +1,16 @@
-from OCCUtils import Topo
-from OCCUtils.Common import vertex2pnt
-from OCCUtils.Construct import make_box
+from afem.topology.create import BoxBySize
 from compas.datastructures import Mesh
+from compas.geometry import Point
 
-box = make_box(1, 1, 1)
-
+box = BoxBySize(1, 1, 1)
 polygons = []
 
-topo = Topo(box)
-
-for f in topo.faces():
+for f in box.solid.faces:
     points = []
-    for v in Topo(f).vertices():
-        pt = vertex2pnt(v).to_compas()
+    for v in f.vertices:
+        pt = Point(*v.point.XYZ().Coord())
         points.append(pt)
 
-mesh = Mesh.from_polygons(polygons)
+    polygons.append(points)
 
+mesh = Mesh.from_polygons(polygons)

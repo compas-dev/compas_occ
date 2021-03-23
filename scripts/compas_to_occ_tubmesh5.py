@@ -1,81 +1,31 @@
 import compas
-
-from OCC.Core.Tesselator import ShapeTesselator
-
-from OCC.Core.BRep import BRep_Builder
-from OCC.Core.BRepBuilderAPI import (
-    BRepBuilderAPI_MakePolygon,
-    BRepBuilderAPI_MakeVertex,
-    BRepBuilderAPI_MakeFace,
-    BRepBuilderAPI_MakeEdge,
-    BRepBuilderAPI_MakeWire
-)
-from OCC.Core.BRepFill import BRepFill_Filling
-from OCC.Core.TopoDS import TopoDS_Shell, TopoDS_Vertex, TopoDS_Edge, topods_Wire, topods_Vertex
-from OCC.Core.gp import gp_Pnt
-
-from OCC.Core.BRep import BRep_Tool
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopAbs import TopAbs_WIRE, TopAbs_VERTEX
-from OCC.Core.GeomAbs import GeomAbs_C0
-
+from OCC.Extend.ShapeFactory import make_n_sided
+from afem.topology.create import EdgeByPoints, ShellBySewing, Face
 from compas.datastructures import Mesh
-from compas_view2.app import App
 
 tubemesh = Mesh.from_obj(compas.get('tubemesh.obj'))
 
-print(tubemesh.number_of_vertices())
-print(tubemesh.number_of_faces())
-
-# ==============================================================================
-# To OCC
-# ==============================================================================
-
-shell = TopoDS_Shell()
-builder = BRep_Builder()
-builder.MakeShell(shell)
+nr_verts_compas = tubemesh.number_of_vertices()
+nr_faces_compas = tubemesh.number_of_faces()
 
 points = tubemesh.vertices_attributes('xyz')
 
+_shells = []
 for face in tubemesh.faces():
-    brep = BRepFill_Filling()
 
+    _edges = []
     for u, v in tubemesh.face_halfedges(face):
-        edge = BRepBuilderAPI_MakeEdge(gp_Pnt(* points[u]), gp_Pnt(* points[v])).Edge()
-        brep.Add(edge, GeomAbs_C0, True)
+        pnt_u, pnt_v = points[u], points[v]
 
-    brep.Build()
+        edge = EdgeByPoints(pnt_u, pnt_v)
+        _edges.append(edge)
 
-    face = BRepBuilderAPI_MakeFace(brep.Face()).Face()
-    builder.Add(shell, face)
+    # meh, proper AFEM method is required...
+    _face = make_n_sided([e._e.object for e in _edges])
+    face = Face(_face)
+    _shells.append(face)
 
-# ==============================================================================
-# Tesselation
-# ==============================================================================
+shell = ShellBySewing(_shells)
 
-tess = ShapeTesselator(shell)
-tess.Compute(compute_edges=True)
-
-vertices = []
-triangles = []
-
-for i in range(tess.ObjGetVertexCount()):
-    xyz = tess.GetVertex(i)
-    vertices.append(xyz)
-
-for i in range(tess.ObjGetTriangleCount()):
-    a, b, c = tess.GetTriangleIndex(i)
-    triangles.append([a, b, c])
-
-mesh = Mesh.from_vertices_and_faces(vertices, triangles)
-
-# ==============================================================================
-# Viz
-# ==============================================================================
-
-print(mesh.number_of_vertices())
-print(mesh.number_of_faces())
-
-viewer = App()
-viewer.add(mesh)
-viewer.run()
+assert shell.shell.num_faces == nr_faces_compas
+assert shell.shell.num_vertices == nr_verts_compas
