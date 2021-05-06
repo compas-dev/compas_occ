@@ -4,19 +4,13 @@ from OCC.Core.Tesselator import ShapeTesselator
 
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import (
-    BRepBuilderAPI_MakePolygon,
-    BRepBuilderAPI_MakeVertex,
     BRepBuilderAPI_MakeFace,
-    BRepBuilderAPI_MakeEdge,
-    BRepBuilderAPI_MakeWire
+    BRepBuilderAPI_MakeEdge
 )
 from OCC.Core.BRepFill import BRepFill_Filling
-from OCC.Core.TopoDS import TopoDS_Shell, TopoDS_Vertex, TopoDS_Edge, topods_Wire, topods_Vertex
+from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.gp import gp_Pnt
 
-from OCC.Core.BRep import BRep_Tool
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopAbs import TopAbs_WIRE, TopAbs_VERTEX
 from OCC.Core.GeomAbs import GeomAbs_C0
 
 from compas.datastructures import Mesh
@@ -54,7 +48,7 @@ for face in tubemesh.faces():
 # ==============================================================================
 
 tess = ShapeTesselator(shell)
-tess.Compute(compute_edges=True)
+tess.Compute()
 
 vertices = []
 triangles = []

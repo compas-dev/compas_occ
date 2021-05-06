@@ -3,12 +3,9 @@ import compas
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import (
     BRepBuilderAPI_MakePolygon,
-    BRepBuilderAPI_MakeVertex,
-    BRepBuilderAPI_MakeFace,
-    BRepBuilderAPI_MakeEdge,
-    BRepBuilderAPI_MakeWire
+    BRepBuilderAPI_MakeFace
 )
-from OCC.Core.TopoDS import TopoDS_Shell, TopoDS_Vertex
+from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.gp import gp_Pnt
 
 from OCC.Core.BRep import BRep_Tool

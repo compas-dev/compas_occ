@@ -9,7 +9,7 @@ COMPAS wrapper for the Python bindings of OCC
 ## Installation
 
 ```bash
-conda create -n occ python=3.8 COMPAS compas_view2 pythonocc-core
+conda create -n occ python=3.8 compas compas_view2 pythonocc-core
 conda activate occ
 pip install -e .
 ```
