@@ -7,14 +7,34 @@ from compas.geometry import Transformation
 from compas_occ.interop.arrays import (
     array1_from_points1,
     array1_from_floats1,
-    array1_from_integers1
+    array1_from_integers1,
+    points1_from_array1
 )
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineCurve
-from OCC.Core.GeomAPI import GeomAPI_Interpolate, GeomAPI_PointsToBSpline
+from OCC.Core.GeomAPI import (
+    GeomAPI_Interpolate,
+    GeomAPI_PointsToBSpline
+)
+from OCC.Core.TopoDS import (
+    topods_Edge,
+    TopoDS_Shape,
+    TopoDS_Edge
+)
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
+
 from OCC.Core.TColgp import TColgp_Array1OfPnt
-from OCC.Core.TColStd import TColStd_Array1OfReal, TColStd_Array1OfInteger
+from OCC.Core.TColStd import (
+    TColStd_Array1OfReal,
+    TColStd_Array1OfInteger
+)
+from OCC.Core.Interface import Interface_Static_SetCVal
+from OCC.Core.IFSelect import IFSelect_RetDone
+from OCC.Core.STEPControl import (
+    STEPControl_Writer,
+    STEPControl_AsIs
+)
 
 
 class BSplineCurve:
@@ -59,28 +79,41 @@ class BSplineCurve:
     def from_step(cls, filepath) -> BSplineCurve:
         pass
 
-    def to_step(self, filepath) -> None:
-        pass
+    def to_step(self, filepath, schema="AP203") -> None:
+        step_writer = STEPControl_Writer()
+        Interface_Static_SetCVal("write.step.schema", schema)
+        step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
+        status = step_writer.Write(filepath)
+        if status != IFSelect_RetDone:
+            raise AssertionError("Operation failed.")
+
+    @property
+    def occ_shape(self) -> TopoDS_Shape:
+        return BRepBuilderAPI_MakeEdge(self.occ_curve).Shape()
+
+    @property
+    def occ_edge(self) -> TopoDS_Edge:
+        return topods_Edge(self.occ_shape)
 
     @property
     def occ_poles(self) -> TColgp_Array1OfPnt:
         return self.occ_curve.Poles()
 
     @property
-    def poles(self) -> List[Point]:
-        return [Point(pole.X(), pole.Y(), pole.Z()) for pole in self.occ_poles]
-
-    @property
     def occ_knots(self) -> TColStd_Array1OfReal:
         return self.occ_curve.Knots()
 
     @property
-    def knots(self) -> List[float]:
-        return self.occ_knots
-
-    @property
     def occ_multiplicities(self) -> TColStd_Array1OfInteger:
         return self.occ_curve.Multiplicities()
+
+    @property
+    def poles(self) -> List[Point]:
+        return points1_from_array1(self.occ_poles)
+
+    @property
+    def knots(self) -> List[float]:
+        return self.occ_knots
 
     @property
     def multiplicities(self) -> List[int]:
