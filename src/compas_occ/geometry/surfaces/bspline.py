@@ -1,24 +1,41 @@
 from __future__ import annotations
-from operator import is_
 
 from typing import List
 from compas.geometry import Point
 from compas.geometry import Transformation
 
-from compas_occ.interop.arrays import array_of_points, array_of_floats, array_of_integers
+from compas_occ.interop.arrays import (
+    array1_of_points,
+    array1_of_floats,
+    array1_of_integers
+)
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.TColgp import TColgp_Array2OfPnt
-from OCC.Core.TColStd import TColStd_Array1OfReal, TColStd_Array1OfInteger
-from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
+from OCC.Core.TColStd import (
+    TColStd_Array1OfReal,
+    TColStd_Array1OfInteger
+)
+from OCC.Core.STEPControl import (
+    STEPControl_Writer,
+    STEPControl_AsIs
+)
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.TopoDS import topods_Face, TopoDS_Shape, TopoDS_Face
+from OCC.Core.TopoDS import (
+    topods_Face,
+    TopoDS_Shape,
+    TopoDS_Face
+)
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.Core.GeomFill import GeomFill_BSplineCurves, GeomFill_CoonsStyle
+from OCC.Core.GeomFill import (
+    GeomFill_BSplineCurves,
+    GeomFill_CoonsStyle
+)
 
 
+# update to use "data" interface
 class BSplineSurface:
 
     def __init__(self):
@@ -46,11 +63,11 @@ class BSplineSurface:
                         is_v_periodic: bool = False) -> BSplineSurface:
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
-            array_of_points(poles),
-            array_of_floats(u_knots),
-            array_of_floats(v_knots),
-            array_of_integers(u_mults),
-            array_of_integers(v_mults),
+            array1_of_points(poles),
+            array1_of_floats(u_knots),
+            array1_of_floats(v_knots),
+            array1_of_integers(u_mults),
+            array1_of_integers(v_mults),
             u_degree,
             v_degree,
             is_u_periodic,
