@@ -5,9 +5,9 @@ from compas.geometry import Point
 from compas.geometry import Transformation
 
 from compas_occ.interop.arrays import (
-    array1_of_points,
-    array1_of_floats,
-    array1_of_integers
+    array1_from_points1,
+    array1_from_floats1,
+    array1_from_integers1
 )
 
 from OCC.Core.gp import gp_Trsf
@@ -35,9 +35,9 @@ class BSplineCurve:
                  is_periodic: bool = False) -> BSplineCurve:
         curve = cls()
         curve.occ_curve = Geom_BSplineCurve(
-            array1_of_points(poles),
-            array1_of_floats(knots),
-            array1_of_integers(multiplicities),
+            array1_from_points1(poles),
+            array1_from_floats1(knots),
+            array1_from_integers1(multiplicities),
             degree,
             is_periodic,
         )
@@ -46,13 +46,13 @@ class BSplineCurve:
     @classmethod
     def from_interpolation(cls, points: List[Point]) -> BSplineCurve:
         curve = cls()
-        curve.occ_curve = GeomAPI_Interpolate(array1_of_points(points)).Curve()
+        curve.occ_curve = GeomAPI_Interpolate(array1_from_points1(points)).Curve()
         return curve
 
     @classmethod
     def from_points(cls, points: List[Point]) -> BSplineCurve:
         curve = cls()
-        curve.occ_curve = GeomAPI_PointsToBSpline(array1_of_points(points)).Curve()
+        curve.occ_curve = GeomAPI_PointsToBSpline(array1_from_points1(points)).Curve()
         return curve
 
     @classmethod

@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import List
+from typing import Tuple, List
 from compas.geometry import Point
 from compas.geometry import Transformation
 
 from compas_occ.interop.arrays import (
-    array1_of_points,
-    array1_of_floats,
-    array1_of_integers
+    array2_from_points2,
+    array1_from_floats1,
+    array1_from_integers1
 )
 
 from OCC.Core.gp import gp_Trsf
@@ -52,7 +52,7 @@ class BSplineSurface:
 
     @classmethod
     def from_parameters(cls,
-                        poles: List[Point],
+                        poles: Tuple[List[Point], List[Point]],
                         u_knots: List[float],
                         v_knots: List[float],
                         u_mults: List[int],
@@ -63,11 +63,11 @@ class BSplineSurface:
                         is_v_periodic: bool = False) -> BSplineSurface:
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
-            array1_of_points(poles),
-            array1_of_floats(u_knots),
-            array1_of_floats(v_knots),
-            array1_of_integers(u_mults),
-            array1_of_integers(v_mults),
+            array2_from_points2(poles),
+            array1_from_floats1(u_knots),
+            array1_from_floats1(v_knots),
+            array1_from_integers1(u_mults),
+            array1_from_integers1(v_mults),
             u_degree,
             v_degree,
             is_u_periodic,
@@ -124,7 +124,15 @@ class BSplineSurface:
 
     @property
     def poles(self) -> List[List[Point]]:
-        return [Point(pole.X(), pole.Y(), pole.Z()) for pole in self.occ_poles]
+        occ_poles = self.occ_poles
+        poles1 = []
+        poles2 = []
+        for i in range(occ_poles.LowerRow(), occ_poles.UpperRow() + 1):
+            pole1 = occ_poles.Value(i, occ_poles.LowerCol() + 0)
+            pole2 = occ_poles.Value(i, occ_poles.LowerCol() + 1)
+            poles1.append(Point(pole1.X(), pole1.Y(), pole1.Z()))
+            poles2.append(Point(pole2.X(), pole2.Y(), pole2.Z()))
+        return poles1, poles2
 
     @property
     def u_knots(self) -> List[float]:
@@ -159,15 +167,17 @@ class BSplineSurface:
         return self.occ_surface.IsVPeriodic()
 
     def copy(self) -> BSplineSurface:
-        return BSplineSurface(self.poles,
-                              self.u_knots,
-                              self.v_knots,
-                              self.u_mults,
-                              self.v_mults,
-                              self.u_degree,
-                              self.v_degree,
-                              self.is_u_periodic,
-                              self.is_v_periodic)
+        return BSplineSurface.from_parameters(
+            self.poles,
+            self.u_knots,
+            self.v_knots,
+            self.u_mults,
+            self.v_mults,
+            self.u_degree,
+            self.v_degree,
+            self.is_u_periodic,
+            self.is_v_periodic
+        )
 
     def transform(self, T: Transformation) -> None:
         _T = gp_Trsf()

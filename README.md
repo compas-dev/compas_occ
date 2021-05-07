@@ -25,7 +25,7 @@ from compas_occ.geometry.curves.bspline import BSplineCurve
 from compas_occ.geometry.surfaces.bspline import BSplineSurface
 
 HERE = os.path.dirname(__file__)
-FILE = os.path.join(HERE, 'surface.stp')
+FILE = os.path.join(HERE, '__surface.stp')
 
 points1 = []
 points1.append(Point(-4, 0, 2))

@@ -23,4 +23,6 @@ points2.append(Point(4, 9, -1))
 spline2 = BSplineCurve.from_points(points2)
 
 surface = BSplineSurface.from_fill(spline1, spline2)
-surface.to_step(FILE)
+
+other = surface.copy()
+other.to_step(FILE)
