@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Tuple, List
 from compas.geometry import Point
 from compas.geometry import Transformation
+from compas.datastructures import Mesh
 
 from compas_occ.interop.arrays import (
     array2_from_points2,
@@ -35,6 +36,7 @@ from OCC.Core.GeomFill import (
     GeomFill_BSplineCurves,
     GeomFill_CoonsStyle
 )
+from OCC.Core.Tesselator import ShapeTesselator
 
 
 # update to use "data" interface
@@ -88,6 +90,17 @@ class BSplineSurface:
         status = step_writer.Write(filepath)
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
+
+    def to_vizmesh(self) -> Mesh:
+        tess = ShapeTesselator(self.occ_shape)
+        tess.Compute()
+        vertices = []
+        triangles = []
+        for i in range(tess.ObjGetVertexCount()):
+            vertices.append(tess.GetVertex(i))
+        for i in range(tess.ObjGetTriangleCount()):
+            triangles.append(tess.GetTriangleIndex(i))
+        return Mesh.from_vertices_and_faces(vertices, triangles)
 
     @classmethod
     def from_fill(cls, curve1, curve2) -> BSplineSurface:

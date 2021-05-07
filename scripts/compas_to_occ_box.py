@@ -8,7 +8,7 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import topods_Vertex, topods_Wire
 from OCC.Core.TopAbs import TopAbs_WIRE, TopAbs_VERTEX
 
-from compas_occ.shapes.monkey import Box
+from compas_occ.brep.shapes.monkey import Box
 
 box = Box(Frame.worldXY(), 1, 1, 1)
 shell = box.to_occ()
