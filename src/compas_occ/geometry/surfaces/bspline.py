@@ -7,11 +7,19 @@ from compas.geometry import Transformation
 from compas_occ.interop.arrays import (
     array2_from_points2,
     array1_from_floats1,
-    array1_from_integers1
+    array1_from_integers1,
+    points2_from_array2
 )
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineSurface
+from OCC.Core.TopoDS import (
+    topods_Face,
+    TopoDS_Shape,
+    TopoDS_Face
+)
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 from OCC.Core.TColStd import (
     TColStd_Array1OfReal,
@@ -23,12 +31,6 @@ from OCC.Core.STEPControl import (
 )
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.TopoDS import (
-    topods_Face,
-    TopoDS_Shape,
-    TopoDS_Face
-)
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.GeomFill import (
     GeomFill_BSplineCurves,
     GeomFill_CoonsStyle
@@ -123,16 +125,8 @@ class BSplineSurface:
         return self.occ_surface.VMultiplicities()
 
     @property
-    def poles(self) -> List[List[Point]]:
-        occ_poles = self.occ_poles
-        poles1 = []
-        poles2 = []
-        for i in range(occ_poles.LowerRow(), occ_poles.UpperRow() + 1):
-            pole1 = occ_poles.Value(i, occ_poles.LowerCol() + 0)
-            pole2 = occ_poles.Value(i, occ_poles.LowerCol() + 1)
-            poles1.append(Point(pole1.X(), pole1.Y(), pole1.Z()))
-            poles2.append(Point(pole2.X(), pole2.Y(), pole2.Z()))
-        return poles1, poles2
+    def poles(self) -> Tuple[List[Point], List[Point]]:
+        return points2_from_array2(self.occ_poles)
 
     @property
     def u_knots(self) -> List[float]:
