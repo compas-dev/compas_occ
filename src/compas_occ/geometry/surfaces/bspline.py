@@ -39,7 +39,6 @@ from OCC.Core.GeomFill import (
 from OCC.Core.Tesselator import ShapeTesselator
 
 
-# update to use "data" interface
 class BSplineSurface:
 
     def __init__(self):

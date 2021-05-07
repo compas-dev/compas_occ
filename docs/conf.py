@@ -146,7 +146,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/compas-dev/compas_occ/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
 
 # extlinks
 
