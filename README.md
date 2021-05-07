@@ -22,10 +22,29 @@ Initial API exploration scripts are available in `scripts`.
 import os
 from compas.geometry import Point
 from compas_occ.geometry.curves.bspline import BSplineCurve
+
+HERE = os.path.dirname(__file__)
+FILE = os.path.join(HERE, 'curve.stp')
+
+points = []
+points.append(Point(-4, 0, 2))
+points.append(Point(-7, 2, 2))
+points.append(Point(-6, 3, 1))
+points.append(Point(-4, 3, -1))
+points.append(Point(-3, 5, -2))
+
+spline = BSplineCurve.from_points(points)
+spline.to_step(FILE)
+```
+
+```python
+import os
+from compas.geometry import Point
+from compas_occ.geometry.curves.bspline import BSplineCurve
 from compas_occ.geometry.surfaces.bspline import BSplineSurface
 
 HERE = os.path.dirname(__file__)
-FILE = os.path.join(HERE, '__surface.stp')
+FILE = os.path.join(HERE, 'surface.stp')
 
 points1 = []
 points1.append(Point(-4, 0, 2))
