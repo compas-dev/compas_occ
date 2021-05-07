@@ -23,7 +23,6 @@ from OCC.Core.TopoDS import (
     TopoDS_Edge
 )
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
-
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import (
     TColStd_Array1OfReal,
@@ -47,12 +46,18 @@ class BSplineCurve:
         return self.occ_curve.IsEqual(other.occ_curve)
 
     @classmethod
+    def from_occ(cls, occ_curve: Geom_BSplineCurve) -> BSplineCurve:
+        curve = cls()
+        curve.occ_curve = occ_curve
+        return curve
+
+    @classmethod
     def from_parameters(cls,
-                 poles: List[Point],
-                 knots: List[float],
-                 multiplicities: List[int],
-                 degree: int,
-                 is_periodic: bool = False) -> BSplineCurve:
+                        poles: List[Point],
+                        knots: List[float],
+                        multiplicities: List[int],
+                        degree: int,
+                        is_periodic: bool = False) -> BSplineCurve:
         curve = cls()
         curve.occ_curve = Geom_BSplineCurve(
             array1_from_points1(poles),
@@ -76,10 +81,10 @@ class BSplineCurve:
         return curve
 
     @classmethod
-    def from_step(cls, filepath) -> BSplineCurve:
+    def from_step(cls, filepath: str) -> BSplineCurve:
         pass
 
-    def to_step(self, filepath, schema="AP203") -> None:
+    def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
@@ -145,7 +150,11 @@ class BSplineCurve:
     def is_rational(self) -> bool:
         return self.occ_curve.IsRational()
 
-    def copy(self):
+    def point_at(self, u: float) -> Point:
+        point = self.occ_curve.Value(u)
+        return Point(point.X(), point.Y(), point.Z())
+
+    def copy(self) -> BSplineCurve:
         return BSplineCurve(self.poles,
                             self.knots,
                             self.multiplicities,

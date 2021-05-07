@@ -38,7 +38,6 @@ def occ_to_frame(self: gp_Ax3) -> Frame:
     return Frame(pt, vX, vY)
 
 
-
 Point.to_occ = point_to_occ
 Frame.to_occ = frame_to_occ
 Vector.to_occ = point_to_occ

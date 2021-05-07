@@ -11,6 +11,7 @@ from compas_occ.interop.arrays import (
     array1_from_integers1,
     points2_from_array2
 )
+from compas_occ.geometry import BSplineCurve
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineSurface
@@ -20,7 +21,6 @@ from OCC.Core.TopoDS import (
     TopoDS_Face
 )
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 from OCC.Core.TColStd import (
     TColStd_Array1OfReal,
@@ -36,6 +36,7 @@ from OCC.Core.GeomFill import (
     GeomFill_BSplineCurves,
     GeomFill_CoonsStyle
 )
+from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.Tesselator import ShapeTesselator
 
 
@@ -48,7 +49,7 @@ class BSplineSurface:
         return self.occ_surface.IsEqual(other.occ_surface)
 
     @classmethod
-    def from_occ(cls, occ_surface) -> BSplineSurface:
+    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> BSplineSurface:
         surface = cls()
         surface.occ_surface = occ_surface
         return surface
@@ -79,10 +80,14 @@ class BSplineSurface:
         return surface
 
     @classmethod
-    def from_step(cls, filepath) -> BSplineSurface:
-        pass
+    def from_points(cls, points: List[Point]) -> BSplineSurface:
+        raise NotImplementedError
 
-    def to_step(self, filepath, schema="AP203") -> None:
+    @classmethod
+    def from_step(cls, filepath: str) -> BSplineSurface:
+        raise NotImplementedError
+
+    def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_face, STEPControl_AsIs)
@@ -102,7 +107,7 @@ class BSplineSurface:
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
     @classmethod
-    def from_fill(cls, curve1, curve2) -> BSplineSurface:
+    def from_fill(cls, curve1: BSplineCurve, curve2: BSplineCurve) -> BSplineSurface:
         surface = cls()
         occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
         surface.occ_surface = occ_fill.Surface()
@@ -171,6 +176,10 @@ class BSplineSurface:
     @property
     def is_v_periodic(self) -> bool:
         return self.occ_surface.IsVPeriodic()
+
+    def point_at(self, u: float, v: float) -> Point:
+        point = self.occ_surface.Value(u, v)
+        return Point(point.X(), point.Y(), point.Z())
 
     def copy(self) -> BSplineSurface:
         return BSplineSurface.from_parameters(
