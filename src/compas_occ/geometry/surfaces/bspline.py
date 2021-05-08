@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Tuple, List, Optional
 from compas.geometry import Point, Line
 from compas.geometry import Transformation
+from compas.utilities import meshgrid, linspace
 from compas.datastructures import Mesh
 
 from compas_occ.geometry.primitives import (
@@ -218,11 +219,26 @@ class BSplineSurface:
         copy.transform(T)
         return copy
 
-    def intersections_line(self, line: Line) -> List[Point]:
+    def intersections(self, line: Line) -> List[Point]:
         intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)
             point = Point.from_occ(pnt)
             points.append(point)
+        return points
+
+    def uv(self):
+        pass
+
+    def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
+        points = []
+        umin, umax, vmin, vmax = self.occ_surface.Bounds()
+        U, V = meshgrid(linspace(umin, umax, nu), linspace(vmin, vmax, nv))
+        for i in range(nu):
+            for j in range(nv):
+                u = U[i][j]
+                v = V[i][j]
+                point = self.point_at(u, v)
+                points.append(point)
         return points

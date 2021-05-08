@@ -1,10 +1,10 @@
-from compas.geometry import Point, Line, Polyline
+from compas.geometry import Point, Polyline
 
 from compas_view2.app import App
+from compas_view2.objects import Collection
 
 from compas_occ.geometry.curves.bspline import BSplineCurve
 from compas_occ.geometry.surfaces.bspline import BSplineSurface
-
 
 points1 = []
 points1.append(Point(-4, 0, 2))
@@ -23,7 +23,8 @@ points2.append(Point(4, 9, -1))
 spline2 = BSplineCurve.from_points(points2)
 
 surface = BSplineSurface.from_fill(spline1, spline2)
-line = Line(Point(0, 4, 0), Point(0, 4, 1))
+
+points = Collection(surface.xyz(nu=100, nv=100))
 
 # ==============================================================================
 # Viz
@@ -33,10 +34,6 @@ mesh = surface.to_vizmesh()
 boundary = Polyline(mesh.vertices_attributes('xyz', keys=mesh.vertices_on_boundary()))
 
 view = App()
-view.add(mesh)
 view.add(boundary, linewidth=2)
-
-for point in surface.intersections(line):
-    view.add(point, size=10, color=(1, 0, 0))
-
+view.add(points, color=(1, 0, 0), size=30)
 view.run()

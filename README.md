@@ -140,7 +140,7 @@ view = App()
 view.add(mesh)
 view.add(boundary, linewidth=2)
 
-for point in surface.intersections_line(line):
+for point in surface.intersections(line):
     view.add(point, size=10, color=(1, 0, 0))
 
 view.run()
