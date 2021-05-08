@@ -1,9 +1,18 @@
 from __future__ import annotations
 
-from typing import Tuple, List
-from compas.geometry import Point
+from typing import Tuple, List, Optional
+from compas.geometry import Point, Line
 from compas.geometry import Transformation
 from compas.datastructures import Mesh
+
+from compas_occ.geometry.primitives import (
+    compas_line_to_occ_line,
+    compas_point_from_occ_point,
+    compas_point_to_occ_point
+)
+
+from OCC.Core.Geom import Geom_Line
+from OCC.Core.GeomAPI import GeomAPI_IntCS
 
 from compas_occ.interop.arrays import (
     array2_from_points2,
@@ -37,6 +46,12 @@ from OCC.Core.GeomFill import (
     GeomFill_CoonsStyle
 )
 from OCC.Core.Tesselator import ShapeTesselator
+
+
+Point.from_occ = compas_point_from_occ_point
+Point.to_occ = compas_point_to_occ_point
+
+Line.to_occ = compas_line_to_occ_line
 
 
 class BSplineSurface:
@@ -178,7 +193,7 @@ class BSplineSurface:
 
     def point_at(self, u: float, v: float) -> Point:
         point = self.occ_surface.Value(u, v)
-        return Point(point.X(), point.Y(), point.Z())
+        return Point.from_occ(point)
 
     def copy(self) -> BSplineSurface:
         return BSplineSurface.from_parameters(
@@ -202,3 +217,12 @@ class BSplineSurface:
         copy = self.copy()
         copy.transform(T)
         return copy
+
+    def intersections_line(self, line: Line) -> List[Point]:
+        intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
+        points = []
+        for index in range(intersection.NbPoints()):
+            pnt = intersection.Point(index + 1)
+            point = Point.from_occ(pnt)
+            points.append(point)
+        return points
