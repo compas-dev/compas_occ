@@ -110,7 +110,7 @@ class BSplineSurface:
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
-    def to_vizmesh(self) -> Mesh:
+    def to_tesselation(self) -> Mesh:
         tess = ShapeTesselator(self.occ_shape)
         tess.Compute()
         vertices = []
@@ -120,6 +120,19 @@ class BSplineSurface:
         for i in range(tess.ObjGetTriangleCount()):
             triangles.append(tess.GetTriangleIndex(i))
         return Mesh.from_vertices_and_faces(vertices, triangles)
+
+    def to_vizmesh(self, resolution: int = 100) -> Mesh:
+        quads = []
+        umin, umax, vmin, vmax = self.occ_surface.Bounds()
+        U, V = meshgrid(linspace(umin, umax, resolution), linspace(vmin, vmax, resolution))
+        for i in range(resolution - 1):
+            for j in range(resolution - 1):
+                a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
+                b = self.point_at(U[i + 0][j + 1], V[i + 0][j + 1])
+                c = self.point_at(U[i + 1][j + 1], V[i + 1][j + 1])
+                d = self.point_at(U[i + 1][j + 0], V[i + 1][j + 0])
+                quads.append([a, b, c, d])
+        return Mesh.from_polygons(quads)
 
     @classmethod
     def from_fill(cls, curve1: BSplineCurve, curve2: BSplineCurve) -> BSplineSurface:
@@ -227,9 +240,6 @@ class BSplineSurface:
             point = Point.from_occ(pnt)
             points.append(point)
         return points
-
-    def uv(self):
-        pass
 
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
         points = []
