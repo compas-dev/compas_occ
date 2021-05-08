@@ -36,7 +36,6 @@ from OCC.Core.GeomFill import (
     GeomFill_BSplineCurves,
     GeomFill_CoonsStyle
 )
-from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.Tesselator import ShapeTesselator
 
 
