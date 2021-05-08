@@ -32,7 +32,7 @@ setup(
     description="COMPAS wrapper for the Python bindings of OCC",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/blockresearchgroup/compas_occ",
+    url="https://github.com/compas-dev/compas_occ",
     author="tom van mele",
     author_email="van.mele@arch.ethz.ch",
     license="MIT license",
