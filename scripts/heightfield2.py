@@ -27,6 +27,7 @@ surface = BSplineSurface.from_fill(spline1, spline2)
 points = surface.xyz(nu=30, nv=20)
 
 n = len(points)
+
 colors = [i_to_rgb(i / n, normalize=True) for i in range(n)]
 
 # ==============================================================================
@@ -37,6 +38,7 @@ mesh = surface.to_vizmesh()
 boundary = Polyline(mesh.vertices_attributes('xyz', keys=mesh.vertices_on_boundary()))
 
 view = App()
+view.add(mesh)
 view.add(boundary, linewidth=2)
 view.add(Collection(points), colors=colors, size=10)
 view.run()

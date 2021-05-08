@@ -1,5 +1,5 @@
 from compas.geometry import Point, Polyline
-from compas.utilities import i_to_rgb, meshgrid, linspace
+from compas.utilities import i_to_rgb, meshgrid, linspace, flatten
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
@@ -25,9 +25,9 @@ spline2 = BSplineCurve.from_points(points2)
 
 surface = BSplineSurface.from_fill(spline1, spline2)
 
-U, V = meshgrid(surface.uspace(30), surface.vspace(20))
+U, V = meshgrid(surface.uspace(30), surface.vspace(20), 'ij')
 
-frames = [surface.frame_at(U[i][j], V[i][j]) for i in range(0, 20) for j in range(1, 30)]
+frames = [surface.frame_at(u, v) for u, v in zip(flatten(U[1:]), flatten(V))]
 
 # ==============================================================================
 # Viz

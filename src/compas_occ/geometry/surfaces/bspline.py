@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Tuple, List
 from compas.geometry import Point, Vector, Line, Frame
 from compas.geometry import Transformation
-from compas.utilities import meshgrid, linspace
+from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
 
 from compas_occ.geometry.primitives import (
@@ -133,8 +133,7 @@ class BSplineSurface:
 
     def to_vizmesh(self, resolution: int = 100) -> Mesh:
         quads = []
-        umin, umax, vmin, vmax = self.occ_surface.Bounds()
-        U, V = meshgrid(linspace(umin, umax, resolution), linspace(vmin, vmax, resolution))
+        U, V = meshgrid(self.uspace(resolution), self.vspace(resolution))
         for i in range(resolution - 1):
             for j in range(resolution - 1):
                 a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
@@ -251,9 +250,6 @@ class BSplineSurface:
         point = self.occ_surface.Value(u, v)
         return Point.from_occ(point)
 
-    def normal_at(self, u: float, v: float) -> Vector:
-        pass
-
     def frame_at(self, u: float, v: float) -> Frame:
         point = gp_Pnt()
         uvec = gp_Vec()
@@ -270,5 +266,5 @@ class BSplineSurface:
         return linspace(vmin, vmax, n)
 
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
-        U, V = meshgrid(self.uspace(nu), self.vspace(nv), 'xy')
-        return [self.point_at(U[i][j], V[i][j]) for i in range(nv) for j in range(nu)]
+        U, V = meshgrid(self.uspace(nu), self.vspace(nv), 'ij')
+        return [self.point_at(u, v) for u, v in zip(flatten(U), flatten(V))]
