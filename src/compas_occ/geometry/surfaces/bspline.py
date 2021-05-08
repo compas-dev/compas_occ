@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Tuple, List, Optional
-from compas.geometry import Point, Line
+from typing import Tuple, List
+from compas.geometry import Point, Vector, Line, Frame
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace
 from compas.datastructures import Mesh
@@ -9,11 +9,10 @@ from compas.datastructures import Mesh
 from compas_occ.geometry.primitives import (
     compas_line_to_occ_line,
     compas_point_from_occ_point,
-    compas_point_to_occ_point
+    compas_point_to_occ_point,
+    compas_vector_from_occ_vector,
+    compas_vector_to_occ_vector
 )
-
-from OCC.Core.Geom import Geom_Line
-from OCC.Core.GeomAPI import GeomAPI_IntCS
 
 from compas_occ.interop.arrays import (
     array2_from_points2,
@@ -23,8 +22,16 @@ from compas_occ.interop.arrays import (
 )
 from compas_occ.geometry import BSplineCurve
 
-from OCC.Core.gp import gp_Trsf
-from OCC.Core.Geom import Geom_BSplineSurface
+from OCC.Core.gp import (
+    gp_Trsf,
+    gp_Pnt,
+    gp_Vec
+)
+from OCC.Core.Geom import (
+    Geom_BSplineSurface,
+    Geom_Line
+)
+from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.TopoDS import (
     topods_Face,
     TopoDS_Shape,
@@ -51,6 +58,9 @@ from OCC.Core.Tesselator import ShapeTesselator
 
 Point.from_occ = compas_point_from_occ_point
 Point.to_occ = compas_point_to_occ_point
+
+Vector.from_occ = compas_vector_from_occ_vector
+Vector.to_occ = compas_vector_to_occ_vector
 
 Line.to_occ = compas_line_to_occ_line
 
@@ -205,10 +215,6 @@ class BSplineSurface:
     def is_v_periodic(self) -> bool:
         return self.occ_surface.IsVPeriodic()
 
-    def point_at(self, u: float, v: float) -> Point:
-        point = self.occ_surface.Value(u, v)
-        return Point.from_occ(point)
-
     def copy(self) -> BSplineSurface:
         return BSplineSurface.from_parameters(
             self.poles,
@@ -241,14 +247,28 @@ class BSplineSurface:
             points.append(point)
         return points
 
+    def point_at(self, u: float, v: float) -> Point:
+        point = self.occ_surface.Value(u, v)
+        return Point.from_occ(point)
+
+    def normal_at(self, u: float, v: float) -> Vector:
+        pass
+
+    def frame_at(self, u: float, v: float) -> Frame:
+        point = gp_Pnt()
+        uvec = gp_Vec()
+        vvec = gp_Vec()
+        self.occ_surface.D1(u, v, point, uvec, vvec)
+        return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
+
+    def uspace(self, n: int = 10) -> List[float]:
+        umin, umax, _, _ = self.occ_surface.Bounds()
+        return linspace(umin, umax, n)
+
+    def vspace(self, n: int = 10) -> List[float]:
+        _, _, vmin, vmax = self.occ_surface.Bounds()
+        return linspace(vmin, vmax, n)
+
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
-        points = []
-        umin, umax, vmin, vmax = self.occ_surface.Bounds()
-        U, V = meshgrid(linspace(umin, umax, nu), linspace(vmin, vmax, nv))
-        for i in range(nu):
-            for j in range(nv):
-                u = U[i][j]
-                v = V[i][j]
-                point = self.point_at(u, v)
-                points.append(point)
-        return points
+        U, V = meshgrid(self.uspace(nu), self.vspace(nv), 'xy')
+        return [self.point_at(U[i][j], V[i][j]) for i in range(nv) for j in range(nu)]

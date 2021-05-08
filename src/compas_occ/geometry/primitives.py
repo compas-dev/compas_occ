@@ -25,6 +25,11 @@ def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
     return gp_Vec(* self)
 
 
+@classmethod
+def compas_vector_from_occ_vector(cls: Vector, vector: gp_Vec) -> Vector:
+    return cls(vector.X(), vector.Y(), vector.Z())
+
+
 def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
     return gp_Dir(* self)
 

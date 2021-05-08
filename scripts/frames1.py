@@ -1,5 +1,5 @@
 from compas.geometry import Point, Polyline
-from compas.utilities import i_to_rgb
+from compas.utilities import i_to_rgb, meshgrid, linspace
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
@@ -24,10 +24,10 @@ points2.append(Point(4, 9, -1))
 spline2 = BSplineCurve.from_points(points2)
 
 surface = BSplineSurface.from_fill(spline1, spline2)
-points = surface.xyz(nu=30, nv=20)
 
-n = len(points)
-colors = [i_to_rgb(i / n, normalize=True) for i in range(n)]
+U, V = meshgrid(surface.uspace(30), surface.vspace(20))
+
+frames = [surface.frame_at(U[i][j], V[i][j]) for i in range(0, 20) for j in range(1, 30)]
 
 # ==============================================================================
 # Viz
@@ -37,6 +37,10 @@ mesh = surface.to_vizmesh()
 boundary = Polyline(mesh.vertices_attributes('xyz', keys=mesh.vertices_on_boundary()))
 
 view = App()
+view.add(mesh)
 view.add(boundary, linewidth=2)
-view.add(Collection(points), colors=colors, size=10)
+
+for frame in frames:
+    view.add(frame, size=0.1)
+
 view.run()
