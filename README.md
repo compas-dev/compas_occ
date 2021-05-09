@@ -188,7 +188,6 @@ view.run()
 
 ![Example viz surf1](/docs/_images/example_frames1.png)
 
-
 ```python
 from compas.geometry import Point, Polyline
 from compas.utilities import i_to_rgb, meshgrid, linspace, flatten
