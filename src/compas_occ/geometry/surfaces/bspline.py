@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Tuple, List
-from compas.geometry import Point, Vector, Line, Frame
+from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
@@ -213,6 +213,10 @@ class BSplineSurface:
     @property
     def is_v_periodic(self) -> bool:
         return self.occ_surface.IsVPeriodic()
+
+    @property
+    def aabb(self) -> Box:
+        pass
 
     def copy(self) -> BSplineSurface:
         return BSplineSurface.from_parameters(
