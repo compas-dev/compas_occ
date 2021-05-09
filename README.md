@@ -16,26 +16,7 @@ pip install -e .
 
 ## Scripts
 
-Initial API exploration scripts are available in `scripts`.
-
-```python
-import os
-from compas.geometry import Point
-from compas_occ.geometry.curves.bspline import BSplineCurve
-
-HERE = os.path.dirname(__file__)
-FILE = os.path.join(HERE, 'curve.stp')
-
-points = []
-points.append(Point(-4, 0, 2))
-points.append(Point(-7, 2, 2))
-points.append(Point(-6, 3, 1))
-points.append(Point(-4, 3, -1))
-points.append(Point(-3, 5, -2))
-
-spline = BSplineCurve.from_points(points)
-spline.to_step(FILE)
-```
+### Export BSplineSurface to STP
 
 ```python
 import os
@@ -65,6 +46,8 @@ spline2 = BSplineCurve.from_points(points2)
 surface = BSplineSurface.from_fill(spline1, spline2)
 surface.to_step(FILE)
 ```
+
+### Viz BSplineSurface with View2
 
 ![Example viz surf1](/docs/_images/example_viz_surf1.png)
 
@@ -102,6 +85,8 @@ view.add(mesh)
 view.add(boundary, linewidth=2)
 view.run()
 ```
+
+### Intersect BSplineSurface with Line
 
 ![Example viz surf1](/docs/_images/example_intersections1.png)
 
@@ -146,6 +131,8 @@ for point in surface.intersections(line):
 view.run()
 ```
 
+### BSplineSurface points along UV
+
 ![Example viz surf1](/docs/_images/example_heightfield1.png)
 
 ```python
@@ -185,6 +172,8 @@ view.add(boundary, linewidth=2)
 view.add(points, color=(1, 0, 0), size=30)
 view.run()
 ```
+
+### BSplineSurface frames along UV
 
 ![Example viz surf1](/docs/_images/example_frames1.png)
 
@@ -231,4 +220,26 @@ for frame in frames:
     view.add(frame, size=0.1)
 
 view.run()
+```
+
+### BRep boolean union primitives
+
+![Example viz surf1](/docs/_images/example_boolean_union1.png)
+
+```python
+import os
+
+from compas.geometry import Frame
+from compas_occ.brep.primitives import Box, Sphere
+from compas_occ.brep.booleans import boolean_union_shape_shape
+
+HERE = os.path.dirname(__file__)
+FILE = os.path.join(HERE, '__fuse.stp')
+
+box = Box(Frame.worldXY(), 1, 1, 1)
+sphere = Sphere([0.5 * box.xsize, 0.5 * box.ysize, 0.5 * box.zsize], 0.5)
+
+shape = boolean_union_shape_shape(box, sphere)
+
+shape.to_step(FILE)
 ```
