@@ -7,7 +7,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 
 from OCC.Core.Tesselator import ShapeTesselator
 
-from OCC.Extend.TopologyUtils import TopologyExplorer
+from OCC.Extend.TopologyUtils import TopologyExplorer  # noqa F401
 
 
 # class BRepVertex:
