@@ -17,11 +17,10 @@ Object.register(Sphere, SphereObject)
 box = Box(Frame.worldXY(), 1, 1, 1)
 sphere = Sphere([0.5 * box.xsize, 0.5 * box.ysize, 0.5 * box.zsize], 0.5)
 shape = boolean_union_shape_shape(box, sphere)
-
-viewer = App()
-
 converter = BRepBuilderAPI_NurbsConvert(shape.occ_shape, True)
 shape_exp = TopologyExplorer(converter.Shape())
+
+viewer = App()
 
 for face in shape_exp.faces():
     srf = BRep_Tool_Surface(face)
