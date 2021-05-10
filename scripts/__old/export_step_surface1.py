@@ -1,16 +1,13 @@
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.GeomFill import (
     GeomFill_BSplineCurves,
-    GeomFill_StretchStyle,
     GeomFill_CoonsStyle,
-    GeomFill_CurvedStyle
 )
 from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
 from OCC.Extend.ShapeFactory import point_list_to_TColgp_Array1OfPnt
 
 from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
 
 from OCC.Core.TopoDS import topods_Face
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
@@ -45,6 +42,3 @@ Interface_Static_SetCVal("write.step.schema", "AP203")
 
 step_writer.Transfer(face, STEPControl_AsIs)
 status = step_writer.Write("surface1.stp")
-
-if status != IFSelect_RetDone:
-	raise AssertionError("load failed")
