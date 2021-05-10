@@ -116,7 +116,7 @@ class BSplineSurface:
     @classmethod
     def from_face(cls, face: TopoDS_Face) -> BSplineSurface:
         srf = BRep_Tool_Surface(face)
-        return BSplineSurface.from_occ(srf)
+        return cls.from_occ(srf)
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
