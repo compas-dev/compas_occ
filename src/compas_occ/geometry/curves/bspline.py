@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import List
 from compas.geometry import Point
 from compas.geometry import Transformation
+from compas.utilities import linspace
 
 from compas_occ.interop.arrays import (
     array1_from_points1,
@@ -92,6 +93,9 @@ class BSplineCurve:
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
+    def to_locus(self, resolution=100):
+        return self.xyz(resolution)
+
     @property
     def occ_shape(self) -> TopoDS_Shape:
         return BRepBuilderAPI_MakeEdge(self.occ_curve).Shape()
@@ -150,10 +154,6 @@ class BSplineCurve:
     def is_rational(self) -> bool:
         return self.occ_curve.IsRational()
 
-    def point_at(self, u: float) -> Point:
-        point = self.occ_curve.Value(u)
-        return Point(point.X(), point.Y(), point.Z())
-
     def copy(self) -> BSplineCurve:
         return BSplineCurve(self.poles,
                             self.knots,
@@ -170,3 +170,17 @@ class BSplineCurve:
         copy = self.copy()
         copy.transform(T)
         return copy
+
+    def domain(self):
+        return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
+
+    def space(self, n: int = 10) -> List[float]:
+        u, v = self.domain()
+        return linspace(u, v, n)
+
+    def point_at(self, u: float) -> Point:
+        point = self.occ_curve.Value(u)
+        return Point(point.X(), point.Y(), point.Z())
+
+    def xyz(self, n: int = 10) -> List[Point]:
+        return [self.point_at(param) for param in self.space(n)]
