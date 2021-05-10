@@ -47,7 +47,8 @@ class BRepShape:
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
     def to_vizmesh(self):
-        exp = TopologyExplorer(self.occ_shape)
+        pass
+        # exp = TopologyExplorer(self.occ_shape)
         # print(exp.number_of_vertices())
         # print(exp.number_of_edges())
         # print(exp.number_of_faces())
