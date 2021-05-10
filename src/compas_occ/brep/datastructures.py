@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 from compas.datastructures import Mesh
 
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
-
 from OCC.Core.Tesselator import ShapeTesselator
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
 
 from OCC.Extend.TopologyUtils import TopologyExplorer  # noqa F401
 
@@ -30,7 +32,22 @@ class BRepShape:
     """Wrapper for TopoDS_Shape."""
 
     def __init__(self, shape: TopoDS_Shape):
+        self._occ_shape = None
+        self._explorer = None
         self.occ_shape = shape
+
+    @property
+    def occ_shape(self):
+        return self._occ_shape
+
+    @occ_shape.setter
+    def occ_shape(self, occ_shape):
+        self._occ_shape = occ_shape
+        self._explorer = TopologyExplorer(self._occ_shape)
+
+    @property
+    def explorer(self):
+        return self._explorer
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         """Write the shape contained in this wrapper to a STEP file."""
@@ -52,3 +69,19 @@ class BRepShape:
     def to_vizmesh(self) -> Mesh:
         """Convert the shape contained in this wrapper to a clean UV mesh for visualization."""
         pass
+
+    def convert(self) -> None:
+        """Convert the shape to a new shape such that the underlying geometry is bspline."""
+        converter = BRepBuilderAPI_NurbsConvert(self.occ_shape, False)
+        self.occ_shape = converter.Shape()
+
+    def converted(self) -> BRepShape:
+        """Convert the shape to a new shape such that the underlying geometry is bspline."""
+        converter = BRepBuilderAPI_NurbsConvert(self.occ_shape, True)
+        return BRepShape(converter.Shape())
+
+    def faces(self):
+        return self.explorer.faces()
+
+    def edges(self):
+        return self.explorer.edges()
