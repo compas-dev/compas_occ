@@ -271,8 +271,7 @@ shape.convert()
 viewer = App()
 
 for face in shape.faces():
-    srf = BRep_Tool_Surface(face)
-    surface = BSplineSurface.from_occ(srf)
+    surface = BSplineSurface.from_face(face)
     viewer.add(surface.to_vizmesh(resolution=16), show_edges=True)
 
 for edge in shape.edges():

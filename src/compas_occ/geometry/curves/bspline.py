@@ -23,6 +23,7 @@ from OCC.Core.TopoDS import (
     TopoDS_Shape,
     TopoDS_Edge
 )
+from OCC.Core.BRep import BRep_Tool_Curve
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import (
@@ -84,6 +85,13 @@ class BSplineCurve:
     @classmethod
     def from_step(cls, filepath: str) -> BSplineCurve:
         pass
+
+    @classmethod
+    def from_edge(cls, edge: TopoDS_Edge) -> BSplineCurve:
+        res = BRep_Tool_Curve(edge)
+        if len(res) != 3:
+            return
+        return cls.from_occ(res[0])
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Tuple, List
+
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
@@ -36,6 +37,7 @@ from OCC.Core.TopoDS import (
     TopoDS_Shape,
     TopoDS_Face
 )
+from OCC.Core.BRep import BRep_Tool_Surface
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 from OCC.Core.TColStd import (
@@ -110,6 +112,11 @@ class BSplineSurface:
     @classmethod
     def from_step(cls, filepath: str) -> BSplineSurface:
         raise NotImplementedError
+
+    @classmethod
+    def from_face(cls, face: TopoDS_Face) -> BSplineSurface:
+        srf = BRep_Tool_Surface(face)
+        return BSplineSurface.from_occ(srf)
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
