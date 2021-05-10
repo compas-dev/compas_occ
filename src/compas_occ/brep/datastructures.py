@@ -27,11 +27,13 @@ from OCC.Extend.TopologyUtils import TopologyExplorer  # noqa F401
 
 
 class BRepShape:
+    """Wrapper for TopoDS_Shape."""
 
     def __init__(self, shape: TopoDS_Shape):
         self.occ_shape = shape
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
+        """Write the shape contained in this wrapper to a STEP file."""
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
@@ -39,20 +41,14 @@ class BRepShape:
         if status != IFSelect_RetDone:
             raise AssertionError("load failed")
 
-    def to_tesselation(self):
+    def to_tesselation(self) -> Mesh:
+        """Convert the shape contained in this wrapper to a triangulated mesh for visualization."""
         tess = ShapeTesselator(self.occ_shape)
         tess.Compute()
         vertices = [tess.GetVertex(i) for i in range(tess.ObjGetVertexCount())]
         triangles = [tess.GetTriangleIndex(i) for i in range(tess.ObjGetTriangleCount())]
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
-    def to_vizmesh(self):
+    def to_vizmesh(self) -> Mesh:
+        """Convert the shape contained in this wrapper to a clean UV mesh for visualization."""
         pass
-        # exp = TopologyExplorer(self.occ_shape)
-        # print(exp.number_of_vertices())
-        # print(exp.number_of_edges())
-        # print(exp.number_of_faces())
-        # print(exp.number_of_wires())
-        # print(exp.number_of_shells())
-        # print(exp.number_of_solids())
-        # print(exp.number_of_compounds())

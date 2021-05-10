@@ -20,7 +20,7 @@ from compas_occ.interop.arrays import (
     array1_from_integers1,
     points2_from_array2
 )
-from compas_occ.geometry import BSplineCurve
+from compas_occ.geometry.curves import BSplineCurve
 
 from OCC.Core.gp import (
     gp_Trsf,

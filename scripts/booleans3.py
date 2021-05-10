@@ -1,13 +1,13 @@
 from compas.geometry import Point, Line, Polyline, Frame
 from compas_occ.brep.primitives import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
-from compas_occ.geometry.curves.bspline import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
 
 from compas_view2.app import App
 from compas_view2.objects import Object, BoxObject, SphereObject
 
-from OCC.Core.BRep import BRep_Tool_Surface, BRep_Tool_Pnt, BRep_Tool_Curve, BRep_Tool_CurveOnSurface
+from OCC.Core.BRep import BRep_Tool_Surface, BRep_Tool_Pnt, BRep_Tool_Curve
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
 Object.register(Box, BoxObject)
@@ -28,9 +28,12 @@ for vertex in shape_exp.vertices():
 
 for face in shape_exp.faces():
     srf = BRep_Tool_Surface(face)
-    # surface = BSplineSurface.from_occ(srf)
+    print(srf)
+    surface = BSplineSurface.from_occ(srf)
     # mesh = surface.to_vizmesh(resolution=16)
+    # print(mesh.vertices_attributes('xyz'))
     # viewer.add(mesh, show_edges=True)
+
     for edge in shape_exp.edges_from_face(face):
         res = BRep_Tool_Curve(edge)
         if len(res) == 3:
@@ -48,4 +51,3 @@ for face in shape_exp.faces():
             viewer.add(Polyline(curve.to_locus(100)))
 
 viewer.run()
-

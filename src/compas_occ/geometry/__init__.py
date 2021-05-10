@@ -5,15 +5,37 @@ compas_occ.geometry
 
 .. currentmodule:: compas_occ.geometry
 
-Classes
-=======
+Primitives
+==========
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    BSplineCurve
-    BSplineSurface
+    primitives.compas_point_to_occ_point
+    primitives.compas_point_from_occ_point
+    primitives.compas_vector_to_occ_vector
+    primitives.compas_vector_to_occ_direction
+    primitives.compas_vector_from_occ_vector
+    primitives.compas_line_to_occ_line
+
+Curves
+======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    curves.BSplineCurve
+
+Surfaces
+========
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    surfaces.BSplineSurface
 
 """
 
