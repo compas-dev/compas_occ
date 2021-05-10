@@ -268,21 +268,19 @@ Object.register(Sphere, SphereObject)
 box = Box(Frame.worldXY(), 1, 1, 1)
 sphere = Sphere([0.5 * box.xsize, 0.5 * box.ysize, 0.5 * box.zsize], 0.5)
 shape = boolean_union_shape_shape(box, sphere)
-converter = BRepBuilderAPI_NurbsConvert(shape.occ_shape, True)
-shape_exp = TopologyExplorer(converter.Shape())
+shape.convert()
 
 viewer = App()
 
-for face in shape_exp.faces():
+for face in shape.faces():
     srf = BRep_Tool_Surface(face)
     surface = BSplineSurface.from_occ(srf)
     viewer.add(surface.to_vizmesh(resolution=16), show_edges=True)
 
-for edge in shape_exp.edges():
+for edge in shape.edges():
     res = BRep_Tool_Curve(edge)
     if len(res) == 3:
-        crv, u, v = res
-        curve = BSplineCurve.from_occ(crv)
+        curve = BSplineCurve.from_occ(res[0])
         viewer.add(Polyline(curve.to_locus(resolution=16)), linecolor=(1, 0, 0), linewidth=5)
 
 viewer.run()
