@@ -42,13 +42,16 @@ class BRepShape:
     def to_tesselation(self):
         tess = ShapeTesselator(self.occ_shape)
         tess.Compute()
-        vertices = []
-        triangles = []
-        for i in range(tess.ObjGetVertexCount()):
-            vertices.append(tess.GetVertex(i))
-        for i in range(tess.ObjGetTriangleCount()):
-            triangles.append(tess.GetTriangleIndex(i))
+        vertices = [tess.GetVertex(i) for i in range(tess.ObjGetVertexCount())]
+        triangles = [tess.GetTriangleIndex(i) for i in range(tess.ObjGetTriangleCount())]
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
     def to_vizmesh(self):
-        pass
+        exp = TopologyExplorer(self.occ_shape)
+        # print(exp.number_of_vertices())
+        # print(exp.number_of_edges())
+        # print(exp.number_of_faces())
+        # print(exp.number_of_wires())
+        # print(exp.number_of_shells())
+        # print(exp.number_of_solids())
+        # print(exp.number_of_compounds())
