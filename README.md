@@ -259,8 +259,6 @@ from compas_view2.app import App
 from compas_view2.objects import Object, BoxObject, SphereObject
 
 from OCC.Core.BRep import BRep_Tool_Surface, BRep_Tool_Curve
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
-from OCC.Extend.TopologyUtils import TopologyExplorer
 
 Object.register(Box, BoxObject)
 Object.register(Sphere, SphereObject)
