@@ -1,1 +1,1 @@
-from .bspline import BSplineSurface
+from .bspline import BSplineSurface  # noqa F401

@@ -17,5 +17,5 @@ Classes
 
 """
 
-from .curves import BSplineCurve
-from .surfaces import BSplineSurface
+# from .curves import BSplineCurve
+# from .surfaces import BSplineSurface
