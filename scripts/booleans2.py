@@ -1,5 +1,5 @@
 from compas.geometry import Frame, Translation
-from compas_occ.brep.primitives import Box, Sphere
+from compas_occ.interop.shapes import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
 
 from compas_view2.app import App
@@ -18,4 +18,3 @@ viewer.add(box, show_edges=True)
 viewer.add(sphere, show_edges=True)
 viewer.add(shape.to_tesselation().transformed(Translation.from_vector([2, 0, 0])), show_edges=True)
 viewer.run()
-

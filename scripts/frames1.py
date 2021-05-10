@@ -1,11 +1,10 @@
 from compas.geometry import Point, Polyline
-from compas.utilities import i_to_rgb, meshgrid, linspace, flatten
+from compas.utilities import meshgrid, flatten
 
 from compas_view2.app import App
-from compas_view2.objects import Collection
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 points1 = []
 points1.append(Point(-4, 0, 2))

@@ -2,12 +2,16 @@ from compas.geometry import Point, Polyline
 
 from compas_view2.app import App
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
-from OCC.Core.gp import gp_Pnt, gp_Vec, gp_Dir, gp_Lin
+from compas_occ.interop.primitives import compas_point_from_occ_point
+
+from OCC.Core.gp import gp_Pnt, gp_Dir
 from OCC.Core.Geom import Geom_Line
 from OCC.Core.GeomAPI import GeomAPI_IntCS
+
+Point.from_occ = compas_point_from_occ_point
 
 
 points1 = []
@@ -35,13 +39,8 @@ line = Geom_Line(gp_Pnt(0, 4, 0), gp_Dir(0, 0, 1))
 
 intersection = GeomAPI_IntCS(line, surface.occ_surface)
 
-# print(intersection.NbPoints())
-# print(intersection.NbSegments())
-# print(intersection.Point(1))
-
 pnt = intersection.Point(1)
-
-point = Point(pnt.X(), pnt.Y(), pnt.Z())
+point = Point.from_occ(pnt)
 
 # ==============================================================================
 # Viz

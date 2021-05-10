@@ -1,4 +1,5 @@
 from compas_occ.brep.datastructures import BRepShape
+
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 
 

@@ -1,5 +1,5 @@
 from compas.geometry import Polyline, Frame
-from compas_occ.brep.primitives import Box, Sphere
+from compas_occ.interop.shapes import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
 from compas_occ.geometry.surfaces import BSplineSurface
 from compas_occ.geometry.curves import BSplineCurve

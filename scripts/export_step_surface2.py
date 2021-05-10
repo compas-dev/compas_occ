@@ -1,7 +1,7 @@
 import os
 from compas.geometry import Point
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, '__surface.stp')

@@ -21,8 +21,8 @@ pip install -e .
 ```python
 import os
 from compas.geometry import Point
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, 'surface.stp')
@@ -56,8 +56,8 @@ from compas.geometry import Point, Polyline
 
 from compas_view2.app import App
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 points1 = []
 points1.append(Point(-4, 0, 2))
@@ -95,8 +95,8 @@ from compas.geometry import Point, Line, Polyline
 
 from compas_view2.app import App
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 
 points1 = []
@@ -141,8 +141,8 @@ from compas.geometry import Point, Polyline
 from compas_view2.app import App
 from compas_view2.objects import Collection
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 points1 = []
 points1.append(Point(-4, 0, 2))
@@ -184,8 +184,8 @@ from compas.utilities import i_to_rgb, meshgrid, linspace, flatten
 from compas_view2.app import App
 from compas_view2.objects import Collection
 
-from compas_occ.geometry.curves.bspline import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces import BSplineSurface
 
 points1 = []
 points1.append(Point(-4, 0, 2))

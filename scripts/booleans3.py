@@ -1,14 +1,18 @@
 from compas.geometry import Point, Line, Polyline, Frame
-from compas_occ.brep.primitives import Box, Sphere
+from compas_occ.interop.primitives import compas_point_from_occ_point
+from compas_occ.interop.shapes import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
-from compas_occ.geometry.surfaces import BSplineSurface
 from compas_occ.geometry.curves import BSplineCurve
 
 from compas_view2.app import App
 from compas_view2.objects import Object, BoxObject, SphereObject
 
-from OCC.Core.BRep import BRep_Tool_Surface, BRep_Tool_Pnt, BRep_Tool_Curve
+from OCC.Core.BRep import BRep_Tool_Pnt, BRep_Tool_Curve
 from OCC.Extend.TopologyUtils import TopologyExplorer
+
+
+Point.from_occ = classmethod(compas_point_from_occ_point)
+
 
 Object.register(Box, BoxObject)
 Object.register(Sphere, SphereObject)
@@ -23,27 +27,17 @@ shape_exp = TopologyExplorer(shape.occ_shape)
 
 for vertex in shape_exp.vertices():
     pnt = BRep_Tool_Pnt(vertex)
-    point = Point(pnt.X(), pnt.Y(), pnt.Z())
+    point = Point.from_occ(pnt)
     viewer.add(point, size=10, color=(1, 0, 0))
 
 for face in shape_exp.faces():
-    srf = BRep_Tool_Surface(face)
-    print(srf)
-    surface = BSplineSurface.from_occ(srf)
-    # mesh = surface.to_vizmesh(resolution=16)
-    # print(mesh.vertices_attributes('xyz'))
-    # viewer.add(mesh, show_edges=True)
-
     for edge in shape_exp.edges_from_face(face):
         res = BRep_Tool_Curve(edge)
         if len(res) == 3:
             crv, u, v = res
 
-            pnt = crv.Value(u)
-            start = Point(pnt.X(), pnt.Y(), pnt.Z())
-
-            pnt = crv.Value(v)
-            end = Point(pnt.X(), pnt.Y(), pnt.Z())
+            start = Point.from_occ(crv.Value(u))
+            end = Point.from_occ(crv.Value(v))
 
             viewer.add(Line(start, end))
 

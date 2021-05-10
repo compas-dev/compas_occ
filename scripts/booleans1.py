@@ -1,7 +1,7 @@
 import os
 
 from compas.geometry import Frame
-from compas_occ.brep.primitives import Box, Sphere
+from compas_occ.interop.shapes import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
 
 HERE = os.path.dirname(__file__)

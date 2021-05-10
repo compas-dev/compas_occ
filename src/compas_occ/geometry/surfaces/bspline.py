@@ -6,14 +6,13 @@ from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
 
-from compas_occ.geometry.primitives import (
+from compas_occ.interop.primitives import (
     compas_line_to_occ_line,
     compas_point_from_occ_point,
     compas_point_to_occ_point,
     compas_vector_from_occ_vector,
     compas_vector_to_occ_vector
 )
-
 from compas_occ.interop.arrays import (
     array2_from_points2,
     array1_from_floats1,
@@ -56,10 +55,10 @@ from OCC.Core.GeomFill import (
 from OCC.Core.Tesselator import ShapeTesselator
 
 
-Point.from_occ = compas_point_from_occ_point
+Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
 
-Vector.from_occ = compas_vector_from_occ_vector
+Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
 
 Line.to_occ = compas_line_to_occ_line

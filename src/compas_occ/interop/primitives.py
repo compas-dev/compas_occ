@@ -16,7 +16,6 @@ def compas_point_to_occ_point(self: Point) -> gp_Pnt:
     return gp_Pnt(* self)
 
 
-@classmethod
 def compas_point_from_occ_point(cls: Point, point: gp_Pnt) -> Point:
     return cls(point.X(), point.Y(), point.Z())
 
@@ -25,7 +24,6 @@ def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
     return gp_Vec(* self)
 
 
-@classmethod
 def compas_vector_from_occ_vector(cls: Vector, vector: gp_Vec) -> Vector:
     return cls(vector.X(), vector.Y(), vector.Z())
 
@@ -36,9 +34,3 @@ def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
 
 def compas_line_to_occ_line(self: Line) -> gp_Lin:
     return gp_Lin(self.start.to_occ_point(), self.direction.to_occ_direction())
-
-
-Point.to_occ_point = compas_point_to_occ_point
-Vector.to_occ_vector = compas_vector_to_occ_vector
-Vector.to_occ_direction = compas_vector_to_occ_direction
-Line.to_occ_line = compas_line_to_occ_line

@@ -5,34 +5,33 @@ compas_occ.interop
 
 .. currentmodule:: compas_occ.interop
 
-Functions
-=========
+Arrays
+======
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    array1_from_floats1
-    array1_from_integers1
-    array1_from_points1
-    array2_from_points2
+    arrays.array1_from_floats1
+    arrays.array1_from_integers1
+    arrays.array1_from_points1
+    arrays.points1_from_array1
+    arrays.array2_from_points2
+    arrays.points2_from_array2
+
+
+Primitives
+==========
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    points1_from_array1
-    points2_from_array2
+    primitives.compas_point_to_occ_point
+    primitives.compas_point_from_occ_point
+    primitives.compas_vector_to_occ_vector
+    primitives.compas_vector_to_occ_direction
+    primitives.compas_vector_from_occ_vector
+    primitives.compas_line_to_occ_line
 
 """
-
-from .arrays import (  # noqa F401
-    array1_from_floats1,
-    array1_from_integers1,
-    array1_from_points1,
-    array2_from_points2
-)
-from .arrays import (  # noqa F401
-    points1_from_array1,
-    points2_from_array2
-)
