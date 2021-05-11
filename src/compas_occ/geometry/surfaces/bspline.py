@@ -118,6 +118,13 @@ class BSplineSurface:
         srf = BRep_Tool_Surface(face)
         return cls.from_occ(srf)
 
+    @classmethod
+    def from_fill(cls, curve1: BSplineCurve, curve2: BSplineCurve) -> BSplineSurface:
+        surface = cls()
+        occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
+        surface.occ_surface = occ_fill.Surface()
+        return surface
+
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
@@ -148,13 +155,6 @@ class BSplineSurface:
                 d = self.point_at(U[i + 1][j + 0], V[i + 1][j + 0])
                 quads.append([a, b, c, d])
         return Mesh.from_polygons(quads)
-
-    @classmethod
-    def from_fill(cls, curve1: BSplineCurve, curve2: BSplineCurve) -> BSplineSurface:
-        surface = cls()
-        occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
-        surface.occ_surface = occ_fill.Surface()
-        return surface
 
     @property
     def occ_shape(self) -> TopoDS_Shape:

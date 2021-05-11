@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+from typing import List
+
 from compas.datastructures import Mesh
 
-from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import (
+    TopoDS_Shape,
+    TopoDS_Vertex,
+    TopoDS_Edge,
+    TopoDS_Face,
+    TopoDS_Shell,
+    TopoDS_Solid
+)
 from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
@@ -80,8 +89,17 @@ class BRepShape:
         converter = BRepBuilderAPI_NurbsConvert(self.occ_shape, True)
         return BRepShape(converter.Shape())
 
-    def faces(self):
+    def vertices(self) -> List[TopoDS_Vertex]:
+        return self.explorer.vertices()
+
+    def edges(self) -> List[TopoDS_Edge]:
+        return self.explorer.edges()
+
+    def faces(self) -> List[TopoDS_Face]:
         return self.explorer.faces()
 
-    def edges(self):
-        return self.explorer.edges()
+    def shells(self) -> List[TopoDS_Shell]:
+        return self.explorer.shells()
+
+    def solids(self) -> List[TopoDS_Solid]:
+        return self.explorer.solids()
