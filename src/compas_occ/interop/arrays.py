@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Tuple, List
 
 from compas.geometry import Point
@@ -52,16 +54,8 @@ def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
     return array
 
 
-def integers1_from_array1(array: TColStd_Array1OfInteger) -> List[int]:
-    pass
-
-
 def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
     array = TColStd_Array1OfReal(0, len(numbers) - 1)
     for index, number in enumerate(numbers):
         array.SetValue(index, number)
     return array
-
-
-def floats1_from_array1(array: TColStd_Array1OfReal) -> List[float]:
-    pass
