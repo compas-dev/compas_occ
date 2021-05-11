@@ -16,17 +16,6 @@ Datastructures
     datastructures.BRepShape
 
 
-Primitives
-==========
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    primitives.Box
-    primitives.Sphere
-
-
 Booleans
 ========
 
@@ -35,6 +24,7 @@ Booleans
     :nosignatures:
 
     booleans.boolean_union_shape_shape
+    booleans.boolean_difference_shape_shape
 
 
 """

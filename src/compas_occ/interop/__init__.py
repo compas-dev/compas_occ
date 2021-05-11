@@ -34,4 +34,26 @@ Primitives
     primitives.compas_vector_from_occ_vector
     primitives.compas_line_to_occ_line
 
+
+Shapes
+======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    shapes.Box
+    shapes.Sphere
+
+
+Meshes
+======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    meshes.compas_trimesh_to_occ_shell
+    meshes.compas_quadmesh_to_occ_shell
+
 """
