@@ -5,7 +5,7 @@ from compas.datastructures import Mesh
 
 from compas_occ.brep.datastructures import BRepShape
 from compas_occ.geometry.curves import BSplineCurve
-from compas_occ.geometry.surfaces.bspline import BSplineSurface
+from compas_occ.geometry.surfaces import BSplineSurface
 
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import (
