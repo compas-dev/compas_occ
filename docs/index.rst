@@ -1,10 +1,11 @@
 ********************************************************************************
-compas_occ
+COMPAS OCC
 ********************************************************************************
 
 .. rst-class:: lead
 
-This is the documentation of COMPAS OCC.
+COMPAS OCC provides an easy-to-use interface to the Python bindings
+of the 3D modelling kernel of Open CasCade.
 
 .. .. figure:: /_images/view2_scripted.png
      :figclass: figure

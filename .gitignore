@@ -120,3 +120,5 @@ docs/api/generated/
 conda.recipe/
 
 __*.stp
+
+scripts/__floor

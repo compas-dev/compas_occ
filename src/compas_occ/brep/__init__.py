@@ -25,6 +25,6 @@ Booleans
 
     booleans.boolean_union_shape_shape
     booleans.boolean_difference_shape_shape
-
+    booleans.boolean_intersection_shape_shape
 
 """

@@ -1,7 +1,7 @@
 from compas.geometry import Polyline, Frame
 
 from compas_occ.interop.shapes import Box, Sphere
-from compas_occ.brep.booleans import boolean_difference_shape_shape
+from compas_occ.brep.booleans import boolean_intersection_shape_shape
 from compas_occ.geometry.surfaces import BSplineSurface
 from compas_occ.geometry.curves import BSplineCurve
 
@@ -14,7 +14,7 @@ Object.register(Sphere, SphereObject)
 box = Box(Frame.worldXY(), 1, 1, 1)
 sphere = Sphere([0.5 * box.xsize, 0.5 * box.ysize, 0.5 * box.zsize], 0.5)
 
-shape = boolean_difference_shape_shape(box, sphere, convert=True)
+shape = boolean_intersection_shape_shape(box, sphere, convert=True)
 
 viewer = App()
 
