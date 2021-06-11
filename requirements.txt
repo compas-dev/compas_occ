@@ -1,3 +1,5 @@
 compas>=1.5
+nptyping
+typing_extentions
 # pythonocc-core
 #git+https://github.com/tpaviot/pythonocc-utils
