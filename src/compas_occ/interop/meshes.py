@@ -8,6 +8,7 @@ from compas_occ.geometry.surfaces import BSplineSurface
 
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Shell
+from OCC.Core.TopoDS import TopoDS_Compound
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
@@ -17,7 +18,7 @@ from OCC.Core.GeomAbs import GeomAbs_C0
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
 
-def _triangle_to_face(points):
+def triangle_to_face(points):
     polygon = BRepBuilderAPI_MakePolygon()
     for point in points:
         polygon.Add(gp_Pnt(* point))
@@ -26,7 +27,7 @@ def _triangle_to_face(points):
     return BRepBuilderAPI_MakeFace(wire).Face()
 
 
-def _quad_to_face(points):
+def quad_to_face(points):
     points = [Point(* point) for point in points]
     curve1 = BSplineCurve.from_points([points[0], points[1]])
     curve2 = BSplineCurve.from_points([points[3], points[2]])
@@ -35,7 +36,7 @@ def _quad_to_face(points):
     return BRepBuilderAPI_MakeFace(surface.occ_face).Face()
 
 
-def _ngon_to_face(points):
+def ngon_to_face(points):
     points = [gp_Pnt(* point) for point in points]
     poly = BRepBuilderAPI_MakePolygon()
     for point in points:
@@ -60,7 +61,7 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, _triangle_to_face(points))
+        builder.Add(shell, triangle_to_face(points))
 
     return shell
 
@@ -75,9 +76,24 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, _quad_to_face(points))
+        builder.Add(shell, quad_to_face(points))
 
     return shell
+
+
+def compas_quadmesh_to_occ_compound(mesh: Mesh) -> TopoDS_Compound:
+    """Convert a COMPAS quad mesh to an OCC compound."""
+    assert mesh.is_quadmesh(), "The input mesh is not a quad mesh."
+
+    compound = TopoDS_Compound()
+    builder = BRep_Builder()
+    builder.MakeCompound(compound)
+
+    for face in mesh.faces():
+        points = mesh.face_coordinates(face)
+        builder.Add(compound, quad_to_face(points))
+
+    return compound
 
 
 def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
@@ -92,10 +108,10 @@ def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
         points = mesh.face_coordinates(face)
 
         if len(points) == 3:
-            builder.Add(shell, _triangle_to_face(points))
+            builder.Add(shell, triangle_to_face(points))
         elif len(points) == 4:
-            builder.Add(shell, _quad_to_face(points))
+            builder.Add(shell, quad_to_face(points))
         else:
-            builder.Add(shell, _ngon_to_face(points))
+            builder.Add(shell, ngon_to_face(points))
 
     return shell

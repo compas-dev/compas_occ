@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple, List
+from typing import Optional, Tuple, List
 
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
@@ -144,11 +144,12 @@ class BSplineSurface:
             triangles.append(tess.GetTriangleIndex(i))
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
-    def to_vizmesh(self, resolution: int = 100) -> Mesh:
+    def to_vizmesh(self, u: int = 100, v: Optional[int] = None) -> Mesh:
         quads = []
-        U, V = meshgrid(self.uspace(resolution), self.vspace(resolution))
-        for i in range(resolution - 1):
-            for j in range(resolution - 1):
+        v = v or u
+        U, V = meshgrid(self.uspace(u), self.vspace(v))
+        for i in range(u - 1):
+            for j in range(v - 1):
                 a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
                 b = self.point_at(U[i + 0][j + 1], V[i + 0][j + 1])
                 c = self.point_at(U[i + 1][j + 1], V[i + 1][j + 1])

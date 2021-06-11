@@ -19,7 +19,6 @@ Arrays
     arrays.array2_from_points2
     arrays.points2_from_array2
 
-
 Primitives
 ==========
 
@@ -34,7 +33,6 @@ Primitives
     primitives.compas_vector_from_occ_vector
     primitives.compas_line_to_occ_line
 
-
 Shapes
 ======
 
@@ -44,7 +42,6 @@ Shapes
 
     shapes.Box
     shapes.Sphere
-
 
 Meshes
 ======

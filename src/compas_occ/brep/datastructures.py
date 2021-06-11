@@ -58,14 +58,17 @@ class BRepShape:
     def explorer(self):
         return self._explorer
 
-    def to_step(self, filepath: str, schema: str = "AP203") -> None:
+    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
         """Write the shape contained in this wrapper to a STEP file."""
         step_writer = STEPControl_Writer()
+
         Interface_Static_SetCVal("write.step.schema", schema)
+        Interface_Static_SetCVal("write.step.unit", unit)
+
         step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
+
         status = step_writer.Write(filepath)
-        if status != IFSelect_RetDone:
-            raise AssertionError("load failed")
+        assert status == IFSelect_RetDone, "STEP writing failed."
 
     def to_tesselation(self) -> Mesh:
         """Convert the shape contained in this wrapper to a triangulated mesh for visualization."""

@@ -5,22 +5,23 @@ compas_occ.geometry
 
 .. currentmodule:: compas_occ.geometry
 
-Curves
-======
+Classes
+=======
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    curves.BSplineCurve
+    BSplineCurve
+    BSplineSurface
 
-Surfaces
-========
+Functions
+=========
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
-
-    surfaces.BSplineSurface
 
 """
+from .curves import BSplineCurve  # noqa: F401
+from .surfaces import BSplineSurface  # noqa: F401
