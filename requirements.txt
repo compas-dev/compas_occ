@@ -1,5 +1,5 @@
 compas>=1.5
 nptyping
-typing_extentions
+typing_extensions
 # pythonocc-core
 #git+https://github.com/tpaviot/pythonocc-utils
