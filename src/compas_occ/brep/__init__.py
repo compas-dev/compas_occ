@@ -5,26 +5,21 @@ compas_occ.brep
 
 .. currentmodule:: compas_occ.brep
 
-
-Datastructures
-==============
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    datastructures.BRepShape
-
-
-Booleans
-========
+Classes
+=======
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    booleans.boolean_union_shape_shape
-    booleans.boolean_difference_shape_shape
-    booleans.boolean_intersection_shape_shape
+    BRep
+
+Functions
+=========
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
 
 """
+from .brep import BRep  # noqa: F401
