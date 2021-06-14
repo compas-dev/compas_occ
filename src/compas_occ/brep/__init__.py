@@ -13,6 +13,9 @@ Classes
     :nosignatures:
 
     BRep
+    BRepVertex
+    BRepEdge
+    BRepLoop
 
 Functions
 =========
@@ -22,4 +25,7 @@ Functions
     :nosignatures:
 
 """
+from .brepvertex import BRepVertex  # noqa: F401
+from .brepedge import BRepEdge  # noqa: F401
+from .breploop import BRepLoop  # noqa: F401
 from .brep import BRep  # noqa: F401

@@ -14,9 +14,6 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Ax2
 
-from OCC.Core.TopoDS import TopoDS_Vertex, topods_Vertex
-from OCC.Core.TopoDS import TopoDS_Edge, topods_Edge
-from OCC.Core.TopoDS import TopoDS_Wire, topods_Wire
 from OCC.Core.TopoDS import TopoDS_Face, topods_Face
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.TopoDS import TopoDS_Shape
@@ -32,6 +29,8 @@ from OCC.Core.TopAbs import TopAbs_ShapeEnum
 
 from OCC.Core.BRep import BRep_Builder
 
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
+
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder
@@ -42,9 +41,19 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 
 from OCC.Core.Tesselator import ShapeTesselator
 
-from compas_occ.interop.meshes import triangle_to_face
-from compas_occ.interop.meshes import quad_to_face
-from compas_occ.interop.meshes import ngon_to_face
+from OCC.Core.STEPControl import STEPControl_Writer
+from OCC.Core.STEPControl import STEPControl_AsIs
+from OCC.Core.Interface import Interface_Static_SetCVal
+from OCC.Core.IFSelect import IFSelect_RetDone
+
+from compas_occ.interop import triangle_to_face
+from compas_occ.interop import quad_to_face
+from compas_occ.interop import ngon_to_face
+from compas_occ.geometry import BSplineSurface
+
+from compas_occ.brep import BRepVertex
+from compas_occ.brep import BRepEdge
+from compas_occ.brep import BRepLoop
 
 
 class BRep:
@@ -52,16 +61,26 @@ class BRep:
 
     Attributes
     ----------
-    shape
-    type
-    vertices
-    edges
-    loops
-    faces
-    orientation
-    frame
-    area
-    volume
+    shape : :class:`TopoDS_Shape`
+        The underlying OCC shape of the BRep.
+    type : :class:`TopAbs_ShapeEnum`, read-only
+        One of `{TopAbs_COMPOUND, TopAbs_COMPSOLID, TopAbs_SOLID, TopAbs_SHELL, TopAbs_FACE,  TopAbs_WIRE, TopAbs_EDGE, TopAbs_VERTEX, TopAbs_SHAPE}`.
+    vertices : list of :class:`TopoDS_Vertex`, read-only
+        The vertices of the BRep.
+    edges : list of :class:`TopoDS_Edge`, read-only
+        The edges of the BRep.
+    loops : list of :class:`TopoDS_Wire`, read-only
+        The loops of the BRep.
+    faces : list of :class:`TopoDS_Face`, read-only
+        The faces of the BRep.
+    orientation : :class:`TopAbs_Orientation`, read-only
+        One of `{TopAbs_FORWARD, TopAbs_REVERSED, TopAbs_INTERNAL, TopAbs_EXTERNAL}`.
+    frame : :class:`Frame`, read-only
+        The local coordinate system of the BRep.
+    area : float, read-only
+        The surface area of the BRep.
+    volume : float, read-only
+        The volume of the regions contained by the BRep.
     """
 
     def __init__(self) -> None:
@@ -91,34 +110,34 @@ class BRep:
         return self.shape.ShapeType()
 
     @property
-    def vertices(self) -> List[TopoDS_Vertex]:
+    def vertices(self) -> List[BRepVertex]:
         vertices = []
         explorer = TopExp_Explorer(self.shape, TopAbs_VERTEX)
         while explorer.More():
-            vertex = topods_Vertex(explorer.Current())
-            vertices.append(vertex)
+            vertex = explorer.Current()
+            vertices.append(BRepVertex(vertex))
             explorer.Next()
         return vertices
 
     @property
-    def edges(self) -> List[TopoDS_Edge]:
+    def edges(self) -> List[BRepEdge]:
         edges = []
         explorer = TopExp_Explorer(self.shape, TopAbs_EDGE)
         while explorer.More():
-            edge = topods_Edge(explorer.Current())
-            edges.append(edge)
+            edge = explorer.Current()
+            edges.append(BRepEdge(edge))
             explorer.Next()
         return edges
 
     @property
-    def loops(self) -> List[TopoDS_Wire]:
-        wires = []
+    def loops(self) -> List[BRepLoop]:
+        loops = []
         explorer = TopExp_Explorer(self.shape, TopAbs_WIRE)
         while explorer.More():
-            wire = topods_Wire(explorer.Current())
-            wires.append(wire)
+            wire = explorer.Current()
+            loops.append(BRepLoop(wire))
             explorer.Next()
-        return wires
+        return loops
 
     @property
     def faces(self) -> List[TopoDS_Face]:
@@ -168,6 +187,7 @@ class BRep:
                      p2: compas.geometry.Point,
                      p3: compas.geometry.Point,
                      p4: Optional[compas.geometry.Point] = None) -> BRep:
+        """Construct a BRep from 3 or 4 corner points."""
         if not p4:
             brep = BRep()
             brep.shape = triangle_to_face([p1, p2, p3])
@@ -178,6 +198,7 @@ class BRep:
 
     @classmethod
     def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> BRep:
+        """Construct a BRep from a set of polygons."""
         shell = TopoDS_Shell()
         builder = BRep_Builder()
         builder.MakeShell(shell)
@@ -198,6 +219,7 @@ class BRep:
 
     @classmethod
     def from_box(cls, box: compas.geometry.Box) -> BRep:
+        """Construct a BRep from a COMPAS box."""
         xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
         yaxis = box.frame.yaxis.scaled(-0.5 * box.ysize)
         zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
@@ -209,12 +231,14 @@ class BRep:
 
     @classmethod
     def from_sphere(cls, sphere: compas.geometry.Sphere) -> BRep:
+        """Construct a BRep from a COMPAS sphere."""
         brep = BRep()
         brep.shape = BRepPrimAPI_MakeSphere(gp_Pnt(* sphere.point), sphere.radius).Shape()
         return brep
 
     @classmethod
     def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> BRep:
+        """Construct a BRep from a COMPAS cylinder."""
         plane = cylinder.circle.plane
         height = cylinder.height
         radius = cylinder.circle.radius
@@ -227,14 +251,17 @@ class BRep:
 
     @classmethod
     def from_cone(cls, cone: compas.geometry.Cone) -> BRep:
+        """Construct a BRep from a COMPAS cone."""
         raise NotImplementedError
 
     @classmethod
     def from_torus(cls, torus: compas.geometry.Torus) -> BRep:
+        """Construct a BRep from a COMPAS torus."""
         raise NotImplementedError
 
     @classmethod
     def from_boolean_difference(cls, A: BRep, B: BRep) -> BRep:
+        """Construct a BRep from the boolean difference of two other BReps."""
         cut = BRepAlgoAPI_Cut(A.shape, B.shape)
         if not cut.IsDone():
             raise Exception("Boolean difference operation could not be completed.")
@@ -244,6 +271,7 @@ class BRep:
 
     @classmethod
     def from_boolean_intersection(cls, A: BRep, B: BRep) -> BRep:
+        """Construct a BRep from the boolean intersection of two other BReps."""
         common = BRepAlgoAPI_Common(A.shape, B.shape)
         if not common.IsDone():
             raise Exception("Boolean intersection operation could not be completed.")
@@ -253,6 +281,7 @@ class BRep:
 
     @classmethod
     def from_boolean_union(cls, A, B) -> BRep:
+        """Construct a BRep from the boolean union of two other BReps."""
         fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
         if not fuse.IsDone():
             raise Exception("Boolean union operation could not be completed.")
@@ -262,6 +291,7 @@ class BRep:
 
     @classmethod
     def from_mesh(cls, mesh: compas.datastructures.Mesh) -> BRep:
+        """Construct a BRep from a COMPAS mesh."""
         shell = TopoDS_Shell()
         builder = BRep_Builder()
         builder.MakeShell(shell)
@@ -280,36 +310,44 @@ class BRep:
     # create pipe
     # create patch
     # create offset
-    #
 
     # ==============================================================================
     # Converters
     # ==============================================================================
 
     def to_json(self, filepath: str):
+        """Export the BRep to a JSON file."""
         with open(filepath, 'w') as f:
             self.shape.DumpJson(f)
 
-    def to_stp(self, filepath: str):
-        raise NotImplementedError
+    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
+        """Write the BRep shape to a STEP file."""
+        step_writer = STEPControl_Writer()
+        Interface_Static_SetCVal("write.step.schema", schema)
+        Interface_Static_SetCVal("write.step.unit", unit)
+        step_writer.Transfer(self.shape, STEPControl_AsIs)
+        status = step_writer.Write(filepath)
+        assert status == IFSelect_RetDone, "STEP writing failed."
 
     def to_tesselation(self) -> Mesh:
+        """Create a tesselation of the shape for visualisation."""
         tesselation = ShapeTesselator(self.shape)
         tesselation.Compute()
         vertices = [tesselation.GetVertex(i) for i in range(tesselation.ObjGetVertexCount())]
         triangles = [tesselation.GetTriangleIndex(i) for i in range(tesselation.ObjGetTriangleCount())]
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
-    # def to_meshes(self, u=16, v=16):
-    #     converter = BRepBuilderAPI_NurbsConvert(self.shape, False)
-    #     brep = BRep()
-    #     brep.shape = converter.Shape()
-    #     meshes = []
-    #     for face in brep.faces:
-    #         srf = BSplineSurface.from_face(face)
-    #         mesh = srf.to_vizmesh(u, v)
-    #         meshes.append(mesh)
-    #     return meshes
+    def to_meshes(self, u=16, v=16):
+        """Convert the faces of the BRep shape to meshes."""
+        converter = BRepBuilderAPI_NurbsConvert(self.shape, False)
+        brep = BRep()
+        brep.shape = converter.Shape()
+        meshes = []
+        for face in brep.faces:
+            srf = BSplineSurface.from_face(face)
+            mesh = srf.to_vizmesh(u, v)
+            meshes.append(mesh)
+        return meshes
 
     # make meshes from the loops
     # use gmsh to generate proper mesh
@@ -319,15 +357,19 @@ class BRep:
     # ==============================================================================
 
     def is_orientable(self) -> bool:
+        """Check if the shape is orientable."""
         return self.shape.Orientable()
 
     def is_closed(self) -> bool:
+        """Check if the shape is closed."""
         return self.shape.Closed()
 
     def is_infinite(self) -> bool:
+        """Check if the shape is infinite."""
         return self.shape.Infinite()
 
     def is_convex(self) -> bool:
+        """Check if the shape is convex."""
         return self.shape.Convex()
 
     def is_manifold(self) -> bool:

@@ -12,12 +12,12 @@ Arrays
     :toctree: generated/
     :nosignatures:
 
-    arrays.array1_from_floats1
-    arrays.array1_from_integers1
-    arrays.array1_from_points1
-    arrays.points1_from_array1
-    arrays.array2_from_points2
-    arrays.points2_from_array2
+    array1_from_floats1
+    array1_from_integers1
+    array1_from_points1
+    array2_from_points2
+    points1_from_array1
+    points2_from_array2
 
 Primitives
 ==========
@@ -50,7 +50,24 @@ Meshes
     :toctree: generated/
     :nosignatures:
 
-    meshes.compas_trimesh_to_occ_shell
-    meshes.compas_quadmesh_to_occ_shell
+    compas_mesh_to_occ_shell
+    compas_quadmesh_to_occ_shell
+    compas_trimesh_to_occ_shell
+    ngon_to_face
+    quad_to_face
+    triangle_to_face
 
 """
+from .arrays import array1_from_integers1  # noqa: F401
+from .arrays import array1_from_floats1  # noqa: F401
+from .arrays import array1_from_points1  # noqa: F401
+from .arrays import array2_from_points2  # noqa: F401
+from .arrays import points1_from_array1  # noqa: F401
+from .arrays import points2_from_array2  # noqa: F401
+
+from .meshes import triangle_to_face  # noqa: F401
+from .meshes import quad_to_face  # noqa: F401
+from .meshes import ngon_to_face  # noqa: F401
+from .meshes import compas_mesh_to_occ_shell  # noqa: F401
+from .meshes import compas_quadmesh_to_occ_shell  # noqa: F401
+from .meshes import compas_trimesh_to_occ_shell  # noqa: F401
