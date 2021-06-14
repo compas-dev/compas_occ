@@ -10,6 +10,7 @@ from compas_occ.brep import BRepEdge
 
 
 class BRepLoop:
+    """Class representing an edge loop in the BRep of a geometric shape."""
 
     def __init__(self, loop: TopoDS_Wire):
         self._loop = None

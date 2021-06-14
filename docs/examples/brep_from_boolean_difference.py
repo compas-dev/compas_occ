@@ -27,14 +27,17 @@ C = BRep.from_boolean_difference(A, BRep.from_boolean_union(BRep.from_boolean_un
 
 lines = []
 circles = []
+ellipses = []
 
 for edge in C.edges:
     if edge.is_line:
         lines.append(edge.to_line())
     elif edge.is_circle:
         circles.append(edge.to_circle())
+    elif edge.is_ellipse:
+        ellipses.append(edge.to_ellipse())
     else:
-        print(edge.type)
+        raise NotImplementedError
 
 mesh = C.to_tesselation()
 
@@ -45,6 +48,9 @@ for line in lines:
     viewer.add(line, linewidth=2)
 
 for circle in circles:
-    viewer.add(circle, linewidth=2, u=32)
+    viewer.add(circle, linewidth=2, u=64)
+
+for ellipse in ellipses:
+    viewer.add(ellipse, linewidth=2, u=64)
 
 viewer.run()

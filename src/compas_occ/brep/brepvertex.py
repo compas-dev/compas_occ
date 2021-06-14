@@ -10,6 +10,20 @@ from compas.geometry import Point
 
 
 class BRepVertex:
+    """Class representing a vertex in the BRep of a geometric shape.
+
+    Attributes
+    ----------
+    vertex : :class:`TopoDS_Vertex`
+        The underlying OCC vertex.
+    point : :class:`Point`, read-only
+        The geometric point underlying the topological vertex.
+
+    Parameters
+    ----------
+    vertex : :class:`TopoDS_Vertex`
+        An OCC topological vertex data structure.
+    """
 
     def __init__(self, vertex: TopoDS_Vertex):
         self._vertex = None

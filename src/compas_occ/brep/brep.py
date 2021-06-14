@@ -14,7 +14,6 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Ax2
 
-from OCC.Core.TopoDS import TopoDS_Face, topods_Face
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.TopoDS import TopoDS_Shape
 
@@ -54,6 +53,7 @@ from compas_occ.geometry import BSplineSurface
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
 from compas_occ.brep import BRepLoop
+from compas_occ.brep import BRepFace
 
 
 class BRep:
@@ -140,12 +140,12 @@ class BRep:
         return loops
 
     @property
-    def faces(self) -> List[TopoDS_Face]:
+    def faces(self) -> List[BRepFace]:
         faces = []
         explorer = TopExp_Explorer(self.shape, TopAbs_FACE)
         while explorer.More():
-            face = topods_Face(explorer.Current())
-            faces.append(face)
+            face = explorer.Current()
+            faces.append(BRepFace(face))
             explorer.Next()
         return faces
 
