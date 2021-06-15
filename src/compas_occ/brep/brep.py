@@ -65,13 +65,13 @@ class BRep:
         The underlying OCC shape of the BRep.
     type : :class:`TopAbs_ShapeEnum`, read-only
         One of `{TopAbs_COMPOUND, TopAbs_COMPSOLID, TopAbs_SOLID, TopAbs_SHELL, TopAbs_FACE,  TopAbs_WIRE, TopAbs_EDGE, TopAbs_VERTEX, TopAbs_SHAPE}`.
-    vertices : list of :class:`TopoDS_Vertex`, read-only
+    vertices : list of :class:`BRepVertex`, read-only
         The vertices of the BRep.
-    edges : list of :class:`TopoDS_Edge`, read-only
+    edges : list of :class:`BRepEdge`, read-only
         The edges of the BRep.
-    loops : list of :class:`TopoDS_Wire`, read-only
+    loops : list of :class:`BRepLoop`, read-only
         The loops of the BRep.
-    faces : list of :class:`TopoDS_Face`, read-only
+    faces : list of :class:`BRepFace`, read-only
         The faces of the BRep.
     orientation : :class:`TopAbs_Orientation`, read-only
         One of `{TopAbs_FORWARD, TopAbs_REVERSED, TopAbs_INTERNAL, TopAbs_EXTERNAL}`.
