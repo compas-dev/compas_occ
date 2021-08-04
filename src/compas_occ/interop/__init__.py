@@ -61,6 +61,7 @@ Meshes
 from .arrays import array1_from_integers1  # noqa: F401
 from .arrays import array1_from_floats1  # noqa: F401
 from .arrays import array1_from_points1  # noqa: F401
+from .arrays import harray1_from_points1  # noqa: F401
 from .arrays import array2_from_points2  # noqa: F401
 from .arrays import points1_from_array1  # noqa: F401
 from .arrays import points2_from_array2  # noqa: F401

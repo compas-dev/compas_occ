@@ -35,4 +35,4 @@ def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
 
 
 def compas_line_to_occ_line(self: Line) -> gp_Lin:
-    return gp_Lin(self.start.to_occ_point(), self.direction.to_occ_direction())
+    return gp_Lin(compas_point_to_occ_point(self.start), compas_vector_to_occ_direction(self.direction))

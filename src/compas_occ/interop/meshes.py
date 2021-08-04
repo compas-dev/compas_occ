@@ -6,10 +6,10 @@ import compas.geometry
 from compas.geometry import Point
 from compas.datastructures import Mesh
 
-from compas_occ.geometry.curves import BSplineCurve
-from compas_occ.geometry.surfaces import BSplineSurface
+from .arrays import array1_from_points1
 
 from OCC.Core.gp import gp_Pnt
+from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.BRep import BRep_Builder
@@ -32,11 +32,10 @@ def triangle_to_face(points: List[compas.geometry.Point, Annotated[List[float], 
 
 def quad_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]]) -> TopoDS_Face:
     points = [Point(* point) for point in points]
-    curve1 = BSplineCurve.from_points([points[0], points[1]])
-    curve2 = BSplineCurve.from_points([points[3], points[2]])
-    srf = geomfill_Surface(curve1.occ_curve, curve2.occ_curve)
-    surface = BSplineSurface.from_occ(srf)
-    return BRepBuilderAPI_MakeFace(surface.occ_face).Face()
+    curve1 = GeomAPI_PointsToBSpline(array1_from_points1([points[0], points[1]])).Curve()
+    curve2 = GeomAPI_PointsToBSpline(array1_from_points1([points[3], points[2]])).Curve()
+    srf = geomfill_Surface(curve1, curve2)
+    return BRepBuilderAPI_MakeFace(srf, 1e-6).Face()
 
 
 def ngon_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]]) -> TopoDS_Face:

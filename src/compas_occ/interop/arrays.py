@@ -7,7 +7,8 @@ from compas.geometry import Point
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TColgp import (
     TColgp_Array1OfPnt,
-    TColgp_Array2OfPnt
+    TColgp_Array2OfPnt,
+    TColgp_HArray1OfPnt
 )
 from OCC.Core.TColStd import (
     TColStd_Array1OfReal,
@@ -16,9 +17,16 @@ from OCC.Core.TColStd import (
 
 
 def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
-    array = TColgp_Array1OfPnt(0, len(points) - 1)
+    array = TColgp_Array1OfPnt(1, len(points))
     for index, point in enumerate(points):
-        array.SetValue(index, gp_Pnt(* point))
+        array.SetValue(index + 1, gp_Pnt(* point))
+    return array
+
+
+def harray1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
+    array = TColgp_HArray1OfPnt(1, len(points))
+    for index, point in enumerate(points):
+        array.SetValue(index + 1, gp_Pnt(* point))
     return array
 
 
@@ -48,14 +56,14 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> Tuple[List[Point], List[Po
 
 
 def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
-    array = TColStd_Array1OfInteger(0, len(numbers) - 1)
+    array = TColStd_Array1OfInteger(1, len(numbers))
     for index, number in enumerate(numbers):
-        array.SetValue(index, number)
+        array.SetValue(index + 1, number)
     return array
 
 
 def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
-    array = TColStd_Array1OfReal(0, len(numbers) - 1)
+    array = TColStd_Array1OfReal(1, len(numbers))
     for index, number in enumerate(numbers):
-        array.SetValue(index, number)
+        array.SetValue(index + 1, number)
     return array
