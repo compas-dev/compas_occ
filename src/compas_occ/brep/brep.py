@@ -29,6 +29,7 @@ from OCC.Core.TopAbs import TopAbs_ShapeEnum
 from OCC.Core.BRep import BRep_Builder
 
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
 
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
@@ -351,6 +352,9 @@ class BRep:
 
     # make meshes from the loops
     # use gmsh to generate proper mesh
+
+    def make_solid(self):
+        self.shape = BRepBuilderAPI_MakeSolid(self.shape).Solid()
 
     # ==============================================================================
     # Methods
