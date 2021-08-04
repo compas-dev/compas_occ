@@ -19,7 +19,7 @@ from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import (
     GeomAPI_Interpolate,
-    GeomAPI_PointsToBSpline
+    # GeomAPI_PointsToBSpline
 )
 from OCC.Core.TopoDS import (
     topods_Edge,
@@ -42,7 +42,46 @@ from OCC.Core.STEPControl import (
 
 
 class BSplineCurve(Curve):
-    """Wrapper for OCC BSplineCurve."""
+    """Class representing a B-spline based on the BSplineCurve of OCC.
+
+    Attributes
+    ----------
+    poles: List[Point]
+        The control points of the curve.
+    knots: List[float]
+        The knot vector, without duplicates.
+    multiplicities: List[int]
+        The multiplicities of the knots in the knot vector.
+    knotsequence: List[float]
+        The knot vector, with repeating values according to the multiplicities.
+    degree: int
+        The degree of the polynomials.
+    domain: Tuple[float, float]
+        The parameter domain.
+    order: int
+        The order of the curve.
+    start: :class:`Point`
+        The point corresponding to the start of the parameter domain.
+    end: :class:`Point`
+        The point corresponding to the end of the parameter domain.
+    is_closed: bool
+        True if the curve is closed.
+    is_periodic: bool
+        True if the curve is periodic.
+    is_rational: bool
+        True is the curve is rational.
+    length: float
+        Length of the curve.
+
+    References
+    ----------
+    .. [1] https://en.wikipedia.org/wiki/B-spline
+
+    .. [2] https://mathworld.wolfram.com/B-spline.html
+
+    .. [3] https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_geom___b_spline_curve.html
+
+    """
 
     @property
     def DATASCHEMA(self):
@@ -62,7 +101,7 @@ class BSplineCurve(Curve):
     def JSONSCHEMANAME(self):
         raise NotImplementedError
 
-    def __init__(self, name=None) -> BSplineCurve:
+    def __init__(self, name=None) -> None:
         super().__init__(name=name)
         self.occ_curve = None
 
@@ -116,7 +155,7 @@ class BSplineCurve(Curve):
 
     @classmethod
     def from_data(cls, data: Dict) -> BSplineCurve:
-        """Construct a BSpline curve from its data representation.
+        """Construct a B-spline from its data representation.
 
         Parameters
         ----------
@@ -125,8 +164,8 @@ class BSplineCurve(Curve):
 
         Returns
         -------
-        :class:`compas.geometry.BezierCurve`
-            The constructed bezier curve.
+        :class:`compas_occ.geometry.BSplineCurve`
+            The constructed curve.
 
         """
         poles = [Point.from_data(point) for point in data['points']]
@@ -142,6 +181,7 @@ class BSplineCurve(Curve):
 
     @classmethod
     def from_occ(cls, occ_curve: Geom_BSplineCurve) -> BSplineCurve:
+        """Construct a B-spline from OCC geometry."""
         curve = cls()
         curve.occ_curve = occ_curve
         return curve
@@ -153,7 +193,7 @@ class BSplineCurve(Curve):
                         multiplicities: List[int],
                         degree: int,
                         is_periodic: bool = False) -> BSplineCurve:
-        """Construct a curve from poles and knots."""
+        """Construct a B-spline from control points."""
         curve = cls()
         curve.occ_curve = Geom_BSplineCurve(
             array1_from_points1(poles),
@@ -165,25 +205,28 @@ class BSplineCurve(Curve):
         return curve
 
     @classmethod
-    def from_interpolation(cls, points: List[Point]) -> BSplineCurve:
+    def from_interpolation(cls, points: List[Point], precision: float = 1e-3) -> BSplineCurve:
+        """Construct a B-spline by interpolating a set of points."""
         curve = cls()
-        interp = GeomAPI_Interpolate(harray1_from_points1(points), False, 1e-3)
+        interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
         interp.Perform()
         curve.occ_curve = interp.Curve()
         return curve
 
-    @classmethod
-    def from_points(cls, points: List[Point]) -> BSplineCurve:
-        curve = cls()
-        curve.occ_curve = GeomAPI_PointsToBSpline(array1_from_points1(points)).Curve()
-        return curve
+    # @classmethod
+    # def from_points(cls, points: List[Point]) -> BSplineCurve:
+    #     curve = cls()
+    #     curve.occ_curve = GeomAPI_PointsToBSpline(array1_from_points1(points)).Curve()
+    #     return curve
 
     @classmethod
     def from_step(cls, filepath: str) -> BSplineCurve:
+        """Load a B-spline from a STP file."""
         pass
 
     @classmethod
     def from_edge(cls, edge: TopoDS_Edge) -> BSplineCurve:
+        """Construct a B-spline from an OCC edge."""
         res = BRep_Tool_Curve(edge)
         if len(res) != 3:
             return
@@ -210,6 +253,7 @@ class BSplineCurve(Curve):
     # ==============================================================================
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
+        """Write the curve geometry to a STP file."""
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
@@ -320,6 +364,7 @@ class BSplineCurve(Curve):
     # ==============================================================================
 
     def copy(self) -> BSplineCurve:
+        """Make an independent copy of the current curve."""
         return BSplineCurve(self.poles,
                             self.knots,
                             self.multiplicities,
@@ -327,20 +372,24 @@ class BSplineCurve(Curve):
                             self.is_periodic)
 
     def transform(self, T: Transformation) -> None:
+        """Transform this curve."""
         occ_T = gp_Trsf()
         occ_T.SetValues(* T.list)
         self.occ_curve.Transform(occ_T)
 
     def transformed(self, T: Transformation) -> BSplineCurve:
+        """Transform a copy of the curve."""
         copy = self.copy()
         copy.transform(T)
         return copy
 
     def space(self, n: int = 10) -> List[float]:
+        """Compute evenly spaced parameters over the curve domain."""
         u, v = self.domain
         return linspace(u, v, n)
 
     def xyz(self, n: int = 10) -> List[Point]:
+        """Compute point locations corresponding to evenly spaced parameters over the curve domain."""
         return [self.point_at(param) for param in self.space(n)]
 
     def locus(self, resolution=100):
@@ -424,12 +473,15 @@ class BSplineCurve(Curve):
         pass
 
     def closest_point(self, point, distance=None):
+        """Compute the closest point on the curve to a given point."""
         pass
 
     def divide_by_count(self, count):
+        """Divide the curve into a specific number of equal length segments."""
         pass
 
     def divide_by_length(self, length):
+        """Divide the curve into segments of specified length."""
         pass
 
     def fair(self):
