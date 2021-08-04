@@ -1,10 +1,9 @@
 from compas.geometry import Point, Polyline
+from compas_occ.geometry import BSplineCurve
+from compas_occ.geometry import BSplineSurface
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
-
-from compas_occ.geometry import BSplineCurve
-from compas_occ.geometry import BSplineSurface
 
 points1 = []
 points1.append(Point(-4, 0, 2))

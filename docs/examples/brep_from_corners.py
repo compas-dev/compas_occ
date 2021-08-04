@@ -1,5 +1,5 @@
 from compas.geometry import Point
-from compas_occ.brep.brep import BRep
+from compas_occ.brep import BRep
 from compas_view2.app import App
 
 brep3 = BRep.from_corners(Point(0, 0, 0), Point(1, 1, 1), Point(0, 1, 0))

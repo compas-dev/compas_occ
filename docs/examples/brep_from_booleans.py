@@ -2,7 +2,7 @@ from compas.geometry import Point, Vector, Plane
 from compas.geometry import Box
 from compas.geometry import Sphere
 from compas.geometry import Cylinder
-from compas_occ.brep.brep import BRep
+from compas_occ.brep import BRep
 from compas_view2.app import App
 
 R = 1.4
