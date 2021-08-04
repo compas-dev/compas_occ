@@ -11,7 +11,7 @@ from OCC.Core.gp import gp_Pnt, gp_Dir
 from OCC.Core.Geom import Geom_Line
 from OCC.Core.GeomAPI import GeomAPI_IntCS
 
-Point.from_occ = compas_point_from_occ_point
+Point.from_occ = classmethod(compas_point_from_occ_point)
 
 
 points1 = []
