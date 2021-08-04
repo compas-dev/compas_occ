@@ -26,22 +26,12 @@ Primitives
     :toctree: generated/
     :nosignatures:
 
-    primitives.compas_point_to_occ_point
-    primitives.compas_point_from_occ_point
-    primitives.compas_vector_to_occ_vector
-    primitives.compas_vector_to_occ_direction
-    primitives.compas_vector_from_occ_vector
-    primitives.compas_line_to_occ_line
-
-Shapes
-======
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    shapes.Box
-    shapes.Sphere
+    compas_point_to_occ_point
+    compas_point_from_occ_point
+    compas_vector_to_occ_vector
+    compas_vector_to_occ_direction
+    compas_vector_from_occ_vector
+    compas_line_to_occ_line
 
 Meshes
 ======
@@ -65,6 +55,13 @@ from .arrays import harray1_from_points1  # noqa: F401
 from .arrays import array2_from_points2  # noqa: F401
 from .arrays import points1_from_array1  # noqa: F401
 from .arrays import points2_from_array2  # noqa: F401
+
+from .primitives import compas_point_to_occ_point  # noqa: F401
+from .primitives import compas_point_from_occ_point  # noqa: F401
+from .primitives import compas_vector_to_occ_vector  # noqa: F401
+from .primitives import compas_vector_to_occ_direction  # noqa: F401
+from .primitives import compas_vector_from_occ_vector  # noqa: F401
+from .primitives import compas_line_to_occ_line  # noqa: F401
 
 from .meshes import triangle_to_face  # noqa: F401
 from .meshes import quad_to_face  # noqa: F401
