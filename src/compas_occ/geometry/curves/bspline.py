@@ -73,14 +73,6 @@ class BSplineCurve(Curve):
     length: float
         Length of the curve.
 
-    References
-    ----------
-    .. [1] https://en.wikipedia.org/wiki/B-spline
-
-    .. [2] https://mathworld.wolfram.com/B-spline.html
-
-    .. [3] https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_geom___b_spline_curve.html
-
     """
 
     @property
