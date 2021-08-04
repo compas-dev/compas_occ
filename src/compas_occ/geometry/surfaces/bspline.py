@@ -1,26 +1,27 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
 
-from compas_occ.interop.primitives import (
+from compas_occ.interop import (
     compas_line_to_occ_line,
     compas_point_from_occ_point,
     compas_point_to_occ_point,
     compas_vector_from_occ_vector,
     compas_vector_to_occ_vector
 )
-from compas_occ.interop.arrays import (
+from compas_occ.interop import (
     array2_from_points2,
     array1_from_floats1,
     array1_from_integers1,
     points2_from_array2
 )
 from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.surfaces._surface import Surface
 
 from OCC.Core.gp import (
     gp_Trsf,
@@ -59,20 +60,136 @@ from OCC.Core.Tesselator import ShapeTesselator
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
-
 Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
-
 Line.to_occ = compas_line_to_occ_line
 
 
-class BSplineSurface:
+class BSplineSurface(Surface):
 
-    def __init__(self):
+    @property
+    def DATASCHEMA(self):
+        from schema import Schema
+        from compas.data import is_float3
+        from compas.data import is_sequence_of_int
+        from compas.data import is_sequence_of_float
+        return Schema({
+            'points': lambda points: all(is_float3(point) for point in points),
+            'u_knots': is_sequence_of_float,
+            'v_knots': is_sequence_of_float,
+            'u_mults': is_sequence_of_int,
+            'v_mults': is_sequence_of_int,
+            'u_degree': int,
+            'v_degree': int,
+            'is_u_periodic': bool,
+            'is_v_periodic': bool
+        })
+
+    @property
+    def JSONSCHEMANAME(self):
+        raise NotImplementedError
+
+    def __init__(self, name=None) -> None:
+        super().__init__(name=name)
         self.occ_surface = None
 
     def __eq__(self, other: BSplineSurface) -> bool:
         return self.occ_surface.IsEqual(other.occ_surface)
+
+    def __str__(self):
+        lines = [
+            'BSplineSurface',
+            '--------------',
+            f'Poles: {self.poles}',
+            f'U Knots: {self.u_knots}',
+            f'V Knots: {self.v_knots}',
+            f'U Mults: {self.u_mults}',
+            f'V Mults: {self.v_mults}',
+            f'U Degree: {self.u_degree}',
+            f'V Degree: {self.v_degree}',
+            f'U Domain: {self.u_domain}',
+            f'V Domain: {self.v_domain}',
+            f'U Periodic: {self.is_u_periodic}',
+            f'V Periodic: {self.is_v_periodic}',
+        ]
+        return "\n".join(lines)
+
+    # ==============================================================================
+    # Data
+    # ==============================================================================
+
+    @property
+    def data(self) -> Dict:
+        return {
+            'points': [point.data for point in self.points],
+            'u_knots': self.u_knots,
+            'v_knots': self.v_knots,
+            'u_mults': self.u_mults,
+            'v_mults': self.v_mults,
+            'u_degree': self.u_degree,
+            'v_degree': self.v_degree,
+            'is_u_periodic': self.is_u_periodic,
+            'is_v_periodic': self.is_v_periodic
+        }
+
+    @data.setter
+    def data(self, data: Dict):
+        poles = [Point.from_data(point) for point in data['points']]
+        u_knots = data['u_knots']
+        v_knots = data['v_knots']
+        u_mults = data['u_mults']
+        v_mults = data['v_mults']
+        u_degree = data['u_degree']
+        v_degree = data['v_degree']
+        is_u_periodic = data['is_u_periodic']
+        is_v_periodic = data['is_v_periodic']
+        self.occ_surface = Geom_BSplineSurface(
+            array2_from_points2(poles),
+            array1_from_floats1(u_knots),
+            array1_from_floats1(v_knots),
+            array1_from_integers1(u_mults),
+            array1_from_integers1(v_mults),
+            u_degree,
+            v_degree,
+            is_u_periodic,
+            is_v_periodic
+        )
+
+    @classmethod
+    def from_data(cls, data: Dict) -> BSplineSurface:
+        """Construct a BSpline surface from its data representation.
+
+        Parameters
+        ----------
+        data : dict
+            The data dictionary.
+
+        Returns
+        -------
+        :class:`compas_occ.geometry.BSplineSurface`
+            The constructed surface.
+
+        """
+        poles = [Point.from_data(point) for point in data['points']]
+        u_knots = data['u_knots']
+        v_knots = data['v_knots']
+        u_mults = data['u_mults']
+        v_mults = data['v_mults']
+        u_degree = data['u_degree']
+        v_degree = data['v_degree']
+        is_u_periodic = data['is_u_periodic']
+        is_v_periodic = data['is_v_periodic']
+        return BSplineSurface.from_parameters(
+            poles,
+            u_knots, v_knots,
+            u_mults, v_mults,
+            u_degree, v_degree,
+            is_u_periodic, is_v_periodic
+        )
+
+    # ==============================================================================
+    # Constructors
+    # ==============================================================================
 
     @classmethod
     def from_occ(cls, occ_surface: Geom_BSplineSurface) -> BSplineSurface:
@@ -125,6 +242,10 @@ class BSplineSurface:
         surface.occ_surface = occ_fill.Surface()
         return surface
 
+    # ==============================================================================
+    # Conversions
+    # ==============================================================================
+
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
@@ -157,6 +278,10 @@ class BSplineSurface:
                 quads.append([a, b, c, d])
         return Mesh.from_polygons(quads)
 
+    # ==============================================================================
+    # OCC
+    # ==============================================================================
+
     @property
     def occ_shape(self) -> TopoDS_Shape:
         return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
@@ -184,6 +309,10 @@ class BSplineSurface:
     @property
     def occ_v_mults(self) -> TColStd_Array1OfInteger:
         return self.occ_surface.VMultiplicities()
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
 
     @property
     def poles(self) -> Tuple[List[Point], List[Point]]:
@@ -214,6 +343,16 @@ class BSplineSurface:
         return self.occ_surface.VDegree()
 
     @property
+    def u_domain(self) -> int:
+        umin, umax, _, _ = self.occ_surface.Bounds()
+        return umin, umax
+
+    @property
+    def v_domain(self) -> int:
+        _, _, vmin, vmax = self.occ_surface.Bounds()
+        return vmin, vmax
+
+    @property
     def is_u_periodic(self) -> bool:
         return self.occ_surface.IsUPeriodic()
 
@@ -224,6 +363,10 @@ class BSplineSurface:
     @property
     def aabb(self) -> Box:
         pass
+
+    # ==============================================================================
+    # Methods
+    # ==============================================================================
 
     def copy(self) -> BSplineSurface:
         return BSplineSurface.from_parameters(
@@ -269,11 +412,11 @@ class BSplineSurface:
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
     def uspace(self, n: int = 10) -> List[float]:
-        umin, umax, _, _ = self.occ_surface.Bounds()
+        umin, umax = self.u_domain
         return linspace(umin, umax, n)
 
     def vspace(self, n: int = 10) -> List[float]:
-        _, _, vmin, vmax = self.occ_surface.Bounds()
+        vmin, vmax = self.v_domain
         return linspace(vmin, vmax, n)
 
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
