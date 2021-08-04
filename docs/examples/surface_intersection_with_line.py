@@ -25,12 +25,15 @@ spline2 = BSplineCurve.from_points(points2)
 surface = BSplineSurface.from_fill(spline1, spline2)
 line = Line(Point(0, 4, 0), Point(0, 4, 1))
 
-mesh = surface.to_tesselation()
-boundary = Polyline(mesh.vertices_attributes('xyz', keys=mesh.vertices_on_boundary()))
+# ==============================================================================
+# Visualisation
+# ==============================================================================
 
 view = App()
-view.add(mesh, show_edges=False)
-view.add(boundary, linewidth=2)
+
+view.add(surface.to_tesselation(), show_edges=False)
+view.add(Polyline(spline1.locus()), linewidth=2)
+view.add(Polyline(spline2.locus()), linewidth=2)
 
 for point in surface.intersections(line):
     view.add(point, size=10, color=(1, 0, 0))

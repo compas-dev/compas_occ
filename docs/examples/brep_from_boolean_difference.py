@@ -39,10 +39,13 @@ for edge in C.edges:
     else:
         raise NotImplementedError
 
-mesh = C.to_tesselation()
+# ==============================================================================
+# Visualisation
+# ==============================================================================
 
 viewer = App()
-viewer.add(mesh, show_edges=False)
+
+viewer.add(C.to_tesselation(), show_edges=False)
 
 for line in lines:
     viewer.add(line, linewidth=2)

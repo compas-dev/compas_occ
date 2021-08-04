@@ -24,16 +24,19 @@ spline2 = BSplineCurve.from_points(points2)
 
 surface = BSplineSurface.from_fill(spline1, spline2)
 
-U, V = meshgrid(surface.uspace(30), surface.vspace(20), 'ij')
+U, V = meshgrid(surface.uspace(15), surface.vspace(10), 'ij')
 
 frames = [surface.frame_at(u, v) for u, v in zip(flatten(U[1:]), flatten(V))]
 
-mesh = surface.to_tesselation()
-boundary = Polyline(mesh.vertices_attributes('xyz', keys=mesh.vertices_on_boundary()))
+# ==============================================================================
+# Visualisation
+# ==============================================================================
 
 view = App()
-view.add(mesh, show_edges=False)
-view.add(boundary, linewidth=2)
+
+view.add(surface.to_tesselation(), show_edges=False)
+view.add(Polyline(spline1.locus()), linewidth=2)
+view.add(Polyline(spline2.locus()), linewidth=2)
 
 for frame in frames:
     view.add(frame, size=0.1)

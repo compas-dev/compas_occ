@@ -33,8 +33,10 @@ F = BRep.from_boolean_difference(
     BRep.from_boolean_union(BRep.from_boolean_union(C, D), E),
 )
 
-mesh = F.to_tesselation()
+# ==============================================================================
+# Visualisation
+# ==============================================================================
 
 viewer = App()
-viewer.add(mesh)
+viewer.add(F.to_tesselation())
 viewer.run()
