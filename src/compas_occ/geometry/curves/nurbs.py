@@ -1,8 +1,11 @@
 from __future__ import annotations
+from math import sqrt
 
 from typing import Dict, List
 from compas.geometry import Point
 from compas.geometry import Transformation
+from compas.geometry import Frame
+from compas.geometry import Circle
 from compas.utilities import linspace
 
 from compas_occ.interop.arrays import (
@@ -41,13 +44,15 @@ from OCC.Core.STEPControl import (
 )
 
 
-class BSplineCurve(Curve):
-    """Class representing a B-spline based on the BSplineCurve of OCC.
+class NurbsCurve(Curve):
+    """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
 
     Attributes
     ----------
-    poles: List[Point]
+    points: List[Point]
         The control points of the curve.
+    weights: List[float]
+        The weights of the control points.
     knots: List[float]
         The knot vector, without duplicates.
     multiplicities: List[int]
@@ -56,10 +61,10 @@ class BSplineCurve(Curve):
         The knot vector, with repeating values according to the multiplicities.
     degree: int
         The degree of the polynomials.
-    domain: Tuple[float, float]
-        The parameter domain.
     order: int
         The order of the curve.
+    domain: Tuple[float, float]
+        The parameter domain.
     start: :class:`Point`
         The point corresponding to the start of the parameter domain.
     end: :class:`Point`
@@ -73,6 +78,13 @@ class BSplineCurve(Curve):
     length: float
         Length of the curve.
 
+    References
+    ----------
+    .. [1] https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_geom___b_spline_curve.html
+    .. [2] https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_Geometry_NurbsCurve.htm
+    .. [3] https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline
+    .. [4] https://developer.rhino3d.com/guides/opennurbs/nurbs-geometry-overview/
+
     """
 
     @property
@@ -83,6 +95,7 @@ class BSplineCurve(Curve):
         from compas.data import is_sequence_of_float
         return Schema({
             'points': lambda points: all(is_float3(point) for point in points),
+            'weights': is_sequence_of_float,
             'knots': is_sequence_of_float,
             'multiplicities': is_sequence_of_int,
             'degree': int,
@@ -97,14 +110,15 @@ class BSplineCurve(Curve):
         super().__init__(name=name)
         self.occ_curve = None
 
-    def __eq__(self, other: BSplineCurve) -> bool:
+    def __eq__(self, other: NurbsCurve) -> bool:
         return self.occ_curve.IsEqual(other.occ_curve)
 
     def __str__(self):
         lines = [
-            'BSplineCurve',
+            'NurbsCurve',
             '------------',
-            f'Poles: {self.poles}',
+            f'Points: {self.points}',
+            f'Weights: {self.weights}',
             f'Knots: {self.knots}',
             f'Mults: {self.multiplicities}',
             f'Degree: {self.degree}',
@@ -124,6 +138,7 @@ class BSplineCurve(Curve):
     def data(self) -> Dict:
         return {
             'points': [point.data for point in self.points],
+            'weights': self.weights,
             'knots': self.knots,
             'multiplicities': self.multiplicities,
             'degree': self.degree,
@@ -132,13 +147,15 @@ class BSplineCurve(Curve):
 
     @data.setter
     def data(self, data: Dict):
-        poles = [Point.from_data(point) for point in data['points']]
+        points = [Point.from_data(point) for point in data['points']]
+        weights = data['weights']
         knots = data['knots']
         multiplicities = data['multiplicities']
         degree = data['degree']
         is_periodic = data['is_periodic']
         self.occ_curve = Geom_BSplineCurve(
-            array1_from_points1(poles),
+            array1_from_points1(points),
+            array1_from_floats1(weights),
             array1_from_floats1(knots),
             array1_from_integers1(multiplicities),
             degree,
@@ -146,8 +163,8 @@ class BSplineCurve(Curve):
         )
 
     @classmethod
-    def from_data(cls, data: Dict) -> BSplineCurve:
-        """Construct a B-spline from its data representation.
+    def from_data(cls, data: Dict) -> NurbsCurve:
+        """Construct a NURBS curve from its data representation.
 
         Parameters
         ----------
@@ -156,39 +173,42 @@ class BSplineCurve(Curve):
 
         Returns
         -------
-        :class:`compas_occ.geometry.BSplineCurve`
+        :class:`compas_occ.geometry.NurbsCurve`
             The constructed curve.
 
         """
-        poles = [Point.from_data(point) for point in data['points']]
+        points = [Point.from_data(point) for point in data['points']]
+        weights = data['weights']
         knots = data['knots']
         multiplicities = data['multiplicities']
         degree = data['degree']
         is_periodic = data['is_periodic']
-        return BSplineCurve.from_parameters(poles, knots, multiplicities, degree, is_periodic)
+        return NurbsCurve.from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
 
     # ==============================================================================
     # Constructors
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve: Geom_BSplineCurve) -> BSplineCurve:
-        """Construct a B-spline from OCC geometry."""
+    def from_occ(cls, occ_curve: Geom_BSplineCurve) -> NurbsCurve:
+        """Construct a NURBS curve from an existing OCC BSplineCurve."""
         curve = cls()
         curve.occ_curve = occ_curve
         return curve
 
     @classmethod
     def from_parameters(cls,
-                        poles: List[Point],
+                        points: List[Point],
+                        weights: List[float],
                         knots: List[float],
                         multiplicities: List[int],
                         degree: int,
-                        is_periodic: bool = False) -> BSplineCurve:
-        """Construct a B-spline from control points."""
+                        is_periodic: bool = False) -> NurbsCurve:
+        """Construct a NURBS curve from explicit curve parameters."""
         curve = cls()
         curve.occ_curve = Geom_BSplineCurve(
-            array1_from_points1(poles),
+            array1_from_points1(points),
+            array1_from_floats1(weights),
             array1_from_floats1(knots),
             array1_from_integers1(multiplicities),
             degree,
@@ -197,28 +217,64 @@ class BSplineCurve(Curve):
         return curve
 
     @classmethod
-    def from_interpolation(cls, points: List[Point], precision: float = 1e-3) -> BSplineCurve:
-        """Construct a B-spline by interpolating a set of points."""
+    def from_points(cls, points: List[Point], degree: int = 3) -> NurbsCurve:
+        """Construct a NURBS curve from control points.
+
+        This construction method is similar to the method ``Create`` of the Rhino API for NURBS curves [1]_.
+
+        References
+        ----------
+        .. [1] https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_Geometry_NurbsCurve_Create.htm
+
+        """
+        p = len(points)
+        weights = [1.0] * p
+        degree = degree if p > degree else p - 1
+        order = degree + 1
+        x = p - order
+        knots = [float(i) for i in range(2 + x)]
+        multiplicities = [order]
+        for _ in range(x):
+            multiplicities.append(1)
+        multiplicities.append(order)
+        is_periodic = False
+        curve = cls()
+        curve.occ_curve = Geom_BSplineCurve(
+            array1_from_points1(points),
+            array1_from_floats1(weights),
+            array1_from_floats1(knots),
+            array1_from_integers1(multiplicities),
+            degree,
+            is_periodic,
+        )
+        return curve
+
+    @classmethod
+    def from_interpolation(cls, points: List[Point], precision: float = 1e-3) -> NurbsCurve:
+        """Construct a NURBS curve by interpolating a set of points.
+
+        This construction method is similar to the method ``CreateHSpline`` of the Rhino API for NURBS curves [1]_.
+
+        References
+        ----------
+        .. [1] https://developer.rhino3d.com/api/RhinoCommon/html/Overload_Rhino_Geometry_NurbsCurve_CreateHSpline.htm
+        .. [2] https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_geom_a_p_i___interpolate.html
+
+        """
         curve = cls()
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
         interp.Perform()
         curve.occ_curve = interp.Curve()
         return curve
 
-    # @classmethod
-    # def from_points(cls, points: List[Point]) -> BSplineCurve:
-    #     curve = cls()
-    #     curve.occ_curve = GeomAPI_PointsToBSpline(array1_from_points1(points)).Curve()
-    #     return curve
-
     @classmethod
-    def from_step(cls, filepath: str) -> BSplineCurve:
-        """Load a B-spline from a STP file."""
+    def from_step(cls, filepath: str) -> NurbsCurve:
+        """Load a NURBS curve from an STP file."""
         pass
 
     @classmethod
-    def from_edge(cls, edge: TopoDS_Edge) -> BSplineCurve:
-        """Construct a B-spline from an OCC edge."""
+    def from_edge(cls, edge: TopoDS_Edge) -> NurbsCurve:
+        """Construct a NURBS curve from an existing OCC TopoDS_Edge."""
         res = BRep_Tool_Curve(edge)
         if len(res) != 3:
             return
@@ -229,16 +285,90 @@ class BSplineCurve(Curve):
         pass
 
     @classmethod
-    def from_circle(cls, circle, degree, pointcount=None):
-        pass
+    def from_circle(cls, circle: Circle) -> NurbsCurve:
+        """Construct a NURBS curve from a circle.
+
+        This construction method is similar to the method ``CreateFromCircle`` of the Rhino API for NURBS curves [1]_.
+
+        References
+        ----------
+        .. [1] https://developer.rhino3d.com/api/RhinoCommon/html/Overload_Rhino_Geometry_NurbsCurve_CreateFromCircle.htm
+
+        """
+        frame = Frame.from_plane(circle.plane)
+        w = 0.5 * sqrt(2)
+        dx = frame.xaxis * circle.radius
+        dy = frame.yaxis * circle.radius
+        points = [
+            frame.point - dy,
+            frame.point - dy - dx,
+            frame.point - dx,
+            frame.point + dy - dx,
+            frame.point + dy,
+            frame.point + dy + dx,
+            frame.point + dx,
+            frame.point - dy + dx,
+            frame.point - dy
+        ]
+        knots = [0, 1/4, 1/2, 3/4, 1]
+        mults = [3, 2, 2, 2, 3]
+        weights = [1, w, 1, w, 1, w, 1, w, 1]
+        return cls.from_parameters(
+            points=points, weights=weights, knots=knots, multiplicities=mults, degree=2
+        )
 
     @classmethod
-    def from_ellipse(cls, ellipse, degree, pointcount=None):
-        pass
+    def from_ellipse(cls, ellipse):
+        """Construct a NURBS curve from an ellipse.
+
+        This construction method is similar to the method ``CreateFromEllipse`` of the Rhino API for NURBS curves [1]_.
+
+        References
+        ----------
+        .. [1] https://developer.rhino3d.com/api/RhinoCommon/html/Overload_Rhino_Geometry_NurbsCurve_CreateFromEllipse.htm
+
+        """
+        frame = Frame.from_plane(ellipse.plane)
+        frame = Frame.worldXY()
+        w = 0.5 * sqrt(2)
+        dx = frame.xaxis * ellipse.major
+        dy = frame.yaxis * ellipse.minor
+        points = [
+            frame.point - dy,
+            frame.point - dy - dx,
+            frame.point - dx,
+            frame.point + dy - dx,
+            frame.point + dy,
+            frame.point + dy + dx,
+            frame.point + dx,
+            frame.point - dy + dx,
+            frame.point - dy
+        ]
+        knots = [0, 1/4, 1/2, 3/4, 1]
+        mults = [3, 2, 2, 2, 3]
+        weights = [1, w, 1, w, 1, w, 1, w, 1]
+        return cls.from_parameters(
+            points=points, weights=weights, knots=knots, multiplicities=mults, degree=2
+        )
 
     @classmethod
-    def from_line(cls, line, degree, pointcount=None):
-        pass
+    def from_line(cls, line):
+        """Construct a NURBS curve from a line.
+
+        This construction method is similar to the method ``CreateFromLine`` of the Rhino API for NURBS curves [1]_.
+
+        References
+        ----------
+        .. [1] https://developer.rhino3d.com/api/RhinoCommon/html/Overload_Rhino_Geometry_NurbsCurve_CreateFromLine.htm
+
+        """
+        return cls.from_parameters(
+            points=[line.start, line.end],
+            weights=[1.0, 1.0],
+            knots=[0.0, 1.0],
+            multiplicities=[2, 2],
+            degree=1
+        )
 
     # ==============================================================================
     # Conversions
@@ -266,10 +396,12 @@ class BSplineCurve(Curve):
         return topods_Edge(self.occ_shape)
 
     @property
-    def occ_poles(self) -> TColgp_Array1OfPnt:
+    def occ_points(self) -> TColgp_Array1OfPnt:
         return self.occ_curve.Poles()
 
-    occ_points = occ_poles
+    @property
+    def occ_weights(self) -> TColStd_Array1OfReal:
+        return self.occ_curve.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
 
     @property
     def occ_knots(self) -> TColStd_Array1OfReal:
@@ -288,10 +420,12 @@ class BSplineCurve(Curve):
     # ==============================================================================
 
     @property
-    def poles(self) -> List[Point]:
-        return points1_from_array1(self.occ_poles)
+    def points(self) -> List[Point]:
+        return points1_from_array1(self.occ_points)
 
-    points = poles
+    @property
+    def weights(self) -> List[float]:
+        return list(self.occ_weights or [])
 
     @property
     def knots(self) -> List[float]:
@@ -355,13 +489,16 @@ class BSplineCurve(Curve):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> BSplineCurve:
+    def copy(self) -> NurbsCurve:
         """Make an independent copy of the current curve."""
-        return BSplineCurve(self.poles,
-                            self.knots,
-                            self.multiplicities,
-                            self.degree,
-                            self.is_periodic)
+        return NurbsCurve.from_parameters(
+            self.points,
+            self.weights,
+            self.knots,
+            self.multiplicities,
+            self.degree,
+            self.is_periodic
+        )
 
     def transform(self, T: Transformation) -> None:
         """Transform this curve."""
@@ -369,7 +506,7 @@ class BSplineCurve(Curve):
         occ_T.SetValues(* T.list)
         self.occ_curve.Transform(occ_T)
 
-    def transformed(self, T: Transformation) -> BSplineCurve:
+    def transformed(self, T: Transformation) -> NurbsCurve:
         """Transform a copy of the curve."""
         copy = self.copy()
         copy.transform(T)

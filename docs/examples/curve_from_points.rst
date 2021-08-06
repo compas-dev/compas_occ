@@ -1,12 +1,12 @@
 ********************************************************************************
-Curve From Poles and Knots
+Curve From Control Points
 ********************************************************************************
 
 .. figure:: /_images/example_curve_from_poles.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve_from_poles.py
+.. literalinclude:: curve_from_points.py
     :language: python
 
 .. code-block:: python

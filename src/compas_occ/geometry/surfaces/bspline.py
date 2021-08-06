@@ -20,7 +20,7 @@ from compas_occ.interop import (
     array1_from_integers1,
     points2_from_array2
 )
-from compas_occ.geometry.curves import BSplineCurve
+from compas_occ.geometry.curves import NurbsCurve
 from compas_occ.geometry.surfaces._surface import Surface
 
 from OCC.Core.gp import (
@@ -236,7 +236,7 @@ class BSplineSurface(Surface):
         return cls.from_occ(srf)
 
     @classmethod
-    def from_fill(cls, curve1: BSplineCurve, curve2: BSplineCurve) -> BSplineSurface:
+    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> BSplineSurface:
         surface = cls()
         occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
         surface.occ_surface = occ_fill.Surface()

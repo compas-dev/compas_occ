@@ -13,7 +13,7 @@ Curves
     :nosignatures:
 
     Curve
-    BSplineCurve
+    NurbsCurve
 
 Surfaces
 ========
@@ -27,6 +27,6 @@ Surfaces
 
 """
 from .curves import Curve  # noqa: F401
-from .curves import BSplineCurve  # noqa: F401
+from .curves import NurbsCurve  # noqa: F401
 from .surfaces import Surface  # noqa: F401
 from .surfaces import BSplineSurface  # noqa: F401
