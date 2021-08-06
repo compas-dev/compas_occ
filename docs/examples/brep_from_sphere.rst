@@ -1,11 +1,11 @@
 ********************************************************************************
-BRep From Corners
+BRep From Sphere
 ********************************************************************************
 
-.. figure:: /_images/example_brep_from_corners.png
+.. figure:: /_images/
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: brep_from_corners.py
+.. literalinclude:: brep_from_sphere.py
     :language: python

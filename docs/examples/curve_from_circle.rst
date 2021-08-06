@@ -1,11 +1,11 @@
 ********************************************************************************
-BRep From Corners
+Curve From Circle
 ********************************************************************************
 
-.. figure:: /_images/example_brep_from_corners.png
+.. figure:: /_images/
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: brep_from_corners.py
+.. literalinclude:: curve_from_circle.py
     :language: python

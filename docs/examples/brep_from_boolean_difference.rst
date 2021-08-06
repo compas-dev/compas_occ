@@ -1,5 +1,5 @@
 ********************************************************************************
-BRep Shape from Boolean Difference
+BRep Shape From Boolean Difference
 ********************************************************************************
 
 .. figure:: /_images/example_brep_from_boolean_difference.png

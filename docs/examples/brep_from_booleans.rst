@@ -1,5 +1,5 @@
 ********************************************************************************
-BRep Shape from Booleans
+BRep Shape From Booleans
 ********************************************************************************
 
 .. figure:: /_images/example_brep_from_booleans.png
