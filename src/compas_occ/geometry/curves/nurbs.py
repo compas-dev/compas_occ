@@ -6,42 +6,37 @@ from compas.geometry import Point
 from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
+from compas.geometry import Box
 from compas.utilities import linspace
 
-from compas_occ.interop.arrays import (
-    harray1_from_points1,
-    array1_from_points1,
-    array1_from_floats1,
-    array1_from_integers1,
-    points1_from_array1
-)
+from compas_occ.interop import harray1_from_points1
+from compas_occ.interop import array1_from_points1
+from compas_occ.interop import array1_from_floats1
+from compas_occ.interop import array1_from_integers1
+from compas_occ.interop import points1_from_array1
+from compas_occ.interop import compas_point_from_occ_point
 
 from ._curve import Curve
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineCurve
-from OCC.Core.GeomAPI import (
-    GeomAPI_Interpolate,
-    # GeomAPI_PointsToBSpline
-)
-from OCC.Core.TopoDS import (
-    topods_Edge,
-    TopoDS_Shape,
-    TopoDS_Edge
-)
+from OCC.Core.GeomAPI import GeomAPI_Interpolate
+from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
+from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.BndLib import BndLib_Add3dCurve_Add
+from OCC.Core.TopoDS import topods_Edge
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.BRep import BRep_Tool_Curve
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.TColgp import TColgp_Array1OfPnt
-from OCC.Core.TColStd import (
-    TColStd_Array1OfReal,
-    TColStd_Array1OfInteger
-)
+from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.STEPControl import (
-    STEPControl_Writer,
-    STEPControl_AsIs
-)
+from OCC.Core.STEPControl import STEPControl_Writer
+from OCC.Core.STEPControl import STEPControl_AsIs
 
 
 class NurbsCurve(Curve):
@@ -75,8 +70,6 @@ class NurbsCurve(Curve):
         True if the curve is periodic.
     is_rational: bool
         True is the curve is rational.
-    length: float
-        Length of the curve.
 
     References
     ----------
@@ -477,14 +470,6 @@ class NurbsCurve(Curve):
     def is_rational(self) -> bool:
         return self.occ_curve.IsRational()
 
-    @property
-    def bounding_box(self):
-        pass
-
-    @property
-    def length(self):
-        pass
-
     # ==============================================================================
     # Methods
     # ==============================================================================
@@ -615,3 +600,16 @@ class NurbsCurve(Curve):
 
     def fair(self):
         pass
+
+    def bounding_box(self, precision: float = 1e-3) -> Box:
+        """Compute the bounding box of the curve."""
+        box = Bnd_Box()
+        BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
+        return Box.from_diagonal((
+            compas_point_from_occ_point(Point, box.CornerMin()),
+            compas_point_from_occ_point(Point, box.CornerMax())
+        ))
+
+    def length(self) -> float:
+        """Compute the length of the curve."""
+        return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))

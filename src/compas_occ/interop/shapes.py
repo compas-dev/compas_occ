@@ -1,25 +1,19 @@
 from __future__ import annotations
 
-from compas.geometry import (
-    Box,
-    Sphere,
-    Translation
-)
+from compas.geometry import Box
+from compas.geometry import Sphere
+from compas.geometry import Translation
 
-from OCC.Core.TopoDS import (
-    TopoDS_Shape,
-    TopoDS_Solid,
-    TopoDS_Shell
-)
-from OCC.Core.BRepPrimAPI import (
-    BRepPrimAPI_MakeBox,
-    BRepPrimAPI_MakeSphere
-)
-from OCC.Core.gp import (
-    gp_Pnt,
-    gp_Dir,
-    gp_Ax2
-)
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Solid
+from OCC.Core.TopoDS import TopoDS_Shell
+
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
+
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Dir
+from OCC.Core.gp import gp_Ax2
 
 
 class Box(Box):

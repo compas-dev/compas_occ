@@ -5,15 +5,11 @@ from typing import Tuple, List
 from compas.geometry import Point
 
 from OCC.Core.gp import gp_Pnt
-from OCC.Core.TColgp import (
-    TColgp_Array1OfPnt,
-    TColgp_Array2OfPnt,
-    TColgp_HArray1OfPnt
-)
-from OCC.Core.TColStd import (
-    TColStd_Array1OfReal,
-    TColStd_Array1OfInteger
-)
+from OCC.Core.TColgp import TColgp_Array1OfPnt
+from OCC.Core.TColgp import TColgp_Array2OfPnt
+from OCC.Core.TColgp import TColgp_HArray1OfPnt
+from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 
 def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:

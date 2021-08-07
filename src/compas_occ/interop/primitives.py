@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from compas.geometry import (
-    Point,
-    Vector,
-    Line
-)
+from compas.geometry import Point
+from compas.geometry import Vector
+from compas.geometry import Line
 
-from OCC.Core.gp import (
-    gp_Pnt,
-    gp_Vec,
-    gp_Dir,
-    gp_Lin
-)
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Vec
+from OCC.Core.gp import gp_Dir
+from OCC.Core.gp import gp_Lin
 
 
 def compas_point_to_occ_point(self: Point) -> gp_Pnt:
