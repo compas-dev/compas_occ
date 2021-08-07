@@ -2,7 +2,7 @@
 Curve From Circle
 ********************************************************************************
 
-.. figure:: /_images/
+.. figure:: /_images/example_curve_from_circle.png
     :figclass: figure
     :class: figure-img img-fluid
 
