@@ -1,6 +1,6 @@
 from compas.geometry import Point, Line, Polyline
 from compas_occ.geometry import NurbsCurve
-from compas_occ.geometry import BSplineSurface
+from compas_occ.geometry import NurbsSurface
 
 from compas_view2.app import App
 
@@ -20,7 +20,7 @@ points2.append(Point(3, 7, -2))
 points2.append(Point(4, 9, -1))
 spline2 = NurbsCurve.from_interpolation(points2)
 
-surface = BSplineSurface.from_fill(spline1, spline2)
+surface = NurbsSurface.from_fill(spline1, spline2)
 line = Line(Point(0, 4, 0), Point(0, 4, 1))
 
 # ==============================================================================

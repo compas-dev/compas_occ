@@ -18,13 +18,6 @@ Classes
     BRepLoop
     BRepFace
 
-Functions
-=========
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
 """
 from .brepvertex import BRepVertex  # noqa: F401
 from .brepedge import BRepEdge  # noqa: F401

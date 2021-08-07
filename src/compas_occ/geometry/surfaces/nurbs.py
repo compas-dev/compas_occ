@@ -2,61 +2,57 @@ from __future__ import annotations
 
 from typing import Optional, Tuple, List, Dict
 
-from compas.geometry import Point, Vector, Line, Frame, Box
+from compas.geometry import Point, Vector, Line, Frame
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
 
-from compas_occ.interop import (
-    compas_line_to_occ_line,
-    compas_point_from_occ_point,
-    compas_point_to_occ_point,
-    compas_vector_from_occ_vector,
-    compas_vector_to_occ_vector
-)
-from compas_occ.interop import (
-    array2_from_points2,
-    array1_from_floats1,
-    array1_from_integers1,
-    points2_from_array2
-)
+from compas_occ.interop import compas_line_to_occ_line
+from compas_occ.interop import compas_point_from_occ_point
+from compas_occ.interop import compas_point_to_occ_point
+from compas_occ.interop import compas_vector_from_occ_vector
+from compas_occ.interop import compas_vector_to_occ_vector
+
+from compas_occ.interop import array2_from_points2
+from compas_occ.interop import array1_from_floats1
+from compas_occ.interop import array1_from_integers1
+from compas_occ.interop import points2_from_array2
+
 from compas_occ.geometry.curves import NurbsCurve
 from compas_occ.geometry.surfaces._surface import Surface
 
-from OCC.Core.gp import (
-    gp_Trsf,
-    gp_Pnt,
-    gp_Vec
-)
-from OCC.Core.Geom import (
-    Geom_BSplineSurface,
-    Geom_Line
-)
-from OCC.Core.GeomAPI import GeomAPI_IntCS
-from OCC.Core.TopoDS import (
-    topods_Face,
-    TopoDS_Shape,
-    TopoDS_Face
-)
+from OCC.Core.gp import gp_Trsf
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Vec
+# from OCC.Core.gp import gp_Dir
+
+from OCC.Core.Geom import Geom_BSplineSurface
+# from OCC.Core.Geom import Geom_Line
+# from OCC.Core.GeomAPI import GeomAPI_IntCS
+
+from OCC.Core.GeomLProp import GeomLProp_SLProps
+
+from OCC.Core.TopoDS import topods_Face
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Face
+
 from OCC.Core.BRep import BRep_Tool_Surface
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.TColgp import TColgp_Array2OfPnt
-from OCC.Core.TColStd import (
-    TColStd_Array1OfReal,
-    TColStd_Array1OfInteger
-)
-from OCC.Core.STEPControl import (
-    STEPControl_Writer,
-    STEPControl_AsIs
-)
+
+from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array1OfInteger
+
+from OCC.Core.STEPControl import STEPControl_Writer
+from OCC.Core.STEPControl import STEPControl_AsIs
+
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.GeomFill import (
-    GeomFill_BSplineCurves,
-    GeomFill_CoonsStyle
-)
-from OCC.Core.Tesselator import ShapeTesselator
 
+from OCC.Core.GeomFill import GeomFill_BSplineCurves
+from OCC.Core.GeomFill import GeomFill_CoonsStyle
+
+from OCC.Core.Tesselator import ShapeTesselator
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
@@ -65,7 +61,37 @@ Vector.to_occ = compas_vector_to_occ_vector
 Line.to_occ = compas_line_to_occ_line
 
 
-class BSplineSurface(Surface):
+class NurbsSurface(Surface):
+    """Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.
+
+    Attributes
+    ----------
+    points: List[Point]
+        The control points of the surface.
+    weights: List[float]
+        The weights of the control points.
+    u_knots: List[float]
+        The knot vector, in the U direction, without duplicates.
+    v_knots: List[float]
+        The knot vector, in the V direction, without duplicates.
+    u_mults: List[int]
+        The multiplicities of the knots in the knot vector of the U direction.
+    v_mults: List[int]
+        The multiplicities of the knots in the knot vector of the V direction.
+    u_degree: int
+        The degree of the polynomials in the U direction.
+    v_degree: int
+        The degree of the polynomials in the V direction.
+    u_domain: Tuple[float, float]
+        The parameter domain in the U direction.
+    v_domain: Tuple[float, float]
+        The parameter domain in the V direction.
+    is_u_periodic: bool
+        True if the curve is periodic in the U direction.
+    is_v_periodic: bool
+        True if the curve is periodic in the V direction.
+
+    """
 
     @property
     def DATASCHEMA(self):
@@ -75,6 +101,7 @@ class BSplineSurface(Surface):
         from compas.data import is_sequence_of_float
         return Schema({
             'points': lambda points: all(is_float3(point) for point in points),
+            'weights': is_sequence_of_float,
             'u_knots': is_sequence_of_float,
             'v_knots': is_sequence_of_float,
             'u_mults': is_sequence_of_int,
@@ -93,14 +120,15 @@ class BSplineSurface(Surface):
         super().__init__(name=name)
         self.occ_surface = None
 
-    def __eq__(self, other: BSplineSurface) -> bool:
+    def __eq__(self, other: NurbsSurface) -> bool:
         return self.occ_surface.IsEqual(other.occ_surface)
 
     def __str__(self):
         lines = [
-            'BSplineSurface',
+            'NurbsSurface',
             '--------------',
-            f'Poles: {self.poles}',
+            f'Points: {self.points}',
+            f'Weights: {self.weights}',
             f'U Knots: {self.u_knots}',
             f'V Knots: {self.v_knots}',
             f'U Mults: {self.u_mults}',
@@ -122,6 +150,7 @@ class BSplineSurface(Surface):
     def data(self) -> Dict:
         return {
             'points': [point.data for point in self.points],
+            'weights': self.weights,
             'u_knots': self.u_knots,
             'v_knots': self.v_knots,
             'u_mults': self.u_mults,
@@ -134,7 +163,8 @@ class BSplineSurface(Surface):
 
     @data.setter
     def data(self, data: Dict):
-        poles = [Point.from_data(point) for point in data['points']]
+        points = [Point.from_data(point) for point in data['points']]
+        weights = data['weights']
         u_knots = data['u_knots']
         v_knots = data['v_knots']
         u_mults = data['u_mults']
@@ -144,7 +174,8 @@ class BSplineSurface(Surface):
         is_u_periodic = data['is_u_periodic']
         is_v_periodic = data['is_v_periodic']
         self.occ_surface = Geom_BSplineSurface(
-            array2_from_points2(poles),
+            array2_from_points2(points),
+            array1_from_floats1(weights),
             array1_from_floats1(u_knots),
             array1_from_floats1(v_knots),
             array1_from_integers1(u_mults),
@@ -156,7 +187,7 @@ class BSplineSurface(Surface):
         )
 
     @classmethod
-    def from_data(cls, data: Dict) -> BSplineSurface:
+    def from_data(cls, data: Dict) -> NurbsSurface:
         """Construct a BSpline surface from its data representation.
 
         Parameters
@@ -166,11 +197,12 @@ class BSplineSurface(Surface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.BSplineSurface`
+        :class:`compas_occ.geometry.NurbsSurface`
             The constructed surface.
 
         """
-        poles = [Point.from_data(point) for point in data['points']]
+        points = [Point.from_data(point) for point in data['points']]
+        weights = data['weights']
         u_knots = data['u_knots']
         v_knots = data['v_knots']
         u_mults = data['u_mults']
@@ -179,8 +211,9 @@ class BSplineSurface(Surface):
         v_degree = data['v_degree']
         is_u_periodic = data['is_u_periodic']
         is_v_periodic = data['is_v_periodic']
-        return BSplineSurface.from_parameters(
-            poles,
+        return NurbsSurface.from_parameters(
+            points,
+            weights,
             u_knots, v_knots,
             u_mults, v_mults,
             u_degree, v_degree,
@@ -192,14 +225,16 @@ class BSplineSurface(Surface):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> BSplineSurface:
+    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> NurbsSurface:
+        """Construct a NUBRS surface from an existing OCC BSplineSurface."""
         surface = cls()
         surface.occ_surface = occ_surface
         return surface
 
     @classmethod
     def from_parameters(cls,
-                        poles: Tuple[List[Point], List[Point]],
+                        points: Tuple[List[Point], List[Point]],
+                        weights: List[float],
                         u_knots: List[float],
                         v_knots: List[float],
                         u_mults: List[int],
@@ -207,10 +242,12 @@ class BSplineSurface(Surface):
                         u_degree: int,
                         v_degree: int,
                         is_u_periodic: bool = False,
-                        is_v_periodic: bool = False) -> BSplineSurface:
+                        is_v_periodic: bool = False) -> NurbsSurface:
+        """Construct a NURBS surface from explicit parameters."""
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
-            array2_from_points2(poles),
+            array2_from_points2(points),
+            array1_from_floats1(weights),
             array1_from_floats1(u_knots),
             array1_from_floats1(v_knots),
             array1_from_integers1(u_mults),
@@ -223,20 +260,24 @@ class BSplineSurface(Surface):
         return surface
 
     @classmethod
-    def from_points(cls, points: List[Point]) -> BSplineSurface:
+    def from_points(cls, points: List[Point]) -> NurbsSurface:
+        """Construct a NURBS surface from control points."""
         raise NotImplementedError
 
     @classmethod
-    def from_step(cls, filepath: str) -> BSplineSurface:
+    def from_step(cls, filepath: str) -> NurbsSurface:
+        """Load a NURBS surface from a STP file."""
         raise NotImplementedError
 
     @classmethod
-    def from_face(cls, face: TopoDS_Face) -> BSplineSurface:
+    def from_face(cls, face: TopoDS_Face) -> NurbsSurface:
+        """Construct a NURBS surface from an existing OCC TopoDS_Face."""
         srf = BRep_Tool_Surface(face)
         return cls.from_occ(srf)
 
     @classmethod
-    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> BSplineSurface:
+    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> NurbsSurface:
+        """Construct a NURBS surface from the infill between two NURBS curves."""
         surface = cls()
         occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
         surface.occ_surface = occ_fill.Surface()
@@ -247,6 +288,7 @@ class BSplineSurface(Surface):
     # ==============================================================================
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
+        """Write the surface geometry to a STP file."""
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_face, STEPControl_AsIs)
@@ -255,6 +297,7 @@ class BSplineSurface(Surface):
             raise AssertionError("Operation failed.")
 
     def to_tesselation(self) -> Mesh:
+        """Convert the surface to a triangle mesh."""
         tess = ShapeTesselator(self.occ_shape)
         tess.Compute()
         vertices = []
@@ -265,7 +308,8 @@ class BSplineSurface(Surface):
             triangles.append(tess.GetTriangleIndex(i))
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
-    def to_vizmesh(self, u: int = 100, v: Optional[int] = None) -> Mesh:
+    def to_mesh(self, u: int = 100, v: Optional[int] = None) -> Mesh:
+        """Convert the surface to a quad mesh."""
         quads = []
         v = v or u
         U, V = meshgrid(self.uspace(u), self.vspace(v))
@@ -291,8 +335,12 @@ class BSplineSurface(Surface):
         return topods_Face(self.occ_shape)
 
     @property
-    def occ_poles(self) -> TColgp_Array2OfPnt:
+    def occ_points(self) -> TColgp_Array2OfPnt:
         return self.occ_surface.Poles()
+
+    @property
+    def occ_weights(self) -> TColStd_Array1OfReal:
+        return self.occ_surface.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
 
     @property
     def occ_u_knots(self) -> TColStd_Array1OfReal:
@@ -315,24 +363,28 @@ class BSplineSurface(Surface):
     # ==============================================================================
 
     @property
-    def poles(self) -> Tuple[List[Point], List[Point]]:
-        return points2_from_array2(self.occ_poles)
+    def points(self) -> Tuple[List[Point], List[Point]]:
+        return points2_from_array2(self.occ_points)
+
+    @property
+    def weights(self) -> List[float]:
+        return list(self.occ_weights)
 
     @property
     def u_knots(self) -> List[float]:
-        return self.occ_u_knots
+        return list(self.occ_u_knots)
 
     @property
     def v_knots(self) -> List[float]:
-        return self.occ_v_knots
+        return list(self.occ_v_knots)
 
     @property
     def u_mults(self) -> List[int]:
-        return self.occ_u_mults
+        return list(self.occ_u_mults)
 
     @property
     def v_mults(self) -> List[int]:
-        return self.occ_v_mults
+        return list(self.occ_v_mults)
 
     @property
     def u_degree(self) -> int:
@@ -360,17 +412,15 @@ class BSplineSurface(Surface):
     def is_v_periodic(self) -> bool:
         return self.occ_surface.IsVPeriodic()
 
-    @property
-    def aabb(self) -> Box:
-        pass
-
     # ==============================================================================
     # Methods
     # ==============================================================================
 
-    def copy(self) -> BSplineSurface:
-        return BSplineSurface.from_parameters(
-            self.poles,
+    def copy(self) -> NurbsSurface:
+        """Make an independent copy of the surface."""
+        return NurbsSurface.from_parameters(
+            self.points,
+            self.weights,
             self.u_knots,
             self.v_knots,
             self.u_mults,
@@ -382,43 +432,70 @@ class BSplineSurface(Surface):
         )
 
     def transform(self, T: Transformation) -> None:
+        """Transform this surface."""
         _T = gp_Trsf()
         _T.SetValues(* T.list)
         self.occ_surface.Transform(T)
 
-    def transformed(self, T: Transformation) -> BSplineSurface:
+    def transformed(self, T: Transformation) -> NurbsSurface:
+        """Transform an independent copy of this surface."""
         copy = self.copy()
         copy.transform(T)
         return copy
 
-    def intersections(self, line: Line) -> List[Point]:
-        intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
-        points = []
-        for index in range(intersection.NbPoints()):
-            pnt = intersection.Point(index + 1)
-            point = Point.from_occ(pnt)
-            points.append(point)
-        return points
+    # def intersections(self, line: Line) -> List[Point]:
+    #     intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
+    #     points = []
+    #     for index in range(intersection.NbPoints()):
+    #         pnt = intersection.Point(index + 1)
+    #         point = Point.from_occ(pnt)
+    #         points.append(point)
+    #     return points
+
+    def u_space(self, n: int = 10) -> List[float]:
+        """Compute evenly spaced parameters over the surface domain in the U direction.
+        """
+        umin, umax = self.u_domain
+        return linspace(umin, umax, n)
+
+    def v_space(self, n: int = 10) -> List[float]:
+        """Compute evenly spaced parameters over the surface domain in the V direction.
+        """
+        vmin, vmax = self.v_domain
+        return linspace(vmin, vmax, n)
+
+    def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
+        """Compute point locations corresponding to evenly spaced parameters over the surface domain.
+        """
+        U, V = meshgrid(self.u_space(nu), self.v_space(nv), 'ij')
+        return [self.point_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
     def point_at(self, u: float, v: float) -> Point:
+        """Compute a point on the surface.
+        """
         point = self.occ_surface.Value(u, v)
         return Point.from_occ(point)
 
+    def curvature_at(self, u: float, v: float) -> Tuple[float, float, Point, Vector]:
+        """Compute the curvature at a point on the surface.
+        """
+        props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
+        gaussian = props.GaussianCurvature()
+        mean = props.MeanCurvature()
+        point = props.Value()
+        normal = props.Normal()
+        return gaussian, mean, point, normal
+
     def frame_at(self, u: float, v: float) -> Frame:
+        """Compute the local frame at a point on the curve.
+        """
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def uspace(self, n: int = 10) -> List[float]:
-        umin, umax = self.u_domain
-        return linspace(umin, umax, n)
-
-    def vspace(self, n: int = 10) -> List[float]:
-        vmin, vmax = self.v_domain
-        return linspace(vmin, vmax, n)
-
-    def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
-        U, V = meshgrid(self.uspace(nu), self.vspace(nv), 'ij')
-        return [self.point_at(u, v) for u, v in zip(flatten(U), flatten(V))]
+    def closest_point(self, point, distance=None):
+        """Compute the closest point on the curve to a given point.
+        """
+        pass

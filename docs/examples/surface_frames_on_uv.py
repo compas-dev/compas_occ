@@ -1,6 +1,6 @@
 from compas.geometry import Point, Polyline
 from compas_occ.geometry import NurbsCurve
-from compas_occ.geometry import BSplineSurface
+from compas_occ.geometry import NurbsSurface
 from compas.utilities import meshgrid, flatten
 
 from compas_view2.app import App
@@ -21,9 +21,9 @@ points2.append(Point(3, 7, -2))
 points2.append(Point(4, 9, -1))
 spline2 = NurbsCurve.from_interpolation(points2)
 
-surface = BSplineSurface.from_fill(spline1, spline2)
+surface = NurbsSurface.from_fill(spline1, spline2)
 
-U, V = meshgrid(surface.uspace(15), surface.vspace(10), 'ij')
+U, V = meshgrid(surface.u_space(15), surface.v_space(10), 'ij')
 
 frames = [surface.frame_at(u, v) for u, v in zip(flatten(U[1:]), flatten(V))]
 

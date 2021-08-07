@@ -38,6 +38,12 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 
+Point.from_occ = classmethod(compas_point_from_occ_point)
+# Point.to_occ = compas_point_to_occ_point
+# Vector.from_occ = classmethod(compas_vector_from_occ_vector)
+# Vector.to_occ = compas_vector_to_occ_vector
+# Line.to_occ = compas_line_to_occ_line
+
 
 class NurbsCurve(Curve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
@@ -418,7 +424,7 @@ class NurbsCurve(Curve):
 
     @property
     def weights(self) -> List[float]:
-        return list(self.occ_weights or [])
+        return list(self.occ_weights)
 
     @property
     def knots(self) -> List[float]:
@@ -507,7 +513,7 @@ class NurbsCurve(Curve):
         return [self.point_at(param) for param in self.space(n)]
 
     def locus(self, resolution=100):
-        """Compute the locus of all points on the curve.
+        """Compute the locus of the curve.
 
         Parameters
         ----------
@@ -606,8 +612,8 @@ class NurbsCurve(Curve):
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal((
-            compas_point_from_occ_point(Point, box.CornerMin()),
-            compas_point_from_occ_point(Point, box.CornerMax())
+            Point.from_occ(box.CornerMin()),
+            Point.from_occ(box.CornerMax())
         ))
 
     def length(self) -> float:
