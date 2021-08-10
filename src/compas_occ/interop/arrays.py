@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple, List
+from typing import List
 
 from compas.geometry import Point
 
@@ -13,6 +13,7 @@ from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 
 def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
+    """Construct a one-dimensional point array from a list of points."""
     array = TColgp_Array1OfPnt(1, len(points))
     for index, point in enumerate(points):
         array.SetValue(index + 1, gp_Pnt(* point))
@@ -27,31 +28,35 @@ def harray1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
 
 
 def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
+    """Construct a list of points from a one-dimensional point array."""
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
 
 
-def array2_from_points2(points: Tuple[List[Point], List[Point]]) -> TColgp_Array2OfPnt:
-    points1, points2 = points
-    array = TColgp_Array2OfPnt(0, len(points1) - 1, 0, 1)
-    for index, point in enumerate(points1):
-        array.SetValue(index, 0, gp_Pnt(* point))
-    for index, point in enumerate(points2):
-        array.SetValue(index, 1, gp_Pnt(* point))
+def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
+    """Construct a two-dimensional point array from a list of lists of points."""
+    rows = len(points)
+    cols = len(points[0])
+    array = TColgp_Array2OfPnt(1, rows, 1, cols)
+    for i, row in enumerate(points):
+        for j, point in enumerate(row):
+            array.SetValue(i + 1, j + 1, gp_Pnt(* point))
     return array
 
 
-def points2_from_array2(array: TColgp_Array2OfPnt) -> Tuple[List[Point], List[Point]]:
-    points1 = []
-    points2 = []
+def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
+    """Construct a list of lists of points from two-dimensional point array."""
+    points = []
     for i in range(array.LowerRow(), array.UpperRow() + 1):
-        point1 = array.Value(i, array.LowerCol() + 0)
-        point2 = array.Value(i, array.LowerCol() + 1)
-        points1.append(Point(point1.X(), point1.Y(), point1.Z()))
-        points2.append(Point(point2.X(), point2.Y(), point2.Z()))
-    return points1, points2
+        row = []
+        for j in range(array.LowerCol(), array.UpperCol() + 1):
+            pnt = array.Value(i, j)
+            row.append(Point(pnt.X(), pnt.Y(), pnt.Z()))
+        points.append(row)
+    return points
 
 
 def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
+    """Construct a one-dimensional integer array from a list of integers."""
     array = TColStd_Array1OfInteger(1, len(numbers))
     for index, number in enumerate(numbers):
         array.SetValue(index + 1, number)
@@ -59,6 +64,7 @@ def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
 
 
 def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
+    """Construct a one-dimensional float array from a list of floats."""
     array = TColStd_Array1OfReal(1, len(numbers))
     for index, number in enumerate(numbers):
         array.SetValue(index + 1, number)
