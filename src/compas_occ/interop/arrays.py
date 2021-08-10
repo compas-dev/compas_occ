@@ -9,6 +9,7 @@ from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 from OCC.Core.TColgp import TColgp_HArray1OfPnt
 from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array2OfReal
 from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 
@@ -69,3 +70,26 @@ def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
     for index, number in enumerate(numbers):
         array.SetValue(index + 1, number)
     return array
+
+
+def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
+    """Construct a two-dimensional real array from a list of lists of floats."""
+    rows = len(numbers)
+    cols = len(numbers[0])
+    array = TColStd_Array2OfReal(1, rows, 1, cols)
+    for i, row in enumerate(numbers):
+        for j, number in enumerate(row):
+            array.SetValue(i + 1, j + 1, number)
+    return array
+
+
+def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
+    """Construct a list of lists of floats from two-dimensional real array."""
+    numbers = []
+    for i in range(array.LowerRow(), array.UpperRow() + 1):
+        row = []
+        for j in range(array.LowerCol(), array.UpperCol() + 1):
+            number = array.Value(i, j)
+            row.append(number)
+        numbers.append(row)
+    return numbers
