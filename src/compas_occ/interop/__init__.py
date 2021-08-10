@@ -13,9 +13,11 @@ Arrays
     :nosignatures:
 
     array1_from_floats1
+    array2_from_floats2
     array1_from_integers1
     array1_from_points1
     array2_from_points2
+    floats2_from_array2
     points1_from_array1
     points2_from_array2
 
@@ -50,11 +52,13 @@ Meshes
 """
 from .arrays import array1_from_integers1  # noqa: F401
 from .arrays import array1_from_floats1  # noqa: F401
+from .arrays import array2_from_floats2  # noqa: F401
 from .arrays import array1_from_points1  # noqa: F401
 from .arrays import harray1_from_points1  # noqa: F401
 from .arrays import array2_from_points2  # noqa: F401
 from .arrays import points1_from_array1  # noqa: F401
 from .arrays import points2_from_array2  # noqa: F401
+from .arrays import floats2_from_array2  # noqa: F401
 
 from .primitives import compas_point_to_occ_point  # noqa: F401
 from .primitives import compas_point_from_occ_point  # noqa: F401

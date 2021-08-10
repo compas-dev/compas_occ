@@ -12,23 +12,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-weights = [
-    [1.0, 1.0, 1.0, 1.0],
-    [1.0, 2.0, 2.0, 1.0],
-    [1.0, 2.0, 2.0, 1.0],
-    [1.0, 1.0, 1.0, 1.0]
-]
-
-surface = NurbsSurface.from_parameters(
-    points=points,
-    weights=weights,
-    u_knots=[0.0, 1.0],
-    v_knots=[0.0, 1.0],
-    u_mults=[4, 4],
-    v_mults=[4, 4],
-    u_degree=3,
-    v_degree=3,
-)
+surface = NurbsSurface.from_points(points=points)
 
 print(surface)
 
