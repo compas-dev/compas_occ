@@ -15,7 +15,9 @@ from compas_occ.interop import compas_vector_to_occ_vector
 
 from compas_occ.interop import array2_from_points2
 from compas_occ.interop import array1_from_floats1
+from compas_occ.interop import array2_from_floats2
 from compas_occ.interop import array1_from_integers1
+from compas_occ.interop import floats2_from_array2
 from compas_occ.interop import points2_from_array2
 
 from compas_occ.geometry.curves import NurbsCurve
@@ -42,6 +44,7 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 
 from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array2OfReal
 from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 from OCC.Core.STEPControl import STEPControl_Writer
@@ -129,7 +132,7 @@ class NurbsSurface(Surface):
             'NurbsSurface',
             '--------------',
             f'Points: {self.points}',
-            # f'Weights: {self.weights}',
+            f'Weights: {self.weights}',
             f'U Knots: {self.u_knots}',
             f'V Knots: {self.v_knots}',
             f'U Mults: {self.u_mults}',
@@ -234,8 +237,8 @@ class NurbsSurface(Surface):
 
     @classmethod
     def from_parameters(cls,
-                        points: Tuple[List[Point], List[Point]],
-                        weights: List[float],
+                        points: List[List[Point]],
+                        weights: List[List[float]],
                         u_knots: List[float],
                         v_knots: List[float],
                         u_mults: List[int],
@@ -248,7 +251,7 @@ class NurbsSurface(Surface):
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
             array2_from_points2(points),
-            # array1_from_floats1(weights),
+            array2_from_floats2(weights),
             array1_from_floats1(u_knots),
             array1_from_floats1(v_knots),
             array1_from_integers1(u_mults),
@@ -261,13 +264,40 @@ class NurbsSurface(Surface):
         return surface
 
     @classmethod
-    def from_points(cls, points: List[Point]) -> NurbsSurface:
+    def from_points(cls,
+                    points: List[List[Point]],
+                    u_degree: int = 3,
+                    v_degree: int = 3) -> NurbsSurface:
         """Construct a NURBS surface from control points."""
-        # all curves in the u direction have the same
-        # - number of control points
-        # - degree
-        # - knot vectoor
-        # - periodicity
+        u = len(points[0])
+        v = len(points)
+        weights = [[1.0 for _ in range(u)] for _ in range(v)]
+        u_degree = u_degree if u > u_degree else u - 1
+        v_degree = v_degree if v > v_degree else v - 1
+        u_order = u_degree + 1
+        v_order = v_degree + 1
+        x = u - u_order
+        u_knots = [float(i) for i in range(2 + x)]
+        u_mults = [u_order]
+        for _ in range(x):
+            u_mults.append(1)
+        u_mults.append(u_order)
+        x = v - v_order
+        v_knots = [float(i) for i in range(2 + x)]
+        v_mults = [v_order]
+        for _ in range(x):
+            v_mults.append(1)
+        v_mults.append(v_order)
+        is_u_periodic = False
+        is_v_periodic = False
+        return cls.from_parameters(
+            points,
+            weights,
+            u_knots, v_knots,
+            u_mults, v_mults,
+            u_degree, v_degree,
+            is_u_periodic, is_v_periodic
+        )
 
     @classmethod
     def from_step(cls, filepath: str) -> NurbsSurface:
@@ -344,8 +374,9 @@ class NurbsSurface(Surface):
         return self.occ_surface.Poles()
 
     @property
-    def occ_weights(self) -> TColStd_Array1OfReal:
-        return self.occ_surface.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
+    def occ_weights(self) -> TColStd_Array2OfReal:
+        weights = self.occ_surface.Weights()
+        return weights
 
     @property
     def occ_u_knots(self) -> TColStd_Array1OfReal:
@@ -372,8 +403,13 @@ class NurbsSurface(Surface):
         return points2_from_array2(self.occ_points)
 
     @property
-    def weights(self) -> List[float]:
-        return list(self.occ_weights)
+    def weights(self) -> List[List[float]]:
+        weights = self.occ_weights
+        if not weights:
+            weights = [[1.0] * len(self.points[0]) for _ in range(len(self.points))]
+        else:
+            weights = floats2_from_array2(weights)
+        return weights
 
     @property
     def u_knots(self) -> List[float]:
