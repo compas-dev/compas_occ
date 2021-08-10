@@ -27,8 +27,9 @@ from OCC.Core.gp import gp_Vec
 # from OCC.Core.gp import gp_Dir
 
 from OCC.Core.Geom import Geom_BSplineSurface
-# from OCC.Core.Geom import Geom_Line
-# from OCC.Core.GeomAPI import GeomAPI_IntCS
+from OCC.Core.Geom import Geom_Line
+from OCC.Core.GeomAPI import GeomAPI_IntCS
+from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 
 from OCC.Core.GeomLProp import GeomLProp_SLProps
 
@@ -128,7 +129,7 @@ class NurbsSurface(Surface):
             'NurbsSurface',
             '--------------',
             f'Points: {self.points}',
-            f'Weights: {self.weights}',
+            # f'Weights: {self.weights}',
             f'U Knots: {self.u_knots}',
             f'V Knots: {self.v_knots}',
             f'U Mults: {self.u_mults}',
@@ -247,7 +248,7 @@ class NurbsSurface(Surface):
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
             array2_from_points2(points),
-            array1_from_floats1(weights),
+            # array1_from_floats1(weights),
             array1_from_floats1(u_knots),
             array1_from_floats1(v_knots),
             array1_from_integers1(u_mults),
@@ -262,7 +263,11 @@ class NurbsSurface(Surface):
     @classmethod
     def from_points(cls, points: List[Point]) -> NurbsSurface:
         """Construct a NURBS surface from control points."""
-        raise NotImplementedError
+        # all curves in the u direction have the same
+        # - number of control points
+        # - degree
+        # - knot vectoor
+        # - periodicity
 
     @classmethod
     def from_step(cls, filepath: str) -> NurbsSurface:
@@ -312,7 +317,7 @@ class NurbsSurface(Surface):
         """Convert the surface to a quad mesh."""
         quads = []
         v = v or u
-        U, V = meshgrid(self.uspace(u), self.vspace(v))
+        U, V = meshgrid(self.u_space(u), self.v_space(v))
         for i in range(u - 1):
             for j in range(v - 1):
                 a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
@@ -363,7 +368,7 @@ class NurbsSurface(Surface):
     # ==============================================================================
 
     @property
-    def points(self) -> Tuple[List[Point], List[Point]]:
+    def points(self) -> List[List[Point]]:
         return points2_from_array2(self.occ_points)
 
     @property
@@ -443,14 +448,15 @@ class NurbsSurface(Surface):
         copy.transform(T)
         return copy
 
-    # def intersections(self, line: Line) -> List[Point]:
-    #     intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
-    #     points = []
-    #     for index in range(intersection.NbPoints()):
-    #         pnt = intersection.Point(index + 1)
-    #         point = Point.from_occ(pnt)
-    #         points.append(point)
-    #     return points
+    def intersections_with_line(self, line: Line) -> List[Point]:
+        """Compute the intersections with a line."""
+        intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
+        points = []
+        for index in range(intersection.NbPoints()):
+            pnt = intersection.Point(index + 1)
+            point = Point.from_occ(pnt)
+            points.append(point)
+        return points
 
     def u_space(self, n: int = 10) -> List[float]:
         """Compute evenly spaced parameters over the surface domain in the U direction.
@@ -495,7 +501,9 @@ class NurbsSurface(Surface):
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point, distance=None):
+    def closest_point(self, point, distance=None) -> Point:
         """Compute the closest point on the curve to a given point.
         """
-        pass
+        projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
+        pnt = projector.NearestPoint()
+        return Point.from_occ(pnt)

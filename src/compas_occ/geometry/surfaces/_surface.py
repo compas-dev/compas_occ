@@ -2,4 +2,4 @@ from compas.data import Data
 
 
 class Surface(Data):
-    pass
+    """Base class for all surfaces in this package."""
