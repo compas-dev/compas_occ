@@ -129,7 +129,7 @@ class NurbsSurface(Surface):
         self.occ_surface = None
 
     def __eq__(self, other: NurbsSurface) -> bool:
-        return self.occ_surface.IsEqual(other.occ_surface)
+        raise NotImplementedError
 
     def __str__(self):
         lines = [
@@ -157,7 +157,7 @@ class NurbsSurface(Surface):
     @property
     def data(self) -> Dict:
         return {
-            'points': [point.data for point in self.points],
+            'points': [[point.data for point in row] for row in self.points],
             'weights': self.weights,
             'u_knots': self.u_knots,
             'v_knots': self.v_knots,
@@ -171,7 +171,7 @@ class NurbsSurface(Surface):
 
     @data.setter
     def data(self, data: Dict):
-        points = [Point.from_data(point) for point in data['points']]
+        points = [[Point.from_data(point) for point in row] for row in data['points']]
         weights = data['weights']
         u_knots = data['u_knots']
         v_knots = data['v_knots']
@@ -209,7 +209,7 @@ class NurbsSurface(Surface):
             The constructed surface.
 
         """
-        points = [Point.from_data(point) for point in data['points']]
+        points = [[Point.from_data(point) for point in row] for row in data['points']]
         weights = data['weights']
         u_knots = data['u_knots']
         v_knots = data['v_knots']
