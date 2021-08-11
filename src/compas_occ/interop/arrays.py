@@ -35,6 +35,7 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
 
 def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     """Construct a two-dimensional point array from a list of lists of points."""
+    points = list(zip(* points))
     rows = len(points)
     cols = len(points[0])
     array = TColgp_Array2OfPnt(1, rows, 1, cols)
@@ -53,7 +54,7 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
             pnt = array.Value(i, j)
             row.append(Point(pnt.X(), pnt.Y(), pnt.Z()))
         points.append(row)
-    return points
+    return list(zip(* points))
 
 
 def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
