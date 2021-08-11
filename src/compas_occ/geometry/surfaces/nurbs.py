@@ -352,8 +352,8 @@ class NurbsSurface(Surface):
         quads = []
         v = v or u
         U, V = meshgrid(self.u_space(u), self.v_space(v))
-        for i in range(u - 1):
-            for j in range(v - 1):
+        for i in range(v - 1):
+            for j in range(u - 1):
                 a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
                 b = self.point_at(U[i + 0][j + 1], V[i + 0][j + 1])
                 c = self.point_at(U[i + 1][j + 1], V[i + 1][j + 1])
