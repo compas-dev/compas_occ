@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Optional, Tuple, List, Dict
 
-from compas.geometry import Point, Vector, Line, Frame
+from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
@@ -57,6 +57,10 @@ from OCC.Core.GeomFill import GeomFill_BSplineCurves
 from OCC.Core.GeomFill import GeomFill_CoonsStyle
 
 from OCC.Core.Tesselator import ShapeTesselator
+
+from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
+from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.BndLib import BndLib_AddSurface_Add
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
@@ -543,3 +547,15 @@ class NurbsSurface(Surface):
         projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
         pnt = projector.NearestPoint()
         return Point.from_occ(pnt)
+
+    def aabb(self, precision: float = 0.0) -> Box:
+        """Compute the axis aligned bounding box of the surface."""
+        box = Bnd_Box()
+        BndLib_AddSurface_Add(GeomAdaptor_Surface(self.occ_curve), precision, box)
+        return Box.from_diagonal((
+            Point.from_occ(box.CornerMin()),
+            Point.from_occ(box.CornerMax())
+        ))
+
+    def obb(self, precision: float = 0.0) -> Box:
+        """Compute the oriented bounding box of the surface."""

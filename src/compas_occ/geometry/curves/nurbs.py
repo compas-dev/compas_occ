@@ -382,6 +382,12 @@ class NurbsCurve(Curve):
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
+    def to_line(self):
+        pass
+
+    def to_polyline(self):
+        pass
+
     # ==============================================================================
     # OCC
     # ==============================================================================
@@ -607,8 +613,8 @@ class NurbsCurve(Curve):
     def fair(self):
         pass
 
-    def bounding_box(self, precision: float = 1e-3) -> Box:
-        """Compute the bounding box of the curve."""
+    def aabb(self, precision: float = 0.0) -> Box:
+        """Compute the axis aligned bounding box of the curve."""
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal((
@@ -616,6 +622,9 @@ class NurbsCurve(Curve):
             Point.from_occ(box.CornerMax())
         ))
 
-    def length(self) -> float:
+    def obb(self, precision: float = 0.0) -> Box:
+        """Compute the oriented bounding box of the curve."""
+
+    def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve."""
         return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))
