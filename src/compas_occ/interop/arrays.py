@@ -75,6 +75,7 @@ def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
 
 def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
     """Construct a two-dimensional real array from a list of lists of floats."""
+    numbers = list(zip(* numbers))
     rows = len(numbers)
     cols = len(numbers[0])
     array = TColStd_Array2OfReal(1, rows, 1, cols)
@@ -93,4 +94,4 @@ def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
             number = array.Value(i, j)
             row.append(number)
         numbers.append(row)
-    return numbers
+    return list(zip(* numbers))
