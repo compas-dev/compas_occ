@@ -2,7 +2,6 @@ from compas.geometry import Point, Polyline
 from compas_occ.geometry import NurbsSurface
 
 from compas_view2.app import App
-from compas_view2.objects import Collection
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -32,13 +31,10 @@ other = NurbsSurface.from_jsonstring(string)
 view = App()
 
 for row in other.points:
-    view.add(Collection(row), size=20, color=(1, 0, 0))
-
-for row in other.points:
-    view.add(Polyline(row), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 for col in zip(* other.points):
-    view.add(Polyline(col), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 view.add(other.to_mesh(u=50), show_edges=False)
 

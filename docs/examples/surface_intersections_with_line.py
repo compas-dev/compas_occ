@@ -47,13 +47,10 @@ for line in lines:
 view = App(viewmode='ghosted')
 
 for row in surface.points:
-    view.add(Collection(row), size=20, color=(1, 0, 0))
-
-for row in surface.points:
-    view.add(Polyline(row), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 for col in zip(* surface.points):
-    view.add(Polyline(col), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 view.add(Collection(intersections), size=30, color=(0, 0, 1))
 

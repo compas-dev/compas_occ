@@ -28,13 +28,10 @@ spacepoints = surface.xyz(nu=50, nv=10)
 view = App()
 
 for row in surface.points:
-    view.add(Collection(row), size=20, color=(1, 0, 0))
-
-for row in surface.points:
-    view.add(Polyline(row), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 for col in zip(* surface.points):
-    view.add(Polyline(col), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 view.add(surface.to_mesh(u=50), show_edges=False)
 

@@ -1,9 +1,7 @@
-from compas.geometry import Point, Line
-from compas.utilities import pairwise
+from compas.geometry import Point, Polyline
 from compas_occ.geometry import NurbsSurface
 
 from compas_view2.app import App
-from compas_view2.objects import Collection
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -23,15 +21,10 @@ print(surface)
 view = App()
 
 for row in surface.points:
-    view.add(Collection(row), size=20, color=(1, 0, 0))
-
-for row in surface.points:
-    for a, b in pairwise(row):
-        view.add(Line(a, b), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 for col in zip(* surface.points):
-    for a, b in pairwise(col):
-        view.add(Line(a, b), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
 view.add(surface.to_mesh(u=50))
 
