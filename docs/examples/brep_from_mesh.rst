@@ -2,7 +2,7 @@
 BRep From Mesh
 ********************************************************************************
 
-.. figure:: /_images/
+.. figure:: /_images/example_brep_from_mesh.png
     :figclass: figure
     :class: figure-img img-fluid
 
