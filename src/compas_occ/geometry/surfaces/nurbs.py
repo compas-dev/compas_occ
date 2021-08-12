@@ -304,6 +304,18 @@ class NurbsSurface(Surface):
         )
 
     @classmethod
+    def from_meshgrid(cls, nu: int = 10, nv: int = 10) -> NurbsSurface:
+        """Construct a NURBS surface from a mesh grid."""
+        UU, VV = meshgrid(linspace(0, nu, nu + 1), linspace(0, nv, nv + 1))
+        points = []
+        for U, V in zip(UU, VV):
+            row = []
+            for u, v in zip(U, V):
+                row.append(Point(u, v, 0.0))
+            points.append(row)
+        return cls.from_points(points=points)
+
+    @classmethod
     def from_step(cls, filepath: str) -> NurbsSurface:
         """Load a NURBS surface from a STP file."""
         raise NotImplementedError
