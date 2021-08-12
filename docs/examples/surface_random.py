@@ -1,7 +1,5 @@
 import random
 
-from OCC.Core.gp import gp_Pnt
-
 from compas.geometry import Polyline
 from compas_occ.geometry import NurbsSurface
 
@@ -18,10 +16,11 @@ print(surface)
 # Update
 # ==============================================================================
 
-for u in range(2, U + 1):
-    for v in range(2, V + 1):
-        pole = surface.occ_surface.Pole(u, v)
-        surface.occ_surface.SetPole(u, v, gp_Pnt(pole.X(), pole.Y(), random.choice([+1, -1]) * random.random()))
+for u in range(1, U):
+    for v in range(1, V):
+        point = surface.points[u, v]
+        point.z = random.choice([+1, -1]) * random.random()
+        surface.points[u, v] = point
 
 # ==============================================================================
 # Visualisation
