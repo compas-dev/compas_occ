@@ -69,6 +69,39 @@ Vector.to_occ = compas_vector_to_occ_vector
 Line.to_occ = compas_line_to_occ_line
 
 
+class Points:
+    def __init__(self, surface):
+        self.occ_surface = surface
+        # self._points = None
+
+    @property
+    def points(self):
+        # if not self._points:
+        #     self._points =
+        # return self._points
+        return points2_from_array2(self.occ_surface.Poles())
+
+    def __getitem__(self, index):
+        try:
+            u, v = index
+        except TypeError:
+            return self.points[index]
+        else:
+            pnt = self.occ_surface.Pole(u + 1, v + 1)
+            return Point.from_occ(pnt)
+
+    def __setitem__(self, index, point):
+        u, v = index
+        self.occ_surface.SetPole(u + 1, v + 1, point.to_occ())
+
+    def __len__(self):
+        return self.occ_surface.NbUPoles() * self.occ_surface.NbVPoles()
+
+    def __iter__(self):
+        for row in self.points:
+            yield row
+
+
 class NurbsSurface(Surface):
     """Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.
 
@@ -127,6 +160,7 @@ class NurbsSurface(Surface):
     def __init__(self, name=None) -> None:
         super().__init__(name=name)
         self.occ_surface = None
+        self._points = None
 
     def __eq__(self, other: NurbsSurface) -> bool:
         raise NotImplementedError
@@ -416,7 +450,9 @@ class NurbsSurface(Surface):
 
     @property
     def points(self) -> List[List[Point]]:
-        return points2_from_array2(self.occ_points)
+        if not self._points:
+            self._points = Points(self.occ_surface)
+        return self._points
 
     @property
     def weights(self) -> List[List[float]]:
