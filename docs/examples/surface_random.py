@@ -6,7 +6,7 @@ from compas_occ.geometry import NurbsSurface
 from compas_view2.app import App
 
 U = 10
-V = 10
+V = 20
 
 surface = NurbsSurface.from_meshgrid(nu=U, nv=V)
 
