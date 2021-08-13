@@ -527,8 +527,8 @@ class NurbsSurface(Surface):
     def transform(self, T: Transformation) -> None:
         """Transform this surface."""
         _T = gp_Trsf()
-        _T.SetValues(* T.list)
-        self.occ_surface.Transform(T)
+        _T.SetValues(* T.list[:12])
+        self.occ_surface.Transform(_T)
 
     def transformed(self, T: Transformation) -> NurbsSurface:
         """Transform an independent copy of this surface."""
@@ -609,7 +609,7 @@ class NurbsSurface(Surface):
     def aabb(self, precision: float = 0.0) -> Box:
         """Compute the axis aligned bounding box of the surface."""
         box = Bnd_Box()
-        BndLib_AddSurface_Add(GeomAdaptor_Surface(self.occ_curve), precision, box)
+        BndLib_AddSurface_Add(GeomAdaptor_Surface(self.occ_surface), precision, box)
         return Box.from_diagonal((
             Point.from_occ(box.CornerMin()),
             Point.from_occ(box.CornerMax())
