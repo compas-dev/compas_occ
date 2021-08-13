@@ -2,9 +2,7 @@
 
 COMPAS wrapper for the Python bindings of OCC
 
-**This package is in early stages of development!**
-
-----
+For more information, see the docs at <https://compas.dev/compas_occ/latest/index.html>.
 
 ## Installation
 
