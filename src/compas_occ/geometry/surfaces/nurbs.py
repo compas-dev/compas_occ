@@ -95,11 +95,11 @@ class Points:
         self.occ_surface.SetPole(u + 1, v + 1, point.to_occ())
 
     def __len__(self):
-        return self.occ_surface.NbUPoles() * self.occ_surface.NbVPoles()
+        return self.occ_surface.NbVPoles()
+        # return self.occ_surface.Poles().NbColumns()
 
     def __iter__(self):
-        for row in self.points:
-            yield row
+        return iter(self.points)
 
 
 class NurbsSurface(Surface):
@@ -557,6 +557,16 @@ class NurbsSurface(Surface):
         """
         vmin, vmax = self.v_domain
         return linspace(vmin, vmax, n)
+
+    def u_isocurve(self, u: float) -> NurbsCurve:
+        """Compute the isoparametric curve at parameter u."""
+        occ_curve = self.occ_surface.UIso(u)
+        return NurbsCurve.from_occ(occ_curve)
+
+    def v_isocurve(self, v: float) -> NurbsCurve:
+        """Compute the isoparametric curve at parameter v."""
+        occ_curve = self.occ_surface.VIso(v)
+        return NurbsCurve.from_occ(occ_curve)
 
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
         """Compute point locations corresponding to evenly spaced parameters over the surface domain.
