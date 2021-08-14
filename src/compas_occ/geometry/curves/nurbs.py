@@ -509,6 +509,10 @@ class NurbsCurve(Curve):
         copy.transform(T)
         return copy
 
+    def reverse(self) -> None:
+        """Reverse the parametrisation of the curve."""
+        self.occ_curve.Reverse()
+
     def space(self, n: int = 10) -> List[float]:
         """Compute evenly spaced parameters over the curve domain."""
         u, v = self.domain
