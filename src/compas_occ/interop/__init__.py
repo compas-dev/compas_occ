@@ -34,6 +34,7 @@ Primitives
     compas_vector_to_occ_direction
     compas_vector_from_occ_vector
     compas_line_to_occ_line
+    compas_frame_from_occ_position
 
 Meshes
 ======
@@ -66,6 +67,7 @@ from .primitives import compas_vector_to_occ_vector  # noqa: F401
 from .primitives import compas_vector_to_occ_direction  # noqa: F401
 from .primitives import compas_vector_from_occ_vector  # noqa: F401
 from .primitives import compas_line_to_occ_line  # noqa: F401
+from .primitives import compas_frame_from_occ_position  # noqa: F401
 
 from .meshes import triangle_to_face  # noqa: F401
 from .meshes import quad_to_face  # noqa: F401
