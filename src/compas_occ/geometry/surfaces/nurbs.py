@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple, List, Dict
+from typing import Generator, Optional, Tuple, List, Dict
 
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
@@ -12,7 +12,7 @@ from compas_occ.interop import compas_point_from_occ_point
 from compas_occ.interop import compas_point_to_occ_point
 from compas_occ.interop import compas_vector_from_occ_vector
 from compas_occ.interop import compas_vector_to_occ_vector
-
+from compas_occ.interop import compas_frame_from_occ_position
 from compas_occ.interop import array2_from_points2
 from compas_occ.interop import array1_from_floats1
 from compas_occ.interop import array2_from_floats2
@@ -20,65 +20,44 @@ from compas_occ.interop import array1_from_integers1
 from compas_occ.interop import floats2_from_array2
 from compas_occ.interop import points2_from_array2
 
-from compas_occ.geometry.curves import NurbsCurve
-from compas_occ.geometry.surfaces._surface import Surface
+from ..curves import NurbsCurve
+from ._surface import Surface
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
-# from OCC.Core.gp import gp_Dir
-
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.Geom import Geom_Line
 from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
-
 from OCC.Core.GeomLProp import GeomLProp_SLProps
-
 from OCC.Core.TopoDS import topods_Face
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Face
-
 from OCC.Core.BRep import BRep_Tool_Surface
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.Core.TColgp import TColgp_Array2OfPnt
-
-from OCC.Core.TColStd import TColStd_Array1OfReal
-from OCC.Core.TColStd import TColStd_Array2OfReal
-from OCC.Core.TColStd import TColStd_Array1OfInteger
-
-from OCC.Core.STEPControl import STEPControl_Writer
-from OCC.Core.STEPControl import STEPControl_AsIs
-
-from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
-
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
 from OCC.Core.GeomFill import GeomFill_CoonsStyle
-
-from OCC.Core.Tesselator import ShapeTesselator
-
 from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
 from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BndLib import BndLib_AddSurface_Add
+from OCC.Core.BndLib import BndLib_AddSurface_AddOptimal
+from OCC.Core.BRepBndLib import brepbndlib_AddOBB
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
 Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
+Frame.from_occ = classmethod(compas_frame_from_occ_position)
 Line.to_occ = compas_line_to_occ_line
 
 
 class Points:
     def __init__(self, surface):
         self.occ_surface = surface
-        # self._points = None
 
     @property
     def points(self):
-        # if not self._points:
-        #     self._points =
-        # return self._points
         return points2_from_array2(self.occ_surface.Poles())
 
     def __getitem__(self, index):
@@ -157,13 +136,29 @@ class NurbsSurface(Surface):
     def JSONSCHEMANAME(self):
         raise NotImplementedError
 
-    def __init__(self, name=None) -> None:
+    def __init__(self, name: str = None) -> None:
         super().__init__(name=name)
         self.occ_surface = None
         self._points = None
 
     def __eq__(self, other: NurbsSurface) -> bool:
-        raise NotImplementedError
+        for a, b in zip(flatten(self.points), flatten(other.points)):
+            if a != b:
+                return False
+        for a, b in zip(flatten(self.weights), flatten(other.weights)):
+            if a != b:
+                return False
+        for a, b in zip(self.u_knots, self.v_knots):
+            if a != b:
+                return False
+        for a, b in zip(self.u_mults, self.v_mults):
+            if a != b:
+                return False
+        if self.u_degree != self.v_degree:
+            return False
+        if self.is_u_periodic != self.is_v_periodic:
+            return False
+        return True
 
     def __str__(self):
         lines = [
@@ -374,6 +369,11 @@ class NurbsSurface(Surface):
 
     def to_step(self, filepath: str, schema: str = "AP203") -> None:
         """Write the surface geometry to a STP file."""
+        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.Interface import Interface_Static_SetCVal
+        from OCC.Core.IFSelect import IFSelect_RetDone
+
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_face, STEPControl_AsIs)
@@ -383,6 +383,8 @@ class NurbsSurface(Surface):
 
     def to_tesselation(self) -> Mesh:
         """Convert the surface to a triangle mesh."""
+        from OCC.Core.Tesselator import ShapeTesselator
+
         tess = ShapeTesselator(self.occ_shape)
         tess.Compute()
         vertices = []
@@ -395,16 +397,22 @@ class NurbsSurface(Surface):
 
     def to_mesh(self, u: int = 100, v: Optional[int] = None) -> Mesh:
         """Convert the surface to a quad mesh."""
-        quads = []
+        from itertools import product
+        from functools import lru_cache
+
+        @lru_cache(maxsize=None)
+        def point_at(i, j):
+            return self.point_at(i, j)
+
         v = v or u
         U, V = meshgrid(self.u_space(u), self.v_space(v))
-        for i in range(v - 1):
-            for j in range(u - 1):
-                a = self.point_at(U[i + 0][j + 0], V[i + 0][j + 0])
-                b = self.point_at(U[i + 0][j + 1], V[i + 0][j + 1])
-                c = self.point_at(U[i + 1][j + 1], V[i + 1][j + 1])
-                d = self.point_at(U[i + 1][j + 0], V[i + 1][j + 0])
-                quads.append([a, b, c, d])
+        quads = [[
+            point_at(U[i + 0][j + 0], V[i + 0][j + 0]),
+            point_at(U[i + 0][j + 1], V[i + 0][j + 1]),
+            point_at(U[i + 1][j + 1], V[i + 1][j + 1]),
+            point_at(U[i + 1][j + 0], V[i + 1][j + 0])
+        ] for i, j in product(range(v - 1), range(u - 1))]
+
         return Mesh.from_polygons(quads)
 
     # ==============================================================================
@@ -413,36 +421,12 @@ class NurbsSurface(Surface):
 
     @property
     def occ_shape(self) -> TopoDS_Shape:
+        from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
         return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
 
     @property
     def occ_face(self) -> TopoDS_Face:
         return topods_Face(self.occ_shape)
-
-    @property
-    def occ_points(self) -> TColgp_Array2OfPnt:
-        return self.occ_surface.Poles()
-
-    @property
-    def occ_weights(self) -> TColStd_Array2OfReal:
-        weights = self.occ_surface.Weights()
-        return weights
-
-    @property
-    def occ_u_knots(self) -> TColStd_Array1OfReal:
-        return self.occ_surface.UKnots()
-
-    @property
-    def occ_v_knots(self) -> TColStd_Array1OfReal:
-        return self.occ_surface.VKnots()
-
-    @property
-    def occ_u_mults(self) -> TColStd_Array1OfInteger:
-        return self.occ_surface.UMultiplicities()
-
-    @property
-    def occ_v_mults(self) -> TColStd_Array1OfInteger:
-        return self.occ_surface.VMultiplicities()
 
     # ==============================================================================
     # Properties
@@ -456,7 +440,7 @@ class NurbsSurface(Surface):
 
     @property
     def weights(self) -> List[List[float]]:
-        weights = self.occ_weights
+        weights = self.occ_surface.Weights()
         if not weights:
             weights = [[1.0] * len(self.points[0]) for _ in range(len(self.points))]
         else:
@@ -465,19 +449,19 @@ class NurbsSurface(Surface):
 
     @property
     def u_knots(self) -> List[float]:
-        return list(self.occ_u_knots)
+        return list(self.occ_surface.UKnots())
 
     @property
     def v_knots(self) -> List[float]:
-        return list(self.occ_v_knots)
+        return list(self.occ_surface.VKnots())
 
     @property
     def u_mults(self) -> List[int]:
-        return list(self.occ_u_mults)
+        return list(self.occ_surface.UMultiplicities())
 
     @property
     def v_mults(self) -> List[int]:
-        return list(self.occ_v_mults)
+        return list(self.occ_surface.VMultiplicities())
 
     @property
     def u_degree(self) -> int:
@@ -546,13 +530,13 @@ class NurbsSurface(Surface):
             points.append(point)
         return points
 
-    def u_space(self, n: int = 10) -> List[float]:
+    def u_space(self, n: int = 10) -> Generator[float, None, None]:
         """Compute evenly spaced parameters over the surface domain in the U direction.
         """
         umin, umax = self.u_domain
         return linspace(umin, umax, n)
 
-    def v_space(self, n: int = 10) -> List[float]:
+    def v_space(self, n: int = 10) -> Generator[float, None, None]:
         """Compute evenly spaced parameters over the surface domain in the V direction.
         """
         vmin, vmax = self.v_domain
@@ -567,6 +551,19 @@ class NurbsSurface(Surface):
         """Compute the isoparametric curve at parameter v."""
         occ_curve = self.occ_surface.VIso(v)
         return NurbsCurve.from_occ(occ_curve)
+
+    def boundary(self) -> List[NurbsCurve]:
+        """Compute the boundary curves of the surface."""
+        umin, umax, vmin, vmax = self.occ_surface.Bounds()
+        curves = [
+            self.v_isocurve(vmin),
+            self.u_isocurve(umax),
+            self.v_isocurve(vmax),
+            self.u_isocurve(umin)
+        ]
+        curves[-2].reverse()
+        curves[-1].reverse()
+        return curves
 
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
         """Compute point locations corresponding to evenly spaced parameters over the surface domain.
@@ -606,10 +603,14 @@ class NurbsSurface(Surface):
         pnt = projector.NearestPoint()
         return Point.from_occ(pnt)
 
-    def aabb(self, precision: float = 0.0) -> Box:
+    def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box:
         """Compute the axis aligned bounding box of the surface."""
         box = Bnd_Box()
-        BndLib_AddSurface_Add(GeomAdaptor_Surface(self.occ_surface), precision, box)
+        if optimal:
+            add = BndLib_AddSurface_AddOptimal
+        else:
+            add = BndLib_AddSurface_Add
+        add(GeomAdaptor_Surface(self.occ_surface), precision, box)
         return Box.from_diagonal((
             Point.from_occ(box.CornerMin()),
             Point.from_occ(box.CornerMax())
@@ -617,3 +618,6 @@ class NurbsSurface(Surface):
 
     def obb(self, precision: float = 0.0) -> Box:
         """Compute the oriented bounding box of the surface."""
+        box = Bnd_OBB()
+        brepbndlib_AddOBB(self.occ_shape, box, True, True, True)
+        return Box(Frame.from_occ(box.Position()), box.XHSize(), box.YHSize(), box.ZHSize())
