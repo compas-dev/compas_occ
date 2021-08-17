@@ -18,6 +18,6 @@ surface = NurbsSurface.from_points(points=points)
 
 view = App()
 
-view.add(surface)
+view.add(surface, show_edges=True, show_points=True)
 
 view.run()

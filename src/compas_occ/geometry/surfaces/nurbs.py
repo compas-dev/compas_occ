@@ -419,7 +419,7 @@ class NurbsSurface(Surface):
         return Mesh.from_polygons(quads)
 
     def to_triangles(self, nu: int = 100, nv: Optional[int] = None) -> List[Tuple[float, float, float]]:
-        """Convert the surface to a quad mesh."""
+        """Convert the surface to a list of triangles."""
         from itertools import product
         from functools import lru_cache
 
