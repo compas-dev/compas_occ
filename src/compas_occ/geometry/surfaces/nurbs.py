@@ -1,6 +1,9 @@
 from __future__ import annotations
+from itertools import product
 
 from typing import Generator, Optional, Tuple, List, Dict
+
+import numpy as np
 
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
@@ -395,7 +398,7 @@ class NurbsSurface(Surface):
             triangles.append(tess.GetTriangleIndex(i))
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
-    def to_mesh(self, u: int = 100, v: Optional[int] = None) -> Mesh:
+    def to_mesh(self, nu: int = 100, nv: Optional[int] = None) -> Mesh:
         """Convert the surface to a quad mesh."""
         from itertools import product
         from functools import lru_cache
@@ -404,16 +407,41 @@ class NurbsSurface(Surface):
         def point_at(i, j):
             return self.point_at(i, j)
 
-        v = v or u
-        U, V = meshgrid(self.u_space(u), self.v_space(v))
+        nv = nv or nu
+        V, U = np.meshgrid(self.v_space(nv + 1), self.u_space(nu + 1), indexing='ij')
         quads = [[
             point_at(U[i + 0][j + 0], V[i + 0][j + 0]),
             point_at(U[i + 0][j + 1], V[i + 0][j + 1]),
             point_at(U[i + 1][j + 1], V[i + 1][j + 1]),
             point_at(U[i + 1][j + 0], V[i + 1][j + 0])
-        ] for i, j in product(range(v - 1), range(u - 1))]
+        ] for i, j in product(range(nv), range(nu))]
 
         return Mesh.from_polygons(quads)
+
+    def to_triangles(self, nu: int = 100, nv: Optional[int] = None) -> List[Tuple[float, float, float]]:
+        """Convert the surface to a quad mesh."""
+        from itertools import product
+        from functools import lru_cache
+
+        @lru_cache(maxsize=None)
+        def point_at(i, j):
+            return self.point_at(i, j)
+
+        nv = nv or nu
+        V, U = np.meshgrid(self.v_space(nv + 1), self.u_space(nu + 1), indexing='ij')
+
+        tris = [None] * (6 * nu * nv)
+        index = 0
+        for i, j in product(range(nv), range(nu)):
+            tris[index + 0] = point_at(U[i + 0][j + 0], V[i + 0][j + 0])
+            tris[index + 1] = point_at(U[i + 0][j + 1], V[i + 0][j + 1])
+            tris[index + 2] = point_at(U[i + 1][j + 1], V[i + 1][j + 1])
+            tris[index + 3] = point_at(U[i + 0][j + 0], V[i + 0][j + 0])
+            tris[index + 4] = point_at(U[i + 1][j + 1], V[i + 1][j + 1])
+            tris[index + 5] = point_at(U[i + 1][j + 0], V[i + 1][j + 0])
+            index += 6
+
+        return tris
 
     # ==============================================================================
     # OCC
@@ -534,13 +562,13 @@ class NurbsSurface(Surface):
         """Compute evenly spaced parameters over the surface domain in the U direction.
         """
         umin, umax = self.u_domain
-        return linspace(umin, umax, n)
+        return np.linspace(umin, umax, n)
 
     def v_space(self, n: int = 10) -> Generator[float, None, None]:
         """Compute evenly spaced parameters over the surface domain in the V direction.
         """
         vmin, vmax = self.v_domain
-        return linspace(vmin, vmax, n)
+        return np.linspace(vmin, vmax, n)
 
     def u_isocurve(self, u: float) -> NurbsCurve:
         """Compute the isoparametric curve at parameter u."""
@@ -568,8 +596,8 @@ class NurbsSurface(Surface):
     def xyz(self, nu: int = 10, nv: int = 10) -> List[Point]:
         """Compute point locations corresponding to evenly spaced parameters over the surface domain.
         """
-        U, V = meshgrid(self.u_space(nu), self.v_space(nv), 'ij')
-        return [self.point_at(u, v) for u, v in zip(flatten(U), flatten(V))]
+        U, V = np.meshgrid(self.u_space(nu), self.v_space(nv), indexing='ij')
+        return [self.point_at(U[i, j], V[i, j]) for i, j in product(np.arange(nu), np.arange(nv))]
 
     def point_at(self, u: float, v: float) -> Point:
         """Compute a point on the surface.
