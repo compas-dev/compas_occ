@@ -24,7 +24,7 @@ weights = [
 surface = NurbsSurface.from_parameters(
     points=points,
     weights=weights,
-    u_knots=[0.0, 1/9, 2/9, 3/9, 4/9, 5/9, 6/9, 7/9, 8/9, 1.0],
+    u_knots=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],
     v_knots=[0.0, 1/9, 2/9, 3/9, 4/9, 5/9, 6/9, 7/9, 8/9, 1.0],
     u_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     v_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -46,6 +46,6 @@ for row in surface.points:
 for col in zip(* surface.points):
     view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
-view.add(surface.to_mesh(u=50))
+view.add(surface.to_mesh())
 
 view.run()

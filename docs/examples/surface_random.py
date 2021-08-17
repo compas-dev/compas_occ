@@ -34,6 +34,6 @@ for row in surface.points:
 for col in zip(* surface.points):
     view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
 
-view.add(surface.to_mesh(u=100, v=50))
+view.add(surface.to_mesh(nu=100, nv=50))
 
 view.run()

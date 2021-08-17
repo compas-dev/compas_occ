@@ -57,6 +57,6 @@ view.add(Collection(intersections), size=30, color=(0, 0, 1))
 for x in intersections:
     view.add(Line(base, base + (x - base).scaled(1.2)), linewidth=1, color=(0, 0, 1))
 
-view.add(surface.to_mesh(u=50), show_edges=False)
+view.add(surface.to_mesh(), show_edges=False)
 
 view.run()

@@ -12,8 +12,6 @@ points = [
 
 surface = NurbsSurface.from_points(points=points)
 
-print(surface)
-
 # ==============================================================================
 # JSON Data
 # ==============================================================================
@@ -24,18 +22,23 @@ print(string)
 
 other = NurbsSurface.from_jsonstring(string)
 
+print(surface == other)
+
 # ==============================================================================
 # Visualisation
 # ==============================================================================
 
 view = App()
 
-for row in other.points:
-    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+u = surface.u_isocurve(0.5 * sum(surface.u_domain))
+v = surface.v_isocurve(0.5 * sum(surface.v_domain))
 
-for col in zip(* other.points):
-    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+view.add(Polyline(u.locus()), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+view.add(Polyline(v.locus()), linewidth=1, linecolor=(0.3, 0.3, 0.3))
 
-view.add(other.to_mesh(u=50), show_edges=False)
+for curve in surface.boundary():
+    view.add(Polyline(curve.locus()), linewidth=2, linecolor=(0, 0, 0))
+
+view.add(other.to_mesh(), show_edges=False)
 
 view.run()
