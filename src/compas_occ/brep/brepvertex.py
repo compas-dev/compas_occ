@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from OCC.Core.TopoDS import TopoDS_Vertex
 from OCC.Core.TopoDS import topods_Vertex
 

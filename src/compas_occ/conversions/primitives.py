@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Line

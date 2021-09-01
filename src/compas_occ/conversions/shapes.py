@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from compas.geometry import Box
 from compas.geometry import Sphere
 from compas.geometry import Translation

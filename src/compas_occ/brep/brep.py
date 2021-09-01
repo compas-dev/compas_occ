@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Any, List, Optional
+from typing import List, Optional
 
 import compas.geometry
 import compas.datastructures
@@ -103,7 +101,7 @@ class BRep:
         return self._shape
 
     @shape.setter
-    def shape(self, shape: Any[TopoDS_Shape]) -> None:
+    def shape(self, shape: TopoDS_Shape) -> None:
         self._shape = shape
 
     @property
@@ -187,7 +185,7 @@ class BRep:
                      p1: compas.geometry.Point,
                      p2: compas.geometry.Point,
                      p3: compas.geometry.Point,
-                     p4: Optional[compas.geometry.Point] = None) -> BRep:
+                     p4: Optional[compas.geometry.Point] = None) -> 'BRep':
         """Construct a BRep from 3 or 4 corner points."""
         if not p4:
             brep = BRep()
@@ -198,7 +196,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> BRep:
+    def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> 'BRep':
         """Construct a BRep from a set of polygons."""
         shell = TopoDS_Shell()
         builder = BRep_Builder()
@@ -215,11 +213,11 @@ class BRep:
         return brep
 
     @classmethod
-    def from_curves(cls, curves) -> BRep:
+    def from_curves(cls, curves) -> 'BRep':
         raise NotImplementedError
 
     @classmethod
-    def from_box(cls, box: compas.geometry.Box) -> BRep:
+    def from_box(cls, box: compas.geometry.Box) -> 'BRep':
         """Construct a BRep from a COMPAS box."""
         xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
         yaxis = box.frame.yaxis.scaled(-0.5 * box.ysize)
@@ -231,14 +229,14 @@ class BRep:
         return brep
 
     @classmethod
-    def from_sphere(cls, sphere: compas.geometry.Sphere) -> BRep:
+    def from_sphere(cls, sphere: compas.geometry.Sphere) -> 'BRep':
         """Construct a BRep from a COMPAS sphere."""
         brep = BRep()
         brep.shape = BRepPrimAPI_MakeSphere(gp_Pnt(* sphere.point), sphere.radius).Shape()
         return brep
 
     @classmethod
-    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> BRep:
+    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> 'BRep':
         """Construct a BRep from a COMPAS cylinder."""
         plane = cylinder.circle.plane
         height = cylinder.height
@@ -251,17 +249,17 @@ class BRep:
         return brep
 
     @classmethod
-    def from_cone(cls, cone: compas.geometry.Cone) -> BRep:
+    def from_cone(cls, cone: compas.geometry.Cone) -> 'BRep':
         """Construct a BRep from a COMPAS cone."""
         raise NotImplementedError
 
     @classmethod
-    def from_torus(cls, torus: compas.geometry.Torus) -> BRep:
+    def from_torus(cls, torus: compas.geometry.Torus) -> 'BRep':
         """Construct a BRep from a COMPAS torus."""
         raise NotImplementedError
 
     @classmethod
-    def from_boolean_difference(cls, A: BRep, B: BRep) -> BRep:
+    def from_boolean_difference(cls, A: 'BRep', B: 'BRep') -> 'BRep':
         """Construct a BRep from the boolean difference of two other BReps."""
         cut = BRepAlgoAPI_Cut(A.shape, B.shape)
         if not cut.IsDone():
@@ -271,7 +269,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_boolean_intersection(cls, A: BRep, B: BRep) -> BRep:
+    def from_boolean_intersection(cls, A: 'BRep', B: 'BRep') -> 'BRep':
         """Construct a BRep from the boolean intersection of two other BReps."""
         common = BRepAlgoAPI_Common(A.shape, B.shape)
         if not common.IsDone():
@@ -281,7 +279,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_boolean_union(cls, A, B) -> BRep:
+    def from_boolean_union(cls, A, B) -> 'BRep':
         """Construct a BRep from the boolean union of two other BReps."""
         fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
         if not fuse.IsDone():
@@ -291,7 +289,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_mesh(cls, mesh: compas.datastructures.Mesh) -> BRep:
+    def from_mesh(cls, mesh: compas.datastructures.Mesh) -> 'BRep':
         """Construct a BRep from a COMPAS mesh."""
         shell = TopoDS_Shell()
         builder = BRep_Builder()

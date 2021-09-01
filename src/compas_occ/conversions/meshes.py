@@ -1,5 +1,4 @@
-from __future__ import annotations
-from typing import List
+from typing import List, Union
 from typing_extensions import Annotated
 
 import compas.geometry
@@ -21,7 +20,7 @@ from OCC.Core.GeomAbs import GeomAbs_C0
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
 
-def triangle_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]]) -> TopoDS_Face:
+def triangle_to_face(points: Union[List[compas.geometry.Point], List[Annotated[List[float], 3]]]) -> TopoDS_Face:
     polygon = BRepBuilderAPI_MakePolygon()
     for point in points:
         polygon.Add(gp_Pnt(* point))
@@ -30,7 +29,7 @@ def triangle_to_face(points: List[compas.geometry.Point, Annotated[List[float], 
     return BRepBuilderAPI_MakeFace(wire).Face()
 
 
-def quad_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]]) -> TopoDS_Face:
+def quad_to_face(points: Union[List[compas.geometry.Point], List[Annotated[List[float], 3]]]) -> TopoDS_Face:
     points = [Point(* point) for point in points]
     curve1 = GeomAPI_PointsToBSpline(array1_from_points1([points[0], points[1]])).Curve()
     curve2 = GeomAPI_PointsToBSpline(array1_from_points1([points[3], points[2]])).Curve()
@@ -38,7 +37,7 @@ def quad_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]])
     return BRepBuilderAPI_MakeFace(srf, 1e-6).Face()
 
 
-def ngon_to_face(points: List[compas.geometry.Point, Annotated[List[float], 3]]) -> TopoDS_Face:
+def ngon_to_face(points: Union[List[compas.geometry.Point], List[Annotated[List[float], 3]]]) -> TopoDS_Face:
     points = [gp_Pnt(* point) for point in points]
     poly = BRepBuilderAPI_MakePolygon()
     for point in points:
