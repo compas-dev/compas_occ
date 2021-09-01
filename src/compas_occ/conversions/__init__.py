@@ -1,9 +1,9 @@
 """
 ********************************************************************************
-compas_occ.interop
+compas_occ.conversions
 ********************************************************************************
 
-.. currentmodule:: compas_occ.interop
+.. currentmodule:: compas_occ.conversions
 
 Arrays
 ======

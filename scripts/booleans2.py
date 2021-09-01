@@ -1,5 +1,5 @@
 from compas.geometry import Frame, Translation
-from compas_occ.interop.shapes import Box, Sphere
+from compas_occ.conversions.shapes import Box, Sphere
 from compas_occ.brep.booleans import boolean_union_shape_shape
 
 from compas_view2.app import App

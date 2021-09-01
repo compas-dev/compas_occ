@@ -10,18 +10,18 @@ from compas.geometry import Transformation
 from compas.utilities import meshgrid, linspace, flatten
 from compas.datastructures import Mesh
 
-from compas_occ.interop import compas_line_to_occ_line
-from compas_occ.interop import compas_point_from_occ_point
-from compas_occ.interop import compas_point_to_occ_point
-from compas_occ.interop import compas_vector_from_occ_vector
-from compas_occ.interop import compas_vector_to_occ_vector
-from compas_occ.interop import compas_frame_from_occ_position
-from compas_occ.interop import array2_from_points2
-from compas_occ.interop import array1_from_floats1
-from compas_occ.interop import array2_from_floats2
-from compas_occ.interop import array1_from_integers1
-from compas_occ.interop import floats2_from_array2
-from compas_occ.interop import points2_from_array2
+from compas_occ.conversions import compas_line_to_occ_line
+from compas_occ.conversions import compas_point_from_occ_point
+from compas_occ.conversions import compas_point_to_occ_point
+from compas_occ.conversions import compas_vector_from_occ_vector
+from compas_occ.conversions import compas_vector_to_occ_vector
+from compas_occ.conversions import compas_frame_from_occ_position
+from compas_occ.conversions import array2_from_points2
+from compas_occ.conversions import array1_from_floats1
+from compas_occ.conversions import array2_from_floats2
+from compas_occ.conversions import array1_from_integers1
+from compas_occ.conversions import floats2_from_array2
+from compas_occ.conversions import points2_from_array2
 
 from ..curves import NurbsCurve
 from ._surface import Surface

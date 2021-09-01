@@ -9,12 +9,12 @@ from compas.geometry import Circle
 from compas.geometry import Box
 from compas.utilities import linspace
 
-from compas_occ.interop import harray1_from_points1
-from compas_occ.interop import array1_from_points1
-from compas_occ.interop import array1_from_floats1
-from compas_occ.interop import array1_from_integers1
-from compas_occ.interop import points1_from_array1
-from compas_occ.interop import compas_point_from_occ_point
+from compas_occ.conversions import harray1_from_points1
+from compas_occ.conversions import array1_from_points1
+from compas_occ.conversions import array1_from_floats1
+from compas_occ.conversions import array1_from_integers1
+from compas_occ.conversions import points1_from_array1
+from compas_occ.conversions import compas_point_from_occ_point
 
 from ._curve import Curve
 

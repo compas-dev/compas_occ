@@ -1,7 +1,7 @@
 import os
 
 from compas.geometry import Frame
-from compas_occ.interop.shapes import Box
+from compas_occ.conversions.shapes import Box
 from compas_occ.brep.datastructures import BRepShape
 
 from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet

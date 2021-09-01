@@ -10,8 +10,8 @@ compas_occ
     :maxdepth: 1
 
     compas_occ.brep
+    compas_occ.conversions
     compas_occ.geometry
-    compas_occ.interop
 
 """
 

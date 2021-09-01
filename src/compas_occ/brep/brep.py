@@ -46,9 +46,9 @@ from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
 
-from compas_occ.interop import triangle_to_face
-from compas_occ.interop import quad_to_face
-from compas_occ.interop import ngon_to_face
+from compas_occ.conversions import triangle_to_face
+from compas_occ.conversions import quad_to_face
+from compas_occ.conversions import ngon_to_face
 from compas_occ.geometry import NurbsSurface
 
 from compas_occ.brep import BRepVertex

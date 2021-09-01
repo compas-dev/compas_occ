@@ -5,7 +5,7 @@ from compas_view2.app import App
 from compas_occ.geometry.curves import BSplineCurve
 from compas_occ.geometry.surfaces import BSplineSurface
 
-from compas_occ.interop.primitives import compas_point_from_occ_point
+from compas_occ.conversions.primitives import compas_point_from_occ_point
 
 from OCC.Core.gp import gp_Pnt, gp_Dir
 from OCC.Core.Geom import Geom_Line
