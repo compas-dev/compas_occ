@@ -28,7 +28,7 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 view = App()
 
-view.add(surface.to_mesh(u=50), show_edges=False)
+view.add(surface.to_mesh(), show_edges=False)
 
 for frame in frames:
     view.add(frame, size=0.25)

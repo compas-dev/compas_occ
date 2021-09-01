@@ -37,7 +37,7 @@ for row in surface.points:
 for col in zip(* surface.points):
     view.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
 
-view.add(surface.to_mesh(u=50))
+view.add(surface)
 view.add(box, show_faces=False)
 
 view.run()
