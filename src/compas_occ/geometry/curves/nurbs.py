@@ -20,6 +20,7 @@ from ._curve import Curve
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
+from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.Bnd import Bnd_Box
@@ -601,9 +602,28 @@ class NurbsCurve(Curve):
         """
         pass
 
-    def closest_point(self, point, distance=None):
-        """Compute the closest point on the curve to a given point."""
-        pass
+    def closest_point(self, point: Point, parameter=False) -> Point:
+        """Compute the closest point on the curve to a given point.
+
+        Parameters
+        ----------
+        point : Point
+            The point to project orthogonally to the curve.
+        parameter : bool, optional
+            Return the projected point as well as the curve parameter.
+
+        Returns
+        -------
+        Point or tuple
+            The nearest point on the curve, if ``parameter`` is false.
+            The nearest as (point, parameter) tuple, if ``parameter`` is true.
+        """
+        projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
+        point = Point.from_occ(projector.NearestPoint())
+        if not parameter:
+            return point
+        else:
+            return point, projector.LowerDistanceParameter()
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
