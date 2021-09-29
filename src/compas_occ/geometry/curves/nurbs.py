@@ -671,14 +671,14 @@ class NurbsCurve(Curve):
             u, v = v, u
         s, e = self.domain
         if u < s or v > e:
-            raise ValueError(f'At least one of the given parameters is outside the curve domain.')
+            raise ValueError('At least one of the given parameters is outside the curve domain.')
         if u == v:
-            raise ValueError(f'The given domain is zero length.')
+            raise ValueError('The given domain is zero length.')
         else:
             return self.occ_curve.Segment(u, v, precision)
 
     def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'NurbsCurve':
-        """Return a copy of this curve by segmenting it between the parameters u and v.
+        """Returns a copy of this curve by segmenting it between the parameters u and v.
 
         Parameters
         ----------
