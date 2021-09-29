@@ -602,7 +602,7 @@ class NurbsCurve(Curve):
         """
         pass
 
-    def closest_point(self, point: Point, parameter=False) -> Point:
+    def closest_point(self, point: Point, parameter: bool = False) -> Point:
         """Compute the closest point on the curve to a given point.
 
         Parameters
