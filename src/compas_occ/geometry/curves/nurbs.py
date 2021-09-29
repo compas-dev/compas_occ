@@ -651,3 +651,47 @@ class NurbsCurve(Curve):
     def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve."""
         return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))
+
+    def segment(self, u: float, v: float, precision: float = 1e-3) -> None:
+        """Modifies this curve by segmenting it between the parameters u and v.
+
+        Parameters
+        ----------
+        u: float
+        v: float
+        tol: float, optional
+            default value is 1e-3
+
+        Returns
+        -------
+        None
+
+        """
+        if u > v:
+            u, v = v, u
+        s, e = self.domain
+        if u < s or v > e:
+            raise ValueError(f'At least one of the given parameters is outside the curve domain.')
+        if u == v:
+            raise ValueError(f'The given domain is zero length.')
+        else:
+            return self.occ_curve.Segment(u, v, precision)
+
+    def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'NurbsCurve':
+        """Return a copy of this curve by segmenting it between the parameters u and v.
+
+        Parameters
+        ----------
+        u: float
+        v: float
+        tol: float,optional
+            default value is 1e-3
+
+        Returns
+        -------
+        NurbsCurve
+
+        """
+        copy = self.copy()
+        copy.occ_curve.Segment(u, v, precision)
+        return copy
