@@ -1,7 +1,7 @@
 from math import sqrt
 
 from typing import Dict, List
-from compas.geometry import Point
+from compas.geometry import Point, Vector
 from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
@@ -14,10 +14,15 @@ from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import points1_from_array1
 from compas_occ.conversions import compas_point_from_occ_point
+from compas_occ.conversions import compas_point_to_occ_point
+from compas_occ.conversions import compas_vector_from_occ_vector
+from compas_occ.conversions import compas_vector_to_occ_vector
 
 from ._curve import Curve
 
 from OCC.Core.gp import gp_Trsf
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Vec
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
@@ -37,11 +42,11 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 
+
 Point.from_occ = classmethod(compas_point_from_occ_point)
-# Point.to_occ = compas_point_to_occ_point
-# Vector.from_occ = classmethod(compas_vector_from_occ_vector)
-# Vector.to_occ = compas_vector_to_occ_vector
-# Line.to_occ = compas_line_to_occ_line
+Point.to_occ = compas_point_to_occ_point
+Vector.from_occ = classmethod(compas_vector_from_occ_vector)
+Vector.to_occ = compas_vector_to_occ_vector
 
 
 class NurbsCurve(Curve):
@@ -567,7 +572,10 @@ class NurbsCurve(Curve):
             The corresponding tangent vector.
 
         """
-        pass
+        point = gp_Pnt()
+        uvec = gp_Vec()
+        self.occ_curve.D1(t, point, uvec)
+        return Vector.from_occ(uvec)
 
     def curvature_at(self, t):
         """Compute the curvature at a point on the curve.
@@ -599,7 +607,11 @@ class NurbsCurve(Curve):
             The corresponding local frame.
 
         """
-        pass
+        point = gp_Pnt()
+        uvec = gp_Vec()
+        vvec = gp_Vec()
+        self.occ_curve.D2(t, point, uvec, vvec)
+        return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
     def closest_point(self, point, distance=None):
         """Compute the closest point on the curve to a given point."""
