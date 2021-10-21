@@ -26,7 +26,6 @@ Surfaces
     NurbsSurface
 
 """
-from .curves import Curve  # noqa: F401
-from .curves import NurbsCurve  # noqa: F401
+from .curves import OCCNurbsCurve  # noqa: F401
 from .surfaces import Surface  # noqa: F401
 from .surfaces import NurbsSurface  # noqa: F401

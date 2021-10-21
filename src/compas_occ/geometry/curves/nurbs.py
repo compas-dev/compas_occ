@@ -6,6 +6,7 @@ from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
 from compas.geometry import Box
+from compas.geometry import NurbsCurve
 from compas.utilities import linspace
 
 from compas_occ.conversions import harray1_from_points1
@@ -17,8 +18,6 @@ from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_to_occ_vector
-
-from ._curve import Curve
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
@@ -49,7 +48,7 @@ Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
 
 
-class NurbsCurve(Curve):
+class OCCNurbsCurve(NurbsCurve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
 
     Attributes
