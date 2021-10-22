@@ -622,8 +622,7 @@ class NurbsCurve(Curve):
         point = Point.from_occ(projector.NearestPoint())
         if not parameter:
             return point
-        else:
-            return point, projector.LowerDistanceParameter()
+        return point, projector.LowerDistanceParameter()
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
@@ -674,8 +673,7 @@ class NurbsCurve(Curve):
             raise ValueError('At least one of the given parameters is outside the curve domain.')
         if u == v:
             raise ValueError('The given domain is zero length.')
-        else:
-            return self.occ_curve.Segment(u, v, precision)
+        self.occ_curve.Segment(u, v, precision)
 
     def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'NurbsCurve':
         """Returns a copy of this curve by segmenting it between the parameters u and v.
