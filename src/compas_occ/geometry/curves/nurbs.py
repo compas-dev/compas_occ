@@ -24,6 +24,7 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
+from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.Bnd import Bnd_Box
@@ -612,9 +613,27 @@ class OCCNurbsCurve(NurbsCurve):
         self.occ_curve.D2(t, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point, distance=None):
-        """Compute the closest point on the curve to a given point."""
-        pass
+    def closest_point(self, point: Point, parameter: bool = False) -> Point:
+        """Compute the closest point on the curve to a given point.
+
+        Parameters
+        ----------
+        point : Point
+            The point to project orthogonally to the curve.
+        parameter : bool, optional
+            Return the projected point as well as the curve parameter.
+
+        Returns
+        -------
+        Point or tuple
+            The nearest point on the curve, if ``parameter`` is false.
+            The nearest as (point, parameter) tuple, if ``parameter`` is true.
+        """
+        projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
+        point = Point.from_occ(projector.NearestPoint())
+        if not parameter:
+            return point
+        return point, projector.LowerDistanceParameter()
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
@@ -642,3 +661,46 @@ class OCCNurbsCurve(NurbsCurve):
     def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve."""
         return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))
+
+    def segment(self, u: float, v: float, precision: float = 1e-3) -> None:
+        """Modifies this curve by segmenting it between the parameters u and v.
+
+        Parameters
+        ----------
+        u: float
+        v: float
+        tol: float, optional
+            default value is 1e-3
+
+        Returns
+        -------
+        None
+
+        """
+        if u > v:
+            u, v = v, u
+        s, e = self.domain
+        if u < s or v > e:
+            raise ValueError('At least one of the given parameters is outside the curve domain.')
+        if u == v:
+            raise ValueError('The given domain is zero length.')
+        self.occ_curve.Segment(u, v, precision)
+
+    def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'NurbsCurve':
+        """Returns a copy of this curve by segmenting it between the parameters u and v.
+
+        Parameters
+        ----------
+        u: float
+        v: float
+        tol: float,optional
+            default value is 1e-3
+
+        Returns
+        -------
+        NurbsCurve
+
+        """
+        copy = self.copy()
+        copy.occ_curve.Segment(u, v, precision)
+        return copy

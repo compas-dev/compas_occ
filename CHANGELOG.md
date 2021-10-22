@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.brep.BRepLoop`.
 * Added `compas_occ.brep.BRepVertex`.
 
+* Added `compas_occ.geometry.NurbsCurve.segment`.
+* Added `compas_occ.geometry.NurbsCurve.segmented`.
+* Added `compas_occ.geometry.NurbsCurve.closest_point`.
+
 ### Changed
 
 ### Removed
