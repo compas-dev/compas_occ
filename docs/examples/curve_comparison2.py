@@ -1,6 +1,6 @@
 from compas.geometry import Point, Polyline
 from compas.geometry import Bezier
-from compas_occ.geometry import NurbsCurve
+from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
 
 from compas_view2.app import App
 

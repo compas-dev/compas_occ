@@ -1,5 +1,5 @@
 from compas.geometry import Point, Line, Polyline
-from compas_occ.geometry import NurbsCurve
+from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
