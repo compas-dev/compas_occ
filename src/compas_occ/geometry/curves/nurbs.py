@@ -496,7 +496,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def copy(self) -> 'OCCNurbsCurve':
         """Make an independent copy of the current curve."""
-        return NurbsCurve.from_parameters(
+        return OCCNurbsCurve.from_parameters(
             self.points,
             self.weights,
             self.knots,
