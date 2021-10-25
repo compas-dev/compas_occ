@@ -6,8 +6,12 @@ from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
 from compas.geometry import Box
-from compas.geometry import NurbsCurve
 from compas.utilities import linspace
+
+try:
+    from compas.geometry import NurbsCurve
+except ImportError:
+    from compas.geometry import Geometry as NurbsCurve
 
 from compas_occ.conversions import harray1_from_points1
 from compas_occ.conversions import array1_from_points1

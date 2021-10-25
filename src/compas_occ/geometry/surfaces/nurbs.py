@@ -24,7 +24,10 @@ from compas_occ.conversions import points2_from_array2
 
 from ..curves import OCCNurbsCurve
 
-from compas.geometry import NurbsSurface
+try:
+    from compas.geometry import NurbsSurface
+except ImportError:
+    from compas.geometry import Geometry as NurbsSurface
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
