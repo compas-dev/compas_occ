@@ -113,12 +113,12 @@ class OCCNurbsCurve(NurbsCurve):
         super().__init__(name=name)
         self.occ_curve = None
 
-    def __eq__(self, other: 'NurbsCurve') -> bool:
+    def __eq__(self, other: 'OCCNurbsCurve') -> bool:
         return self.occ_curve.IsEqual(other.occ_curve)
 
     def __str__(self):
         lines = [
-            'NurbsCurve',
+            'OCCNurbsCurve',
             '------------',
             f'Points: {self.points}',
             f'Weights: {self.weights}',
@@ -166,7 +166,7 @@ class OCCNurbsCurve(NurbsCurve):
         )
 
     @classmethod
-    def from_data(cls, data: Dict) -> 'NurbsCurve':
+    def from_data(cls, data: Dict) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from its data representation.
 
         Parameters
@@ -176,7 +176,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`compas_occ.geometry.NurbsCurve`
+        :class:`compas_occ.geometry.OCCNurbsCurve`
             The constructed curve.
 
         """
@@ -193,7 +193,7 @@ class OCCNurbsCurve(NurbsCurve):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve: Geom_BSplineCurve) -> 'NurbsCurve':
+    def from_occ(cls, occ_curve: Geom_BSplineCurve) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from an existing OCC BSplineCurve."""
         curve = cls()
         curve.occ_curve = occ_curve
@@ -206,7 +206,7 @@ class OCCNurbsCurve(NurbsCurve):
                         knots: List[float],
                         multiplicities: List[int],
                         degree: int,
-                        is_periodic: bool = False) -> 'NurbsCurve':
+                        is_periodic: bool = False) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from explicit curve parameters."""
         curve = cls()
         curve.occ_curve = Geom_BSplineCurve(
@@ -220,7 +220,7 @@ class OCCNurbsCurve(NurbsCurve):
         return curve
 
     @classmethod
-    def from_points(cls, points: List[Point], degree: int = 3) -> 'NurbsCurve':
+    def from_points(cls, points: List[Point], degree: int = 3) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from control points.
 
         This construction method is similar to the method ``Create`` of the Rhino API for NURBS curves [1]_.
@@ -253,7 +253,7 @@ class OCCNurbsCurve(NurbsCurve):
         return curve
 
     @classmethod
-    def from_interpolation(cls, points: List[Point], precision: float = 1e-3) -> 'NurbsCurve':
+    def from_interpolation(cls, points: List[Point], precision: float = 1e-3) -> 'OCCNurbsCurve':
         """Construct a NURBS curve by interpolating a set of points.
 
         This construction method is similar to the method ``CreateHSpline`` of the Rhino API for NURBS curves [1]_.
@@ -271,12 +271,12 @@ class OCCNurbsCurve(NurbsCurve):
         return curve
 
     @classmethod
-    def from_step(cls, filepath: str) -> 'NurbsCurve':
+    def from_step(cls, filepath: str) -> 'OCCNurbsCurve':
         """Load a NURBS curve from an STP file."""
         pass
 
     @classmethod
-    def from_edge(cls, edge: TopoDS_Edge) -> 'NurbsCurve':
+    def from_edge(cls, edge: TopoDS_Edge) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from an existing OCC TopoDS_Edge."""
         res = BRep_Tool_Curve(edge)
         if len(res) != 3:
@@ -288,7 +288,7 @@ class OCCNurbsCurve(NurbsCurve):
         pass
 
     @classmethod
-    def from_circle(cls, circle: Circle) -> 'NurbsCurve':
+    def from_circle(cls, circle: Circle) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from a circle.
 
         This construction method is similar to the method ``CreateFromCircle`` of the Rhino API for NURBS curves [1]_.
@@ -490,7 +490,7 @@ class OCCNurbsCurve(NurbsCurve):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> 'NurbsCurve':
+    def copy(self) -> 'OCCNurbsCurve':
         """Make an independent copy of the current curve."""
         return NurbsCurve.from_parameters(
             self.points,
@@ -507,7 +507,7 @@ class OCCNurbsCurve(NurbsCurve):
         occ_T.SetValues(* T.list)
         self.occ_curve.Transform(occ_T)
 
-    def transformed(self, T: Transformation) -> 'NurbsCurve':
+    def transformed(self, T: Transformation) -> 'OCCNurbsCurve':
         """Transform a copy of the curve."""
         copy = self.copy()
         copy.transform(T)
@@ -591,7 +591,11 @@ class OCCNurbsCurve(NurbsCurve):
             The corresponding curvature vector.
 
         """
-        pass
+        point = gp_Pnt()
+        uvec = gp_Vec()
+        vvec = gp_Vec()
+        self.occ_curve.D2(t, point, uvec, vvec)
+        return Vector.from_occ(vvec)
 
     def frame_at(self, t):
         """Compute the local frame at a point on the curve.
@@ -643,20 +647,17 @@ class OCCNurbsCurve(NurbsCurve):
         """Divide the curve into segments of specified length."""
         pass
 
-    def fair(self):
-        pass
-
     def aabb(self, precision: float = 0.0) -> Box:
         """Compute the axis aligned bounding box of the curve."""
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal((
             Point.from_occ(box.CornerMin()),
-            Point.from_occ(box.CornerMax())
-        ))
+            Point.from_occ(box.CornerMax())))
 
     def obb(self, precision: float = 0.0) -> Box:
         """Compute the oriented bounding box of the curve."""
+        pass
 
     def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve."""
@@ -686,7 +687,7 @@ class OCCNurbsCurve(NurbsCurve):
             raise ValueError('The given domain is zero length.')
         self.occ_curve.Segment(u, v, precision)
 
-    def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'NurbsCurve':
+    def segmented(self, u: float, v: float, precision: float = 1e-3) -> 'OCCNurbsCurve':
         """Returns a copy of this curve by segmenting it between the parameters u and v.
 
         Parameters

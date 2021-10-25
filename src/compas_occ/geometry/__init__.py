@@ -5,27 +5,16 @@ compas_occ.geometry
 
 .. currentmodule:: compas_occ.geometry
 
-Curves
-======
+Classes
+=======
 
 .. autosummary::
     :toctree: generated/
     :nosignatures:
 
-    Curve
-    NurbsCurve
-
-Surfaces
-========
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    Surface
-    NurbsSurface
+    OCCNurbsCurve
+    OCCNurbsSurface
 
 """
 from .curves import OCCNurbsCurve  # noqa: F401
-from .surfaces import Surface  # noqa: F401
-from .surfaces import NurbsSurface  # noqa: F401
+from .surfaces import OCCNurbsSurface  # noqa: F401

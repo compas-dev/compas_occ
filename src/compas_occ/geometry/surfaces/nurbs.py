@@ -22,8 +22,9 @@ from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import floats2_from_array2
 from compas_occ.conversions import points2_from_array2
 
-from ..curves import NurbsCurve
-from ._surface import Surface
+from ..curves import OCCNurbsCurve
+
+from compas.geometry import NurbsSurface
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
@@ -45,6 +46,7 @@ from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BndLib import BndLib_AddSurface_Add
 from OCC.Core.BndLib import BndLib_AddSurface_AddOptimal
 from OCC.Core.BRepBndLib import brepbndlib_AddOBB
+
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
@@ -83,7 +85,7 @@ class Points:
         return iter(self.points)
 
 
-class NurbsSurface(Surface):
+class OCCNurbsSurface(NurbsSurface):
     """Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.
 
     Attributes
@@ -143,7 +145,7 @@ class NurbsSurface(Surface):
         self.occ_surface = None
         self._points = None
 
-    def __eq__(self, other: 'NurbsSurface') -> bool:
+    def __eq__(self, other: 'OCCNurbsSurface') -> bool:
         for a, b in zip(flatten(self.points), flatten(other.points)):
             if a != b:
                 return False
@@ -164,7 +166,7 @@ class NurbsSurface(Surface):
 
     def __str__(self):
         lines = [
-            'NurbsSurface',
+            'OCCNurbsSurface',
             '--------------',
             f'Points: {self.points}',
             f'Weights: {self.weights}',
@@ -226,7 +228,7 @@ class NurbsSurface(Surface):
         )
 
     @classmethod
-    def from_data(cls, data: Dict) -> 'NurbsSurface':
+    def from_data(cls, data: Dict) -> 'OCCNurbsSurface':
         """Construct a BSpline surface from its data representation.
 
         Parameters
@@ -236,7 +238,7 @@ class NurbsSurface(Surface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.NurbsSurface`
+        :class:`compas_occ.geometry.OCCNurbsSurface`
             The constructed surface.
 
         """
@@ -264,7 +266,7 @@ class NurbsSurface(Surface):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> 'NurbsSurface':
+    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> 'OCCNurbsSurface':
         """Construct a NUBRS surface from an existing OCC BSplineSurface."""
         surface = cls()
         surface.occ_surface = occ_surface
@@ -281,7 +283,7 @@ class NurbsSurface(Surface):
                         u_degree: int,
                         v_degree: int,
                         is_u_periodic: bool = False,
-                        is_v_periodic: bool = False) -> 'NurbsSurface':
+                        is_v_periodic: bool = False) -> 'OCCNurbsSurface':
         """Construct a NURBS surface from explicit parameters."""
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
@@ -302,7 +304,7 @@ class NurbsSurface(Surface):
     def from_points(cls,
                     points: List[List[Point]],
                     u_degree: int = 3,
-                    v_degree: int = 3) -> 'NurbsSurface':
+                    v_degree: int = 3) -> 'OCCNurbsSurface':
         """Construct a NURBS surface from control points."""
         u = len(points[0])
         v = len(points)
@@ -335,7 +337,7 @@ class NurbsSurface(Surface):
         )
 
     @classmethod
-    def from_meshgrid(cls, nu: int = 10, nv: int = 10) -> 'NurbsSurface':
+    def from_meshgrid(cls, nu: int = 10, nv: int = 10) -> 'OCCNurbsSurface':
         """Construct a NURBS surface from a mesh grid."""
         UU, VV = meshgrid(linspace(0, nu, nu + 1), linspace(0, nv, nv + 1))
         points = []
@@ -347,18 +349,18 @@ class NurbsSurface(Surface):
         return cls.from_points(points=points)
 
     @classmethod
-    def from_step(cls, filepath: str) -> 'NurbsSurface':
+    def from_step(cls, filepath: str) -> 'OCCNurbsSurface':
         """Load a NURBS surface from a STP file."""
         raise NotImplementedError
 
     @classmethod
-    def from_face(cls, face: TopoDS_Face) -> 'NurbsSurface':
+    def from_face(cls, face: TopoDS_Face) -> 'OCCNurbsSurface':
         """Construct a NURBS surface from an existing OCC TopoDS_Face."""
         srf = BRep_Tool_Surface(face)
         return cls.from_occ(srf)
 
     @classmethod
-    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> 'NurbsSurface':
+    def from_fill(cls, curve1: OCCNurbsCurve, curve2: OCCNurbsCurve) -> 'OCCNurbsSurface':
         """Construct a NURBS surface from the infill between two NURBS curves."""
         surface = cls()
         occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
@@ -520,7 +522,7 @@ class NurbsSurface(Surface):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> 'NurbsSurface':
+    def copy(self) -> 'OCCNurbsSurface':
         """Make an independent copy of the surface."""
         return NurbsSurface.from_parameters(
             self.points,
@@ -541,7 +543,7 @@ class NurbsSurface(Surface):
         _T.SetValues(* T.list[:12])
         self.occ_surface.Transform(_T)
 
-    def transformed(self, T: Transformation) -> 'NurbsSurface':
+    def transformed(self, T: Transformation) -> 'OCCNurbsSurface':
         """Transform an independent copy of this surface."""
         copy = self.copy()
         copy.transform(T)
@@ -569,17 +571,17 @@ class NurbsSurface(Surface):
         vmin, vmax = self.v_domain
         return np.linspace(vmin, vmax, n)
 
-    def u_isocurve(self, u: float) -> NurbsCurve:
+    def u_isocurve(self, u: float) -> OCCNurbsCurve:
         """Compute the isoparametric curve at parameter u."""
         occ_curve = self.occ_surface.UIso(u)
-        return NurbsCurve.from_occ(occ_curve)
+        return OCCNurbsCurve.from_occ(occ_curve)
 
-    def v_isocurve(self, v: float) -> NurbsCurve:
+    def v_isocurve(self, v: float) -> OCCNurbsCurve:
         """Compute the isoparametric curve at parameter v."""
         occ_curve = self.occ_surface.VIso(v)
-        return NurbsCurve.from_occ(occ_curve)
+        return OCCNurbsCurve.from_occ(occ_curve)
 
-    def boundary(self) -> List[NurbsCurve]:
+    def boundary(self) -> List[OCCNurbsCurve]:
         """Compute the boundary curves of the surface."""
         umin, umax, vmin, vmax = self.occ_surface.Bounds()
         curves = [
