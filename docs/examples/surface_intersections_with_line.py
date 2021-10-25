@@ -3,7 +3,8 @@ from compas.geometry import Point, Vector, Line, Polyline
 from compas.geometry import Rotation
 from compas.geometry import centroid_points_xy
 from compas.utilities import flatten
-from compas_occ.geometry import NurbsSurface
+# from compas.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
