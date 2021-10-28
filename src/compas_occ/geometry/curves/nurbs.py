@@ -707,5 +707,5 @@ class OCCNurbsCurve(NurbsCurve):
 
         """
         copy = self.copy()
-        copy.occ_curve.Segment(u, v, precision)
+        copy.segment(u, v, precision)
         return copy
