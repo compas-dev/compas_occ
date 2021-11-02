@@ -1,7 +1,9 @@
 from math import sqrt
 
 from typing import Dict, List
-from compas.geometry import Point, Vector
+from compas.geometry import Point
+from compas.geometry import Vector
+# from compas.geometry import Line
 from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
@@ -36,7 +38,7 @@ from OCC.Core.BndLib import BndLib_Add3dCurve_Add
 from OCC.Core.TopoDS import topods_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Edge
-from OCC.Core.BRep import BRep_Tool_Curve
+# from OCC.Core.BRep import BRep_Tool_Curve
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import TColStd_Array1OfReal
@@ -45,7 +47,6 @@ from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
-
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
@@ -114,7 +115,7 @@ class OCCNurbsCurve(NurbsCurve):
         raise NotImplementedError
 
     def __init__(self, name=None) -> None:
-        super().__init__(name=name)
+        super(OCCNurbsCurve, self).__init__(name=name)
         self.occ_curve = None
 
     def __eq__(self, other: 'OCCNurbsCurve') -> bool:
@@ -282,10 +283,18 @@ class OCCNurbsCurve(NurbsCurve):
     @classmethod
     def from_edge(cls, edge: TopoDS_Edge) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from an existing OCC TopoDS_Edge."""
-        res = BRep_Tool_Curve(edge)
-        if len(res) != 3:
-            return
-        return cls.from_occ(res[0])
+        from compas_occ.brep import BRepEdge
+        # res = BRep_Tool_Curve(edge)
+        # if len(res) != 3:
+        #     return
+        # curve = GeomAdaptor_Curve(res[0])
+        # ctype = curve.GetType()
+        # if ctype == 0:
+        #     return cls.from_line()
+        brepedge = BRepEdge(edge)
+        if brepedge.is_line:
+            line = brepedge.to_line()
+            return cls.from_line(line)
 
     @classmethod
     def from_arc(cls, arc, degree, pointcount=None):

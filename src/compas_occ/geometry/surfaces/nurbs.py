@@ -144,7 +144,7 @@ class OCCNurbsSurface(NurbsSurface):
         raise NotImplementedError
 
     def __init__(self, name: str = None) -> None:
-        super().__init__(name=name)
+        super(OCCNurbsSurface, self).__init__(name=name)
         self.occ_surface = None
         self._points = None
 
