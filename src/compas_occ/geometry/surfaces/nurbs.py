@@ -617,7 +617,7 @@ class OCCNurbsSurface(NurbsSurface):
         mean = props.MeanCurvature()
         point = props.Value()
         normal = props.Normal()
-        return gaussian, mean, point, normal
+        return gaussian, mean, Point.from_occ(point), Vector.from_occ(normal)
 
     def frame_at(self, u: float, v: float) -> Frame:
         """Compute the local frame at a point on the curve.
@@ -628,12 +628,14 @@ class OCCNurbsSurface(NurbsSurface):
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point, distance=None) -> Point:
+    def closest_point(self, point, distance=None, parameter: bool = False) -> Point:
         """Compute the closest point on the curve to a given point.
         """
         projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
-        pnt = projector.NearestPoint()
-        return Point.from_occ(pnt)
+        point = Point.from_occ(projector.NearestPoint())
+        if not parameter:
+            return point
+        return point, projector.LowerDistanceParameters()
 
     def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box:
         """Compute the axis aligned bounding box of the surface."""
