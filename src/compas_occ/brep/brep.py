@@ -47,7 +47,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
-from compas_occ.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
 
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
