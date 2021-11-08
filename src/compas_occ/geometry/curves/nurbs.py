@@ -1,9 +1,8 @@
 from math import sqrt
 
-from typing import Dict, List
+from typing import Dict, List, Union, Tuple
 from compas.geometry import Point
 from compas.geometry import Vector
-# from compas.geometry import Line
 from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
@@ -630,7 +629,7 @@ class OCCNurbsCurve(NurbsCurve):
         self.occ_curve.D2(t, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point: Point, parameter: bool = False) -> Point:
+    def closest_point(self, point: Point, parameter: bool = False) -> Union[Point, Tuple[Point, float]]:
         """Compute the closest point on the curve to a given point.
 
         Parameters

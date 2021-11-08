@@ -1,6 +1,6 @@
 from itertools import product
 
-from typing import Generator, Optional, Tuple, List, Dict
+from typing import Generator, Optional, Tuple, List, Dict, Union
 
 import numpy as np
 
@@ -628,7 +628,7 @@ class OCCNurbsSurface(NurbsSurface):
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point, distance=None, parameter: bool = False) -> Point:
+    def closest_point(self, point, distance=None, parameter: bool = False) -> Union[Point, Tuple[Point, float]]:
         """Compute the closest point on the curve to a given point.
         """
         projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
