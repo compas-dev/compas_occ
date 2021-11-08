@@ -617,7 +617,7 @@ class OCCNurbsSurface(NurbsSurface):
         mean = props.MeanCurvature()
         point = props.Value()
         normal = props.Normal()
-        return gaussian, mean, point, normal
+        return gaussian, mean, Point.from_occ(point), Vector.from_occ(normal)
 
     def frame_at(self, u: float, v: float) -> Frame:
         """Compute the local frame at a point on the curve.
