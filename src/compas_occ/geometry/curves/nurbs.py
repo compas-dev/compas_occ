@@ -53,6 +53,16 @@ Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
 
 
+def occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic):
+    return Geom_BSplineCurve(
+        array1_from_points1(points),
+        array1_from_floats1(weights),
+        array1_from_floats1(knots),
+        array1_from_integers1(multiplicities),
+        degree,
+        is_periodic,
+    )
+
 class OCCNurbsCurve(NurbsCurve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
 
@@ -160,14 +170,7 @@ class OCCNurbsCurve(NurbsCurve):
         multiplicities = data['multiplicities']
         degree = data['degree']
         is_periodic = data['is_periodic']
-        self.occ_curve = Geom_BSplineCurve(
-            array1_from_points1(points),
-            array1_from_floats1(weights),
-            array1_from_floats1(knots),
-            array1_from_integers1(multiplicities),
-            degree,
-            is_periodic,
-        )
+        self.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
 
     @classmethod
     def from_data(cls, data: Dict) -> 'OCCNurbsCurve':
@@ -213,14 +216,7 @@ class OCCNurbsCurve(NurbsCurve):
                         is_periodic: bool = False) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from explicit curve parameters."""
         curve = cls()
-        curve.occ_curve = Geom_BSplineCurve(
-            array1_from_points1(points),
-            array1_from_floats1(weights),
-            array1_from_floats1(knots),
-            array1_from_integers1(multiplicities),
-            degree,
-            is_periodic,
-        )
+        curve.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
         return curve
 
     @classmethod
@@ -246,14 +242,7 @@ class OCCNurbsCurve(NurbsCurve):
         multiplicities.append(order)
         is_periodic = False
         curve = cls()
-        curve.occ_curve = Geom_BSplineCurve(
-            array1_from_points1(points),
-            array1_from_floats1(weights),
-            array1_from_floats1(knots),
-            array1_from_integers1(multiplicities),
-            degree,
-            is_periodic,
-        )
+        curve.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
         return curve
 
     @classmethod
