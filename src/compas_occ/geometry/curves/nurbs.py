@@ -569,14 +569,14 @@ class OCCNurbsCurve(NurbsCurve):
         self.occ_curve.D2(t, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point: Point, parameter: bool = False) -> Union[Point, Tuple[Point, float]]:
+    def closest_point(self, point: Point, return_parameter: bool = False) -> Union[Point, Tuple[Point, float]]:
         """Compute the closest point on the curve to a given point.
 
         Parameters
         ----------
         point : Point
             The point to project orthogonally to the curve.
-        parameter : bool, optional
+        return_parameter : bool, optional
             Return the projected point as well as the curve parameter.
 
         Returns
@@ -587,7 +587,7 @@ class OCCNurbsCurve(NurbsCurve):
         """
         projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
         point = Point.from_occ(projector.NearestPoint())
-        if not parameter:
+        if not return_parameter:
             return point
         return point, projector.LowerDistanceParameter()
 
