@@ -9,10 +9,7 @@ from compas.geometry import Circle
 from compas.geometry import Box
 from compas.utilities import linspace
 
-try:
-    from compas.geometry import NurbsCurve
-except ImportError:
-    from compas.geometry import Geometry as NurbsCurve
+from compas.geometry import NurbsCurve
 
 from compas_occ.conversions import harray1_from_points1
 from compas_occ.conversions import array1_from_points1
@@ -62,6 +59,7 @@ def occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is
         degree,
         is_periodic,
     )
+
 
 class OCCNurbsCurve(NurbsCurve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
@@ -130,23 +128,6 @@ class OCCNurbsCurve(NurbsCurve):
     def __eq__(self, other: 'OCCNurbsCurve') -> bool:
         return self.occ_curve.IsEqual(other.occ_curve)
 
-    def __str__(self):
-        lines = [
-            'OCCNurbsCurve',
-            '------------',
-            f'Points: {self.points}',
-            f'Weights: {self.weights}',
-            f'Knots: {self.knots}',
-            f'Mults: {self.multiplicities}',
-            f'Degree: {self.degree}',
-            f'Order: {self.order}',
-            f'Domain: {self.domain}',
-            f'Closed: {self.is_closed}',
-            f'Periodic: {self.is_periodic}',
-            f'Rational: {self.is_rational}',
-        ]
-        return "\n".join(lines)
-
     # ==============================================================================
     # Data
     # ==============================================================================
@@ -171,29 +152,6 @@ class OCCNurbsCurve(NurbsCurve):
         degree = data['degree']
         is_periodic = data['is_periodic']
         self.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
-
-    @classmethod
-    def from_data(cls, data: Dict) -> 'OCCNurbsCurve':
-        """Construct a NURBS curve from its data representation.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-
-        Returns
-        -------
-        :class:`compas_occ.geometry.OCCNurbsCurve`
-            The constructed curve.
-
-        """
-        points = [Point.from_data(point) for point in data['points']]
-        weights = data['weights']
-        knots = data['knots']
-        multiplicities = data['multiplicities']
-        degree = data['degree']
-        is_periodic = data['is_periodic']
-        return NurbsCurve.from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
 
     # ==============================================================================
     # Constructors
@@ -257,36 +215,29 @@ class OCCNurbsCurve(NurbsCurve):
         .. [2] https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_geom_a_p_i___interpolate.html
 
         """
-        curve = cls()
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
         interp.Perform()
+        curve = cls()
         curve.occ_curve = interp.Curve()
         return curve
 
     @classmethod
     def from_step(cls, filepath: str) -> 'OCCNurbsCurve':
         """Load a NURBS curve from an STP file."""
-        pass
+        raise NotImplementedError
 
     @classmethod
     def from_edge(cls, edge: TopoDS_Edge) -> 'OCCNurbsCurve':
         """Construct a NURBS curve from an existing OCC TopoDS_Edge."""
         from compas_occ.brep import BRepEdge
-        # res = BRep_Tool_Curve(edge)
-        # if len(res) != 3:
-        #     return
-        # curve = GeomAdaptor_Curve(res[0])
-        # ctype = curve.GetType()
-        # if ctype == 0:
-        #     return cls.from_line()
         brepedge = BRepEdge(edge)
         if brepedge.is_line:
             line = brepedge.to_line()
             return cls.from_line(line)
 
     @classmethod
-    def from_arc(cls, arc, degree, pointcount=None):
-        pass
+    def from_arc(cls, arc, degree, pointcount=None) -> 'OCCNurbsCurve':
+        raise NotImplementedError
 
     @classmethod
     def from_circle(cls, circle: Circle) -> 'OCCNurbsCurve':
@@ -388,10 +339,10 @@ class OCCNurbsCurve(NurbsCurve):
             raise AssertionError("Operation failed.")
 
     def to_line(self):
-        pass
+        raise NotImplementedError
 
     def to_polyline(self):
-        pass
+        raise NotImplementedError
 
     # ==============================================================================
     # OCC
@@ -454,8 +405,8 @@ class OCCNurbsCurve(NurbsCurve):
         return self.occ_curve.Degree()
 
     @property
-    def dimension(self):
-        pass
+    def dimension(self) -> int:
+        return 3
 
     @property
     def domain(self):
@@ -543,7 +494,7 @@ class OCCNurbsCurve(NurbsCurve):
         """
         return self.xyz(resolution)
 
-    def point_at(self, u: float) -> Point:
+    def point_at(self, t: float) -> Point:
         """Compute a point on the curve.
 
         Parameters
@@ -556,10 +507,10 @@ class OCCNurbsCurve(NurbsCurve):
         Point
             the corresponding point on the curve.
         """
-        point = self.occ_curve.Value(u)
+        point = self.occ_curve.Value(t)
         return Point(point.X(), point.Y(), point.Z())
 
-    def tangent_at(self, t):
+    def tangent_at(self, t) -> Vector:
         """Compute the tangent vector at a point on the curve.
 
         Parameters
@@ -578,7 +529,7 @@ class OCCNurbsCurve(NurbsCurve):
         self.occ_curve.D1(t, point, uvec)
         return Vector.from_occ(uvec)
 
-    def curvature_at(self, t):
+    def curvature_at(self, t) -> Vector:
         """Compute the curvature at a point on the curve.
 
         Parameters
@@ -598,7 +549,7 @@ class OCCNurbsCurve(NurbsCurve):
         self.occ_curve.D2(t, point, uvec, vvec)
         return Vector.from_occ(vvec)
 
-    def frame_at(self, t):
+    def frame_at(self, t) -> Frame:
         """Compute the local frame at a point on the curve.
 
         Parameters
@@ -642,11 +593,11 @@ class OCCNurbsCurve(NurbsCurve):
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
-        pass
+        raise NotImplementedError
 
     def divide_by_length(self, length):
         """Divide the curve into segments of specified length."""
-        pass
+        raise NotImplementedError
 
     def aabb(self, precision: float = 0.0) -> Box:
         """Compute the axis aligned bounding box of the curve."""
@@ -658,7 +609,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def obb(self, precision: float = 0.0) -> Box:
         """Compute the oriented bounding box of the curve."""
-        pass
+        raise NotImplementedError
 
     def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve."""
