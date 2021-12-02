@@ -583,8 +583,8 @@ class OCCNurbsCurve(NurbsCurve):
         Returns
         -------
         Point or tuple
-            The nearest point on the curve, if ``parameter`` is false.
-            The nearest as (point, parameter) tuple, if ``parameter`` is true.
+            The nearest point on the curve, if ``return_parameter`` is false.
+            The nearest as (point, parameter) tuple, if ``return_parameter`` is true.
         """
         projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
         point = Point.from_occ(projector.NearestPoint())
@@ -593,6 +593,21 @@ class OCCNurbsCurve(NurbsCurve):
         return point, projector.LowerDistanceParameter()
 
     def curve_closest_parameters(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
+        """Computes the curve parameters where the curve is the closest to another given curve.
+
+        Parameters
+        ----------
+        curve : NurbsCurve
+            The curve to find the closest distance to.
+        return_distance : bool, optional
+            Return the parameters as well as the minimum distance of the two curves.
+
+        Returns
+        -------
+        tuple or (tuple, float)
+            The parameters on (curve, given curve) as  tuple, if ``return_distance`` is false.
+            The (parameters on (curve, given curve), distance) tuple, if ``return_distance`` is true.
+        """
         extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
         if not return_distance:
             return extrema.LowerDistanceParameters()
