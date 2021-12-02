@@ -27,6 +27,7 @@ from OCC.Core.gp import gp_Vec
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
+from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.Bnd import Bnd_Box
@@ -590,6 +591,12 @@ class OCCNurbsCurve(NurbsCurve):
         if not return_parameter:
             return point
         return point, projector.LowerDistanceParameter()
+
+    def curve_closest_parameters(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
+        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
+        if not return_distance:
+            return extrema.LowerDistanceParameters()
+        return extrema.LowerDistanceParameters(), extrema.LowerDistance()
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
