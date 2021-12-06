@@ -1,12 +1,12 @@
 ********************************************************************************
-Curve Curve Closest Parameters
+Curve Closest Parameters Curve
 ********************************************************************************
 
-.. figure:: /_images/example_curve_curve_closest_parameters.png
+.. figure:: /_images/example_curve_closest_parameters_curve.png
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve_curve_closest_parameters.py
+.. literalinclude:: curve_closest_parameters_curve.py
     :language: python
 
 .. code-block:: text

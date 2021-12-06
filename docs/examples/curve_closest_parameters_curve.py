@@ -9,7 +9,7 @@ curve0 = NurbsCurve.from_points(points0)
 points1 = [Point(6, -3, 0), Point(3, 1, 0), Point(6, 6, 3), Point(3, 12, 0)]
 curve1 = NurbsCurve.from_points(points1)
 
-parameters, distance = curve0.curve_closest_parameters(curve1, return_distance=True)
+parameters, distance = curve0.closest_parameters_curve(curve1, return_distance=True)
 
 print(parameters)
 print(distance)

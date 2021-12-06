@@ -592,7 +592,7 @@ class OCCNurbsCurve(NurbsCurve):
             return point
         return point, projector.LowerDistanceParameter()
 
-    def curve_closest_parameters(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
+    def closest_parameters_curve(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
         """Computes the curve parameters where the curve is the closest to another given curve.
 
         Parameters
