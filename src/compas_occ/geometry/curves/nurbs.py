@@ -613,6 +613,29 @@ class OCCNurbsCurve(NurbsCurve):
             return extrema.LowerDistanceParameters()
         return extrema.LowerDistanceParameters(), extrema.LowerDistance()
 
+    def closest_points_curve(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[Point, Point], Tuple[Tuple[Point, Point], float]]:
+        """Computes the points on curves where the curve is the closest to another given curve.
+
+        Parameters
+        ----------
+        curve : NurbsCurve
+            The curve to find the closest distance to.
+        return_distance : bool, optional
+            Return the points as well as the minimum distance of the two curves.
+
+        Returns
+        -------
+        tuple or (tuple, float)
+            The points on (curve, given curve) as tuple, if ``return_distance`` is false.
+            The (points on (curve, given curve), distance) tuple, if ``return_distance`` is true.
+        """
+        points = (gp_Pnt(), gp_Pnt())
+        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
+        extrema.NearestPoints(points[0], points[1])
+        if not return_distance:
+            return (Point.from_occ(points[0]), Point.from_occ(points[1]))
+        return (Point.from_occ(points[0]), Point.from_occ(points[1])), extrema.LowerDistance()
+
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments."""
         raise NotImplementedError

@@ -14,6 +14,10 @@ parameters, distance = curve0.closest_parameters_curve(curve1, return_distance=T
 print(parameters)
 print(distance)
 
+points = curve0.closest_points_curve(curve1, return_distance=False)
+
+print(points)
+
 # ==============================================================================
 # Visualisation
 # ==============================================================================
@@ -23,7 +27,7 @@ view = App()
 view.add(Polyline(curve0.locus()), linewidth=3)
 view.add(Polyline(curve1.locus()), linewidth=3)
 
-view.add(curve0.point_at(parameters[0]), pointcolor=(1, 0, 0))
-view.add(curve1.point_at(parameters[1]), pointcolor=(1, 0, 0))
+view.add(points[0], pointcolor=(1, 0, 0))
+view.add(points[1], pointcolor=(1, 0, 0))
 
 view.run()
