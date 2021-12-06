@@ -25,9 +25,9 @@ else:
         return OCCNurbsCurve.from_points(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbscurve_from_interpolation(cls, *args, **kwargs):
+    def new_nurbscurve_from_interpolation(*args, **kwargs):
         return OCCNurbsCurve.from_interpolation(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbscurve_from_step(cls, *args, **kwargs):
+    def new_nurbscurve_from_step(*args, **kwargs):
         return OCCNurbsCurve.from_step(*args, **kwargs)
