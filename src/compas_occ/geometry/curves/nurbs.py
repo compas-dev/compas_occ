@@ -605,7 +605,7 @@ class OCCNurbsCurve(NurbsCurve):
         Returns
         -------
         tuple or (tuple, float)
-            The parameters on (curve, given curve) as  tuple, if ``return_distance`` is false.
+            The parameters on (curve, given curve) as tuple, if ``return_distance`` is false.
             The (parameters on (curve, given curve), distance) tuple, if ``return_distance`` is true.
         """
         extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
