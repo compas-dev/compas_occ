@@ -8,7 +8,7 @@ curve = NurbsCurve.from_interpolation(points)
 
 projection_point = Point(2, -1, 0)
 
-closest_point, t = curve.closest_point(projection_point, parameter=True)
+closest_point, t = curve.closest_point(projection_point, return_parameter=True)
 
 print(curve.point_at(t) == closest_point)
 
