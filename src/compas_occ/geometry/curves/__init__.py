@@ -8,12 +8,7 @@ else:
     from compas.plugins import plugin
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbscurve(cls, *args, **kwargs):
-        # for _, value in inspect.getmembers(OCCNurbsCurve):
-        #     if inspect.isfunction(value):
-        #         if hasattr(value, '__isabstractmethod__'):
-        #             raise Exception('Abstract method not implemented: {}'.format(value))
-
+    def new_nurbscurve(*args, **kwargs):
         return super(NurbsCurve, OCCNurbsCurve).__new__(OCCNurbsCurve)
 
     @plugin(category='factories', requires=['compas_occ'])
