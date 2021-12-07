@@ -383,61 +383,75 @@ class OCCNurbsCurve(NurbsCurve):
 
     @property
     def points(self) -> List[Point]:
-        return points1_from_array1(self.occ_points)
+        if self.occ_curve:
+            return points1_from_array1(self.occ_points)
 
     @property
     def weights(self) -> List[float]:
-        return list(self.occ_weights)
+        if self.occ_curve:
+            return list(self.occ_weights)
 
     @property
     def knots(self) -> List[float]:
-        return list(self.occ_knots)
+        if self.occ_curve:
+            return list(self.occ_knots)
 
     @property
     def knotsequence(self) -> List[float]:
-        return list(self.occ_knotsequence)
+        if self.occ_curve:
+            return list(self.occ_knotsequence)
 
     @property
     def multiplicities(self) -> List[int]:
-        return list(self.occ_multiplicities)
+        if self.occ_curve:
+            return list(self.occ_multiplicities)
 
     @property
     def degree(self) -> int:
-        return self.occ_curve.Degree()
+        if self.occ_curve:
+            return self.occ_curve.Degree()
 
     @property
     def dimension(self) -> int:
-        return 3
+        if self.occ_curve:
+            return 3
 
     @property
     def domain(self):
-        return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
+        if self.occ_curve:
+            return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
 
     @property
     def order(self):
-        return self.degree + 1
+        if self.occ_curve:
+            return self.degree + 1
 
     @property
     def start(self) -> Point:
-        pnt = self.occ_curve.StartPoint()
-        return Point(pnt.X(), pnt.Y(), pnt.Z())
+        if self.occ_curve:
+            pnt = self.occ_curve.StartPoint()
+            return Point(pnt.X(), pnt.Y(), pnt.Z())
 
     @property
     def end(self) -> Point:
-        pnt = self.occ_curve.EndPoint()
-        return Point(pnt.X(), pnt.Y(), pnt.Z())
+        if self.occ_curve:
+            pnt = self.occ_curve.EndPoint()
+            return Point(pnt.X(), pnt.Y(), pnt.Z())
 
     @property
     def is_closed(self) -> bool:
-        return self.occ_curve.IsClosed()
+        if self.occ_curve:
+            return self.occ_curve.IsClosed()
 
     @property
     def is_periodic(self) -> bool:
-        return self.occ_curve.IsPeriodic()
+        if self.occ_curve:
+            return self.occ_curve.IsPeriodic()
 
     @property
     def is_rational(self) -> bool:
-        return self.occ_curve.IsRational()
+        if self.occ_curve:
+            return self.occ_curve.IsRational()
 
     # ==============================================================================
     # Methods
