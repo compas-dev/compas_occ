@@ -1,5 +1,5 @@
 from compas.geometry import Point, Polyline, Bezier
-from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
+from compas.geometry import NurbsCurve
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
@@ -19,8 +19,6 @@ print(curve)
 view = App()
 
 view.add(Polyline(curve.locus()), linewidth=3)
-view.add(Collection(points))
-
-# view.add(Polyline(curve.points), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+view.add(Polyline(curve.points), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=1, linecolor=(0.3, 0.3, 0.3))
 
 view.run()

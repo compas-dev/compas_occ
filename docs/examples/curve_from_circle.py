@@ -1,5 +1,5 @@
 from compas.geometry import Vector, Point, Polyline, Circle, Plane
-from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
+from compas.geometry import NurbsCurve
 
 from compas_view2.app import App
 
