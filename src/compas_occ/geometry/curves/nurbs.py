@@ -586,7 +586,8 @@ class OCCNurbsCurve(NurbsCurve):
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
     def closest_point(self, point: Point, return_parameter: bool = False) -> Union[Point, Tuple[Point, float]]:
-        """Compute the closest point on the curve to a given point.
+        """Compute the closest point on the curve to a given point. 
+        If an orthogonal projection is not possible, the start or end point is returned, whichever is closer.
 
         Parameters
         ----------
