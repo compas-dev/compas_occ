@@ -609,7 +609,7 @@ class OCCNurbsCurve(NurbsCurve):
                 parameter = projector.LowerDistanceParameter()
 
         except RuntimeError as e:
-            if e.args[0] == 'StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint raised from method NearestPoint of class GeomAPI_ProjectPointOnCurve':
+            if e.args[0].startswith('StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint'):
 
                 start = self.start
                 end = self.end
@@ -622,6 +622,8 @@ class OCCNurbsCurve(NurbsCurve):
                     point = end
                     if return_parameter:
                         parameter = self.occ_curve.LastParameter()
+            else:
+                raise
 
         if not return_parameter:
             return point
