@@ -25,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed input parameters of `new_nurbscurve_from_step`.
 * Fixed error in attributes of empty curve.
 * Fixed error in parameter list of `new_nurbscurve` plugin.
+* Fixed exception handling in `compas_occ.geometry.NurbsCurve.closest_point` if no orthogonal projection possible.
 
 ### Removed

@@ -7,6 +7,7 @@ from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
 from compas.geometry import Box
+from compas.geometry._core.distance import distance_point_point
 from compas.utilities import linspace
 
 from compas.geometry import NurbsCurve
@@ -590,7 +591,7 @@ class OCCNurbsCurve(NurbsCurve):
         Parameters
         ----------
         point : Point
-            The point to project orthogonally to the curve.
+            The point to project to the curve.
         return_parameter : bool, optional
             Return the projected point as well as the curve parameter.
 
@@ -601,10 +602,27 @@ class OCCNurbsCurve(NurbsCurve):
             The nearest as (point, parameter) tuple, if ``return_parameter`` is true.
         """
         projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
-        point = Point.from_occ(projector.NearestPoint())
+        try:
+            point = Point.from_occ(projector.NearestPoint())
+            if return_parameter:
+                parameter = projector.LowerDistanceParameter()
+
+        except RuntimeError:
+            start = self.start
+            end = self.end
+
+            if distance_point_point(point, start) <= distance_point_point(point, end):
+                point = start
+                if return_parameter:
+                    parameter = self.occ_curve.FirstParameter()
+            else:
+                point = end
+                if return_parameter:
+                    parameter = self.occ_curve.LastParameter()
+
         if not return_parameter:
             return point
-        return point, projector.LowerDistanceParameter()
+        return point, parameter
 
     def closest_parameters_curve(self, curve: NurbsCurve, return_distance: bool = False) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
         """Computes the curve parameters where the curve is the closest to another given curve.
