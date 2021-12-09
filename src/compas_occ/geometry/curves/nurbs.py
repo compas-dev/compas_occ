@@ -7,7 +7,7 @@ from compas.geometry import Transformation
 from compas.geometry import Frame
 from compas.geometry import Circle
 from compas.geometry import Box
-from compas.geometry._core.distance import distance_point_point
+from compas.geometry import distance_point_point
 from compas.utilities import linspace
 
 from compas.geometry import NurbsCurve
@@ -607,18 +607,20 @@ class OCCNurbsCurve(NurbsCurve):
             if return_parameter:
                 parameter = projector.LowerDistanceParameter()
 
-        except RuntimeError:
-            start = self.start
-            end = self.end
+        except RuntimeError as e:
+            if e.args[0] == 'StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint raised from method NearestPoint of class GeomAPI_ProjectPointOnCurve':
 
-            if distance_point_point(point, start) <= distance_point_point(point, end):
-                point = start
-                if return_parameter:
-                    parameter = self.occ_curve.FirstParameter()
-            else:
-                point = end
-                if return_parameter:
-                    parameter = self.occ_curve.LastParameter()
+                start = self.start
+                end = self.end
+
+                if distance_point_point(point, start) <= distance_point_point(point, end):
+                    point = start
+                    if return_parameter:
+                        parameter = self.occ_curve.FirstParameter()
+                else:
+                    point = end
+                    if return_parameter:
+                        parameter = self.occ_curve.LastParameter()
 
         if not return_parameter:
             return point
