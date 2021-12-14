@@ -8,38 +8,23 @@ on:
     branches:
       - main
 
-defaults:
-  run:
-    shell: bash -l {0}
-
-
 jobs:
-  build-packages:
-    runs-on: ${{ matrix.os }}
+  build-package:
+    if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
+    runs-on: ${{ '{{' }} matrix.os {{ '}}' }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
-
       - uses: actions/checkout@v2
 
-      - uses: conda-incubator/setup-miniconda@v2.0.0
+      - name: Set up Python ${{ '{{' }} matrix.python-version {{ '}}' }}
+        uses: actions/setup-python@v2
         with:
-          miniconda-version: "latest"
-          activate-environment: occ
-          channels: conda-forge
-          python-version: 3.8
+          python-version: ${{ '{{' }} matrix.python-version {{ '}}' }}
 
-      - name: build
-        run: |
-          conda install compas pythonocc-core -y
-          pip install -r requirements-dev.txt
-  
-      - name: Lint with flake8
-        run: |
-          invoke lint
-
-      - name: Test with pytest
-        run: |
-          invoke test
+      - uses: compas-dev/compas-actions.build@v1.0.0
+        with:
+          test_lint: true

@@ -13,33 +13,15 @@ on:
 jobs:
   build:
     name: build and deploy docs
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash -l {0}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: conda-incubator/setup-miniconda@v2.0.0
-        with:
-          miniconda-version: "latest"
-          activate-environment: occ
-          channels: conda-forge
-          python-version: 3.8
-
-      - name: build
-        run: |
-          conda install compas pythonocc-core -y
-          pip install -r requirements-dev.txt
-          invoke docs
-
-      - uses: compas-dev/compas-actions.docs@v1.0.2
+      - uses: compas-dev/compas-actions.docs@v1.2.1
         id: docs
         with:
           dest: deploy
           build_to_subfolder: true
-          install_dependencies: false
-          build_docs: false
 
       - name: Deploy docs
         if: success() && steps.docs.outputs.commit_type != 'pull'
@@ -49,11 +31,11 @@ jobs:
           build_dir: deploy
           keep_history: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ '{{' }} secrets.GITHUB_TOKEN {{ '}}' }}
     
     outputs:
-      commit_type: ${{ steps.docs.outputs.commit_type }}
-      current_version: ${{ steps.docs.outputs.current_version }}
+      commit_type: ${{ '{{' }} steps.docs.outputs.commit_type {{ '}}' }}
+      current_version: ${{ '{{' }} steps.docs.outputs.current_version {{ '}}' }}
   
   docVersions:
     needs: build
@@ -65,9 +47,9 @@ jobs:
         with:
           ref: gh-pages
 
-      - uses: compas-dev/compas-actions.docversions@v1.0.1
+      - uses: compas-dev/compas-actions.docversions@v1.2.1
         with:
-          current_version: ${{ needs.build.outputs.current_version }}
+          current_version: ${{ '{{' }} needs.build.outputs.current_version {{ '}}' }}
 
       - name: Deploy docs
         if: success()
@@ -77,4 +59,4 @@ jobs:
           build_dir: ./
           keep_history: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ '{{' }} secrets.GITHUB_TOKEN {{ '}}' }}
