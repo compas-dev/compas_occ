@@ -31,11 +31,11 @@ jobs:
           build_dir: deploy
           keep_history: true
         env:
-          GITHUB_TOKEN: ${{ '{{' }} secrets.GITHUB_TOKEN {{ '}}' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     outputs:
-      commit_type: ${{ '{{' }} steps.docs.outputs.commit_type {{ '}}' }}
-      current_version: ${{ '{{' }} steps.docs.outputs.current_version {{ '}}' }}
+      commit_type: ${{ steps.docs.outputs.commit_type }}
+      current_version: ${{ steps.docs.outputs.current_version }}
   
   docVersions:
     needs: build
@@ -49,7 +49,7 @@ jobs:
 
       - uses: compas-dev/compas-actions.docversions@v1.2.1
         with:
-          current_version: ${{ '{{' }} needs.build.outputs.current_version {{ '}}' }}
+          current_version: ${{ needs.build.outputs.current_version }}
 
       - name: Deploy docs
         if: success()
@@ -59,4 +59,4 @@ jobs:
           build_dir: ./
           keep_history: false
         env:
-          GITHUB_TOKEN: ${{ '{{' }} secrets.GITHUB_TOKEN {{ '}}' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
