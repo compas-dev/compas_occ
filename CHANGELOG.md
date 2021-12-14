@@ -18,15 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Changed
-
-### Removed
-
-
-## [0.3.2] 2021-12-14
-
-### Added
-
 * Added `compas_occ.brep.BRep`.
 * Added `compas_occ.brep.BRepEdge`.
 * Added `compas_occ.brep.BRepFace`.
