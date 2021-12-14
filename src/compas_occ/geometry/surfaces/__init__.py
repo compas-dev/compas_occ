@@ -8,7 +8,7 @@ else:
     from compas.plugins import plugin
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface(cls, *args, **kwargs):
+    def new_nurbssurface(*args, **kwargs):
         return super(NurbsSurface, OCCNurbsSurface).__new__(OCCNurbsSurface)
 
     @plugin(category='factories', requires=['compas_occ'])
@@ -20,9 +20,9 @@ else:
         return OCCNurbsSurface.from_points(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_fill(cls, *args, **kwargs):
+    def new_nurbssurface_from_fill(*args, **kwargs):
         return OCCNurbsSurface.from_fill(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_step(cls, *args, **kwargs):
+    def new_nurbssurface_from_step(*args, **kwargs):
         return OCCNurbsSurface.from_step(*args, **kwargs)

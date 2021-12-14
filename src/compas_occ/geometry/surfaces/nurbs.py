@@ -93,9 +93,9 @@ class OCCNurbsSurface(NurbsSurface):
 
     Attributes
     ----------
-    points: List[Point]
+    points: List[List[Point]]
         The control points of the surface.
-    weights: List[float]
+    weights: List[List[float]]
         The weights of the control points.
     u_knots: List[float]
         The knot vector, in the U direction, without duplicates.
@@ -120,29 +120,6 @@ class OCCNurbsSurface(NurbsSurface):
 
     """
 
-    @property
-    def DATASCHEMA(self):
-        from schema import Schema
-        from compas.data import is_float3
-        from compas.data import is_sequence_of_int
-        from compas.data import is_sequence_of_float
-        return Schema({
-            'points': lambda points: all(is_float3(point) for point in points),
-            'weights': is_sequence_of_float,
-            'u_knots': is_sequence_of_float,
-            'v_knots': is_sequence_of_float,
-            'u_mults': is_sequence_of_int,
-            'v_mults': is_sequence_of_int,
-            'u_degree': int,
-            'v_degree': int,
-            'is_u_periodic': bool,
-            'is_v_periodic': bool
-        })
-
-    @property
-    def JSONSCHEMANAME(self):
-        raise NotImplementedError
-
     def __init__(self, name: str = None) -> None:
         super(OCCNurbsSurface, self).__init__(name=name)
         self.occ_surface = None
@@ -166,25 +143,6 @@ class OCCNurbsSurface(NurbsSurface):
         if self.is_u_periodic != self.is_v_periodic:
             return False
         return True
-
-    def __str__(self):
-        lines = [
-            'OCCNurbsSurface',
-            '--------------',
-            f'Points: {self.points}',
-            f'Weights: {self.weights}',
-            f'U Knots: {self.u_knots}',
-            f'V Knots: {self.v_knots}',
-            f'U Mults: {self.u_mults}',
-            f'V Mults: {self.v_mults}',
-            f'U Degree: {self.u_degree}',
-            f'V Degree: {self.v_degree}',
-            f'U Domain: {self.u_domain}',
-            f'V Domain: {self.v_domain}',
-            f'U Periodic: {self.is_u_periodic}',
-            f'V Periodic: {self.is_v_periodic}',
-        ]
-        return "\n".join(lines)
 
     # ==============================================================================
     # Data
