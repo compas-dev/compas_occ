@@ -95,7 +95,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def __init__(self, name=None):
         super(OCCNurbsCurve, self).__init__(name=name)
-        self._occ_curve = None
+        self.occ_curve = None
 
     def __eq__(self, other: 'OCCNurbsCurve'):
         return self.occ_curve.IsEqual(other.occ_curve)
@@ -396,11 +396,6 @@ class OCCNurbsCurve(NurbsCurve):
     # ==============================================================================
     # OCC
     # ==============================================================================
-
-    @property
-    def occ_curve(self):
-        """Geom_BSplineCurve - The underlying OCC curve."""
-        return self._occ_curve
 
     @property
     def occ_shape(self):

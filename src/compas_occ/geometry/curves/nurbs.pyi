@@ -111,9 +111,6 @@ class OCCNurbsCurve(NurbsCurve):
     # ==============================================================================
 
     @property
-    def occ_curve(self) -> Geom_BSplineCurve: ...
-
-    @property
     def occ_shape(self) -> TopoDS_Shape: ...
 
     @property
