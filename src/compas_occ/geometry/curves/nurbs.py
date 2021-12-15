@@ -1,6 +1,5 @@
 from math import sqrt
 
-from typing import Dict, List
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Frame
@@ -62,7 +61,7 @@ class OCCNurbsCurve(NurbsCurve):
     ----------
     name : str, optional
         The name of the curve.
-    
+
     Examples
     --------
     Curve from points...
@@ -134,7 +133,7 @@ class OCCNurbsCurve(NurbsCurve):
     @classmethod
     def from_occ(cls, occ_curve):
         """Construct a NURBS curve from an existing OCC BSplineCurve.
-        
+
         Parameters
         ----------
         occ_curve : Geom_BSplineCurve
@@ -150,7 +149,7 @@ class OCCNurbsCurve(NurbsCurve):
     @classmethod
     def from_parameters(cls, points, weights, knots, multiplicities, degree, is_periodic=False):
         """Construct a NURBS curve from explicit curve parameters.
-        
+
         Parameters
         ----------
         points : List[:class:`compas.geometry.Point`]
@@ -375,7 +374,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def to_step(self, filepath, schema="AP203"):
         """Write the curve geometry to a STP file.
-        
+
         Parameters
         ----------
         filepath : str
@@ -534,7 +533,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def copy(self):
         """Make an independent copy of the current curve.
-        
+
         Returns
         -------
         :class:`OCCNurbsCurve`
@@ -551,7 +550,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def transform(self, T):
         """Transform this curve.
-        
+
         Parameters
         ----------
         T : :class:`compas.geometry.Transformation`
@@ -566,7 +565,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def transformed(self, T):
         """Transform a copy of the curve.
-        
+
         Parameters
         ----------
         T : :class:`compas.geometry.Transformation`
@@ -586,7 +585,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def space(self, n=10):
         """Compute evenly spaced parameters over the curve domain.
-        
+
         Parameters
         ----------
         n : int, optional
@@ -601,12 +600,12 @@ class OCCNurbsCurve(NurbsCurve):
 
     def xyz(self, n=10):
         """Compute point locations corresponding to evenly spaced parameters over the curve domain.
-        
+
         Parameters
         ----------
         n : int, optional
             The number of points in the discretisation.
-        
+
         Returns
         -------
         List[:class:`compas.geometry.Point`]
@@ -794,7 +793,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def divide_by_count(self, count):
         """Divide the curve into a specific number of equal length segments.
-        
+
         Parameters
         ----------
         count : int
@@ -807,7 +806,7 @@ class OCCNurbsCurve(NurbsCurve):
 
     def divide_by_length(self, length):
         """Divide the curve into segments of specified length.
-        
+
         Parameters
         ----------
         length : float
@@ -820,11 +819,11 @@ class OCCNurbsCurve(NurbsCurve):
 
     def aabb(self, precision=0.0):
         """Compute the axis aligned bounding box of the curve.
-        
+
         Parameters
         ----------
         precision : float, optional
-        
+
         Returns
         -------
         :class:`compas.geometry.Box`
@@ -837,11 +836,11 @@ class OCCNurbsCurve(NurbsCurve):
 
     def obb(self, precision: float = 0.0):
         """Compute the oriented bounding box of the curve.
-       
+
         Parameters
         ----------
         precision : float, optional
-        
+
         Returns
         -------
         :class:`compas.geometry.Box`
@@ -850,11 +849,11 @@ class OCCNurbsCurve(NurbsCurve):
 
     def length(self, precision=1e-3):
         """Compute the length of the curve.
-       
+
         Parameters
         ----------
         precision : float, optional
-        
+
         Returns
         -------
         :obj:`float`
