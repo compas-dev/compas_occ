@@ -526,23 +526,6 @@ class OCCNurbsCurve(NurbsCurve):
     # Methods
     # ==============================================================================
 
-    def copy(self):
-        """Make an independent copy of the current curve.
-
-        Returns
-        -------
-        :class:`OCCNurbsCurve`
-            An independent copy of the curve.
-        """
-        return OCCNurbsCurve.from_parameters(
-            self.points,
-            self.weights,
-            self.knots,
-            self.multiplicities,
-            self.degree,
-            self.is_periodic
-        )
-
     def transform(self, T):
         """Transform this curve.
 
@@ -558,70 +541,9 @@ class OCCNurbsCurve(NurbsCurve):
         occ_T.SetValues(* T.list)
         self.occ_curve.Transform(occ_T)
 
-    def transformed(self, T):
-        """Transform a copy of the curve.
-
-        Parameters
-        ----------
-        T : :class:`compas.geometry.Transformation`
-
-        Returns
-        -------
-        :class:`OCCNurbsCurve`
-            A transformed copy of the curve.
-        """
-        copy = self.copy()
-        copy.transform(T)
-        return copy
-
     def reverse(self):
         """Reverse the parametrisation of the curve."""
         self.occ_curve.Reverse()
-
-    def space(self, n=10):
-        """Compute evenly spaced parameters over the curve domain.
-
-        Parameters
-        ----------
-        n : int, optional
-            The number of values in the parameter space.
-
-        Returns
-        -------
-        List[:obj:`float`]
-        """
-        u, v = self.domain
-        return linspace(u, v, n)
-
-    def xyz(self, n=10):
-        """Compute point locations corresponding to evenly spaced parameters over the curve domain.
-
-        Parameters
-        ----------
-        n : int, optional
-            The number of points in the discretisation.
-
-        Returns
-        -------
-        List[:class:`compas.geometry.Point`]
-        """
-        return [self.point_at(param) for param in self.space(n)]
-
-    def locus(self, resolution=100):
-        """Compute the locus of the curve.
-
-        Parameters
-        ----------
-        resolution : int, optional
-            The number of intervals at which a point on the
-            curve should be computed. Defaults to 100.
-
-        Returns
-        -------
-        List[:class:`compas.geometry.Point`]
-            Points along the curve.
-        """
-        return self.xyz(resolution)
 
     def point_at(self, t):
         """Compute a point on the curve.
