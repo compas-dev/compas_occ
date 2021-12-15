@@ -5,7 +5,6 @@ from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Box
 from compas.geometry import distance_point_point
-from compas.utilities import linspace
 
 from compas.geometry import NurbsCurve
 
