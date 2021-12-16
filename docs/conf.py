@@ -47,7 +47,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
-    "matplotlib.sphinxext.plot_directive",
+    # "matplotlib.sphinxext.plot_directive",
 ]
 
 # autodoc options
@@ -102,8 +102,8 @@ napoleon_use_rtype = False
 
 # plot options
 
-plot_html_show_source_link = False
-plot_html_show_formats = False
+# plot_html_show_source_link = False
+# plot_html_show_formats = False
 
 # docstring sections
 
