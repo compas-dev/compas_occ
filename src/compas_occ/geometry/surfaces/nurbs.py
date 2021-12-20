@@ -654,12 +654,26 @@ class OCCNurbsSurface(NurbsSurface):
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
-    def closest_point(self, point, distance=None, parameter=False):
+    def closest_point(self, point, return_parameters=False):
         """Compute the closest point on the curve to a given point.
+
+        Parameters
+        ----------
+        point : Point
+            The point to project to the surface.
+        return_parameters : bool, optional
+            Return the projected point as well as the surface UV parameters as tuple.
+
+        Returns
+        -------
+        :class:`compas.geometry.Point`
+            The nearest point on the surface, if ``return_parameters`` is false.
+        (:class:`compas.geometry.Point`, (float, float))
+            The nearest as (point, parameters) tuple, if ``return_parameters`` is true.
         """
         projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
         point = Point.from_occ(projector.NearestPoint())
-        if not parameter:
+        if not return_parameters:
             return point
         return point, projector.LowerDistanceParameters()
 
