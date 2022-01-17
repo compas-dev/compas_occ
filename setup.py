@@ -25,7 +25,7 @@ optional_requirements = {}
 
 setup(
     name="compas_occ",
-    version="0.3.3",
+    version="0.3.4",
     description="COMPAS wrapper for the Python bindings of OCC",
     long_description=long_description,
     long_description_content_type="text/markdown",
