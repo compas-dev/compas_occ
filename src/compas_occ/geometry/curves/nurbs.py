@@ -537,7 +537,7 @@ class OCCNurbsCurve(NurbsCurve):
         None
         """
         occ_T = gp_Trsf()
-        occ_T.SetValues(* T.list)
+        occ_T.SetValues(* T.list[:12])
         self.occ_curve.Transform(occ_T)
 
     def reverse(self):
