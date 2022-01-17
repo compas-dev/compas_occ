@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed input parameters and docstring of `compas_occ.geometry.NurbsSurface.closest_point`.
 * Fixed bug in `compas_occ.geometry.NurbsCurve.transform`.
 
 ### Removed
