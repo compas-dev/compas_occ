@@ -9,7 +9,23 @@ from compas_occ.brep import BRepEdge
 
 
 class BRepLoop:
-    """Class representing an edge loop in the BRep of a geometric shape."""
+    """Class representing an edge loop in the BRep of a geometric shape.
+
+    Parameters
+    ----------
+    loop : TopoDS_Wire
+        An OCC BRep wire.
+
+    Attributes
+    ----------
+    loop : TopoDS_Wire
+        The OCC BRep wire.
+    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+        List of BRep vertices.
+    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
+        List of BRep edges.
+
+    """
 
     def __init__(self, loop: TopoDS_Wire):
         self._loop = None

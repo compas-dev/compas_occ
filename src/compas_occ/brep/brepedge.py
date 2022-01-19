@@ -52,8 +52,11 @@ class BRepEdge:
         The first vertex with forward orientation.
     last_vertex : :class:`BRepVertex`, read-only
         The first vertex with reversed orientation.
-    adaptor
-    curve
+    adaptor : BRepAdaptor_Curve
+        Edge adaptor for extracting curve geometry.
+    curve : GeomAdaptor_Curve
+        Curve geometry from the edge adaptor.
+
     """
 
     class CurveType(Enum):
@@ -151,13 +154,14 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`Line`
+        :class:`compas.geometry.Line`
             A COMPAS line.
 
         Raises
         ------
         ValueError
             If the underlying geometry is not a line.
+
         """
         if not self.is_line:
             raise ValueError(f'The underlying geometry is not a line: {self.type}')
@@ -171,13 +175,14 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`Circle`
+        :class:`compas.geometry.Circle`
             A COMPAS circle.
 
         Raises
         ------
         ValueError
             If the underlying geometry is not a circle.
+
         """
         if not self.is_circle:
             raise ValueError(f'The underlying geometry is not a circle: {self.type}')
@@ -195,13 +200,14 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`Ellipse`
+        :class:`compas.geometry.Ellipse`
             A COMPAS ellipse.
 
         Raises
         ------
         ValueError
             If the underlying geometry is not an ellipse.
+
         """
         if not self.is_ellipse:
             raise ValueError(f'The underlying geometry is not an ellipse: {self.type}')
@@ -228,6 +234,7 @@ class BRepEdge:
             If the underlying geometry is not a hyperbola.
         NotImplementedError
             In all other cases
+
         """
         if not self.is_hyperbola:
             raise ValueError(f'The underlying geometry is not a hyperbola: {self.type}')
@@ -247,6 +254,7 @@ class BRepEdge:
             If the underlying geometry is not a parabola.
         NotImplementedError
             In all other cases
+
         """
         if not self.is_parabola:
             raise ValueError(f'The underlying geometry is not a parabola: {self.type}')
@@ -266,6 +274,7 @@ class BRepEdge:
             If the underlying geometry is not a bezier curve.
         NotImplementedError
             In all other cases
+
         """
         if not self.is_bezier:
             raise ValueError(f'The underlying geometry is not a bezier: {self.type}')
@@ -285,6 +294,7 @@ class BRepEdge:
             If the underlying geometry is not a bspline.
         NotImplementedError
             In all other cases
+
         """
         if not self.is_bspline:
             raise ValueError(f'The underlying geometry is not a bspline: {self.type}')

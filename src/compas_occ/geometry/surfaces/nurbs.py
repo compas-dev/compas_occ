@@ -1,4 +1,8 @@
-from compas.geometry import Point, Vector, Line, Frame, Box
+from compas.geometry import Point
+from compas.geometry import Vector
+from compas.geometry import Line
+from compas.geometry import Frame
+from compas.geometry import Box
 from compas.utilities import flatten
 from compas.datastructures import Mesh
 
@@ -17,10 +21,7 @@ from compas_occ.conversions import points2_from_array2
 
 from ..curves import OCCNurbsCurve
 
-try:
-    from compas.geometry import NurbsSurface
-except ImportError:
-    from compas.geometry import Geometry as NurbsSurface
+from compas.geometry import NurbsSurface
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
@@ -87,6 +88,39 @@ class OCCNurbsSurface(NurbsSurface):
     name : str, optional
         The name of the curve
 
+    Attributes
+    ----------
+    occ_surface : Geom_BSplineSurface, read-only
+        The underlying OCC surface.
+    occ_shape : TopoDS_Shape, read-only
+        An OCC face containing the surface converted to a shape.
+    occ_face : TopoDS_Face, read-only
+        An OCC face containing the surface.
+    points : list[list[:class:`compas.geometry.Point`]], read-only
+        The control points of the surface.
+    weights : list[list[float]], read-only
+        The weights of the control points of the surface.
+    u_knots : list[float], read-only
+        The knots of the surface in the U direction, without multiplicities.
+    v_knots : list[float], read-only
+        The knots of the surface in the V direction, without multiplicities.
+    u_mults : list[int], read-only
+        The multiplicities of the knots of the surface in the U direction.
+    v_mults : list[int], read-only
+        The multiplicities of the knots of the surface in the V direction.
+    u_degree : list[int], read-only
+        The degree of the surface in the U direction.
+    v_degree : list[int], read-only
+        The degree of the surface in the V direction.
+    u_domain : tuple[float, float], read-only
+        The parameter domain of the surface in the U direction.
+    v_domain : tuple[float, float], read-only
+        The parameter domain of the surface in the V direction.
+    is_u_periodic : bool, read-only
+        Flag indicating if the surface is periodic in the U direction.
+    is_v_periodic : bool, read-only
+        Flag indicating if the surface is periodic in the V direction.
+
     Examples
     --------
     Construct a surface from points...
@@ -145,7 +179,7 @@ class OCCNurbsSurface(NurbsSurface):
 
     def __init__(self, name=None):
         super(OCCNurbsSurface, self).__init__(name=name)
-        self.occ_surface = None  #: (:class:`compas.geometry.Point`) Reference to the underlying OCC BSpline Surface.
+        self.occ_surface = None
         self._points = None
 
     def __eq__(self, other):
@@ -173,7 +207,7 @@ class OCCNurbsSurface(NurbsSurface):
 
     @property
     def data(self):
-        """:obj:`dict` - Represenation of the surface as a Python dict."""
+        """dict : Represenation of the surface as a Python dict."""
         return {
             'points': [[point.data for point in row] for row in self.points],
             'weights': self.weights,
@@ -225,6 +259,7 @@ class OCCNurbsSurface(NurbsSurface):
         -------
         :class:`OCCNurbsSurface`
             The constructed surface.
+
         """
         points = [[Point.from_data(point) for point in row] for row in data['points']]
         weights = data['weights']
@@ -262,6 +297,7 @@ class OCCNurbsSurface(NurbsSurface):
         -------
         :class:`OCCNurbsSurface`
             The constructed surface.
+
         """
         surface = cls()
         surface.occ_surface = occ_surface
@@ -273,30 +309,31 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        points : List[List[:class:`compas.geometry.Point`]]
+        points : list[list[:class:`compas.geometry.Point`]]
             The control points of the surface.
-        weights : List[List[:obj:`float`]]
+        weights : list[list[float]]
             The weights of the control points.
-        u_knots : List[:obj:`float`]
+        u_knots : list[float]
             The knots in the U direction, without multiplicities.
-        v_knots : List[:obj:`float`]
+        v_knots : list[float]
             The knots in the V direction, without multiplicities.
-        u_mults : List[:obj:`int`]
+        u_mults : list[int]
             The multiplicities of the knots in the U direction.
-        v_mults : List[:obj:`int`]
+        v_mults : list[int]
             The multiplicities of the knots in the V direction.
-        u_dergee : :obj:`int`
+        u_dergee : int
             Degree in the U direction.
-        v_degree : :obj:`int`
+        v_degree : int
             Degree in the V direction.
-        is_u_periodic : :obj:`bool`, optional
+        is_u_periodic : bool, optional
             Flag indicating that the surface is periodic in the U direction.
-        is_v_periodic : :obj:`bool`, optional
+        is_v_periodic : bool, optional
             Flag indicating that the surface is periodic in the V direction.
 
         Returns
         -------
         :class:`OCCNurbsSurface`
+
         """
         surface = cls()
         surface.occ_surface = Geom_BSplineSurface(
@@ -319,7 +356,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        points : List[List[:class:`compas.geometry.Point`]]
+        points : list[list[:class:`compas.geometry.Point`]]
             The control points.
         u_degree : int, optional
         v_degree : int, optional
@@ -327,6 +364,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`OCCNurbsSurface`
+
         """
         u = len(points[0])
         v = len(points)
@@ -369,6 +407,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`OCCNurbsSurface`
+
         """
         raise NotImplementedError
 
@@ -384,6 +423,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`OCCNurbsSurface`
+
         """
         srf = BRep_Tool_Surface(face)
         return cls.from_occ(srf)
@@ -400,6 +440,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`OCCNurbsSurface`
+
         """
         surface = cls()
         occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, GeomFill_CoonsStyle)
@@ -417,6 +458,11 @@ class OCCNurbsSurface(NurbsSurface):
         ----------
         filepath : str
         schema : str, optional
+
+        Returns
+        -------
+        None
+
         """
         from OCC.Core.STEPControl import STEPControl_Writer
         from OCC.Core.STEPControl import STEPControl_AsIs
@@ -436,6 +482,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`compas.datastructures.Mesh`
+
         """
         from OCC.Core.Tesselator import ShapeTesselator
 
@@ -455,13 +502,11 @@ class OCCNurbsSurface(NurbsSurface):
 
     @property
     def occ_shape(self):
-        """TopoDS_Shape - An OCC face containing the surface converted to a shape."""
         from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
         return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
 
     @property
     def occ_face(self):
-        """TopoDS_Face - An OCC face containing the surface."""
         return topods_Face(self.occ_shape)
 
     # ==============================================================================
@@ -470,14 +515,12 @@ class OCCNurbsSurface(NurbsSurface):
 
     @property
     def points(self):
-        """List[List[:class:`compas.geometry.Point`]] - The control points of the surface."""
         if not self._points:
             self._points = Points(self.occ_surface)
         return self._points
 
     @property
     def weights(self):
-        """List[List[:obj:`float`]] - The weights of the control points of the surface."""
         weights = self.occ_surface.Weights()
         if not weights:
             weights = [[1.0] * len(self.points[0]) for _ in range(len(self.points))]
@@ -487,54 +530,44 @@ class OCCNurbsSurface(NurbsSurface):
 
     @property
     def u_knots(self):
-        """List[:obj:`float`] - The knots of the surface in the U direction, without multiplicities."""
         return list(self.occ_surface.UKnots())
 
     @property
     def v_knots(self):
-        """List[:obj:`float`] - The knots of the surface in the V direction, without multiplicities."""
         return list(self.occ_surface.VKnots())
 
     @property
     def u_mults(self):
-        """List[:obj:`int`] - The multiplicities of the knots of the surface in the U direction."""
         return list(self.occ_surface.UMultiplicities())
 
     @property
     def v_mults(self):
-        """List[:obj:`int`] - The multiplicities of the knots of the surface in the V direction."""
         return list(self.occ_surface.VMultiplicities())
 
     @property
     def u_degree(self):
-        """List[:obj:`int`] - The degree of the surface in the U direction."""
         return self.occ_surface.UDegree()
 
     @property
     def v_degree(self):
-        """List[:obj:`int`] - The degree of the surface in the V direction."""
         return self.occ_surface.VDegree()
 
     @property
     def u_domain(self):
-        """(:obj:`float`, :obj:`float`) - The parameter domain of the surface in the U direction."""
         umin, umax, _, _ = self.occ_surface.Bounds()
         return umin, umax
 
     @property
     def v_domain(self):
-        """(:obj:`float`, :obj:`float`) - The parameter domain of the surface in the V direction."""
         _, _, vmin, vmax = self.occ_surface.Bounds()
         return vmin, vmax
 
     @property
     def is_u_periodic(self):
-        """:obj:`bool` - Flag indicating if the surface is periodic in the U direction."""
         return self.occ_surface.IsUPeriodic()
 
     @property
     def is_v_periodic(self):
-        """:obj:`bool` - Flag indicating if the surface is periodic in the V direction."""
         return self.occ_surface.IsVPeriodic()
 
     # ==============================================================================
@@ -551,6 +584,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         None
+
         """
         _T = gp_Trsf()
         _T.SetValues(* T.list[:12])
@@ -566,6 +600,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`compas.geometry.NurbsCurve`
+
         """
         occ_curve = self.occ_surface.UIso(u)
         return OCCNurbsCurve.from_occ(occ_curve)
@@ -580,6 +615,7 @@ class OCCNurbsSurface(NurbsSurface):
         Returns
         -------
         :class:`compas.geometry.NurbsCurve`
+
         """
         occ_curve = self.occ_surface.VIso(v)
         return OCCNurbsCurve.from_occ(occ_curve)
@@ -589,7 +625,8 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        List[:class:`compas.geometry.NurbsCurve`]
+        list[:class:`compas.geometry.NurbsCurve`]
+
         """
         umin, umax, vmin, vmax = self.occ_surface.Bounds()
         curves = [
@@ -607,12 +644,13 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        u : :obj:`float`
-        v : :obj:`float`
+        u : float
+        v : float
 
         Returns
         -------
         :class:`compas.geometry.Point`
+
         """
         point = self.occ_surface.Value(u, v)
         return Point.from_occ(point)
@@ -622,12 +660,13 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        u : :obj:`float`
-        v : :obj:`float`
+        u : float
+        v : float
 
         Returns
         -------
         :class:`compas.geometry.Vector`
+
         """
         props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
         gaussian = props.GaussianCurvature()
@@ -641,12 +680,13 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        u : :obj:`float`
-        v : :obj:`float`
+        u : float
+        v : float
 
         Returns
         -------
         :class:`compas.geometry.Frame`
+
         """
         point = gp_Pnt()
         uvec = gp_Vec()
@@ -662,14 +702,14 @@ class OCCNurbsSurface(NurbsSurface):
         point : Point
             The point to project to the surface.
         return_parameters : bool, optional
-            Return the projected point as well as the surface UV parameters as tuple.
+            If True, return the surface UV parameters in addition to the closest point.
 
         Returns
         -------
-        :class:`compas.geometry.Point`
-            The nearest point on the surface, if ``return_parameters`` is false.
-        (:class:`compas.geometry.Point`, (float, float))
-            The nearest as (point, parameters) tuple, if ``return_parameters`` is true.
+        :class:`compas.geometry.Point` | tuple[:class:`compas.geometry.Point`, tuple[float, float]]
+            If `return_parameters` is False, the nearest point on the surface.
+            If `return_parameters` is True, the UV parameters in addition to the nearest point on the surface.
+
         """
         projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
         point = Point.from_occ(projector.NearestPoint())
@@ -678,7 +718,18 @@ class OCCNurbsSurface(NurbsSurface):
         return point, projector.LowerDistanceParameters()
 
     def aabb(self, precision=0.0, optimal=False):
-        """Compute the axis aligned bounding box of the surface."""
+        """Compute the axis aligned bounding box of the surface.
+
+        Parameters
+        ----------
+        precision : float, optional
+        optimal : bool, optional
+
+        Returns
+        -------
+        :class:`compas.geometry.Box`
+
+        """
         box = Bnd_Box()
         if optimal:
             add = BndLib_AddSurface_AddOptimal
@@ -691,13 +742,33 @@ class OCCNurbsSurface(NurbsSurface):
         ))
 
     def obb(self, precision=0.0):
-        """Compute the oriented bounding box of the surface."""
+        """Compute the oriented bounding box of the surface.
+
+        Parameters
+        ----------
+        precision : float, optional
+
+        Returns
+        -------
+        :class:`compas.geometry.Box`
+
+        """
         box = Bnd_OBB()
         brepbndlib_AddOBB(self.occ_shape, box, True, True, True)
         return Box(Frame.from_occ(box.Position()), box.XHSize(), box.YHSize(), box.ZHSize())
 
     def intersections_with_line(self, line):
-        """Compute the intersections with a line."""
+        """Compute the intersections with a line.
+
+        Parameters
+        ----------
+        line : :class:`compas.geometry.Line`
+
+        Returns
+        -------
+        list[:class:`compas.geometry.Point`]
+
+        """
         intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
         points = []
         for index in range(intersection.NbPoints()):

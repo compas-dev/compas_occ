@@ -47,10 +47,17 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.githubpages",
-    # "matplotlib.sphinxext.plot_directive",
+    "sphinx.ext.autodoc.typehints",
 ]
 
 # autodoc options
+
+autodoc_type_aliases = {}
+
+# this does not work properly yet
+autodoc_typehints = "none"
+autodoc_typehints_format = "short"
+autodoc_typehints_description_target = "documented"
 
 autodoc_mock_imports = [
     "System",
@@ -74,13 +81,16 @@ autodoc_member_order = "alphabetical"
 
 autoclass_content = "class"
 
+
 def skip(app, what, name, obj, would_skip, options):
     if name.startswith('_'):
         return True
     return would_skip
 
+
 def setup(app):
     app.connect("autodoc-skip-member", skip)
+
 
 # autosummary options
 
@@ -107,14 +117,18 @@ napoleon_use_rtype = False
 
 # docstring sections
 
+
 def parse_attributes_section(self, section):
     return self._format_fields("Attributes", self._consume_fields())
 
+
 NumpyDocstring._parse_attributes_section = parse_attributes_section
+
 
 def patched_parse(self):
     self._sections["attributes"] = self._parse_attributes_section
     self._unpatched_parse()
+
 
 NumpyDocstring._unpatched_parse = NumpyDocstring._parse
 NumpyDocstring._parse = patched_parse
@@ -127,6 +141,7 @@ intersphinx_mapping = {
 }
 
 # linkcode
+
 
 def linkcode_resolve(domain, info):
     if domain != 'py':
@@ -161,6 +176,7 @@ def linkcode_resolve(domain, info):
 
     return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
 
+
 # extlinks
 
 extlinks = {}
@@ -181,11 +197,12 @@ html_theme_options = {
 }
 
 html_context = {}
-html_static_path = []
+html_static_path = sphinx_compas_theme.get_html_static_path()
 html_extra_path = []
 html_last_updated_fmt = ""
 html_copy_source = False
 html_show_sourcelink = False
 html_permalinks = False
 html_permalinks_icon = ""
+html_experimental_html5_writer = False
 html_compact_lists = True

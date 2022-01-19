@@ -12,14 +12,35 @@ from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 
 def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
-    """Construct a one-dimensional point array from a list of points."""
+    """Construct a one-dimensional point array from a list of points.
+
+    Parameters
+    ----------
+    points : list[:class:`compas.geometry.Point`]
+
+    Returns
+    -------
+    TColgp_Array1OfPnt
+
+    """
     array = TColgp_Array1OfPnt(1, len(points))
     for index, point in enumerate(points):
         array.SetValue(index + 1, gp_Pnt(* point))
     return array
 
 
-def harray1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
+def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
+    """Construct a horizontal one-dimensional point array from a list of points.
+
+    Parameters
+    ----------
+    points : list[:class:`compas.geometry.Point`]
+
+    Returns
+    -------
+    TColgp_HArray1OfPnt
+
+    """
     array = TColgp_HArray1OfPnt(1, len(points))
     for index, point in enumerate(points):
         array.SetValue(index + 1, gp_Pnt(* point))
@@ -27,12 +48,32 @@ def harray1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
 
 
 def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
-    """Construct a list of points from a one-dimensional point array."""
+    """Construct a list of points from a one-dimensional point array.
+
+    Parameters
+    ----------
+    array : TColgp_Array1OfPnt
+
+    Returns
+    -------
+    list[:class:`compas.geometry.Point`]
+
+    """
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
 
 
 def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
-    """Construct a two-dimensional point array from a list of lists of points."""
+    """Construct a two-dimensional point array from a list of lists of points.
+
+    Parameters
+    ----------
+    points : list[list[:class:`compas.geometry.Point`]]
+
+    Returns
+    -------
+    TColgp_Array2OfPnt
+
+    """
     points = list(zip(* points))
     rows = len(points)
     cols = len(points[0])
@@ -44,7 +85,17 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
 
 
 def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
-    """Construct a list of lists of points from two-dimensional point array."""
+    """Construct a list of lists of points from two-dimensional point array.
+
+    Parameters
+    ----------
+    array : TColgp_Array2OfPnt
+
+    Returns
+    -------
+    list[list[:class:`compas.geometry.Point`]]
+
+    """
     points = [[None for j in range(array.NbRows())] for i in range(array.NbColumns())]
     for i in range(array.LowerCol(), array.UpperCol() + 1):
         for j in range(array.LowerRow(), array.UpperRow() + 1):
@@ -54,7 +105,17 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
 
 
 def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
-    """Construct a one-dimensional integer array from a list of integers."""
+    """Construct a one-dimensional integer array from a list of integers.
+
+    Parameters
+    ----------
+    numbers : list[int]
+
+    Returns
+    -------
+    TColStd_Array1OfInteger
+
+    """
     array = TColStd_Array1OfInteger(1, len(numbers))
     for index, number in enumerate(numbers):
         array.SetValue(index + 1, number)
@@ -62,7 +123,17 @@ def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
 
 
 def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
-    """Construct a one-dimensional float array from a list of floats."""
+    """Construct a one-dimensional float array from a list of floats.
+
+    Parameters
+    ----------
+    numbers : list[float]
+
+    Returns
+    -------
+    TColStd_Array1OfReal
+
+    """
     array = TColStd_Array1OfReal(1, len(numbers))
     for index, number in enumerate(numbers):
         array.SetValue(index + 1, number)
@@ -70,7 +141,17 @@ def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
 
 
 def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
-    """Construct a two-dimensional real array from a list of lists of floats."""
+    """Construct a two-dimensional real array from a list of lists of floats.
+
+    Parameters
+    ----------
+    numbers : list[list[float]]
+
+    Returns
+    -------
+    TColStd_Array2OfReal
+
+    """
     numbers = list(zip(* numbers))
     rows = len(numbers)
     cols = len(numbers[0])
@@ -82,7 +163,17 @@ def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
 
 
 def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
-    """Construct a list of lists of floats from two-dimensional real array."""
+    """Construct a list of lists of floats from two-dimensional real array.
+
+    Parameters
+    ----------
+    array : TColStd_Array2OfReal
+
+    Returns
+    -------
+    list[list[float]]
+
+    """
     numbers = []
     for i in range(array.LowerRow(), array.UpperRow() + 1):
         row = []

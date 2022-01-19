@@ -15,6 +15,7 @@ from OCC.Core.gp import gp_Ax2
 
 
 class Box(Box):
+    """Extension of COMPAS box with OCC conversion methods."""
 
     def _to_occ(self) -> BRepPrimAPI_MakeBox:
         xaxis = self.frame.xaxis.scaled(-0.5 * self.xsize)
@@ -25,31 +26,68 @@ class Box(Box):
         return BRepPrimAPI_MakeBox(ax2, self.xsize, self.ysize, self.zsize)
 
     def to_occ_shape(self) -> TopoDS_Shape:
-        """Convert a COMPAS box to an OCC shape."""
+        """Convert a COMPAS box to an OCC shape.
+
+        Returns
+        -------
+        TopoDS_Shape
+
+        """
         return self._to_occ().Shape()
 
     def to_occ_solid(self) -> TopoDS_Solid:
-        """Convert a COMPAS box to an OCC solid."""
+        """Convert a COMPAS box to an OCC solid.
+
+        Returns
+        -------
+        TopoDS_Solid
+
+        """
         return self._to_occ().Solid()
 
     def to_occ_shell(self) -> TopoDS_Shell:
-        """Convert a COMPAS box to an OCC shell."""
+        """Convert a COMPAS box to an OCC shell.
+
+        Returns
+        -------
+        TopoDS_Shell
+
+        """
         return self._to_occ().Shell()
 
 
 class Sphere(Sphere):
+    """Extension of COMPAS sphere with OCC conversion methods."""
 
     def _to_occ(self) -> BRepPrimAPI_MakeSphere:
         return BRepPrimAPI_MakeSphere(gp_Pnt(* self.point), self.radius)
 
     def to_occ_shape(self) -> TopoDS_Shape:
-        """Convert a COMPAS sphere to an OCC shape."""
+        """Convert a COMPAS sphere to an OCC shape.
+
+        Returns
+        -------
+        TopoDS_Shape
+
+        """
         return self._to_occ().Shape()
 
     def to_occ_solid(self) -> TopoDS_Solid:
-        """Convert a COMPAS sphere to an OCC solid."""
+        """Convert a COMPAS sphere to an OCC solid.
+
+        Returns
+        -------
+        TopoDS_Solid
+
+        """
         return self._to_occ().Solid()
 
     def to_occ_shell(self) -> TopoDS_Shell:
-        """Convert a COMPAS sphere to an OCC shell."""
+        """Convert a COMPAS sphere to an OCC shell.
+
+        Returns
+        -------
+        TopoDS_Shell
+
+        """
         return self._to_occ().Shell()

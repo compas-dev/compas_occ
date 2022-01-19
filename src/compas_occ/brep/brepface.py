@@ -18,7 +18,29 @@ from compas_occ.brep import BRepLoop
 
 
 class BRepFace:
-    """Class representing a face in the BRep of a geometric shape."""
+    """Class representing a face in the BRep of a geometric shape.
+
+    Parameters
+    ----------
+    face : TopoDS_Face
+        An OCC BRep face.
+
+    Attributes
+    ----------
+    face : TopoDS_Face
+        The OCC BRep face.
+    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+        List of BRep vertices.
+    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
+        List of BRep edges.
+    loops : list[:class:`compas_occ.brep.BRepLoop`], read-only
+        List of BRep loops.
+    adaptor : BRepAdaptor_Surface
+        Adaptor for extracting surface geometry from the BRep face.
+    surface : GeomAdaptor_Surface
+        Surface geometry from the adaptor.
+
+    """
 
     def __init__(self, face: TopoDS_Face):
         self._face = None
