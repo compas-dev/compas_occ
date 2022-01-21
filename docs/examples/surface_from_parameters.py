@@ -1,8 +1,8 @@
-from compas.geometry import Point, Polyline
-# from compas.geometry import NurbsSurface
-from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas_occ.geometry import NurbsSurface
 from compas_view2.app import App
+
 
 points = [
     [Point(0, 0, 0), Point(1, 0, +0), Point(2, 0, +0), Point(3, 0, +0), Point(4, 0, +0), Point(5, 0, 0)],
@@ -32,8 +32,6 @@ surface = NurbsSurface.from_parameters(
     u_degree=3,
     v_degree=3,
 )
-
-print(surface)
 
 # ==============================================================================
 # Visualisation

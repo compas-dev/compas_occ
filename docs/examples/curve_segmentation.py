@@ -1,6 +1,6 @@
-from compas.geometry import Point, Polyline
-from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas_occ.geometry import NurbsCurve
 from compas_view2.app import App
 
 
@@ -10,7 +10,6 @@ curveA = NurbsCurve.from_points(pointsA)
 curveA.segment(u=0.2, v=0.5)
 
 print(curveA.domain)
-
 
 pointsB = [Point(0, -1, 0), Point(3, 5, 0), Point(6, -4, 3), Point(10, -1, 0)]
 curveB = NurbsCurve.from_points(pointsB)

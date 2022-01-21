@@ -1,9 +1,8 @@
 from compas.geometry import Point
 from compas.utilities import meshgrid, flatten
-# from compas.geometry import NurbsSurface
-from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
-
+from compas_occ.geometry import NurbsSurface
 from compas_view2.app import App
+
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -13,8 +12,6 @@ points = [
 ]
 
 surface = NurbsSurface.from_points(points=points)
-
-print(surface)
 
 # ==============================================================================
 # Frames

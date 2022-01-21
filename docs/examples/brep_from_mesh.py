@@ -1,8 +1,10 @@
 import compas
 from compas.geometry import Vector, Translation, Scale
+from compas.geometry import Polyline
 from compas.datastructures import Mesh
 from compas_occ.brep import BRep
 from compas_view2.app import App
+
 
 mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
 
@@ -18,8 +20,20 @@ S = Scale.from_factors([0.3, 0.3, 0.3])
 mesh.transform(S * T)
 
 brep = BRep.from_mesh(mesh)
-tess = brep.to_tesselation()
 
-viewer = App()
-viewer.add(tess)
+lines = []
+curves = []
+
+for edge in brep.edges:
+    if edge.is_line:
+        lines.append(edge.to_line())
+    elif edge.is_bspline:
+        curves.append(Polyline(edge.curve.locus()))
+
+viewer = App(viewmode='ghosted')
+viewer.add(brep.to_tesselation(), show_edges=False)
+
+for curve in curves:
+    viewer.add(curve, linewidth=2)
+
 viewer.run()

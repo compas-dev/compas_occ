@@ -1,14 +1,14 @@
-from compas.geometry import Vector, Point, Line, Polyline, Ellipse, Plane
+from compas.geometry import Vector, Point, Plane
+from compas.geometry import Line, Polyline
+from compas.geometry import Ellipse
 from compas.utilities import pairwise
-from compas_occ.geometry import OCCNurbsCurve as NurbsCurve
-
+from compas_occ.geometry import NurbsCurve
 from compas_view2.app import App
 from compas_view2.objects import Collection
 
+
 ellipse = Ellipse(Plane(Point(0, 0, 0), Vector(0, 0, 1)), 2.0, 1.0)
 curve = NurbsCurve.from_ellipse(ellipse)
-
-print(curve)
 
 # ==============================================================================
 # Visualisation

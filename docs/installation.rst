@@ -5,8 +5,8 @@ Installation
 Stable
 ======
 
-Install with ``conda``
-----------------------
+Install with conda
+------------------
 
 In an existing environment, for example "research".
 
@@ -25,10 +25,10 @@ In a new environment, for example ... "research" 😀
 In both cases, :mod:`compas_view2` is optional.
 
 
-Install with ``pip``
---------------------
+Install with pip
+----------------
 
-To install :mod:`compas_occ` with `pip`, some of its dependencies have to be installed from `conda-forge` first.
+To install :mod:`compas_occ` with ``pip``, some of its dependencies have to be installed from ``conda-forge`` first.
 
 .. code-block:: bash
 

@@ -1,7 +1,8 @@
-from compas.geometry import Point, Polyline
-from compas.geometry import NurbsCurve
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas_occ.geometry import NurbsCurve
 from compas_view2.app import App
+
 
 points0 = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 curve0 = NurbsCurve.from_points(points0)
@@ -11,12 +12,7 @@ curve1 = NurbsCurve.from_points(points1)
 
 parameters, distance = curve0.closest_parameters_curve(curve1, return_distance=True)
 
-print(parameters)
-print(distance)
-
 points = curve0.closest_points_curve(curve1, return_distance=False)
-
-print(points)
 
 # ==============================================================================
 # Visualisation

@@ -1,8 +1,8 @@
-from compas.geometry import Point, Polyline
-# from compas.geometry import NurbsSurface
-from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas_occ.geometry import NurbsSurface
 from compas_view2.app import App
+
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0), Point(4, 0, 0)],
@@ -12,8 +12,6 @@ points = [
 ]
 
 surface = NurbsSurface.from_points(points=points)
-
-# print(surface)
 
 # ==============================================================================
 # Isocurves
@@ -32,14 +30,6 @@ for v in surface.v_space():
 # ==============================================================================
 
 view = App()
-
-# for row in surface.points:
-#     view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(1.0, 0, 0))
-
-# for col in zip(* surface.points):
-#     view.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
-
-# view.add(surface.to_mesh(u=50), show_edges=False)
 
 for curve in u_curves:
     view.add(Polyline(curve.locus()), linecolor=(1, 0, 0), linewidth=2)
