@@ -48,7 +48,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
-from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
+from compas_occ.geometry import NurbsSurface
 
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
@@ -61,21 +61,21 @@ class BRep:
 
     Attributes
     ----------
-    shape : :class:`TopoDS_Shape`
+    shape : ``TopoDS_Shape``
         The underlying OCC shape of the BRep.
-    type : :class:`TopAbs_ShapeEnum`, read-only
-        One of `{TopAbs_COMPOUND, TopAbs_COMPSOLID, TopAbs_SOLID, TopAbs_SHELL, TopAbs_FACE,  TopAbs_WIRE, TopAbs_EDGE, TopAbs_VERTEX, TopAbs_SHAPE}`.
-    vertices : list[:class:`BRepVertex`], read-only
+    type : ``TopAbs_ShapeEnum``, read-only
+        The type of BRep shape.
+    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
         The vertices of the BRep.
-    edges : list[:class:`BRepEdge`], read-only
+    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
         The edges of the BRep.
-    loops : list[:class:`BRepLoop`], read-only
+    loops : list[:class:`compas_occ.brep.BRepLoop`], read-only
         The loops of the BRep.
-    faces : list[:class:`BRepFace`], read-only
+    faces : list[:class:`compas_occ.brep.BRepFace`], read-only
         The faces of the BRep.
-    orientation : :class:`TopAbs_Orientation`, read-only
-        One of `{TopAbs_FORWARD, TopAbs_REVERSED, TopAbs_INTERNAL, TopAbs_EXTERNAL}`.
-    frame : :class:`Frame`, read-only
+    orientation : TopAbs_Orientation, read-only
+        Orientation of the shape.
+    frame : :class:`compas.geometry.Frame`, read-only
         The local coordinate system of the BRep.
     area : float, read-only
         The surface area of the BRep.
@@ -195,7 +195,7 @@ class BRep:
         p1 : :class:`compas.geometry.Point`
         p2 : :class:`compas.geometry.Point`
         p3 : :class:`compas.geometry.Point`
-        p4 : :class:`compas.geometry.Point`
+        p4 : :class:`compas.geometry.Point`, optional
 
         Returns
         -------
@@ -238,12 +238,12 @@ class BRep:
         return brep
 
     @classmethod
-    def from_curves(cls, curves) -> 'BRep':
+    def from_curves(cls, curves: List[compas.geometry.NurbsCurve]) -> 'BRep':
         """Construct a BRep from a set of curves.
 
         Parameters
         ----------
-        curves : list[:class:`compas_occ.geometry.OCCNurbsCurve`]
+        curves : list[:class:`compas.geometry.NurbsCurve`]
 
         Returns
         -------
@@ -449,6 +449,7 @@ class BRep:
         Parameters
         ----------
         filepath : str
+            Location of the file.
 
         Returns
         -------
@@ -464,8 +465,11 @@ class BRep:
         Parameters
         ----------
         filepath : str
+            Location of the file.
         schema : str, optional
+            STEP file format schema.
         unit : str, optional
+            Base units for the geometry in the file.
 
         Returns
         -------
@@ -499,7 +503,9 @@ class BRep:
         Parameters
         ----------
         u : int, optional
+            The number of mesh faces in the U direction of the underlying surface geometry of every face of the BRep.
         v : int, optional
+            The number of mesh faces in the V direction of the underlying surface geometry of every face of the BRep.
 
         Returns
         -------
@@ -511,7 +517,7 @@ class BRep:
         brep.shape = converter.Shape()
         meshes = []
         for face in brep.faces:
-            srf = NurbsSurface.from_face(face)
+            srf = NurbsSurface.from_face(face.face)
             mesh = srf.to_vizmesh(u, v)
             meshes.append(mesh)
         return meshes
@@ -574,24 +580,77 @@ class BRep:
         return self.shape.Convex()
 
     def is_manifold(self) -> bool:
+        """Check if the shape is manifold.
+
+        Returns
+        -------
+        bool
+
+        Notes
+        -----
+        A BRep is non-manifold if at least one edge is shared by more than two faces.
+
+        """
         pass
 
     def is_solid(self) -> bool:
+        """Check if the shape is a solid.
+
+        Returns
+        -------
+        bool
+
+        """
         pass
 
     def is_surface(self) -> bool:
+        """Check if the shape is a surface.
+
+        Returns
+        -------
+        bool
+
+        """
         pass
 
     def cull_unused_vertices(self) -> None:
+        """Remove all unused vertices.
+
+        Returns
+        -------
+        None
+
+        """
         pass
 
     def cull_unused_edges(self) -> None:
+        """Remove all unused edges.
+
+        Returns
+        -------
+        None
+
+        """
         pass
 
     def cull_unused_loops(self) -> None:
+        """Remove all unused loops.
+
+        Returns
+        -------
+        None
+
+        """
         pass
 
     def cull_unused_faces(self) -> None:
+        """Remove all unused faces.
+
+        Returns
+        -------
+        None
+
+        """
         pass
 
     # flip
@@ -611,5 +670,19 @@ class BRep:
     # translate
     # unjoin edges
 
-    def contours(self, plane: compas.geometry.Plane, spacing: Optional[float] = None) -> List[List[compas.geometry.Polyline]]:
+    def contours(self,
+                 planes: List[compas.geometry.Plane]) -> List[List[compas.geometry.Polyline]]:
+        """Generate contour lines by slicing the BRep shape with a series of planes.
+
+        Parameters
+        ----------
+        planes : list[:class:`compas.geometry.Plane`]
+            The slicing planes.
+
+        Returns
+        -------
+        list[list[:class:`compas.geometry.Polyline`]]
+            A list of polylines per plane.
+
+        """
         pass

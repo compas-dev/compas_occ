@@ -12,12 +12,12 @@ class BRepVertex:
 
     Parameters
     ----------
-    vertex : :class:`TopoDS_Vertex`
+    vertex : ``TopoDS_Vertex``
         An OCC topological vertex data structure.
 
     Attributes
     ----------
-    vertex : :class:`TopoDS_Vertex`
+    vertex : ``TopoDS_Vertex``
         The underlying OCC vertex.
     point : :class:`compas.geometry.Point`, read-only
         The geometric point underlying the topological vertex.
