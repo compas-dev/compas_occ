@@ -12,9 +12,11 @@ Classes
     :toctree: generated/
     :nosignatures:
 
-    OCCNurbsCurve
-    OCCNurbsSurface
+    Curve
+    NurbsCurve
+    NurbsSurface
 
 """
-from .curves import OCCNurbsCurve  # noqa: F401
-from .surfaces import OCCNurbsSurface  # noqa: F401
+from .curves import Curve  # noqa: F401
+from .curves import NurbsCurve  # noqa: F401
+from .surfaces import NurbsSurface  # noqa: F401
