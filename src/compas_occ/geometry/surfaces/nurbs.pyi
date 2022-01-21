@@ -1,7 +1,5 @@
 from typing import Tuple, List, Dict, Union
 
-import numpy as np
-
 from compas.geometry import Point, Vector, Line, Frame, Box
 from compas.geometry import Transformation
 from compas.datastructures import Mesh
@@ -14,12 +12,9 @@ from compas_occ.conversions import compas_vector_to_occ_vector
 from compas_occ.conversions import compas_frame_from_occ_position
 from compas_occ.conversions import points2_from_array2
 
-from compas_occ.geometry.curves import OCCNurbsCurve
+from compas_occ.geometry.curves import NurbsCurve
 
-try:
-    from compas.geometry import NurbsSurface
-except ImportError:
-    from compas.geometry import Geometry as NurbsSurface
+from compas.geometry import NurbsSurface as BaseNurbsSurface
 
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.TopoDS import TopoDS_Shape
@@ -63,11 +58,11 @@ class Points:
         return iter(self.points)
 
 
-class OCCNurbsSurface(NurbsSurface):
+class NurbsSurface(BaseNurbsSurface):
 
     def __init__(self, name: str = None) -> None: ...
 
-    def __eq__(self, other: 'OCCNurbsSurface') -> bool: ...
+    def __eq__(self, other: 'NurbsSurface') -> bool: ...
 
     # ==============================================================================
     # Data
@@ -80,14 +75,14 @@ class OCCNurbsSurface(NurbsSurface):
     def data(self, data: Dict) -> None: ...
 
     @classmethod
-    def from_data(cls, data: Dict) -> 'OCCNurbsSurface': ...
+    def from_data(cls, data: Dict) -> 'NurbsSurface': ...
 
     # ==============================================================================
     # Constructors
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> 'OCCNurbsSurface': ...
+    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> 'NurbsSurface': ...
 
     @classmethod
     def from_parameters(cls,
@@ -100,22 +95,22 @@ class OCCNurbsSurface(NurbsSurface):
                         u_degree: int,
                         v_degree: int,
                         is_u_periodic: bool = False,
-                        is_v_periodic: bool = False) -> 'OCCNurbsSurface': ...
+                        is_v_periodic: bool = False) -> 'NurbsSurface': ...
 
     @classmethod
     def from_points(cls,
                     points: List[List[Point]],
                     u_degree: int = 3,
-                    v_degree: int = 3) -> 'OCCNurbsSurface': ...
+                    v_degree: int = 3) -> 'NurbsSurface': ...
 
     @classmethod
-    def from_step(cls, filepath: str) -> 'OCCNurbsSurface': ...
+    def from_step(cls, filepath: str) -> 'NurbsSurface': ...
 
     @classmethod
-    def from_face(cls, face: TopoDS_Face) -> 'OCCNurbsSurface': ...
+    def from_face(cls, face: TopoDS_Face) -> 'NurbsSurface': ...
 
     @classmethod
-    def from_fill(cls, curve1: OCCNurbsCurve, curve2: OCCNurbsCurve) -> 'OCCNurbsSurface': ...
+    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> 'NurbsSurface': ...
 
     # ==============================================================================
     # Conversions
@@ -181,11 +176,11 @@ class OCCNurbsSurface(NurbsSurface):
 
     def transform(self, T: Transformation) -> None: ...
 
-    def u_isocurve(self, u: float) -> OCCNurbsCurve: ...
+    def u_isocurve(self, u: float) -> NurbsCurve: ...
 
-    def v_isocurve(self, v: float) -> OCCNurbsCurve: ...
+    def v_isocurve(self, v: float) -> NurbsCurve: ...
 
-    def boundary(self) -> List[OCCNurbsCurve]: ...
+    def boundary(self) -> List[NurbsCurve]: ...
 
     def point_at(self, u: float, v: float) -> Point: ...
 
@@ -200,4 +195,3 @@ class OCCNurbsSurface(NurbsSurface):
     def obb(self, precision: float = 0.0) -> Box: ...
 
     def intersections_with_line(self, line: Line) -> List[Point]: ...
-

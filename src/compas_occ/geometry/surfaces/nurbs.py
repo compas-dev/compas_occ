@@ -19,9 +19,9 @@ from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import floats2_from_array2
 from compas_occ.conversions import points2_from_array2
 
-from ..curves import OCCNurbsCurve
+from ..curves import NurbsCurve
 
-from compas.geometry import NurbsSurface
+from compas.geometry import NurbsSurface as BaseNurbsSurface
 
 from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
@@ -80,7 +80,7 @@ class Points:
         return iter(self.points)
 
 
-class OCCNurbsSurface(NurbsSurface):
+class NurbsSurface(BaseNurbsSurface):
     """Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.
 
     Parameters
@@ -128,7 +128,7 @@ class OCCNurbsSurface(NurbsSurface):
     .. code-block:: python
 
         from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsSurface
+        from compas_occ.geometry import NurbsSurface
 
         points = [
             [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -137,14 +137,14 @@ class OCCNurbsSurface(NurbsSurface):
             [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
         ]
 
-        surface = OCCNurbsSurface.from_points(points=points)
+        surface = NurbsSurface.from_points(points=points)
 
     Construct a surface from points...
 
     .. code-block:: python
 
         from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsSurface
+        from compas_occ.geometry import NurbsSurface
 
         points = [
             [Point(0, 0, 0), Point(1, 0, +0), Point(2, 0, +0), Point(3, 0, +0), Point(4, 0, +0), Point(5, 0, 0)],
@@ -164,7 +164,7 @@ class OCCNurbsSurface(NurbsSurface):
             [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         ]
 
-        surface = OCCNurbsSurface.from_parameters(
+        surface = NurbsSurface.from_parameters(
             points=points,
             weights=weights,
             u_knots=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],
@@ -178,7 +178,7 @@ class OCCNurbsSurface(NurbsSurface):
     """
 
     def __init__(self, name=None):
-        super(OCCNurbsSurface, self).__init__(name=name)
+        super(NurbsSurface, self).__init__(name=name)
         self.occ_surface = None
         self._points = None
 
@@ -257,7 +257,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
             The constructed surface.
 
         """
@@ -295,7 +295,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
             The constructed surface.
 
         """
@@ -332,7 +332,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
 
         """
         surface = cls()
@@ -363,7 +363,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
 
         """
         u = len(points[0])
@@ -406,7 +406,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
 
         """
         raise NotImplementedError
@@ -422,7 +422,7 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
 
         """
         srf = BRep_Tool_Surface(face)
@@ -434,12 +434,12 @@ class OCCNurbsSurface(NurbsSurface):
 
         Parameters
         ----------
-        curve1 : :class:`compas.geometry.NurbsCurve`
-        curve2 : :class:`compas.geometry.NurbsCurve`
+        curve1 : :class:`compas_occ.geometry.NurbsCurve`
+        curve2 : :class:`compas_occ.geometry.NurbsCurve`
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        :class:`NurbsSurface`
 
         """
         surface = cls()
@@ -599,11 +599,11 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.NurbsCurve`
+        :class:`compas_occ.geometry.NurbsCurve`
 
         """
         occ_curve = self.occ_surface.UIso(u)
-        return OCCNurbsCurve.from_occ(occ_curve)
+        return NurbsCurve.from_occ(occ_curve)
 
     def v_isocurve(self, v):
         """Compute the isoparametric curve at parameter v.
@@ -614,18 +614,18 @@ class OCCNurbsSurface(NurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.NurbsCurve`
+        :class:`compas_occ.geometry.NurbsCurve`
 
         """
         occ_curve = self.occ_surface.VIso(v)
-        return OCCNurbsCurve.from_occ(occ_curve)
+        return NurbsCurve.from_occ(occ_curve)
 
     def boundary(self):
         """Compute the boundary curves of the surface.
 
         Returns
         -------
-        list[:class:`compas.geometry.NurbsCurve`]
+        list[:class:`compas_occ.geometry.NurbsCurve`]
 
         """
         umin, umax, vmin, vmax = self.occ_surface.Bounds()

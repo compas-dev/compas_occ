@@ -6,7 +6,7 @@ from compas.geometry import Frame
 from compas.geometry import Box
 from compas.geometry import distance_point_point
 
-from compas.geometry import NurbsCurve
+from compas.geometry import NurbsCurve as BaseNurbsCurve
 
 from compas_occ.conversions import harray1_from_points1
 from compas_occ.conversions import array1_from_points1
@@ -53,7 +53,7 @@ def occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is
     )
 
 
-class OCCNurbsCurve(NurbsCurve):
+class NurbsCurve(BaseNurbsCurve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
 
     Parameters
@@ -115,22 +115,22 @@ class OCCNurbsCurve(NurbsCurve):
     .. code-block:: python
 
         from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsCurve
+        from compas_occ.geometry import NurbsCurve
 
         points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 
-        curve = OCCNurbsCurve.from_points(points)
+        curve = NurbsCurve.from_points(points)
 
     Curve from parameters...
 
     .. code-block:: python
 
         from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsCurve
+        from compas_occ.geometry import NurbsCurve
 
         points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 
-        curve = OCCNurbsCurve.from_parameters(
+        curve = NurbsCurve.from_parameters(
             points=points,
             weights=[1.0, 1.0, 1.0, 1.0],
             knots=[0.0, 1.0],
@@ -141,10 +141,10 @@ class OCCNurbsCurve(NurbsCurve):
     """
 
     def __init__(self, name=None):
-        super(OCCNurbsCurve, self).__init__(name=name)
+        super(NurbsCurve, self).__init__(name=name)
         self.occ_curve = None
 
-    def __eq__(self, other: 'OCCNurbsCurve'):
+    def __eq__(self, other: 'NurbsCurve'):
         return self.occ_curve.IsEqual(other.occ_curve)
 
     # ==============================================================================
@@ -187,7 +187,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         curve = cls()
@@ -215,7 +215,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         curve = cls()
@@ -235,7 +235,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         p = len(points)
@@ -266,7 +266,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
@@ -285,7 +285,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         raise NotImplementedError
@@ -301,7 +301,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         from compas_occ.brep import BRepEdge
@@ -325,7 +325,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         raise NotImplementedError
@@ -341,7 +341,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         frame = Frame.from_plane(circle.plane)
@@ -377,7 +377,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         frame = Frame.from_plane(ellipse.plane)
@@ -414,7 +414,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         return cls.from_parameters(
@@ -733,7 +733,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.OCCNurbsCurve`
+        curve : :class:`compas_occ.geometry.NurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the two curves in addition to the curve parameters.
@@ -755,7 +755,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.OCCNurbsCurve`
+        curve : :class:`compas_occ.geometry.NurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the curves in addition to the closest points.
@@ -783,7 +783,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        list[:class:`compas_occ.geometry.OCCNurbsCurve`]
+        list[:class:`compas_occ.geometry.NurbsCurve`]
 
         """
         raise NotImplementedError
@@ -797,7 +797,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        list[:class:`compas_occ.geometry.OCCNurbsCurve`]
+        list[:class:`compas_occ.geometry.NurbsCurve`]
 
         """
         raise NotImplementedError
@@ -886,7 +886,7 @@ class OCCNurbsCurve(NurbsCurve):
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`NurbsCurve`
 
         """
         copy = self.copy()
