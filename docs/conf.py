@@ -138,6 +138,7 @@ NumpyDocstring._parse = patched_parse
 intersphinx_mapping = {
     "python": ("https://docs.python.org/", None),
     "compas": ("https://compas.dev/compas/latest/", None),
+    "compas_view2": ("https://compas.dev/compas_view2/latest/", None),
 }
 
 # linkcode
