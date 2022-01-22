@@ -34,8 +34,6 @@ class BRepEdge:
 
     Attributes
     ----------
-    edge : ``TopoDS_Edge``
-        The underlying OCC topological edge data structure.
     type : :class:`BRepEdge.CurveType`, read-only
         The type of the geometric curve underlying the topological edge.
     is_line : bool, read-only
@@ -54,16 +52,21 @@ class BRepEdge:
         True if the underlying curve is a bspline curve.
     is_other : bool, read-only
         True if the underlying curve is an other type of curve.
-    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+    vertices : list[:class:`~compas_occ.brep.BRepVertex`], read-only
         The topological vertices of the edge.
-    first_vertex : :class:`compas_occ.brep.BRepVertex`, read-only
+    first_vertex : :class:`~compas_occ.brep.BRepVertex`, read-only
         The first vertex with forward orientation.
-    last_vertex : :class:`compas_occ.brep.BRepVertex`, read-only
+    last_vertex : :class:`~compas_occ.brep.BRepVertex`, read-only
         The first vertex with reversed orientation.
+    curve : :class:`~compas_occ.geometry.Curve`
+        Curve geometry from the edge adaptor.
+
+    Other Attributes
+    ----------------
+    edge : ``TopoDS_Edge``
+        The underlying OCC topological edge data structure.
     adaptor : ``BRepAdaptor_Curve``
         Edge adaptor for extracting curve geometry.
-    curve : :class:`compas_occ.geometry.OCCCurve`
-        Curve geometry from the edge adaptor.
 
     """
 
@@ -163,7 +166,7 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`compas.geometry.Line`
+        :class:`~compas.geometry.Line`
             A COMPAS line.
 
         Raises
@@ -184,7 +187,7 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`compas.geometry.Circle`
+        :class:`~compas.geometry.Circle`
             A COMPAS circle.
 
         Raises
@@ -210,7 +213,7 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`compas.geometry.Ellipse`
+        :class:`~compas.geometry.Ellipse`
             A COMPAS ellipse.
 
         Raises
@@ -305,7 +308,7 @@ class BRepEdge:
 
         Returns
         -------
-        :class:`compas_occ.geometry.Curve`
+        :class:`~compas_occ.geometry.Curve`
 
         """
         return self.curve

@@ -113,7 +113,7 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     Parameters
     ----------
-    mesh : :class:`compas.datastructures.Mesh`
+    mesh : :class:`~compas.datastructures.Mesh`
         A COMPAS mesh data structure with triangle faces.
 
     Returns
@@ -144,7 +144,7 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     Parameters
     ----------
-    mesh : :class:`compas.datastructures.Mesh`
+    mesh : :class:`~compas.datastructures.Mesh`
         A COMPAS mesh data structure with quad faces.
 
     Returns
@@ -175,7 +175,7 @@ def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     Parameters
     ----------
-    mesh : :class:`compas.datastructures.Mesh`
+    mesh : :class:`~compas.datastructures.Mesh`
         A COMPAS mesh data structure.
 
     Returns

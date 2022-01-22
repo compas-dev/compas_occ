@@ -30,8 +30,6 @@ class Curve(BaseCurve):
 
     Attributes
     ----------
-    occ_curve : ``Geom_Curve``
-        An OCC curve implementing the abstract curve interface.
     domain : tuple[float, float]
         The parameter domain of the curve.
     is_closed
@@ -40,6 +38,11 @@ class Curve(BaseCurve):
     is_c1
     is_c2
     is_c3
+
+    Other Attributes
+    ----------------
+    occ_curve : ``Geom_Curve``
+        The underlying OCC curve.
 
     """
 
@@ -69,7 +72,7 @@ class Curve(BaseCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Point`
+        :class:`~compas.geometry.Point`
 
         """
         start, end = self.domain
@@ -88,7 +91,7 @@ class Curve(BaseCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Vector`
+        :class:`~compas.geometry.Vector`
 
         """
         point = gp_Pnt()
@@ -106,7 +109,7 @@ class Curve(BaseCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Vector`
+        :class:`~compas.geometry.Vector`
 
         """
         point = gp_Pnt()
@@ -125,7 +128,7 @@ class Curve(BaseCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Frame`
+        :class:`~compas.geometry.Frame`
 
         """
         point = gp_Pnt()
@@ -144,7 +147,7 @@ class Curve(BaseCurve):
 
         Returns
         -------
-        list[:class:`compas.geometry.Point`]
+        list[:class:`~compas.geometry.Point`]
 
         """
         a, b = self.domain

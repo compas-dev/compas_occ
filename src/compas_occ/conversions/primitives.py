@@ -17,12 +17,20 @@ def compas_point_to_occ_point(self: Point) -> gp_Pnt:
 
     Parameters
     ----------
-    self : :class:`compas.geometry.Point`
+    self : :class:`~compas.geometry.Point`
         The COMPAS point to convert.
 
     Returns
     -------
-    gp_Pnt
+    ``gp_Pnt``
+
+    Examples
+    --------
+    >>> from compas.geometry import Point
+    >>> Point.to_occ = compas_point_to_occ_point
+    >>> point = Point(0, 0, 0)
+    >>> point.to_occ()
+    <class 'gp_Pnt'>
 
     """
     return gp_Pnt(* self)
@@ -33,14 +41,14 @@ def compas_point_from_occ_point(cls: Type[Point], point: gp_Pnt) -> Point:
 
     Parameters
     ----------
-    cls : Type[:class:`compas.geometry.Point`]
+    cls : Type[:class:`~compas.geometry.Point`]
         The type of COMPAS point.
-    point : gp_Pnt
+    point : ``gp_Pnt``
         The OCC point.
 
     Returns
     -------
-    :class:`compas.geometry.Point`
+    :class:`~compas.geometry.Point`
 
     """
     return cls(point.X(), point.Y(), point.Z())
@@ -51,12 +59,20 @@ def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
 
     Parameters
     ----------
-    self : :class:`compas.geometry.Vector`
+    self : :class:`~compas.geometry.Vector`
         The COMPAS vector to convert.
 
     Returns
     -------
-    gp_Vec
+    ``gp_Vec``
+
+    Examples
+    --------
+    >>> from compas.geometry import Vector
+    >>> Vector.to_occ = compas_vector_to_occ_vector
+    >>> vector = Vector(1, 0, 0)
+    >>> vector.to_occ()
+    <class 'gp_Vec'>
 
     """
     return gp_Vec(* self)
@@ -67,14 +83,14 @@ def compas_vector_from_occ_vector(cls: Type[Vector], vector: gp_Vec) -> Vector:
 
     Parameters
     ----------
-    cls : Type[:class:`compas.geometry.Vector`]
+    cls : Type[:class:`~compas.geometry.Vector`]
         The type of COMPAS vector.
-    vector : gp_Vec
+    vector : ``gp_Vec``
         The OCC vector.
 
     Returns
     -------
-    :class:`compas.geometry.Vector`
+    :class:`~compas.geometry.Vector`
 
     """
     return cls(vector.X(), vector.Y(), vector.Z())
@@ -85,12 +101,20 @@ def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
 
     Parameters
     ----------
-    self : :class:`compas.geometry.Vector`
+    self : :class:`~compas.geometry.Vector`
         The COMPAS vector to convert.
 
     Returns
     -------
-    gp_Dir
+    ``gp_Dir``
+
+    Examples
+    --------
+    >>> from compas.geometry import Vector
+    >>> Vector.to_occ_dir = compas_vector_to_occ_direction
+    >>> vector = Vector(1, 0, 0)
+    >>> vector.to_occ_dir()
+    <class 'gp_Dir'>
 
     """
     return gp_Dir(* self)
@@ -101,14 +125,14 @@ def compas_vector_from_occ_direction(cls: Type[Vector], vector: gp_Dir) -> Vecto
 
     Parameters
     ----------
-    cls : Type[:class:`compas.geometry.Vector`]
+    cls : Type[:class:`~compas.geometry.Vector`]
         The type of COMPAS vector.
-    vector : gp_Dir
+    vector : ``gp_Dir``
         The OCC direction.
 
     Returns
     -------
-    :class:`compas.geometry.Vector`
+    :class:`~compas.geometry.Vector`
 
     """
     return cls(vector.X(), vector.Y(), vector.Z())
@@ -119,12 +143,20 @@ def compas_line_to_occ_line(self: Line) -> gp_Lin:
 
     Parameters
     ----------
-    self : :class:`compas.geometry.Line`
+    self : :class:`~compas.geometry.Line`
         The COMPAS line to convert.
 
     Returns
     -------
-    gp_Lin
+    ``gp_Lin``
+
+    Examples
+    --------
+    >>> from compas.geometry import Line
+    >>> Line.to_occ = compas_line_to_occ_line
+    >>> line = Line([0, 0, 0], [1, 0, 0])
+    >>> line.to_occ()
+    <class 'gp_Lin'>
 
     """
     return gp_Lin(compas_point_to_occ_point(self.start), compas_vector_to_occ_direction(self.direction))
@@ -135,14 +167,14 @@ def compas_frame_from_occ_position(cls: Type[Frame], position: gp_Ax3) -> Frame:
 
     Parameters
     ----------
-    cls : Type[:class:`compas.geometry.Frame`]
+    cls : Type[:class:`~compas.geometry.Frame`]
         The type of COMPAS frame.
-    position : gp_Ax3
+    position : ``gp_Ax3``
         The OCC position.
 
     Returns
     -------
-    :class:`compas.geometry.Frame`
+    :class:`~compas.geometry.Frame`
 
     """
     return cls(

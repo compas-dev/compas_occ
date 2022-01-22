@@ -22,23 +22,26 @@ class BRepFace:
 
     Parameters
     ----------
-    face : TopoDS_Face
+    face : ``TopoDS_Face``
         An OCC BRep face.
 
     Attributes
     ----------
-    face : TopoDS_Face
-        The OCC BRep face.
-    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+    vertices : list[:class:`~compas_occ.brep.BRepVertex`], read-only
         List of BRep vertices.
-    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
+    edges : list[:class:`~compas_occ.brep.BRepEdge`], read-only
         List of BRep edges.
-    loops : list[:class:`compas_occ.brep.BRepLoop`], read-only
+    loops : list[:class:`~compas_occ.brep.BRepLoop`], read-only
         List of BRep loops.
-    adaptor : BRepAdaptor_Surface
-        Adaptor for extracting surface geometry from the BRep face.
-    surface : GeomAdaptor_Surface
+    surface : ``GeomAdaptor_Surface``
         Surface geometry from the adaptor.
+
+    Other Attributes
+    ----------------
+    face : ``TopoDS_Face``
+        The OCC BRep face.
+    adaptor : ``BRepAdaptor_Surface``
+        Adaptor for extracting surface geometry from the BRep face.
 
     """
 

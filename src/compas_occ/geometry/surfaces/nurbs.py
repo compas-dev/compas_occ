@@ -90,13 +90,7 @@ class NurbsSurface(BaseNurbsSurface):
 
     Attributes
     ----------
-    occ_surface : Geom_BSplineSurface, read-only
-        The underlying OCC surface.
-    occ_shape : TopoDS_Shape, read-only
-        An OCC face containing the surface converted to a shape.
-    occ_face : TopoDS_Face, read-only
-        An OCC face containing the surface.
-    points : list[list[:class:`compas.geometry.Point`]], read-only
+    points : list[list[:class:`~compas.geometry.Point`]], read-only
         The control points of the surface.
     weights : list[list[float]], read-only
         The weights of the control points of the surface.
@@ -120,6 +114,15 @@ class NurbsSurface(BaseNurbsSurface):
         Flag indicating if the surface is periodic in the U direction.
     is_v_periodic : bool, read-only
         Flag indicating if the surface is periodic in the V direction.
+
+    Other Attributes
+    ----------------
+    occ_surface : ``Geom_BSplineSurface``, read-only
+        The underlying OCC surface.
+    occ_shape : ``TopoDS_Shape``, read-only
+        An OCC face containing the surface converted to a shape.
+    occ_face : ``TopoDS_Face``, read-only
+        An OCC face containing the surface.
 
     Examples
     --------
@@ -309,7 +312,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Parameters
         ----------
-        points : list[list[:class:`compas.geometry.Point`]]
+        points : list[list[:class:`~compas.geometry.Point`]]
             The control points of the surface.
         weights : list[list[float]]
             The weights of the control points.
@@ -356,7 +359,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Parameters
         ----------
-        points : list[list[:class:`compas.geometry.Point`]]
+        points : list[list[:class:`~compas.geometry.Point`]]
             The control points.
         u_degree : int, optional
         v_degree : int, optional
@@ -434,8 +437,8 @@ class NurbsSurface(BaseNurbsSurface):
 
         Parameters
         ----------
-        curve1 : :class:`compas_occ.geometry.NurbsCurve`
-        curve2 : :class:`compas_occ.geometry.NurbsCurve`
+        curve1 : :class:`~compas_occ.geometry.NurbsCurve`
+        curve2 : :class:`~compas_occ.geometry.NurbsCurve`
 
         Returns
         -------
@@ -481,7 +484,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.datastructures.Mesh`
+        :class:`~compas.datastructures.Mesh`
 
         """
         from OCC.Core.Tesselator import ShapeTesselator
@@ -579,7 +582,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Parameters
         ----------
-        T : :class:`compas.geometry.Transformation`
+        T : :class:`~compas.geometry.Transformation`
 
         Returns
         -------
@@ -599,7 +602,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.NurbsCurve`
+        :class:`~compas_occ.geometry.NurbsCurve`
 
         """
         occ_curve = self.occ_surface.UIso(u)
@@ -614,7 +617,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.NurbsCurve`
+        :class:`~compas_occ.geometry.NurbsCurve`
 
         """
         occ_curve = self.occ_surface.VIso(v)
@@ -625,7 +628,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        list[:class:`compas_occ.geometry.NurbsCurve`]
+        list[:class:`~compas_occ.geometry.NurbsCurve`]
 
         """
         umin, umax, vmin, vmax = self.occ_surface.Bounds()
@@ -649,7 +652,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Point`
+        :class:`~compas.geometry.Point`
 
         """
         point = self.occ_surface.Value(u, v)
@@ -665,7 +668,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Vector`
+        :class:`~compas.geometry.Vector`
 
         """
         props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
@@ -685,7 +688,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Frame`
+        :class:`~compas.geometry.Frame`
 
         """
         point = gp_Pnt()
@@ -706,7 +709,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Point` | tuple[:class:`compas.geometry.Point`, tuple[float, float]]
+        :class:`~compas.geometry.Point` | tuple[:class:`~compas.geometry.Point`, tuple[float, float]]
             If `return_parameters` is False, the nearest point on the surface.
             If `return_parameters` is True, the UV parameters in addition to the nearest point on the surface.
 
@@ -727,7 +730,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Box`
+        :class:`~compas.geometry.Box`
 
         """
         box = Bnd_Box()
@@ -750,7 +753,7 @@ class NurbsSurface(BaseNurbsSurface):
 
         Returns
         -------
-        :class:`compas.geometry.Box`
+        :class:`~compas.geometry.Box`
 
         """
         box = Bnd_OBB()
@@ -762,11 +765,11 @@ class NurbsSurface(BaseNurbsSurface):
 
         Parameters
         ----------
-        line : :class:`compas.geometry.Line`
+        line : :class:`~compas.geometry.Line`
 
         Returns
         -------
-        list[:class:`compas.geometry.Point`]
+        list[:class:`~compas.geometry.Point`]
 
         """
         intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)

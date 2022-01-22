@@ -17,10 +17,13 @@ class BRepVertex:
 
     Attributes
     ----------
+    point : :class:`~compas.geometry.Point`, read-only
+        The geometric point underlying the topological vertex.
+
+    Other Attributes
+    ----------------
     vertex : ``TopoDS_Vertex``
         The underlying OCC vertex.
-    point : :class:`compas.geometry.Point`, read-only
-        The geometric point underlying the topological vertex.
 
     """
 

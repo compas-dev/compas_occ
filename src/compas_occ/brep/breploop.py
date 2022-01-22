@@ -13,17 +13,20 @@ class BRepLoop:
 
     Parameters
     ----------
-    loop : TopoDS_Wire
+    loop : ``TopoDS_Wire``
         An OCC BRep wire.
 
     Attributes
     ----------
-    loop : TopoDS_Wire
-        The OCC BRep wire.
-    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+    vertices : list[:class:`~compas_occ.brep.BRepVertex`], read-only
         List of BRep vertices.
-    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
+    edges : list[:class:`~compas_occ.brep.BRepEdge`], read-only
         List of BRep edges.
+
+    Other Attributes
+    ----------------
+    loop : ``TopoDS_Wire``
+        The OCC BRep wire.
 
     """
 

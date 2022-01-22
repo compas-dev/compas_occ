@@ -16,7 +16,7 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
 
     Parameters
     ----------
-    points : list[:class:`compas.geometry.Point`]
+    points : list[:class:`~compas.geometry.Point`]
 
     Returns
     -------
@@ -34,7 +34,7 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
 
     Parameters
     ----------
-    points : list[:class:`compas.geometry.Point`]
+    points : list[:class:`~compas.geometry.Point`]
 
     Returns
     -------
@@ -56,7 +56,7 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
 
     Returns
     -------
-    list[:class:`compas.geometry.Point`]
+    list[:class:`~compas.geometry.Point`]
 
     """
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
@@ -67,7 +67,7 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
 
     Parameters
     ----------
-    points : list[list[:class:`compas.geometry.Point`]]
+    points : list[list[:class:`~compas.geometry.Point`]]
 
     Returns
     -------
@@ -93,7 +93,7 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
 
     Returns
     -------
-    list[list[:class:`compas.geometry.Point`]]
+    list[list[:class:`~compas.geometry.Point`]]
 
     """
     points = [[None for j in range(array.NbRows())] for i in range(array.NbColumns())]

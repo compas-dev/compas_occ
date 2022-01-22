@@ -63,23 +63,7 @@ class NurbsCurve(BaseNurbsCurve):
 
     Attributes
     ----------
-    occ_curve : Geom_BSplineCurve
-        The underlying OCC curve.
-    occ_shape : TopoDS_Shape, read-only
-        The underlying OCC curve embedded in an edge and converted to a shape.
-    occ_edge : TopoDS_Edge, read-only
-        The underlying OCC curve embedded in an edge.
-    occ_points : TColgp_Array1OfPnt, read-only
-        The control points of the curve.
-    occ_weights : TColStd_Array1OfReal, read-only
-        The weights of the control points of the curve.
-    occ_knots : TColStd_Array1OfReal, read-only
-        The knots of the curve, without multiplicities.
-    occ_knotsequence : TColStd_Array1OfReal, read-only
-        The full vector of knots of the curve.
-    occ_multiplicities : TColStd_Array1OfInteger, read-only
-        The multiplicities of the knots of the curve.
-    points : list[:class:`compas.geometry.Point`], read-only
+    points : list[:class:`~compas.geometry.Point`], read-only
         The control points of the curve.
     weights : list[float], read-only
         The weights of the control points of the curve.
@@ -97,9 +81,9 @@ class NurbsCurve(BaseNurbsCurve):
         The parameter domain of the curve.
     order : int, read-only
         The order of the curve (= degree + 1).
-    start : :class:`compas.geometry.Point`, read-only
+    start : :class:`~compas.geometry.Point`, read-only
         The start point of the curve.
-    end : :class:`compas.geometry.Point`, read-only
+    end : :class:`~compas.geometry.Point`, read-only
         The end point of the curve.
     is_closed : bool, read-only
         Flag indicating that the curve is closed.
@@ -108,35 +92,45 @@ class NurbsCurve(BaseNurbsCurve):
     is_rational : bool, read-only
         Flag indicating that the curve is rational.
 
+    Other Attributes
+    ----------------
+    occ_curve : ``Geom_BSplineCurve``
+        The underlying OCC curve.
+    occ_shape : ``TopoDS_Shape``, read-only
+        The underlying OCC curve embedded in an edge and converted to a shape.
+    occ_edge : ``TopoDS_Edge``, read-only
+        The underlying OCC curve embedded in an edge.
+    occ_points : ``TColgp_Array1OfPnt``, read-only
+        The control points of the curve.
+    occ_weights : ``TColStd_Array1OfReal``, read-only
+        The weights of the control points of the curve.
+    occ_knots : ``TColStd_Array1OfReal``, read-only
+        The knots of the curve, without multiplicities.
+    occ_knotsequence : ``TColStd_Array1OfReal``, read-only
+        The full vector of knots of the curve.
+    occ_multiplicities : ``TColStd_Array1OfInteger``, read-only
+        The multiplicities of the knots of the curve.
+
     Examples
     --------
     Curve from points...
 
-    .. code-block:: python
-
-        from compas.geometry import Point
-        from compas_occ.geometry import NurbsCurve
-
-        points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
-
-        curve = NurbsCurve.from_points(points)
+    >>> from compas.geometry import Point
+    >>> from compas_occ.geometry import NurbsCurve
+    >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
+    >>> curve = NurbsCurve.from_points(points)
 
     Curve from parameters...
 
-    .. code-block:: python
-
-        from compas.geometry import Point
-        from compas_occ.geometry import NurbsCurve
-
-        points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
-
-        curve = NurbsCurve.from_parameters(
-            points=points,
-            weights=[1.0, 1.0, 1.0, 1.0],
-            knots=[0.0, 1.0],
-            multiplicities=[4, 4],
-            degree=3
-        )
+    >>> from compas.geometry import Point
+    >>> from compas_occ.geometry import NurbsCurve
+    >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
+    >>> curve = NurbsCurve.from_parameters(
+    ...     points=points,
+    ...     weights=[1.0, 1.0, 1.0, 1.0],
+    ...     knots=[0.0, 1.0],
+    ...     multiplicities=[4, 4],
+    ...     degree=3)
 
     """
 
@@ -153,7 +147,7 @@ class NurbsCurve(BaseNurbsCurve):
 
     @property
     def data(self):
-        """dict - Representation of the curve as a dict containing only native Python objects."""
+        """dict : Representation of the curve as a dict containing only native Python objects."""
         return {
             'points': [point.data for point in self.points],
             'weights': self.weights,
@@ -200,7 +194,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`compas.geometry.Point`]
+        points : list[:class:`~compas.geometry.Point`]
             The control points.
         weights : list[float]
             The weights of the control points.
@@ -228,7 +222,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`compas.geometry.Point`]
+        points : list[:class:`~compas.geometry.Point`]
             The control points of the curve.
         degree : int, optional
             The degree of the curve.
@@ -259,7 +253,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`compas.geometry.Point`]
+        points : list[:class:`~compas.geometry.Point`]
             The control points of the curve.
         precision : float, optional
             The precision of the interpolation.
@@ -316,7 +310,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        arc : :class:`compas.geometry.Arc`
+        arc : :class:`~compas.geometry.Arc`
             The arc geometry.
         degree : int
             The degree of the resulting NURBS curve.
@@ -336,7 +330,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        circle : :class:`compas.geometry.Circle`
+        circle : :class:`~compas.geometry.Circle`
             The circle geometry.
 
         Returns
@@ -372,7 +366,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        ellipse : :class:`compas.geometry.Ellipse`
+        ellipse : :class:`~compas.geometry.Ellipse`
             The ellipse geometry.
 
         Returns
@@ -409,7 +403,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        line : :class:`compas.geometry.Line`
+        line : :class:`~compas.geometry.Line`
             The line geometry.
 
         Returns
@@ -454,7 +448,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Line`
+        :class:`~compas.geometry.Line`
 
         """
         raise NotImplementedError
@@ -464,7 +458,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Polyline`
+        :class:`~compas.geometry.Polyline`
 
         """
         raise NotImplementedError
@@ -586,7 +580,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        T : :class:`compas.geometry.Transformation`
+        T : :class:`~compas.geometry.Transformation`
 
         Returns
         -------
@@ -617,7 +611,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Point`
+        :class:`~compas.geometry.Point`
             the corresponding point on the curve.
 
         """
@@ -634,7 +628,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Vector`
+        :class:`~compas.geometry.Vector`
             The corresponding tangent vector.
 
         """
@@ -653,7 +647,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Vector`
+        :class:`~compas.geometry.Vector`
             The corresponding curvature vector.
 
         """
@@ -673,7 +667,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Frame`
+        :class:`~compas.geometry.Frame`
             The corresponding local frame.
 
         """
@@ -689,14 +683,14 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        point : :class:`compas.geometry.Point`
+        point : :class:`~compas.geometry.Point`
             The point to project to the curve.
         return_parameter : bool, optional
             If True, return the curve parameter in addition to the closest point.
 
         Returns
         -------
-        :class:`compas.geometry.Point` | tuple[:class:`compas.geometry.Point`, float]
+        :class:`~compas.geometry.Point` | tuple[:class:`~compas.geometry.Point`, float]
             If `return_parameter` is False, the nearest point on the curve.
             If `return_parameter` is True, the nearest point on the curve and the corresponding parameter.
 
@@ -733,7 +727,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.NurbsCurve`
+        curve : :class:`~compas_occ.geometry.NurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the two curves in addition to the curve parameters.
@@ -755,14 +749,14 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.NurbsCurve`
+        curve : :class:`~compas_occ.geometry.NurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the curves in addition to the closest points.
 
         Returns
         -------
-        tuple[:class:`compas.geometry.Point`, :class:`compas.geometry.Point`] | tuple[tuple[:class:`compas.geometry.Point`, :class:`compas.geometry.Point`], float]
+        tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`] | tuple[tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`], float]
             If `return_distance` is False, the closest points.
             If `return_distance` is True, the distance in addition to the closest points.
 
@@ -783,7 +777,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        list[:class:`compas_occ.geometry.NurbsCurve`]
+        list[:class:`~compas_occ.geometry.NurbsCurve`]
 
         """
         raise NotImplementedError
@@ -797,7 +791,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        list[:class:`compas_occ.geometry.NurbsCurve`]
+        list[:class:`~compas_occ.geometry.NurbsCurve`]
 
         """
         raise NotImplementedError
@@ -811,7 +805,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Box`
+        :class:`~compas.geometry.Box`
 
         """
         box = Bnd_Box()
@@ -829,7 +823,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`compas.geometry.Box`
+        :class:`~compas.geometry.Box`
 
         """
         raise NotImplementedError
