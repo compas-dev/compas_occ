@@ -61,26 +61,63 @@ class BRep:
 
     Attributes
     ----------
-    shape : ``TopoDS_Shape``
-        The underlying OCC shape of the BRep.
-    type : ``TopAbs_ShapeEnum``, read-only
-        The type of BRep shape.
-    vertices : list[:class:`compas_occ.brep.BRepVertex`], read-only
+    vertices : list[:class:`~compas_occ.brep.BRepVertex`], read-only
         The vertices of the BRep.
-    edges : list[:class:`compas_occ.brep.BRepEdge`], read-only
+    edges : list[:class:`~compas_occ.brep.BRepEdge`], read-only
         The edges of the BRep.
-    loops : list[:class:`compas_occ.brep.BRepLoop`], read-only
+    loops : list[:class:`~compas_occ.brep.BRepLoop`], read-only
         The loops of the BRep.
-    faces : list[:class:`compas_occ.brep.BRepFace`], read-only
+    faces : list[:class:`~compas_occ.brep.BRepFace`], read-only
         The faces of the BRep.
-    orientation : TopAbs_Orientation, read-only
-        Orientation of the shape.
-    frame : :class:`compas.geometry.Frame`, read-only
+    frame : :class:`~compas.geometry.Frame`, read-only
         The local coordinate system of the BRep.
     area : float, read-only
         The surface area of the BRep.
     volume : float, read-only
         The volume of the regions contained by the BRep.
+
+    Other Attributes
+    ----------------
+    shape : ``TopoDS_Shape``
+        The underlying OCC shape of the BRep.
+    type : ``TopAbs_ShapeEnum``, read-only
+        The type of BRep shape.
+    orientation : ``TopAbs_Orientation``, read-only
+        Orientation of the shape.
+
+    Examples
+    --------
+    Constructors
+
+    >>> brep = BRep.from_corners([0, 0, 0], [1, 0, 0], [1, 1, 1], [1, 1, 0])
+
+    >>> from compas.geometry import Box
+    >>> box = Box.from_width_height_depth(1, 1, 1)
+    >>> vertices, faces = box.to_vertices_and_faces()
+    >>> polygons = [[vertices[index] for index in face] for face in faces]
+    >>> brep = BRep.from_polygons(polygons)
+
+    >>> from compas.geometry import Box
+    >>> box = Box.from_width_height_depth(1, 1, 1)
+    >>> brep = BRep.from_box(box)
+
+    >>> from compas.geometry import Box, Sphere
+    >>> box = Box.from_width_height_depth(1, 1, 1)
+    >>> sphere = Sphere([1, 1, 1], 0.5)
+    >>> A = BRep.from_box(box)
+    >>> B = BRep.from_sphere(sphere)
+    >>> brep = BRep.from_boolean_union(A, B)
+
+    Booleans
+
+    >>> from compas.geometry import Box, Sphere
+    >>> box = Box.from_width_height_depth(1, 1, 1)
+    >>> sphere = Sphere([1, 1, 1], 0.5)
+    >>> A = BRep.from_box(box)
+    >>> B = BRep.from_sphere(sphere)
+    >>> C = A + B
+    >>> D = A - B
+    >>> E = A & B
 
     """
 
@@ -91,8 +128,53 @@ class BRep:
     # Customization
     # ==============================================================================
 
-    # def __eq__(self, other):
-    #     pass
+    def __add__(self, other):
+        """Compute the boolean union using the "+" operator of this BRep and another.
+
+        Parameters
+        ----------
+        other : :class:`compas_occ.brep.BRep`
+            The BRep to add.
+
+        Returns
+        -------
+        :class:`compas_occ.brep.BRep`
+            The resulting BRep.
+
+        """
+        return BRep.from_boolean_union(self, other)
+
+    def __sub__(self, other):
+        """Compute the boolean difference using the "-" operator of this shape and another.
+
+        Parameters
+        ----------
+        other : :class:`compas_occ.brep.BRep`
+            The BRep to subtract.
+
+        Returns
+        -------
+        :class:`compas_occ.brep.BRep`
+            The resulting BRep.
+
+        """
+        return BRep.from_boolean_difference(self, other)
+
+    def __and__(self, other):
+        """Compute the boolean intersection using the "&" operator of this shape and another.
+
+        Parameters
+        ----------
+        other : :class:`compas_occ.brep.BRep`
+            The BRep to intersect with.
+
+        Returns
+        -------
+        :class:`compas_occ.brep.BRep`
+            The resulting BRep.
+
+        """
+        return BRep.from_boolean_intersection(self, other)
 
     # ==============================================================================
     # Properties
@@ -192,14 +274,14 @@ class BRep:
 
         Parameters
         ----------
-        p1 : :class:`compas.geometry.Point`
-        p2 : :class:`compas.geometry.Point`
-        p3 : :class:`compas.geometry.Point`
-        p4 : :class:`compas.geometry.Point`, optional
+        p1 : :class:`~compas.geometry.Point`
+        p2 : :class:`~compas.geometry.Point`
+        p3 : :class:`~compas.geometry.Point`
+        p4 : :class:`~compas.geometry.Point`, optional
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         if not p4:
@@ -216,11 +298,11 @@ class BRep:
 
         Parameters
         ----------
-        polygons : list[:class:`compas.geometry.Polygon`]
+        polygons : list[:class:`~compas.geometry.Polygon`]
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         shell = TopoDS_Shell()
@@ -243,11 +325,11 @@ class BRep:
 
         Parameters
         ----------
-        curves : list[:class:`compas.geometry.NurbsCurve`]
+        curves : list[:class:`~compas.geometry.NurbsCurve`]
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         raise NotImplementedError
@@ -258,11 +340,11 @@ class BRep:
 
         Parameters
         ----------
-        box : :class:`compas.geometry.Box`
+        box : :class:`~compas.geometry.Box`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
@@ -280,11 +362,11 @@ class BRep:
 
         Parameters
         ----------
-        sphere : :class:`compas.geometry.Sphere`
+        sphere : :class:`~compas.geometry.Sphere`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         brep = BRep()
@@ -297,11 +379,11 @@ class BRep:
 
         Parameters
         ----------
-        cylinder : :class:`compas.geometry.Cylinder`
+        cylinder : :class:`~compas.geometry.Cylinder`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         plane = cylinder.circle.plane
@@ -320,11 +402,11 @@ class BRep:
 
         Parameters
         ----------
-        cone : :class:`compas.geometry.Cone`
+        cone : :class:`~compas.geometry.Cone`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         raise NotImplementedError
@@ -335,11 +417,11 @@ class BRep:
 
         Parameters
         ----------
-        torus : :class:`compas.geometry.Torus`
+        torus : :class:`~compas.geometry.Torus`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         raise NotImplementedError
@@ -350,12 +432,12 @@ class BRep:
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.BRep`
-        B : :class:`compas_occ.brep.BRep`
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         cut = BRepAlgoAPI_Cut(A.shape, B.shape)
@@ -371,12 +453,12 @@ class BRep:
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.BRep`
-        B : :class:`compas_occ.brep.BRep`
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         common = BRepAlgoAPI_Common(A.shape, B.shape)
@@ -392,12 +474,12 @@ class BRep:
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.BRep`
-        B : :class:`compas_occ.brep.BRep`
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
@@ -413,11 +495,11 @@ class BRep:
 
         Parameters
         ----------
-        mesh : :class:`compas.datastructures.Mesh`
+        mesh : :class:`~compas.datastructures.Mesh`
 
         Returns
         -------
-        :class:`compas_occ.brep.BRep`
+        :class:`~compas_occ.brep.BRep`
 
         """
         shell = TopoDS_Shell()
@@ -488,7 +570,7 @@ class BRep:
 
         Returns
         -------
-        :class:`compas.datastructures.Mesh`
+        :class:`~compas.datastructures.Mesh`
 
         """
         tesselation = ShapeTesselator(self.shape)
@@ -509,7 +591,7 @@ class BRep:
 
         Returns
         -------
-        list[:class:`compas.datastructures.Mesh`]
+        list[:class:`~compas.datastructures.Mesh`]
 
         """
         converter = BRepBuilderAPI_NurbsConvert(self.shape, False)
@@ -676,12 +758,12 @@ class BRep:
 
         Parameters
         ----------
-        planes : list[:class:`compas.geometry.Plane`]
+        planes : list[:class:`~compas.geometry.Plane`]
             The slicing planes.
 
         Returns
         -------
-        list[list[:class:`compas.geometry.Polyline`]]
+        list[list[:class:`~compas.geometry.Polyline`]]
             A list of polylines per plane.
 
         """
