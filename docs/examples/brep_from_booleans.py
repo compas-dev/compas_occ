@@ -23,7 +23,16 @@ A = BRep.from_box(box)
 B1 = BRep.from_cylinder(cx)
 B2 = BRep.from_cylinder(cy)
 B3 = BRep.from_cylinder(cz)
-C = BRep.from_boolean_difference(A, BRep.from_boolean_union(BRep.from_boolean_union(B1, B2), B3))
+
+# C = BRep.from_boolean_difference(
+#     A,
+#     BRep.from_boolean_union(
+#         BRep.from_boolean_union(B1, B2),
+#         B3
+#     )
+# )
+
+C = A - (B1 + B2 + B3)
 
 # ==============================================================================
 # Visualisation
