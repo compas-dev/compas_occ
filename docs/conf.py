@@ -125,8 +125,16 @@ def parse_attributes_section(self, section):
 NumpyDocstring._parse_attributes_section = parse_attributes_section
 
 
+def parse_other_attributes_section(self, section):
+    return self._format_fields("Other Attributes", self._consume_fields())
+
+
+NumpyDocstring._parse_other_attributes_section = parse_other_attributes_section
+
+
 def patched_parse(self):
     self._sections["attributes"] = self._parse_attributes_section
+    self._sections["other attributes"] = self._parse_other_attributes_section
     self._unpatched_parse()
 
 
