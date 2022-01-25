@@ -1,13 +1,13 @@
 import random
 from compas.geometry import Polyline
-from compas_occ.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
 
 U = 10
 V = 20
 
-surface = NurbsSurface.from_meshgrid(nu=U, nv=V)
+surface = OCCNurbsSurface.from_meshgrid(nu=U, nv=V)
 
 # ==============================================================================
 # Update

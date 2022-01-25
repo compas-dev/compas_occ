@@ -1,6 +1,6 @@
 from compas.geometry import Point
 from compas.geometry import Polyline, Bezier
-from compas_occ.geometry import NurbsCurve
+from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
 
@@ -9,7 +9,7 @@ bezier = Bezier(points)
 
 points = [Point(3, 0, 0), Point(4, 3, 0), Point(5, 0, 0)]
 
-curve1 = NurbsCurve.from_parameters(
+curve1 = OCCNurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0],
@@ -17,7 +17,7 @@ curve1 = NurbsCurve.from_parameters(
     degree=2
 )
 
-curve2 = NurbsCurve.from_parameters(
+curve2 = OCCNurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 2.0, 1.0],
     knots=[0.0, 1.0],
@@ -25,7 +25,7 @@ curve2 = NurbsCurve.from_parameters(
     degree=2
 )
 
-curve3 = NurbsCurve.from_parameters(
+curve3 = OCCNurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0],

@@ -1,28 +1,34 @@
-from .nurbs import NurbsSurface
+from .surface import OCCSurface  # noqa : F401
+from .nurbs import OCCNurbsSurface
 
 try:
-    from compas.geometry import NurbsSurface as BaseNurbsSurface
+    from compas.geometry import Surface
+    from compas.geometry import NurbsSurface
 except ImportError:
     pass
 else:
     from compas.plugins import plugin
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface(*args, **kwargs):
-        return super(BaseNurbsSurface, NurbsSurface).__new__(NurbsSurface)
+    def new_surface(cls, *args, **kwargs):
+        return super(Surface, cls).__new__(cls)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_parameters(*args, **kwargs):
-        return NurbsSurface.from_parameters(*args, **kwargs)
+    def new_nurbssurface(cls, *args, **kwargs):
+        return super(NurbsSurface, cls).__new__(cls)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_points(*args, **kwargs):
-        return NurbsSurface.from_points(*args, **kwargs)
+    def new_nurbssurface_from_parameters(cls, *args, **kwargs):
+        return OCCNurbsSurface.from_parameters(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_fill(*args, **kwargs):
-        return NurbsSurface.from_fill(*args, **kwargs)
+    def new_nurbssurface_from_points(cls, *args, **kwargs):
+        return OCCNurbsSurface.from_points(*args, **kwargs)
 
     @plugin(category='factories', requires=['compas_occ'])
-    def new_nurbssurface_from_step(*args, **kwargs):
-        return NurbsSurface.from_step(*args, **kwargs)
+    def new_nurbssurface_from_fill(cls, *args, **kwargs):
+        return OCCNurbsSurface.from_fill(*args, **kwargs)
+
+    @plugin(category='factories', requires=['compas_occ'])
+    def new_nurbssurface_from_step(cls, *args, **kwargs):
+        return OCCNurbsSurface.from_step(*args, **kwargs)

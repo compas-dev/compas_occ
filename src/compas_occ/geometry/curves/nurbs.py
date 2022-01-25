@@ -3,10 +3,9 @@ from math import sqrt
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Frame
-from compas.geometry import Box
 from compas.geometry import distance_point_point
 
-from compas.geometry import NurbsCurve as BaseNurbsCurve
+from compas.geometry import NurbsCurve
 
 from compas_occ.conversions import harray1_from_points1
 from compas_occ.conversions import array1_from_points1
@@ -18,23 +17,19 @@ from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_to_occ_vector
 
-from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
-from OCC.Core.gp import gp_Vec
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
-from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
-from OCC.Core.Bnd import Bnd_Box
-from OCC.Core.BndLib import BndLib_Add3dCurve_Add
 from OCC.Core.TopoDS import topods_Edge
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
+
+from .curve import OCCCurve
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
@@ -53,7 +48,7 @@ def occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is
     )
 
 
-class NurbsCurve(BaseNurbsCurve):
+class OCCNurbsCurve(OCCCurve, NurbsCurve):
     """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
 
     Parameters
@@ -73,22 +68,6 @@ class NurbsCurve(BaseNurbsCurve):
         The full vector of knots of the curve.
     multiplicities : list[int], read-only
         The multiplicities of the knots of the curve.
-    degree : int, read-only
-        The degree of the curve.
-    dimension : int, read-only
-        The dimension of the curve.
-    domain : tuple[float, float], read-only
-        The parameter domain of the curve.
-    order : int, read-only
-        The order of the curve (= degree + 1).
-    start : :class:`~compas.geometry.Point`, read-only
-        The start point of the curve.
-    end : :class:`~compas.geometry.Point`, read-only
-        The end point of the curve.
-    is_closed : bool, read-only
-        Flag indicating that the curve is closed.
-    is_periodic : bool, read-only
-        Flag indicating that the curve is periodic.
     is_rational : bool, read-only
         Flag indicating that the curve is rational.
 
@@ -116,16 +95,16 @@ class NurbsCurve(BaseNurbsCurve):
     Curve from points...
 
     >>> from compas.geometry import Point
-    >>> from compas_occ.geometry import NurbsCurve
+    >>> from compas_occ.geometry import OCCNurbsCurve
     >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
-    >>> curve = NurbsCurve.from_points(points)
+    >>> curve = OCCNurbsCurve.from_points(points)
 
     Curve from parameters...
 
     >>> from compas.geometry import Point
-    >>> from compas_occ.geometry import NurbsCurve
+    >>> from compas_occ.geometry import OCCNurbsCurve
     >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
-    >>> curve = NurbsCurve.from_parameters(
+    >>> curve = OCCNurbsCurve.from_parameters(
     ...     points=points,
     ...     weights=[1.0, 1.0, 1.0, 1.0],
     ...     knots=[0.0, 1.0],
@@ -135,11 +114,7 @@ class NurbsCurve(BaseNurbsCurve):
     """
 
     def __init__(self, name=None):
-        super(NurbsCurve, self).__init__(name=name)
-        self.occ_curve = None
-
-    def __eq__(self, other: 'NurbsCurve'):
-        return self.occ_curve.IsEqual(other.occ_curve)
+        super(OCCNurbsCurve, self).__init__(name=name)
 
     # ==============================================================================
     # Data
@@ -172,23 +147,6 @@ class NurbsCurve(BaseNurbsCurve):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve):
-        """Construct a NURBS curve from an existing OCC BSplineCurve.
-
-        Parameters
-        ----------
-        occ_curve : Geom_BSplineCurve
-
-        Returns
-        -------
-        :class:`NurbsCurve`
-
-        """
-        curve = cls()
-        curve.occ_curve = occ_curve
-        return curve
-
-    @classmethod
     def from_parameters(cls, points, weights, knots, multiplicities, degree, is_periodic=False):
         """Construct a NURBS curve from explicit curve parameters.
 
@@ -209,7 +167,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         curve = cls()
@@ -229,7 +187,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         p = len(points)
@@ -260,7 +218,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
@@ -279,7 +237,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         raise NotImplementedError
@@ -295,7 +253,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         from compas_occ.brep import BRepEdge
@@ -319,7 +277,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         raise NotImplementedError
@@ -335,7 +293,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         frame = Frame.from_plane(circle.plane)
@@ -371,7 +329,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         frame = Frame.from_plane(ellipse.plane)
@@ -408,7 +366,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         return cls.from_parameters(
@@ -525,48 +483,6 @@ class NurbsCurve(BaseNurbsCurve):
             return list(self.occ_multiplicities)
 
     @property
-    def degree(self):
-        if self.occ_curve:
-            return self.occ_curve.Degree()
-
-    @property
-    def dimension(self):
-        if self.occ_curve:
-            return 3
-
-    @property
-    def domain(self):
-        if self.occ_curve:
-            return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
-
-    @property
-    def order(self):
-        if self.occ_curve:
-            return self.degree + 1
-
-    @property
-    def start(self):
-        if self.occ_curve:
-            pnt = self.occ_curve.StartPoint()
-            return Point(pnt.X(), pnt.Y(), pnt.Z())
-
-    @property
-    def end(self):
-        if self.occ_curve:
-            pnt = self.occ_curve.EndPoint()
-            return Point(pnt.X(), pnt.Y(), pnt.Z())
-
-    @property
-    def is_closed(self):
-        if self.occ_curve:
-            return self.occ_curve.IsClosed()
-
-    @property
-    def is_periodic(self):
-        if self.occ_curve:
-            return self.occ_curve.IsPeriodic()
-
-    @property
     def is_rational(self):
         if self.occ_curve:
             return self.occ_curve.IsRational()
@@ -574,108 +490,6 @@ class NurbsCurve(BaseNurbsCurve):
     # ==============================================================================
     # Methods
     # ==============================================================================
-
-    def transform(self, T):
-        """Transform this curve.
-
-        Parameters
-        ----------
-        T : :class:`~compas.geometry.Transformation`
-
-        Returns
-        -------
-        None
-
-        """
-        occ_T = gp_Trsf()
-        occ_T.SetValues(* T.list[:12])
-        self.occ_curve.Transform(occ_T)
-
-    def reverse(self):
-        """Reverse the parametrisation of the curve.
-
-        Returns
-        -------
-        None
-
-        """
-        self.occ_curve.Reverse()
-
-    def point_at(self, t):
-        """Compute a point on the curve.
-
-        Parameters
-        ----------
-        t : float
-            The value of the curve parameter. Must be between 0 and 1.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Point`
-            the corresponding point on the curve.
-
-        """
-        point = self.occ_curve.Value(t)
-        return Point(point.X(), point.Y(), point.Z())
-
-    def tangent_at(self, t):
-        """Compute the tangent vector at a point on the curve.
-
-        Parameters
-        ----------
-        t : float
-            The value of the curve parameter. Must be between 0 and 1.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Vector`
-            The corresponding tangent vector.
-
-        """
-        point = gp_Pnt()
-        uvec = gp_Vec()
-        self.occ_curve.D1(t, point, uvec)
-        return Vector.from_occ(uvec)
-
-    def curvature_at(self, t):
-        """Compute the curvature at a point on the curve.
-
-        Parameters
-        ----------
-        t : float
-            The value of the curve parameter. Must be between 0 and 1.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Vector`
-            The corresponding curvature vector.
-
-        """
-        point = gp_Pnt()
-        uvec = gp_Vec()
-        vvec = gp_Vec()
-        self.occ_curve.D2(t, point, uvec, vvec)
-        return Vector.from_occ(vvec)
-
-    def frame_at(self, t):
-        """Compute the local frame at a point on the curve.
-
-        Parameters
-        ----------
-        t : float
-            The value of the curve parameter. Must be between 0 and 1.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Frame`
-            The corresponding local frame.
-
-        """
-        point = gp_Pnt()
-        uvec = gp_Vec()
-        vvec = gp_Vec()
-        self.occ_curve.D2(t, point, uvec, vvec)
-        return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
 
     def closest_point(self, point, return_parameter=False):
         """Compute the closest point on the curve to a given point.
@@ -727,7 +541,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.NurbsCurve`
+        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the two curves in addition to the curve parameters.
@@ -749,7 +563,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.NurbsCurve`
+        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
             The curve to find the closest distance to.
         return_distance : bool, optional
             If True, return the minimum distance between the curves in addition to the closest points.
@@ -767,80 +581,6 @@ class NurbsCurve(BaseNurbsCurve):
         if not return_distance:
             return (Point.from_occ(points[0]), Point.from_occ(points[1]))
         return (Point.from_occ(points[0]), Point.from_occ(points[1])), extrema.LowerDistance()
-
-    def divide_by_count(self, count):
-        """Divide the curve into a specific number of equal length segments.
-
-        Parameters
-        ----------
-        count : int
-
-        Returns
-        -------
-        list[:class:`~compas_occ.geometry.NurbsCurve`]
-
-        """
-        raise NotImplementedError
-
-    def divide_by_length(self, length):
-        """Divide the curve into segments of specified length.
-
-        Parameters
-        ----------
-        length : float
-
-        Returns
-        -------
-        list[:class:`~compas_occ.geometry.NurbsCurve`]
-
-        """
-        raise NotImplementedError
-
-    def aabb(self, precision=0.0):
-        """Compute the axis aligned bounding box of the curve.
-
-        Parameters
-        ----------
-        precision : float, optional
-
-        Returns
-        -------
-        :class:`~compas.geometry.Box`
-
-        """
-        box = Bnd_Box()
-        BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
-        return Box.from_diagonal((
-            Point.from_occ(box.CornerMin()),
-            Point.from_occ(box.CornerMax())))
-
-    def obb(self, precision=0.0):
-        """Compute the oriented bounding box of the curve.
-
-        Parameters
-        ----------
-        precision : float, optional
-
-        Returns
-        -------
-        :class:`~compas.geometry.Box`
-
-        """
-        raise NotImplementedError
-
-    def length(self, precision=1e-3):
-        """Compute the length of the curve.
-
-        Parameters
-        ----------
-        precision : float, optional
-
-        Returns
-        -------
-        float
-
-        """
-        return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))
 
     def segment(self, u, v, precision=1e-3):
         """Modifies this curve by segmenting it between the parameters u and v.
@@ -880,7 +620,7 @@ class NurbsCurve(BaseNurbsCurve):
 
         Returns
         -------
-        :class:`NurbsCurve`
+        :class:`OCCNurbsCurve`
 
         """
         copy = self.copy()

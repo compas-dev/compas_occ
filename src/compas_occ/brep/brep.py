@@ -48,7 +48,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
-from compas_occ.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface
 
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
@@ -599,7 +599,7 @@ class BRep:
         brep.shape = converter.Shape()
         meshes = []
         for face in brep.faces:
-            srf = NurbsSurface.from_face(face.face)
+            srf = OCCNurbsSurface.from_face(face.face)
             mesh = srf.to_vizmesh(u, v)
             meshes.append(mesh)
         return meshes

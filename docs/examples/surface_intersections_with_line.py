@@ -3,8 +3,7 @@ from compas.geometry import Point, Vector, Line, Polyline
 from compas.geometry import Rotation
 from compas.geometry import centroid_points_xy
 from compas.utilities import flatten
-# from compas.geometry import NurbsSurface
-from compas_occ.geometry import OCCNurbsSurface as NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
@@ -16,7 +15,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-surface = NurbsSurface.from_points(points=points)
+surface = OCCNurbsSurface.from_points(points=points)
 
 # ==============================================================================
 # Intersections

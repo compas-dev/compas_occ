@@ -21,7 +21,7 @@ from compas.geometry import Circle
 from compas.geometry import Ellipse
 
 from compas_occ.brep import BRepVertex
-from compas_occ.geometry import Curve
+from compas_occ.geometry import OCCCurve
 
 
 class BRepEdge:
@@ -58,7 +58,7 @@ class BRepEdge:
         The first vertex with forward orientation.
     last_vertex : :class:`~compas_occ.brep.BRepVertex`, read-only
         The first vertex with reversed orientation.
-    curve : :class:`~compas_occ.geometry.Curve`
+    curve : :class:`~compas_occ.geometry.OCCCurve`
         Curve geometry from the edge adaptor.
 
     Other Attributes
@@ -155,9 +155,9 @@ class BRepEdge:
         return self._adaptor
 
     @property
-    def curve(self) -> Curve:
+    def curve(self) -> OCCCurve:
         if not self._curve:
-            self._curve = Curve()
+            self._curve = OCCCurve()
             self._curve.occ_curve = self.adaptor.Curve()
         return self._curve
 
@@ -303,12 +303,12 @@ class BRepEdge:
             raise ValueError(f'The underlying geometry is not a bspline: {self.type}')
         raise NotImplementedError
 
-    def to_curve(self) -> Curve:
+    def to_curve(self) -> OCCCurve:
         """Convert the edge geometry to a NURBS curve.
 
         Returns
         -------
-        :class:`~compas_occ.geometry.Curve`
+        :class:`~compas_occ.geometry.OCCCurve`
 
         """
         return self.curve

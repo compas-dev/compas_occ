@@ -1,72 +1,33 @@
-from typing import Tuple, List, Dict, Union
+from typing import Iterable, Tuple, List, Dict, Union
 
-from compas.geometry import Point, Vector, Line, Frame, Box
-from compas.geometry import Transformation
-from compas.datastructures import Mesh
+from compas.geometry import Point
 
-from compas_occ.conversions import compas_line_to_occ_line
-from compas_occ.conversions import compas_point_from_occ_point
-from compas_occ.conversions import compas_point_to_occ_point
-from compas_occ.conversions import compas_vector_from_occ_vector
-from compas_occ.conversions import compas_vector_to_occ_vector
-from compas_occ.conversions import compas_frame_from_occ_position
-from compas_occ.conversions import points2_from_array2
+from compas_occ.geometry.curves import OCCNurbsCurve
 
-from compas_occ.geometry.curves import NurbsCurve
-
-from compas.geometry import NurbsSurface as BaseNurbsSurface
-
-from OCC.Core.Geom import Geom_BSplineSurface
-from OCC.Core.TopoDS import TopoDS_Shape
-from OCC.Core.TopoDS import TopoDS_Face
-
-
-Point.from_occ = classmethod(compas_point_from_occ_point)
-Point.to_occ = compas_point_to_occ_point
-Vector.from_occ = classmethod(compas_vector_from_occ_vector)
-Vector.to_occ = compas_vector_to_occ_vector
-Frame.from_occ = classmethod(compas_frame_from_occ_position)
-Line.to_occ = compas_line_to_occ_line
+from compas.geometry import NurbsSurface
 
 
 class Points:
-    def __init__(self, surface):
-        self.occ_surface = surface
+
+    def __init__(self, surface: 'OCCNurbsSurface') -> None: ...
 
     @property
-    def points(self):
-        return points2_from_array2(self.occ_surface.Poles())
+    def points(self) -> List[List[Point]]: ...
 
-    def __getitem__(self, index):
-        try:
-            u, v = index
-        except TypeError:
-            return self.points[index]
-        else:
-            pnt = self.occ_surface.Pole(u + 1, v + 1)
-            return Point.from_occ(pnt)
+    def __getitem__(self, index: Union[int, Tuple[int, int]]) -> Point: ...
 
-    def __setitem__(self, index, point):
-        u, v = index
-        self.occ_surface.SetPole(u + 1, v + 1, point.to_occ())
+    def __setitem__(self, index: Tuple[int, int], point: Point) -> None: ...
 
-    def __len__(self):
-        return self.occ_surface.NbVPoles()
-        # return self.occ_surface.Poles().NbColumns()
+    def __len__(self) -> int: ...
 
-    def __iter__(self):
-        return iter(self.points)
+    def __iter__(self) -> Iterable: ...
 
 
-class NurbsSurface(BaseNurbsSurface):
+class OCCNurbsSurface(NurbsSurface):
 
     def __init__(self, name: str = None) -> None: ...
 
-    def __eq__(self, other: 'NurbsSurface') -> bool: ...
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
+    def __eq__(self, other: 'OCCNurbsSurface') -> bool: ...
 
     @property
     def data(self) -> Dict: ...
@@ -75,14 +36,7 @@ class NurbsSurface(BaseNurbsSurface):
     def data(self, data: Dict) -> None: ...
 
     @classmethod
-    def from_data(cls, data: Dict) -> 'NurbsSurface': ...
-
-    # ==============================================================================
-    # Constructors
-    # ==============================================================================
-
-    @classmethod
-    def from_occ(cls, occ_surface: Geom_BSplineSurface) -> 'NurbsSurface': ...
+    def from_data(cls, data: Dict) -> 'OCCNurbsSurface': ...
 
     @classmethod
     def from_parameters(cls,
@@ -95,44 +49,19 @@ class NurbsSurface(BaseNurbsSurface):
                         u_degree: int,
                         v_degree: int,
                         is_u_periodic: bool = False,
-                        is_v_periodic: bool = False) -> 'NurbsSurface': ...
+                        is_v_periodic: bool = False) -> 'OCCNurbsSurface': ...
 
     @classmethod
     def from_points(cls,
                     points: List[List[Point]],
                     u_degree: int = 3,
-                    v_degree: int = 3) -> 'NurbsSurface': ...
+                    v_degree: int = 3) -> 'OCCNurbsSurface': ...
 
     @classmethod
-    def from_step(cls, filepath: str) -> 'NurbsSurface': ...
+    def from_step(cls, filepath: str) -> 'OCCNurbsSurface': ...
 
     @classmethod
-    def from_face(cls, face: TopoDS_Face) -> 'NurbsSurface': ...
-
-    @classmethod
-    def from_fill(cls, curve1: NurbsCurve, curve2: NurbsCurve) -> 'NurbsSurface': ...
-
-    # ==============================================================================
-    # Conversions
-    # ==============================================================================
-
-    def to_step(self, filepath: str, schema: str = "AP203") -> None: ...
-
-    def to_tesselation(self) -> Mesh: ...
-
-    # ==============================================================================
-    # OCC
-    # ==============================================================================
-
-    @property
-    def occ_shape(self) -> TopoDS_Shape: ...
-
-    @property
-    def occ_face(self) -> TopoDS_Face: ...
-
-    # ==============================================================================
-    # Properties
-    # ==============================================================================
+    def from_fill(cls, curve1: OCCNurbsCurve, curve2: OCCNurbsCurve) -> 'OCCNurbsSurface': ...
 
     @property
     def points(self) -> List[List[Point]]: ...
@@ -151,47 +80,3 @@ class NurbsSurface(BaseNurbsSurface):
 
     @property
     def v_mults(self) -> List[int]: ...
-
-    @property
-    def u_degree(self) -> int: ...
-
-    @property
-    def v_degree(self) -> int: ...
-
-    @property
-    def u_domain(self) -> int: ...
-
-    @property
-    def v_domain(self) -> int: ...
-
-    @property
-    def is_u_periodic(self) -> bool: ...
-
-    @property
-    def is_v_periodic(self) -> bool: ...
-
-    # ==============================================================================
-    # Methods
-    # ==============================================================================
-
-    def transform(self, T: Transformation) -> None: ...
-
-    def u_isocurve(self, u: float) -> NurbsCurve: ...
-
-    def v_isocurve(self, v: float) -> NurbsCurve: ...
-
-    def boundary(self) -> List[NurbsCurve]: ...
-
-    def point_at(self, u: float, v: float) -> Point: ...
-
-    def curvature_at(self, u: float, v: float) -> Tuple[float, float, Point, Vector]: ...
-
-    def frame_at(self, u: float, v: float) -> Frame: ...
-
-    def closest_point(self, point, distance=None, parameter: bool = False) -> Union[Point, Tuple[Point, float]]: ...
-
-    def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box: ...
-
-    def obb(self, precision: float = 0.0) -> Box: ...
-
-    def intersections_with_line(self, line: Line) -> List[Point]: ...

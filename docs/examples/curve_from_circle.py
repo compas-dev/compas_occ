@@ -1,12 +1,12 @@
 from compas.geometry import Vector, Point, Plane
 from compas.geometry import Polyline
 from compas.geometry import Circle
-from compas_occ.geometry import NurbsCurve
+from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
 
 circle = Circle(Plane(Point(0, 0, 0), Vector(0, 0, 1)), 1.0)
-curve = NurbsCurve.from_circle(circle)
+curve = OCCNurbsCurve.from_circle(circle)
 
 # ==============================================================================
 # Visualisation

@@ -1,6 +1,6 @@
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_occ.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
 
@@ -22,7 +22,7 @@ weights = [
     [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
 ]
 
-surface = NurbsSurface.from_parameters(
+surface = OCCNurbsSurface.from_parameters(
     points=points,
     weights=weights,
     u_knots=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],

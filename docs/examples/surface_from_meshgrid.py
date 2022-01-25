@@ -1,7 +1,7 @@
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.utilities import meshgrid, linspace
-from compas_occ.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
 
@@ -25,7 +25,7 @@ for i, (U, V) in enumerate(zip(UU, VV)):
         row.append(Point(u, v, z))
     points.append(row)
 
-surface = NurbsSurface.from_points(points=points)
+surface = OCCNurbsSurface.from_points(points=points)
 
 # ==============================================================================
 # Visualisation
