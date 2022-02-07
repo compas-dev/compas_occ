@@ -3,7 +3,6 @@ from math import sqrt
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Frame
-from compas.geometry import distance_point_point
 
 from compas.geometry import NurbsCurve
 
@@ -17,17 +16,8 @@ from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_to_occ_vector
 
-from OCC.Core.gp import gp_Pnt
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
-from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
-from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
-from OCC.Core.TopoDS import topods_Edge
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
-from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.STEPControl import STEPControl_Writer
-from OCC.Core.STEPControl import STEPControl_AsIs
 
 from .curve import OCCCurve
 
@@ -68,13 +58,17 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         The full vector of knots of the curve.
     multiplicities : list[int], read-only
         The multiplicities of the knots of the curve.
+    continuity : int, read-only
+        The degree of continuity of the curve.
+    degree : int, read-only
+        The degree of the curve.
+    order : int, read-only
+        The order of the curve (= degree + 1).
     is_rational : bool, read-only
         Flag indicating that the curve is rational.
 
     Other Attributes
     ----------------
-    occ_curve : ``Geom_BSplineCurve``
-        The underlying OCC curve.
     occ_shape : ``TopoDS_Shape``, read-only
         The underlying OCC curve embedded in an edge and converted to a shape.
     occ_edge : ``TopoDS_Edge``, read-only
@@ -143,8 +137,101 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         self.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
 
     # ==============================================================================
+    # OCC Properties
+    # ==============================================================================
+
+    @property
+    def occ_points(self):
+        return self.occ_curve.Poles()
+
+    @property
+    def occ_weights(self):
+        return self.occ_curve.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
+
+    @property
+    def occ_knots(self):
+        return self.occ_curve.Knots()
+
+    @property
+    def occ_knotsequence(self):
+        return self.occ_curve.KnotSequence()
+
+    @property
+    def occ_multiplicities(self):
+        return self.occ_curve.Multiplicities()
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
+
+    @property
+    def points(self):
+        if self.occ_curve:
+            return points1_from_array1(self.occ_points)
+
+    @property
+    def weights(self):
+        if self.occ_curve:
+            return list(self.occ_weights)
+
+    @property
+    def knots(self):
+        if self.occ_curve:
+            return list(self.occ_knots)
+
+    @property
+    def knotsequence(self):
+        if self.occ_curve:
+            return list(self.occ_knotsequence)
+
+    @property
+    def multiplicities(self):
+        if self.occ_curve:
+            return list(self.occ_multiplicities)
+
+    @property
+    def continuity(self):
+        if self.occ_curve:
+            return self.occ_curve.Continuity()
+
+    @property
+    def degree(self):
+        if self.occ_curve:
+            return self.occ_curve.Degree()
+
+    @property
+    def order(self):
+        if self.occ_curve:
+            return self.degree + 1
+
+    @property
+    def is_rational(self):
+        if self.occ_curve:
+            return self.occ_curve.IsRational()
+
+    # ==============================================================================
     # Constructors
     # ==============================================================================
+
+    @classmethod
+    def from_edge(cls, edge):
+        """Construct a NURBS curve from an existing OCC TopoDS_Edge.
+
+        Parameters
+        ----------
+        edge : TopoDS_Edge
+            The OCC edge containing the curve information.
+
+        Returns
+        -------
+        :class:`OCCNurbsCurve`
+
+        """
+        from compas_occ.brep import BRepEdge
+        brepedge = BRepEdge(edge)
+        if brepedge.is_line:
+            line = brepedge.to_line()
+            return cls.from_line(line)
 
     @classmethod
     def from_parameters(cls, points, weights, knots, multiplicities, degree, is_periodic=False):
@@ -226,41 +313,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         curve = cls()
         curve.occ_curve = interp.Curve()
         return curve
-
-    @classmethod
-    def from_step(cls, filepath):
-        """Load a NURBS curve from an STP file.
-
-        Parameters
-        ----------
-        filepath : str
-
-        Returns
-        -------
-        :class:`OCCNurbsCurve`
-
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def from_edge(cls, edge):
-        """Construct a NURBS curve from an existing OCC TopoDS_Edge.
-
-        Parameters
-        ----------
-        edge : TopoDS_Edge
-            The OCC edge containing the curve information.
-
-        Returns
-        -------
-        :class:`OCCNurbsCurve`
-
-        """
-        from compas_occ.brep import BRepEdge
-        brepedge = BRepEdge(edge)
-        if brepedge.is_line:
-            line = brepedge.to_line()
-            return cls.from_line(line)
 
     @classmethod
     def from_arc(cls, arc, degree, pointcount=None):
@@ -381,206 +433,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # Conversions
     # ==============================================================================
 
-    def to_step(self, filepath, schema="AP203"):
-        """Write the curve geometry to a STP file.
-
-        Parameters
-        ----------
-        filepath : str
-        schema : str, optional
-
-        Returns
-        -------
-        None
-
-        """
-        step_writer = STEPControl_Writer()
-        Interface_Static_SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
-        status = step_writer.Write(filepath)
-        if status != IFSelect_RetDone:
-            raise AssertionError("Operation failed.")
-
-    def to_line(self):
-        """Convert the geometry to a line.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Line`
-
-        """
-        raise NotImplementedError
-
-    def to_polyline(self):
-        """Convert the geometry to a polyline.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Polyline`
-
-        """
-        raise NotImplementedError
-
-    # ==============================================================================
-    # OCC
-    # ==============================================================================
-
-    @property
-    def occ_shape(self):
-        return BRepBuilderAPI_MakeEdge(self.occ_curve).Shape()
-
-    @property
-    def occ_edge(self):
-        return topods_Edge(self.occ_shape)
-
-    @property
-    def occ_points(self):
-        return self.occ_curve.Poles()
-
-    @property
-    def occ_weights(self):
-        return self.occ_curve.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
-
-    @property
-    def occ_knots(self):
-        return self.occ_curve.Knots()
-
-    @property
-    def occ_knotsequence(self):
-        return self.occ_curve.KnotSequence()
-
-    @property
-    def occ_multiplicities(self):
-        return self.occ_curve.Multiplicities()
-
-    # ==============================================================================
-    # Properties
-    # ==============================================================================
-
-    @property
-    def points(self):
-        if self.occ_curve:
-            return points1_from_array1(self.occ_points)
-
-    @property
-    def weights(self):
-        if self.occ_curve:
-            return list(self.occ_weights)
-
-    @property
-    def knots(self):
-        if self.occ_curve:
-            return list(self.occ_knots)
-
-    @property
-    def knotsequence(self):
-        if self.occ_curve:
-            return list(self.occ_knotsequence)
-
-    @property
-    def multiplicities(self):
-        if self.occ_curve:
-            return list(self.occ_multiplicities)
-
-    @property
-    def is_rational(self):
-        if self.occ_curve:
-            return self.occ_curve.IsRational()
-
     # ==============================================================================
     # Methods
     # ==============================================================================
-
-    def closest_point(self, point, return_parameter=False):
-        """Compute the closest point on the curve to a given point.
-        If an orthogonal projection is not possible, the start or end point is returned, whichever is closer.
-
-        Parameters
-        ----------
-        point : :class:`~compas.geometry.Point`
-            The point to project to the curve.
-        return_parameter : bool, optional
-            If True, return the curve parameter in addition to the closest point.
-
-        Returns
-        -------
-        :class:`~compas.geometry.Point` | tuple[:class:`~compas.geometry.Point`, float]
-            If `return_parameter` is False, the nearest point on the curve.
-            If `return_parameter` is True, the nearest point on the curve and the corresponding parameter.
-
-        """
-        projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
-        try:
-            point = Point.from_occ(projector.NearestPoint())
-            if return_parameter:
-                parameter = projector.LowerDistanceParameter()
-
-        except RuntimeError as e:
-            if e.args[0].startswith('StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint'):
-
-                start = self.start
-                end = self.end
-
-                if distance_point_point(point, start) <= distance_point_point(point, end):
-                    point = start
-                    if return_parameter:
-                        parameter = self.occ_curve.FirstParameter()
-                else:
-                    point = end
-                    if return_parameter:
-                        parameter = self.occ_curve.LastParameter()
-            else:
-                raise
-
-        if not return_parameter:
-            return point
-        return point, parameter
-
-    def closest_parameters_curve(self, curve, return_distance=False):
-        """Computes the curve parameters where the curve is the closest to another given curve.
-
-        Parameters
-        ----------
-        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
-            The curve to find the closest distance to.
-        return_distance : bool, optional
-            If True, return the minimum distance between the two curves in addition to the curve parameters.
-
-        Returns
-        -------
-        tuple[float, float] | tuple[tuple[float, float], float]
-            If `return_distance` is False, the lowest distance parameters on the two curves.
-            If `return_distance` is True, the distance between the two curves in addition to the curve parameters.
-
-        """
-        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
-        if not return_distance:
-            return extrema.LowerDistanceParameters()
-        return extrema.LowerDistanceParameters(), extrema.LowerDistance()
-
-    def closest_points_curve(self, curve, return_distance=False):
-        """Computes the points on curves where the curve is the closest to another given curve.
-
-        Parameters
-        ----------
-        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
-            The curve to find the closest distance to.
-        return_distance : bool, optional
-            If True, return the minimum distance between the curves in addition to the closest points.
-
-        Returns
-        -------
-        tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`] | tuple[tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`], float]
-            If `return_distance` is False, the closest points.
-            If `return_distance` is True, the distance in addition to the closest points.
-
-        """
-        points = (gp_Pnt(), gp_Pnt())
-        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
-        extrema.NearestPoints(points[0], points[1])
-        if not return_distance:
-            return (Point.from_occ(points[0]), Point.from_occ(points[1]))
-        return (Point.from_occ(points[0]), Point.from_occ(points[1])), extrema.LowerDistance()
 
     def segment(self, u, v, precision=1e-3):
         """Modifies this curve by segmenting it between the parameters u and v.

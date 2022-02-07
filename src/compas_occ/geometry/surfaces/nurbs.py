@@ -26,7 +26,7 @@ Point.to_occ = compas_point_to_occ_point
 Line.to_occ = compas_line_to_occ_line
 
 
-class Points:
+class ControlPoints:
     def __init__(self, surface):
         self.occ_surface = surface
 
@@ -387,7 +387,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     @property
     def points(self):
         if not self._points:
-            self._points = Points(self.occ_surface)
+            self._points = ControlPoints(self.occ_surface)
         return self._points
 
     @property

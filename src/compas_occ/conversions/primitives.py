@@ -4,12 +4,14 @@ from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Line
 from compas.geometry import Frame
+from compas.geometry import Circle
 
 from OCC.Core.gp import gp_Ax3
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Lin
+from OCC.Core.gp import gp_Circ
 
 
 def compas_point_to_occ_point(self: Point) -> gp_Pnt:
@@ -182,3 +184,7 @@ def compas_frame_from_occ_position(cls: Type[Frame], position: gp_Ax3) -> Frame:
         compas_vector_from_occ_direction(Vector, position.XDirection()),
         compas_vector_from_occ_direction(Vector, position.YDirection())
     )
+
+
+def compas_circle_to_occ(circle: Circle) -> gp_Circ:
+    """"""

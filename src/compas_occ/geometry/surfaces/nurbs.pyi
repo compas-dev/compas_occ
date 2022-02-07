@@ -7,7 +7,7 @@ from compas_occ.geometry.curves import OCCNurbsCurve
 from compas.geometry import NurbsSurface
 
 
-class Points:
+class ControlPoints:
 
     def __init__(self, surface: 'OCCNurbsSurface') -> None: ...
 

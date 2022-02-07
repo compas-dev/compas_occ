@@ -9,7 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.geometry.OCCCurve`.
+* Added `compas_occ.geometry.OCCSurface`.
+* Added `compas_occ.brep.BRep.__add__` to support boolean union through "+".
+* Added `compas_occ.brep.BRep.__sub__` to support boolean difference through "-".
+* Added `compas_occ.brep.BRep.__and__` to support boolean intersection through "&".
+
 ### Changed
+
+* Changed base class of `compas_occ.geometry.OCCNurbsCurve` to `compas_occ.geometry.OCCCurve`.
+* Changed base class of `compas_occ.geometry.OCCNurbsSurface` to `compas_occ.geometry.OCCSurface`.
+* Changed `compas_occ.brep.BRepEdge` to use `compas_occ.geometry.OCCCurve`.
+* Fixed bug in `compas_occ.brep.BRep.to_meshes`.
+* Fixed registration of curve plugin constructors to support multiple inheritance.
+* Fixed registration of surface plugin constructors to support multiple inheritance.
 
 ### Removed
 
