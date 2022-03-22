@@ -356,7 +356,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         raise NotImplementedError
 
     @classmethod
-    def from_fill(cls, curve1, curve2, curve3=None, curve4=None, scheme='stretch'):
+    def from_fill(cls, curve1, curve2, curve3=None, curve4=None, style='stretch'):
         """Construct a NURBS surface from the infill between two, three or four contiguous NURBS curves.
 
         Parameters
@@ -365,7 +365,16 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         curve2 : :class:`~compas_occ.geometry.OCCNurbsCurve`
         curve3 : :class:`~compas_occ.geometry.OCCNurbsCurve`, optional.
         curve4 : :class:`~compas_occ.geometry.OCCNurbsCurve`, optional.
-        scheme (Literal[’stretch’, ’coons’, ‘curved’], optional) – The scheme according to which the mesh should be subdivided.
+        style : Literal['stretch', 'coons', 'curved'], optional.
+            The fill style:
+            'stretch' gives the flattest patch.
+            'coons' gives a rounded patch with less depth than that of curved.
+            'curved' gives with the most rounded patch.
+
+        Raises
+        ------
+        ValueError
+            If the fill style is not supported.
 
         Returns
         -------
@@ -373,22 +382,22 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         """
 
-        if scheme == 'stretch':
-            schemeStyle = GeomFill_StretchStyle
-        elif scheme == 'coons':
-            schemeStyle = GeomFill_CoonsStyle
-        elif scheme == 'curved':
-            schemeStyle = GeomFill_CurvedStyle
+        if style == 'stretch':
+            style = GeomFill_StretchStyle
+        elif style == 'coons':
+            style = GeomFill_CoonsStyle
+        elif style == 'curved':
+            style = GeomFill_CurvedStyle
         else:
             ValueError('Scheme is not supported')
 
         surface = cls()
-        if curve3:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, schemeStyle)
         if curve3 and curve4:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, curve4.occ_curve, schemeStyle)
+            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, curve4.occ_curve, style)
+        elif curve3:
+            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, style)
         else:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, schemeStyle)
+            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, style)
         surface.occ_surface = occ_fill.Surface()
         return surface
 

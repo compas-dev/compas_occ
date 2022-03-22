@@ -502,7 +502,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         ----------
         curve : :class:`OCCNurbsCurve`
             The curve to join.
-
         precision : float, optional
             Tolerance for continuity and multiplicity.
 
@@ -517,19 +516,18 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             self.occ_curve = converter.BSplineCurve()
 
     def joined(self, curve, precision=1e-4):
-        """Returns a copy of joining this curve with another curve.
+        """Returns a new curve that is the result of joining this curve with another.
 
         Parameters
         ----------
         curve : :class:`OCCNurbsCurve`
             The curve to join.
-
         precision : float, optional
             Tolerance for continuity and multiplicity.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        :class:`OCCNurbsCurve` | None
 
         """
         copy = self.copy()
@@ -538,5 +536,3 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         if success:
             copy.occ_curve = converter.BSplineCurve()
             return copy
-        else:
-            return None
