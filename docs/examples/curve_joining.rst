@@ -10,5 +10,5 @@ Curve Joining
     :figclass: figure
     :class: figure-img img-fluid
 
-.. literalinclude:: curve_joined.py
+.. literalinclude:: curve_joining.py
     :language: python
