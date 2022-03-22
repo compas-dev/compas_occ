@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
+* Added `compas_occ.geometry.NurbsCurve.join`.
+* Added `compas_occ.geometry.NurbsCurve.joined`.
 
 ### Changed
 
