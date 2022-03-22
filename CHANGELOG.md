@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed bug in `compas_occ.brep.BRep.to_meshes`.
 * Fixed registration of curve plugin constructors to support multiple inheritance.
 * Fixed registration of surface plugin constructors to support multiple inheritance.
+* Fixed `compas_occ.geometry.NurbsCurve.copy`.
 
 ### Removed
 
