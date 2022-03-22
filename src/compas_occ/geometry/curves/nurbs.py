@@ -1,4 +1,5 @@
 from math import sqrt
+from copy import deepcopy
 
 from compas.geometry import Point
 from compas.geometry import Vector
@@ -436,6 +437,17 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
     # Methods
     # ==============================================================================
+
+    def copy(self):
+        """Make an independent copy of the current curve.
+
+        Returns
+        -------
+        :class:`compas_occ.geometry.OCCCurve`
+
+        """
+        cls = type(self)
+        return cls.from_data(deepcopy(self.data))
 
     def segment(self, u, v, precision=1e-3):
         """Modifies this curve by segmenting it between the parameters u and v.
