@@ -19,6 +19,7 @@ from compas_occ.conversions import compas_vector_to_occ_vector
 
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
+from OCC.Core.GeomConvert import GeomConvert_CompCurveToBSplineCurve
 
 from .curve import OCCCurve
 
@@ -493,3 +494,45 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         copy = self.copy()
         copy.segment(u, v, precision)
         return copy
+
+    def join(self, curve, precision=1e-4):
+        """Modifies this curve by joining it with another curve.
+
+        Parameters
+        ----------
+        curve : :class:`OCCNurbsCurve`
+            The curve to join.
+        precision : float, optional
+            Tolerance for continuity and multiplicity.
+
+        Returns
+        -------
+        None
+
+        """
+        converter = GeomConvert_CompCurveToBSplineCurve(self.occ_curve)
+        success = converter.Add(curve.occ_curve, precision)
+        if success:
+            self.occ_curve = converter.BSplineCurve()
+
+    def joined(self, curve, precision=1e-4):
+        """Returns a new curve that is the result of joining this curve with another.
+
+        Parameters
+        ----------
+        curve : :class:`OCCNurbsCurve`
+            The curve to join.
+        precision : float, optional
+            Tolerance for continuity and multiplicity.
+
+        Returns
+        -------
+        :class:`OCCNurbsCurve` | None
+
+        """
+        copy = self.copy()
+        converter = GeomConvert_CompCurveToBSplineCurve(self.occ_curve)
+        success = converter.Add(curve.occ_curve, precision)
+        if success:
+            copy.occ_curve = converter.BSplineCurve()
+            return copy
