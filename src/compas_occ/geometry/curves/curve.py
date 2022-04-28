@@ -3,6 +3,7 @@ from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
+from compas.geometry import Polyline
 from compas.geometry import distance_point_point
 
 
@@ -187,6 +188,21 @@ class OCCCurve(Curve):
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
+    def to_polyline(self, n=100):
+        """Convert the curve to a polyline.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of polyline points.
+
+        Returns
+        -------
+        :class:`compas.geometry.Polyline`
+
+        """
+        return Polyline(self.locus(resolution=n))
+
     # ==============================================================================
     # Methods
     # ==============================================================================
@@ -217,7 +233,7 @@ class OCCCurve(Curve):
 
         """
         occ_T = gp_Trsf()
-        occ_T.SetValues(* T.list[:12])
+        occ_T.SetValues(*T.list[:12])
         self.occ_curve.Transform(occ_T)
 
     def reverse(self):
@@ -332,7 +348,9 @@ class OCCCurve(Curve):
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
-        return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
+        return Frame(
+            Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec)
+        )
 
     # ==============================================================================
     # Methods continued
@@ -352,10 +370,9 @@ class OCCCurve(Curve):
         """
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
-        return Box.from_diagonal((
-            Point.from_occ(box.CornerMin()),
-            Point.from_occ(box.CornerMax())
-        ))
+        return Box.from_diagonal(
+            (Point.from_occ(box.CornerMin()), Point.from_occ(box.CornerMax()))
+        )
 
     def length(self, precision=1e-3):
         """Compute the length of the curve.
@@ -395,10 +412,14 @@ class OCCCurve(Curve):
             if return_parameter:
                 parameter = projector.LowerDistanceParameter()
         except RuntimeError as e:
-            if e.args[0].startswith('StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint'):
+            if e.args[0].startswith(
+                "StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint"
+            ):
                 start = self.start
                 end = self.end
-                if distance_point_point(point, start) <= distance_point_point(point, end):
+                if distance_point_point(point, start) <= distance_point_point(
+                    point, end
+                ):
                     point = start
                     if return_parameter:
                         parameter = self.occ_curve.FirstParameter()
