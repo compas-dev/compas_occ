@@ -163,8 +163,8 @@ def compas_axis_to_occ_axis(axis: tuple[Point, Vector]) -> gp_Ax1:
 
     """
     return gp_Ax1(
-        compas_point_to_occ_point(Point(0, 0, 0)),
-        compas_vector_to_occ_direction(Vector(1, 0, 0)),
+        compas_point_to_occ_point(axis[0]),
+        compas_vector_to_occ_direction(axis[1]),
     )
 
 
