@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - Curve Joining</title>
+  <title>compas_occ - Surface of Revolution</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Curve Segmentation" href="curve_segmentation.html" />
+  <link rel="next" title="Surface With Random Control Points" href="surface_random.html" />
   
 
   
-  <link rel="prev" title="Curve From Control Points" href="curve_from_points.html" />
+  <link rel="prev" title="Surface JSON Data" href="surface_jsondata.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,46 +84,38 @@
             
             <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">Curve Joining</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Surface of Revolution</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="curve-joining">
-<h1>Curve Joining</h1>
+        <section id="surface-of-revolution">
+<h1>Surface of Revolution</h1>
 <figure class="figure align-default">
-<img alt="../_images/example_curve_joining_separate.png" class="figure-img img-fluid" src="../_images/example_curve_joining_separate.png" />
-</figure>
-<figure class="figure align-default">
-<img alt="../_images/example_curve_joining_joined.png" class="figure-img img-fluid" src="../_images/example_curve_joining_joined.png" />
+<img alt="../_images/example_surface_of_revolution.png" class="figure-img img-fluid" src="../_images/example_surface_of_revolution.png" />
 </figure>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsCurve</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsCurve</span>
+<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCSurfaceOfRevolution</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
-<span class="n">points1</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
-<span class="n">points2</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">)]</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">NurbsCurve</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-<span class="n">curve1</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_interpolation</span><span class="p">(</span><span class="n">points1</span><span class="p">)</span>
-<span class="n">curve2</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_interpolation</span><span class="p">(</span><span class="n">points2</span><span class="p">)</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCSurfaceOfRevolution</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">point</span><span class="o">=</span><span class="n">point</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">vector</span><span class="p">)</span>
 
-<span class="n">joined</span> <span class="o">=</span> <span class="n">curve1</span><span class="o">.</span><span class="n">joined</span><span class="p">(</span><span class="n">curve2</span><span class="p">)</span>
-<span class="n">curve1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">curve2</span><span class="p">)</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
 
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Visualisation</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">view</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve1</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve2</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">joined</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">to_polyline</span><span class="p">(),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">())</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </section>
@@ -160,7 +152,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_line.html">Curve From Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_parameters.html">Curve From Parameters</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_points.html">Curve From Control Points</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Curve Joining</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_joining.html">Curve Joining</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_segmentation.html">Curve Segmentation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_frames.html">Surface Frames</a></li>
@@ -171,7 +163,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Surface of Revolution</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
@@ -194,7 +186,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Curve Joining</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Surface of Revolution</a></li>
 </ul>
 
       </div>
@@ -206,20 +198,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="curve_from_points.html" title="Curve From Control Points" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="surface_jsondata.html" title="Surface JSON Data" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Curve From Control Points
+          Surface JSON Data
         </div>
       </a>
       
 
       
-      <a href="curve_segmentation.html" title="Curve Segmentation" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="surface_random.html" title="Surface With Random Control Points" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Curve Segmentation
+          Surface With Random Control Points
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

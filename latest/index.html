@@ -94,12 +94,12 @@ of the <a class="reference external" href="https://www.opencascade.com/open-casc
 <figure class="figure align-default">
 <img alt="_images/compas_occ.png" class="figure-img img-fluid" src="_images/compas_occ.png" />
 </figure>
-<p><a class="reference internal" href="api/compas_occ.geometry.html#module-compas_occ.geometry" title="compas_occ.geometry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.geometry</span></code></a> defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Curve</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code>,
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.geometry</span></code> defines <code class="xref py py-class docutils literal notranslate"><span class="pre">Curve</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code>,
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Surface</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsSurface</span></code>, which are wrappers around
 <code class="docutils literal notranslate"><span class="pre">Geom_Curve</span></code> <a class="footnote-reference brackets" href="#id5" id="id1">1</a>, <code class="docutils literal notranslate"><span class="pre">Geom_BSplineCurve</span></code> <a class="footnote-reference brackets" href="#id6" id="id2">2</a>, <code class="docutils literal notranslate"><span class="pre">Geom_Surface</span></code> <a class="footnote-reference brackets" href="#id7" id="id3">3</a> and <code class="docutils literal notranslate"><span class="pre">Geom_BSplineSurface</span></code> <a class="footnote-reference brackets" href="#id8" id="id4">4</a> of OCC, repsectively.
 The <a class="reference internal" href="api/compas_occ.html#module-compas_occ" title="compas_occ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ</span></code></a> wrappers provide an API for working with NURBS curves and surfaces similar to the API of RhinoCommon.</p>
-<p><a class="reference internal" href="api/compas_occ.brep.html#module-compas_occ.brep" title="compas_occ.brep"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.brep</span></code></a> is a package for working with Boundary Representation (BRep) objects
-with the NURBS curves and surfaces of <a class="reference internal" href="api/compas_occ.geometry.html#module-compas_occ.geometry" title="compas_occ.geometry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.geometry</span></code></a> as underlying geometry.</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.brep</span></code> is a package for working with Boundary Representation (BRep) objects
+with the NURBS curves and surfaces of <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ.geometry</span></code> as underlying geometry.</p>
 <section id="table-of-contents">
 <h2>Table of Contents</h2>
 <div class="toctree-wrapper compound">
@@ -130,16 +130,14 @@ with the NURBS curves and surfaces of <a class="reference internal" href="api/co
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_occ.html">compas_occ</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_occ.brep.html">compas_occ.brep</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_occ.conversions.html">compas_occ.conversions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_occ.geometry.html">compas_occ.geometry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_occ.html">compas_occ</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -217,16 +215,14 @@ with the NURBS curves and surfaces of <a class="reference internal" href="api/co
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_occ.html">compas_occ</a><ul class="nav flex-column collapse">
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_occ.brep.html">compas_occ.brep</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_occ.conversions.html">compas_occ.conversions</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="api/compas_occ.geometry.html">compas_occ.geometry</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_occ.html">compas_occ</a><ul class="simple">
 </ul>
 </li>
 </ul>
