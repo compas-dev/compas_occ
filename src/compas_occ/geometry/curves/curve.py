@@ -13,6 +13,7 @@ from OCC.Core.gp import gp_Vec
 
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.BndLib import BndLib_Add3dCurve_Add
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
@@ -479,3 +480,30 @@ class OCCCurve(Curve):
         if not return_distance:
             return points
         return points, extrema.LowerDistance()
+
+    def divide(self, n):
+        """Divide a curve into segments of equal length.
+
+        Parameters
+        ----------
+        n : int
+            The number of segments.
+
+        Returns
+        -------
+        list[float]
+            The parameters dividing the curve into segments.
+
+        """
+        L = self.length()
+        length = L / n
+        a, b = self.domain
+        t = a
+        params = [t]
+        adaptor = GeomAdaptor_Curve(self.occ_curve)
+        for _ in range(n - 1):
+            a = GCPnts_AbscissaPoint(adaptor, length, t)
+            t = a.Parameter()
+            params.append(t)
+        params.append(b)
+        return params
