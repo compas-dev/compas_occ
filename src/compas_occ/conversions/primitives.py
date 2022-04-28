@@ -4,14 +4,15 @@ from compas.geometry import Point
 from compas.geometry import Vector
 from compas.geometry import Line
 from compas.geometry import Frame
-from compas.geometry import Circle
+# from compas.geometry import Circle
 
+from OCC.Core.gp import gp_Ax1
 from OCC.Core.gp import gp_Ax3
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Lin
-from OCC.Core.gp import gp_Circ
+# from OCC.Core.gp import gp_Circ
 
 
 def compas_point_to_occ_point(self: Point) -> gp_Pnt:
@@ -35,7 +36,7 @@ def compas_point_to_occ_point(self: Point) -> gp_Pnt:
     <class 'gp_Pnt'>
 
     """
-    return gp_Pnt(* self)
+    return gp_Pnt(*self)
 
 
 def compas_point_from_occ_point(cls: Type[Point], point: gp_Pnt) -> Point:
@@ -77,7 +78,7 @@ def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
     <class 'gp_Vec'>
 
     """
-    return gp_Vec(* self)
+    return gp_Vec(*self)
 
 
 def compas_vector_from_occ_vector(cls: Type[Vector], vector: gp_Vec) -> Vector:
@@ -119,7 +120,7 @@ def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
     <class 'gp_Dir'>
 
     """
-    return gp_Dir(* self)
+    return gp_Dir(*self)
 
 
 def compas_vector_from_occ_direction(cls: Type[Vector], vector: gp_Dir) -> Vector:
@@ -138,6 +139,51 @@ def compas_vector_from_occ_direction(cls: Type[Vector], vector: gp_Dir) -> Vecto
 
     """
     return cls(vector.X(), vector.Y(), vector.Z())
+
+
+def compas_axis_to_occ_axis(axis: tuple[Point, Vector]) -> gp_Ax1:
+    """Convert a COMPAS point and vector to an OCC axis.
+
+    Parameters
+    ----------
+    axis : tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
+        The COMPAS point and vector.
+
+    Returns
+    -------
+    ``gp_Ax1``
+
+    Examples
+    --------
+    >>> from compas.geometry import Vector
+    >>> from compas_occ.conversions import compas_axis_to_occ_axis
+    >>> vector = Vector(1, 0, 0)
+    >>> axis = compas_axis_to_occ_axis(vector)
+    <class 'gp_Ax1'>
+
+    """
+    return gp_Ax1(
+        compas_point_to_occ_point(Point(0, 0, 0)),
+        compas_vector_to_occ_direction(Vector(1, 0, 0)),
+    )
+
+
+def compas_axis_from_occ_axis(axis: gp_Ax1) -> tuple[Point, Vector]:
+    """Convert an OCC axis to a tuple of COMPAS point and vector.
+
+    Parameters
+    ----------
+    axis : ``gp_Ax1``
+        The OCC axis.
+
+    Returns
+    -------
+    tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
+
+    """
+    point = compas_point_from_occ_point(axis.Location())
+    vector = compas_vector_from_occ_direction(axis.Direction())
+    return point, vector
 
 
 def compas_line_to_occ_line(self: Line) -> gp_Lin:
@@ -161,7 +207,10 @@ def compas_line_to_occ_line(self: Line) -> gp_Lin:
     <class 'gp_Lin'>
 
     """
-    return gp_Lin(compas_point_to_occ_point(self.start), compas_vector_to_occ_direction(self.direction))
+    return gp_Lin(
+        compas_point_to_occ_point(self.start),
+        compas_vector_to_occ_direction(self.direction),
+    )
 
 
 def compas_frame_from_occ_position(cls: Type[Frame], position: gp_Ax3) -> Frame:
@@ -182,9 +231,5 @@ def compas_frame_from_occ_position(cls: Type[Frame], position: gp_Ax3) -> Frame:
     return cls(
         compas_point_from_occ_point(Point, position.Location()),
         compas_vector_from_occ_direction(Vector, position.XDirection()),
-        compas_vector_from_occ_direction(Vector, position.YDirection())
+        compas_vector_from_occ_direction(Vector, position.YDirection()),
     )
-
-
-def compas_circle_to_occ(circle: Circle) -> gp_Circ:
-    """"""
