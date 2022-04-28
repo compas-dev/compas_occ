@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.geometry.OCCCurve.to_polyline`.
 * Added `compas_occ.geometry.OCCExtrusionSurface`.
 * Added `compas_occ.geometry.OCCNurbsSurface.from_extrusion`.
+* Added `compas_occ.geometry.OCCCurve.divide`.
 
 ### Changed
 
