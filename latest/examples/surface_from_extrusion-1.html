@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - Surface Frames</title>
+  <title>compas_occ - Surface From Extrusion 1</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Surface From Extrusion 1" href="surface_from_extrusion-1.html" />
+  <link rel="next" title="Surface From Extrusion 2" href="surface_from_extrusion-2.html" />
   
 
   
-  <link rel="prev" title="Surface Axis-Aligned Bounding Box" href="surface_aabb.html" />
+  <link rel="prev" title="Surface Frames" href="surface_frames.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,52 +84,36 @@
             
             <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">Surface Frames</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Surface From Extrusion 1</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="surface-frames">
-<h1>Surface Frames</h1>
+        <section id="surface-from-extrusion-1">
+<h1>Surface From Extrusion 1</h1>
 <figure class="figure align-default">
-<img alt="../_images/example_surface_frames.png" class="figure-img img-fluid" src="../_images/example_surface_frames.png" />
+<img alt="../_images/example_surface_from_extrusion-1.png" class="figure-img img-fluid" src="../_images/example_surface_from_extrusion-1.png" />
 </figure>
-<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">flatten</span>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Vector</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Circle</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Plane</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsCurve</span>
 <span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsSurface</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
+<span class="n">curve</span> <span class="o">=</span> <span class="n">NurbsCurve</span><span class="o">.</span><span class="n">from_circle</span><span class="p">(</span><span class="n">Circle</span><span class="p">(</span><span class="n">Plane</span><span class="o">.</span><span class="n">worldXY</span><span class="p">(),</span> <span class="mf">2.0</span><span class="p">))</span>
 
-<span class="n">points</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-    <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-    <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-    <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
-<span class="p">]</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_extrusion</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
-<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Frames</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">u_space</span><span class="p">(),</span> <span class="n">surface</span><span class="o">.</span><span class="n">v_space</span><span class="p">(),</span> <span class="s1">&#39;ij&#39;</span><span class="p">)</span>
-<span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">surface</span><span class="o">.</span><span class="n">frame_at</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">U</span><span class="p">),</span> <span class="n">flatten</span><span class="p">(</span><span class="n">V</span><span class="p">))]</span>
-
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Visualisation</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">view</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(),</span> <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">to_polyline</span><span class="p">(),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">())</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </section>
@@ -169,8 +153,8 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_joining.html">Curve Joining</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_segmentation.html">Curve Segmentation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Surface Frames</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Surface From Extrusion 1</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_meshgrid.html">Surface From Meshgrid</a></li>
@@ -202,7 +186,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Surface Frames</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Surface From Extrusion 1</a></li>
 </ul>
 
       </div>
@@ -214,20 +198,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="surface_aabb.html" title="Surface Axis-Aligned Bounding Box" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="surface_frames.html" title="Surface Frames" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Surface Axis-Aligned Bounding Box
+          Surface Frames
         </div>
       </a>
       
 
       
-      <a href="surface_from_extrusion-1.html" title="Surface From Extrusion 1" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="surface_from_extrusion-2.html" title="Surface From Extrusion 2" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Surface From Extrusion 1
+          Surface From Extrusion 2
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
