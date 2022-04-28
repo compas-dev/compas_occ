@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - Curve Closest Parameters Curve</title>
+  <title>compas_occ - Curve Divide</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Curve Closest Point" href="curve_closest_point.html" />
+  <link rel="next" title="Curve From Circle" href="curve_from_circle.html" />
   
 
   
-  <link rel="prev" title="BRep From Mesh" href="brep_from_mesh.html" />
+  <link rel="prev" title="Curve Comparison 2" href="curve_comparison2.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -84,52 +84,34 @@
             
             <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">Curve Closest Parameters Curve</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Curve Divide</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="curve-closest-parameters-curve">
-<h1>Curve Closest Parameters Curve</h1>
+        <section id="curve-divide">
+<h1>Curve Divide</h1>
 <figure class="figure align-default">
-<img alt="../_images/example_curve_closest_parameters_curve.png" class="figure-img img-fluid" src="../_images/example_curve_closest_parameters_curve.png" />
+<img alt="../_images/example_curve_divide.png" class="figure-img img-fluid" src="../_images/example_curve_divide.png" />
 </figure>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsCurve</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsCurve</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">NurbsCurve</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
-<span class="n">points0</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
-<span class="n">curve0</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points0</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">curve</span><span class="o">.</span><span class="n">point_at</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
 
-<span class="n">points1</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
-<span class="n">curve1</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points1</span><span class="p">)</span>
-
-<span class="n">parameters</span><span class="p">,</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">curve0</span><span class="o">.</span><span class="n">closest_parameters_curve</span><span class="p">(</span><span class="n">curve1</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">points</span> <span class="o">=</span> <span class="n">curve0</span><span class="o">.</span><span class="n">closest_points_curve</span><span class="p">(</span><span class="n">curve1</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="c1"># ==============================================================================</span>
-<span class="c1"># Visualisation</span>
-<span class="c1"># ==============================================================================</span>
-
-<span class="n">view</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve0</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve1</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-
-<span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre></div>
-</div>
-<div class="highlight-text notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>(0.47576829374770674, 0.336691471561402)
-0.43417581808963873
-(Point(4.390, 1.286, 1.068), Point(4.552, 1.380, 0.677))
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">to_polyline</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 </div>
 </section>
@@ -157,11 +139,11 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brep_from_booleans.html">BRep Shape From Booleans</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brep_from_corners.html">BRep From Corners</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brep_from_mesh.html">BRep From Mesh</a></li>
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Curve Closest Parameters Curve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_closest_point.html">Curve Closest Point</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_comparison1.html">Curve Comparison 1</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_comparison2.html">Curve Comparison 2</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_divide.html">Curve Divide</a></li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">Curve Divide</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_circle.html">Curve From Circle</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_line.html">Curve From Line</a></li>
@@ -203,7 +185,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Curve Closest Parameters Curve</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Curve Divide</a></li>
 </ul>
 
       </div>
@@ -215,20 +197,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="brep_from_mesh.html" title="BRep From Mesh" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="curve_comparison2.html" title="Curve Comparison 2" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRep From Mesh
+          Curve Comparison 2
         </div>
       </a>
       
 
       
-      <a href="curve_closest_point.html" title="Curve Closest Point" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="curve_from_circle.html" title="Curve From Circle" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Curve Closest Point
+          Curve From Circle
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
