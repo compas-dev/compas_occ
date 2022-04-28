@@ -57,7 +57,7 @@ class OCCSurfaceOfRevolution(OCCSurface):
 
     @property
     def point(self):
-        if not self._point:
+        if self._point is None:
             self._point = Point(0, 0, 0)
         return self._point
 
@@ -69,7 +69,7 @@ class OCCSurfaceOfRevolution(OCCSurface):
 
     @property
     def vector(self):
-        if not self._vector:
+        if self._vector is None:
             self._vector = Vector(0, 0, 1)
         return self._vector
 
