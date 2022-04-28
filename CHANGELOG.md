@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.geometry.OCCSurfaceOfRevolution`.
+* Added `compas_occ.conversions.compas_axis_to_occ_axis`.
+* Added `compas_occ.conversions.compas_axis_from_occ_axis`.
+* Added `compas_occ.geometry.OCCCurve.to_polyline`.
+
 ### Changed
 
 ### Removed
@@ -17,10 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.2] 2022-03-22
 
 ### Added
-* Added `compas_occ.geometry.NurbsCurve.join`.
-* Added `compas_occ.geometry.NurbsCurve.joined`.
+
+* Added `compas_occ.geometry.OCCNurbsCurve.join`.
+* Added `compas_occ.geometry.OCCNurbsCurve.joined`.
 
 ### Changed
+
 * Extend `compas_occ.geometry.OCCNurbsSurface.from_fill` with up to 4 input curves.
 
 ### Removed
