@@ -1,5 +1,6 @@
 from .surface import OCCSurface  # noqa : F401
 from .revolution import OCCRevolutionSurface  # noqa : F401
+from .extrusion import OCCExtrusionSurface  # noqa : F401
 from .nurbs import OCCNurbsSurface
 
 try:

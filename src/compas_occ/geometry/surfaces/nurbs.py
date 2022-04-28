@@ -1,5 +1,6 @@
 from compas.geometry import Point
 from compas.geometry import Line
+from compas.geometry import Translation
 from compas.utilities import flatten
 
 from compas_occ.conversions import compas_line_to_occ_line
@@ -172,30 +173,30 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     def data(self):
         """dict : Represenation of the surface as a Python dict."""
         return {
-            'points': [[point.data for point in row] for row in self.points],
-            'weights': self.weights,
-            'u_knots': self.u_knots,
-            'v_knots': self.v_knots,
-            'u_mults': self.u_mults,
-            'v_mults': self.v_mults,
-            'u_degree': self.u_degree,
-            'v_degree': self.v_degree,
-            'is_u_periodic': self.is_u_periodic,
-            'is_v_periodic': self.is_v_periodic
+            "points": [[point.data for point in row] for row in self.points],
+            "weights": self.weights,
+            "u_knots": self.u_knots,
+            "v_knots": self.v_knots,
+            "u_mults": self.u_mults,
+            "v_mults": self.v_mults,
+            "u_degree": self.u_degree,
+            "v_degree": self.v_degree,
+            "is_u_periodic": self.is_u_periodic,
+            "is_v_periodic": self.is_v_periodic,
         }
 
     @data.setter
     def data(self, data):
-        points = [[Point.from_data(point) for point in row] for row in data['points']]
-        weights = data['weights']
-        u_knots = data['u_knots']
-        v_knots = data['v_knots']
-        u_mults = data['u_mults']
-        v_mults = data['v_mults']
-        u_degree = data['u_degree']
-        v_degree = data['v_degree']
-        is_u_periodic = data['is_u_periodic']
-        is_v_periodic = data['is_v_periodic']
+        points = [[Point.from_data(point) for point in row] for row in data["points"]]
+        weights = data["weights"]
+        u_knots = data["u_knots"]
+        v_knots = data["v_knots"]
+        u_mults = data["u_mults"]
+        v_mults = data["v_mults"]
+        u_degree = data["u_degree"]
+        v_degree = data["v_degree"]
+        is_u_periodic = data["is_u_periodic"]
+        is_v_periodic = data["is_v_periodic"]
         self.occ_surface = Geom_BSplineSurface(
             array2_from_points2(points),
             array1_from_floats1(weights),
@@ -206,7 +207,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             u_degree,
             v_degree,
             is_u_periodic,
-            is_v_periodic
+            is_v_periodic,
         )
 
     @classmethod
@@ -224,23 +225,27 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             The constructed surface.
 
         """
-        points = [[Point.from_data(point) for point in row] for row in data['points']]
-        weights = data['weights']
-        u_knots = data['u_knots']
-        v_knots = data['v_knots']
-        u_mults = data['u_mults']
-        v_mults = data['v_mults']
-        u_degree = data['u_degree']
-        v_degree = data['v_degree']
-        is_u_periodic = data['is_u_periodic']
-        is_v_periodic = data['is_v_periodic']
+        points = [[Point.from_data(point) for point in row] for row in data["points"]]
+        weights = data["weights"]
+        u_knots = data["u_knots"]
+        v_knots = data["v_knots"]
+        u_mults = data["u_mults"]
+        v_mults = data["v_mults"]
+        u_degree = data["u_degree"]
+        v_degree = data["v_degree"]
+        is_u_periodic = data["is_u_periodic"]
+        is_v_periodic = data["is_v_periodic"]
         return OCCNurbsSurface.from_parameters(
             points,
             weights,
-            u_knots, v_knots,
-            u_mults, v_mults,
-            u_degree, v_degree,
-            is_u_periodic, is_v_periodic
+            u_knots,
+            v_knots,
+            u_mults,
+            v_mults,
+            u_degree,
+            v_degree,
+            is_u_periodic,
+            is_v_periodic,
         )
 
     # ==============================================================================
@@ -248,7 +253,19 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # ==============================================================================
 
     @classmethod
-    def from_parameters(cls, points, weights, u_knots, v_knots, u_mults, v_mults, u_degree, v_degree, is_u_periodic=False, is_v_periodic=False):
+    def from_parameters(
+        cls,
+        points,
+        weights,
+        u_knots,
+        v_knots,
+        u_mults,
+        v_mults,
+        u_degree,
+        v_degree,
+        is_u_periodic=False,
+        is_v_periodic=False,
+    ):
         """Construct a NURBS surface from explicit parameters.
 
         Parameters
@@ -290,7 +307,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             u_degree,
             v_degree,
             is_u_periodic,
-            is_v_periodic
+            is_v_periodic,
         )
         return surface
 
@@ -334,10 +351,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return cls.from_parameters(
             points,
             weights,
-            u_knots, v_knots,
-            u_mults, v_mults,
-            u_degree, v_degree,
-            is_u_periodic, is_v_periodic
+            u_knots,
+            v_knots,
+            u_mults,
+            v_mults,
+            u_degree,
+            v_degree,
+            is_u_periodic,
+            is_v_periodic,
         )
 
     @classmethod
@@ -356,7 +377,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         raise NotImplementedError
 
     @classmethod
-    def from_fill(cls, curve1, curve2, curve3=None, curve4=None, style='stretch'):
+    def from_fill(cls, curve1, curve2, curve3=None, curve4=None, style="stretch"):
         """Construct a NURBS surface from the infill between two, three or four contiguous NURBS curves.
 
         Parameters
@@ -382,24 +403,54 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         """
 
-        if style == 'stretch':
+        if style == "stretch":
             style = GeomFill_StretchStyle
-        elif style == 'coons':
+        elif style == "coons":
             style = GeomFill_CoonsStyle
-        elif style == 'curved':
+        elif style == "curved":
             style = GeomFill_CurvedStyle
         else:
-            ValueError('Scheme is not supported')
+            ValueError("Scheme is not supported")
 
         surface = cls()
         if curve3 and curve4:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, curve4.occ_curve, style)
+            occ_fill = GeomFill_BSplineCurves(
+                curve1.occ_curve,
+                curve2.occ_curve,
+                curve3.occ_curve,
+                curve4.occ_curve,
+                style,
+            )
         elif curve3:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, style)
+            occ_fill = GeomFill_BSplineCurves(
+                curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, style
+            )
         else:
             occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, style)
         surface.occ_surface = occ_fill.Surface()
         return surface
+
+    @classmethod
+    def from_extrusion(cls, curve, vector):
+        """Construct a NURBS surface from an extrusion of a basis curve.
+
+        Note that the extrusion surface is constructed by generating an infill
+        between the basis curve and a translated copy with :meth:`from_fill`.
+
+        Parameters
+        ----------
+        curve : :class:`compas_occ.geometry.Curve`
+            The basis curve for the extrusion.
+        vector : :class:`compas.geometry.Vector`
+            The extrusion vector, which serves as a translation vector for the basis curve.
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+
+        """
+        other = curve.transformed(Translation.from_vector(vector))
+        return cls.from_fill(curve, other)
 
     # ==============================================================================
     # Conversions
