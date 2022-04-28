@@ -184,6 +184,7 @@ class OCCSurface(Surface):
     @property
     def occ_shape(self):
         from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+
         return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
 
     @property
@@ -237,7 +238,7 @@ class OCCSurface(Surface):
 
         """
         _T = gp_Trsf()
-        _T.SetValues(* T.list[:12])
+        _T.SetValues(*T.list[:12])
         self.occ_surface.Transform(_T)
 
     def u_isocurve(self, u):
@@ -283,7 +284,7 @@ class OCCSurface(Surface):
             self.v_isocurve(vmin),
             self.u_isocurve(umax),
             self.v_isocurve(vmax),
-            self.u_isocurve(umin)
+            self.u_isocurve(umin),
         ]
         curves[-2].reverse()
         curves[-1].reverse()
@@ -342,7 +343,9 @@ class OCCSurface(Surface):
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_surface.D1(u, v, point, uvec, vvec)
-        return Frame(Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec))
+        return Frame(
+            Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec)
+        )
 
     def aabb(self, precision=0.0, optimal=False):
         """Compute the axis aligned bounding box of the surface.
@@ -363,10 +366,9 @@ class OCCSurface(Surface):
         else:
             add = BndLib_AddSurface_Add
         add(GeomAdaptor_Surface(self.occ_surface), precision, box)
-        return Box.from_diagonal((
-            Point.from_occ(box.CornerMin()),
-            Point.from_occ(box.CornerMax())
-        ))
+        return Box.from_diagonal(
+            (Point.from_occ(box.CornerMin()), Point.from_occ(box.CornerMax()))
+        )
 
     def closest_point(self, point, return_parameters=False):
         """Compute the closest point on the curve to a given point.
@@ -405,7 +407,9 @@ class OCCSurface(Surface):
         """
         box = Bnd_OBB()
         brepbndlib_AddOBB(self.occ_shape, box, True, True, True)
-        return Box(Frame.from_occ(box.Position()), box.XHSize(), box.YHSize(), box.ZHSize())
+        return Box(
+            Frame.from_occ(box.Position()), box.XHSize(), box.YHSize(), box.ZHSize()
+        )
 
     def intersections_with_line(self, line):
         """Compute the intersections with a line.
