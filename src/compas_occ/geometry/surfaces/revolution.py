@@ -9,7 +9,7 @@ from OCC.Core.Geom import Geom_Curve
 from OCC.Core.Geom import Geom_SurfaceOfRevolution
 
 
-class OCCSurfaceOfRevolution(OCCSurface):
+class OCCRevolutionSurface(OCCSurface):
     """Class representing a surface of revolution based on the corresponding surface of the OCC kernel.
 
     Parameters
