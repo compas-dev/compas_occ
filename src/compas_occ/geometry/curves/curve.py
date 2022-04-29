@@ -371,7 +371,7 @@ class OCCCurve(Curve):
         float
 
         """
-        return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve))
+        return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve), precision)
 
     def closest_point(self, point, return_parameter=False):
         """Compute the closest point on the curve to a given point.
@@ -465,7 +465,7 @@ class OCCCurve(Curve):
             return points
         return points, extrema.LowerDistance()
 
-    def divide_by_count(self, count, return_points=False):
+    def divide_by_count(self, count, return_points=False, precision=1e-6):
         """Divide the curve into a specific number of equal length segments.
 
         Parameters
@@ -484,14 +484,14 @@ class OCCCurve(Curve):
             If `return_points` is True, a list of points in addition to the parameters of the discretisation.
 
         """
-        L = self.length()
+        L = self.length(precision=precision)
         length = L / count
         a, b = self.domain
         t = a
         params = [t]
         adaptor = GeomAdaptor_Curve(self.occ_curve)
         for _ in range(count - 1):
-            a = GCPnts_AbscissaPoint(adaptor, length, t)
+            a = GCPnts_AbscissaPoint(adaptor, length, t, precision)
             t = a.Parameter()
             params.append(t)
         params.append(b)
