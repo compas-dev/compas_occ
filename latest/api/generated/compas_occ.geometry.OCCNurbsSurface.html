@@ -24,7 +24,7 @@
   
 
   
-  <link rel="prev" title="OCCSurface.xyz" href="compas_occ.geometry.OCCSurface.xyz.html" />
+  <link rel="prev" title="OCCRevolutionSurface.xyz" href="compas_occ.geometry.OCCRevolutionSurface.xyz.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,7 +99,7 @@
 <h1>OCCNurbsSurface</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCNurbsSurface">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCNurbsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/surfaces/nurbs.py#L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCNurbsSurface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/surfaces/nurbs.py#L61"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference internal" href="compas_occ.geometry.OCCSurface.html#compas_occ.geometry.OCCSurface" title="compas_occ.geometry.surfaces.surface.OCCSurface"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_occ.geometry.surfaces.surface.OCCSurface</span></code></a>, <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.NurbsSurface.html#compas.geometry.NurbsSurface" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.surfaces.nurbs.NurbsSurface</span></code></a></p>
 <p>Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.</p>
 <dl class="field-list simple">
@@ -179,16 +179,19 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_data.html#compas_occ.geometry.OCCNurbsSurface.from_data" title="compas_occ.geometry.OCCNurbsSurface.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
 <td><p>Construct a BSpline surface from its data representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_fill.html#compas_occ.geometry.OCCNurbsSurface.from_fill" title="compas_occ.geometry.OCCNurbsSurface.from_fill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_fill</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_extrusion.html#compas_occ.geometry.OCCNurbsSurface.from_extrusion" title="compas_occ.geometry.OCCNurbsSurface.from_extrusion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_extrusion</span></code></a></p></td>
+<td><p>Construct a NURBS surface from an extrusion of a basis curve.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_fill.html#compas_occ.geometry.OCCNurbsSurface.from_fill" title="compas_occ.geometry.OCCNurbsSurface.from_fill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_fill</span></code></a></p></td>
 <td><p>Construct a NURBS surface from the infill between two, three or four contiguous NURBS curves.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_parameters.html#compas_occ.geometry.OCCNurbsSurface.from_parameters" title="compas_occ.geometry.OCCNurbsSurface.from_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_parameters</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_parameters.html#compas_occ.geometry.OCCNurbsSurface.from_parameters" title="compas_occ.geometry.OCCNurbsSurface.from_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_parameters</span></code></a></p></td>
 <td><p>Construct a NURBS surface from explicit parameters.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_points.html#compas_occ.geometry.OCCNurbsSurface.from_points" title="compas_occ.geometry.OCCNurbsSurface.from_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_points</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_points.html#compas_occ.geometry.OCCNurbsSurface.from_points" title="compas_occ.geometry.OCCNurbsSurface.from_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_points</span></code></a></p></td>
 <td><p>Construct a NURBS surface from control points.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_step.html#compas_occ.geometry.OCCNurbsSurface.from_step" title="compas_occ.geometry.OCCNurbsSurface.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_step.html#compas_occ.geometry.OCCNurbsSurface.from_step" title="compas_occ.geometry.OCCNurbsSurface.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
 <td><p>Load a NURBS surface from a STP file.</p></td>
 </tr>
 </tbody>
@@ -326,6 +329,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_closest_point.html">Curve Closest Point</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_comparison1.html">Curve Comparison 1</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_divide.html">Curve Divide</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_circle.html">Curve From Circle</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_line.html">Curve From Line</a></li>
@@ -335,6 +339,8 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_segmentation.html">Curve Segmentation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_parameters.html">Surface From Parameters</a></li>
@@ -342,6 +348,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
@@ -381,11 +388,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.geometry.OCCSurface.xyz.html" title="OCCSurface.xyz" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.geometry.OCCRevolutionSurface.xyz.html" title="OCCRevolutionSurface.xyz" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          OCCSurface.xyz
+          OCCRevolutionSurface.xyz
         </div>
       </a>
       
