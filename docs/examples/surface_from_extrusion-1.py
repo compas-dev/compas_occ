@@ -1,11 +1,11 @@
 from compas.geometry import Vector
 from compas.geometry import Circle
 from compas.geometry import Plane
-from compas.geometry import NurbsCurve
+from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
-curve = NurbsCurve.from_circle(Circle(Plane.worldXY(), 2.0))
+curve = OCCNurbsCurve.from_circle(Circle(Plane.worldXY(), 2.0))
 
 surface = OCCNurbsSurface.from_extrusion(curve, Vector(0, 0, 5))
 
