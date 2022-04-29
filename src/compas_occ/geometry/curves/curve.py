@@ -3,7 +3,6 @@ from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
-from compas.geometry import Polyline
 from compas.geometry import distance_point_point
 
 
@@ -188,21 +187,6 @@ class OCCCurve(Curve):
         status = step_writer.Write(filepath)
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
-
-    def to_polyline(self, n=100):
-        """Convert the curve to a polyline.
-
-        Parameters
-        ----------
-        n : int, optional
-            The number of polyline points.
-
-        Returns
-        -------
-        :class:`compas.geometry.Polyline`
-
-        """
-        return Polyline(self.locus(resolution=n))
 
     # ==============================================================================
     # Methods
@@ -481,29 +465,39 @@ class OCCCurve(Curve):
             return points
         return points, extrema.LowerDistance()
 
-    def divide(self, n):
-        """Divide a curve into segments of equal length.
+    def divide_by_count(self, count, return_points=False):
+        """Divide the curve into a specific number of equal length segments.
 
         Parameters
         ----------
-        n : int
+        count : int
             The number of segments.
+        return_points : bool, optional
+            If True, return the list of division parameters,
+            and the points corresponding to those parameters.
+            If False, return only the list of parameters.
 
         Returns
         -------
-        list[float]
-            The parameters dividing the curve into segments.
+        list[float] | tuple[list[float], list[:class:`~compas.geometry.Point`]]
+            If `return_points` is False, the parameters of the discretisation.
+            If `return_points` is True, a list of points in addition to the parameters of the discretisation.
 
         """
         L = self.length()
-        length = L / n
+        length = L / count
         a, b = self.domain
         t = a
         params = [t]
         adaptor = GeomAdaptor_Curve(self.occ_curve)
-        for _ in range(n - 1):
+        for _ in range(count - 1):
             a = GCPnts_AbscissaPoint(adaptor, length, t)
             t = a.Parameter()
             params.append(t)
         params.append(b)
-        return params
+        if not return_points:
+            return params
+        points = [self.point_at(t) for t in params]
+        return params, points
+
+    divide = divide_by_count

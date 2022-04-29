@@ -24,10 +24,12 @@ class OCCRevolutionSurface(OCCSurface):
 
     Attributes
     ----------
-    curve
-    point
-    vector
-    axis
+    curve : :class:`compas_occ.geometry.OCCCurve`
+        The base curve for the revolution.
+    point : :class:`compas.geometry.Point`
+        The location of the axis of revolution.
+    vector : :class:`compas.geometry.Vector`
+        The direction of the axis of revolution.
 
     Examples
     --------

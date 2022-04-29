@@ -23,8 +23,10 @@ class OCCExtrusionSurface(OCCSurface):
 
     Attributes
     ----------
-    curve
-    vector
+    curve : :class:`compas_occ.geometry.OCCCurve`
+        the base curve for the extrusion.
+    vector : :class:`compas.vector.Vector`
+        The direction of the extrusion.
 
     Examples
     --------
