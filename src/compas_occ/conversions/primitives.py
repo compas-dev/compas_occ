@@ -1,4 +1,5 @@
 from typing import Type
+from typing import Tuple
 
 from compas.geometry import Point
 from compas.geometry import Vector
@@ -141,7 +142,7 @@ def compas_vector_from_occ_direction(cls: Type[Vector], vector: gp_Dir) -> Vecto
     return cls(vector.X(), vector.Y(), vector.Z())
 
 
-def compas_axis_to_occ_axis(axis: tuple[Point, Vector]) -> gp_Ax1:
+def compas_axis_to_occ_axis(axis: Tuple[Point, Vector]) -> gp_Ax1:
     """Convert a COMPAS point and vector to an OCC axis.
 
     Parameters
@@ -168,7 +169,7 @@ def compas_axis_to_occ_axis(axis: tuple[Point, Vector]) -> gp_Ax1:
     )
 
 
-def compas_axis_from_occ_axis(axis: gp_Ax1) -> tuple[Point, Vector]:
+def compas_axis_from_occ_axis(axis: gp_Ax1) -> Tuple[Point, Vector]:
     """Convert an OCC axis to a tuple of COMPAS point and vector.
 
     Parameters
