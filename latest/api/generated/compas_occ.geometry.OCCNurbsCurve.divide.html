@@ -101,14 +101,20 @@
 <h1>OCCNurbsCurve.divide</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCNurbsCurve.divide">
-<span class="sig-prename descclassname"><span class="pre">OCCNurbsCurve.</span></span><span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/nurbs.py#L484"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Divide a curve into segments of equal length.</p>
+<span class="sig-prename descclassname"><span class="pre">OCCNurbsCurve.</span></span><span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/nurbs.py#L468"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Divide the curve into a specific number of equal length segments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – The number of segments.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>count</strong> (<em>int</em>) – The number of segments.</p></li>
+<li><p><strong>return_points</strong> (<em>bool, optional</em>) – If True, return the list of division parameters,
+and the points corresponding to those parameters.
+If False, return only the list of parameters.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>list[float]</em> – The parameters dividing the curve into segments.</p>
+<dd class="field-even"><p>list[float] | tuple[list[float], list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]] – If <cite>return_points</cite> is False, the parameters of the discretisation.
+If <cite>return_points</cite> is True, a list of points in addition to the parameters of the discretisation.</p>
 </dd>
 </dl>
 </dd></dl>
