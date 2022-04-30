@@ -8,20 +8,25 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_VERTEX
 
 from OCC.Core.BRepAdaptor import BRepAdaptor_Curve
-# from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
-# from OCC.Core.Geom import Geom_Curve
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 
 from OCC.Core.TopExp import topexp_FirstVertex
 from OCC.Core.TopExp import topexp_LastVertex
 
-import compas.geometry
+from compas.geometry import Point
 from compas.geometry import Line
 from compas.geometry import Plane
 from compas.geometry import Circle
 from compas.geometry import Ellipse
 
 from compas_occ.brep import BRepVertex
+from compas_occ.conversions.primitives import (
+    compas_line_to_occ_line,
+    compas_point_to_occ_point,
+    compas_circle_to_occ_circle,
+)
 from compas_occ.geometry import OCCCurve
+from compas_occ.geometry import OCCSurface
 
 
 class BRepEdge:
@@ -161,7 +166,173 @@ class BRepEdge:
             self._curve.occ_curve = self.adaptor.Curve()
         return self._curve
 
-    def to_line(self) -> compas.geometry.Line:
+    @classmethod
+    def from_vertex_vertex(cls, a: BRepVertex, b: BRepVertex) -> "BRepEdge":
+        """Construct an edge from two vertices."""
+        builder = BRepBuilderAPI_MakeEdge(a.vertex, b.vertex)
+        return cls(builder.Edge())
+
+    @classmethod
+    def from_point_point(cls, a: Point, b: Point) -> "BRepEdge":
+        """Construct an edge from two points."""
+        builder = BRepBuilderAPI_MakeEdge(
+            compas_point_to_occ_point(a), compas_point_to_occ_point(b)
+        )
+        return cls(builder.Edge())
+
+    @classmethod
+    def from_line(
+        cls,
+        line: Line,
+        params: tuple[float, float] = None,
+        points: tuple[Point, Point] = None,
+        vertices: tuple[BRepVertex, BRepVertex] = None,
+    ) -> "BRepEdge":
+        """Construct an edge from a line."""
+        if params:
+            builder = BRepBuilderAPI_MakeEdge(compas_line_to_occ_line(line), *params)
+        elif points:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_line_to_occ_line(line),
+                compas_point_to_occ_point(points[0]),
+                compas_point_to_occ_point(points[1]),
+            )
+        elif vertices:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_line_to_occ_line(line), vertices[0].vertex, vertices[1].vertex
+            )
+        else:
+            builder = BRepBuilderAPI_MakeEdge(compas_line_to_occ_line(line))
+        return cls(builder.Edge())
+
+    @classmethod
+    def from_circle(
+        cls,
+        circle: Circle,
+        params: tuple[float, float] = None,
+        points: tuple[Point, Point] = None,
+        vertices: tuple[BRepVertex, BRepVertex] = None,
+    ) -> "BRepEdge":
+        """Construct an edge from a circle."""
+        if params:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_circle_to_occ_circle(circle), *params
+            )
+        elif points:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_circle_to_occ_circle(circle),
+                compas_point_to_occ_point(points[0]),
+                compas_point_to_occ_point(points[1]),
+            )
+        elif vertices:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_circle_to_occ_circle(circle),
+                vertices[0].vertex,
+                vertices[1].vertex,
+            )
+        else:
+            builder = BRepBuilderAPI_MakeEdge(compas_circle_to_occ_circle(circle))
+        return cls(builder.Edge())
+
+    @classmethod
+    def from_ellipse(cls, ellipse: Ellipse) -> "BRepEdge":
+        raise NotImplementedError
+
+    @classmethod
+    def from_curve(
+        cls,
+        curve: OCCCurve,
+        surface: OCCSurface = None,
+        params: tuple[float, float] = None,
+        points: tuple[Point, Point] = None,
+        vertices: tuple[BRepVertex, BRepVertex] = None,
+    ) -> "BRepEdge":
+        """Construct an edge from a curve."""
+        if points:
+            if params:
+                if surface:
+                    # the curve should be 2D
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        surface.occ_surface,
+                        compas_point_to_occ_point(points[0]),
+                        compas_point_to_occ_point(points[1]),
+                        *params,
+                    )
+                else:
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        compas_point_to_occ_point(points[0]),
+                        compas_point_to_occ_point(points[1]),
+                        *params,
+                    )
+            else:
+                if surface:
+                    # the curve should be 2D
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        surface.occ_surface,
+                        compas_point_to_occ_point(points[0]),
+                        compas_point_to_occ_point(points[1]),
+                    )
+                else:
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        compas_point_to_occ_point(points[0]),
+                        compas_point_to_occ_point(points[1]),
+                    )
+        elif vertices:
+            if params:
+                if surface:
+                    # the curve should be 2D
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        surface.occ_surface,
+                        vertices[0].vertex,
+                        vertices[1].vertex,
+                        *params,
+                    )
+                else:
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        vertices[0].vertex,
+                        vertices[1].vertex,
+                        *params,
+                    )
+            else:
+                if surface:
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        surface.occ_surface,
+                        vertices[0].vertex,
+                        vertices[1].vertex,
+                    )
+                else:
+                    builder = BRepBuilderAPI_MakeEdge(
+                        curve.occ_curve,
+                        vertices[0].vertex,
+                        vertices[1].vertex,
+                    )
+        elif params:
+            if surface:
+                builder = BRepBuilderAPI_MakeEdge(
+                    curve.occ_curve,
+                    surface.occ_surface,
+                    *params,
+                )
+            else:
+                builder = BRepBuilderAPI_MakeEdge(
+                    curve.occ_curve,
+                    *params,
+                )
+        else:
+            if surface:
+                builder = BRepBuilderAPI_MakeEdge(curve.occ_curve, surface.occ_surface)
+            else:
+                builder = BRepBuilderAPI_MakeEdge(curve.occ_curve)
+        return cls(builder.Edge())
+
+    def to_line(self) -> Line:
         """Convert the edge geometry to a line.
 
         Returns
@@ -176,13 +347,13 @@ class BRepEdge:
 
         """
         if not self.is_line:
-            raise ValueError(f'The underlying geometry is not a line: {self.type}')
+            raise ValueError(f"The underlying geometry is not a line: {self.type}")
 
         a = self.first_vertex.point
         b = self.last_vertex.point
         return Line(a, b)
 
-    def to_circle(self) -> compas.geometry.Circle:
+    def to_circle(self) -> Circle:
         """Convert the edge geometry to a circle.
 
         Returns
@@ -197,7 +368,7 @@ class BRepEdge:
 
         """
         if not self.is_circle:
-            raise ValueError(f'The underlying geometry is not a circle: {self.type}')
+            raise ValueError(f"The underlying geometry is not a circle: {self.type}")
 
         curve = self.adaptor.Curve()
         circle = curve.Circle()
@@ -208,7 +379,7 @@ class BRepEdge:
         normal = direction.X(), direction.Y(), direction.Z()
         return Circle(Plane(point, normal), radius)
 
-    def to_ellipse(self) -> compas.geometry.Ellipse:
+    def to_ellipse(self) -> Ellipse:
         """Convert the edge geometry to an ellipse.
 
         Returns
@@ -223,7 +394,7 @@ class BRepEdge:
 
         """
         if not self.is_ellipse:
-            raise ValueError(f'The underlying geometry is not an ellipse: {self.type}')
+            raise ValueError(f"The underlying geometry is not an ellipse: {self.type}")
 
         curve = self.adaptor.Curve()
         ellipse = curve.Ellipse()
@@ -249,7 +420,7 @@ class BRepEdge:
 
         """
         if not self.is_hyperbola:
-            raise ValueError(f'The underlying geometry is not a hyperbola: {self.type}')
+            raise ValueError(f"The underlying geometry is not a hyperbola: {self.type}")
         raise NotImplementedError
 
     def to_parabola(self) -> None:
@@ -266,7 +437,7 @@ class BRepEdge:
 
         """
         if not self.is_parabola:
-            raise ValueError(f'The underlying geometry is not a parabola: {self.type}')
+            raise ValueError(f"The underlying geometry is not a parabola: {self.type}")
         raise NotImplementedError
 
     def to_bezier(self) -> None:
@@ -283,7 +454,7 @@ class BRepEdge:
 
         """
         if not self.is_bezier:
-            raise ValueError(f'The underlying geometry is not a bezier: {self.type}')
+            raise ValueError(f"The underlying geometry is not a bezier: {self.type}")
         raise NotImplementedError
 
     def to_bspline(self) -> None:
@@ -300,7 +471,7 @@ class BRepEdge:
 
         """
         if not self.is_bspline:
-            raise ValueError(f'The underlying geometry is not a bspline: {self.type}')
+            raise ValueError(f"The underlying geometry is not a bspline: {self.type}")
         raise NotImplementedError
 
     def to_curve(self) -> OCCCurve:
