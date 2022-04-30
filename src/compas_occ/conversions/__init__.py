@@ -29,12 +29,33 @@ Primitives
     :nosignatures:
 
     compas_point_to_occ_point
-    compas_point_from_occ_point
     compas_vector_to_occ_vector
     compas_vector_to_occ_direction
-    compas_vector_from_occ_vector
+    compas_plane_to_occ_plane
+    compas_plane_to_occ_ax2
+    compas_plane_to_occ_ax3
     compas_line_to_occ_line
+    compas_circle_to_occ_circle
+    compas_sphere_to_occ_sphere
+    compas_cylinder_to_occ_cylinder
+    compas_cone_to_occ_cone
+    compas_torus_to_occ_torus
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    compas_point_from_occ_point
+    compas_vector_from_occ_vector
     compas_frame_from_occ_position
+
+Shapes
+======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
 
 Meshes
 ======
@@ -67,7 +88,15 @@ from .primitives import compas_vector_to_occ_vector  # noqa: F401
 from .primitives import compas_vector_to_occ_direction  # noqa: F401
 from .primitives import compas_vector_from_occ_vector  # noqa: F401
 from .primitives import compas_line_to_occ_line  # noqa: F401
+from .primitives import compas_plane_to_occ_plane  # noqa: F401
+from .primitives import compas_plane_to_occ_ax2  # noqa: F401
+from .primitives import compas_plane_to_occ_ax3  # noqa: F401
+from .primitives import compas_circle_to_occ_circle  # noqa: F401
 from .primitives import compas_frame_from_occ_position  # noqa: F401
+from .primitives import compas_sphere_to_occ_sphere  # noqa: F401
+from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
+from .primitives import compas_cone_to_occ_cone  # noqa: F401
+from .primitives import compas_torus_to_occ_torus  # noqa: F401
 
 from .meshes import triangle_to_face  # noqa: F401
 from .meshes import quad_to_face  # noqa: F401
