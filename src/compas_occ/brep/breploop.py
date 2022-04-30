@@ -1,8 +1,13 @@
 from typing import List
 
-from OCC.Core.TopoDS import TopoDS_Wire, topods_Wire
-
+from OCC.Core.TopoDS import TopoDS_Wire
+from OCC.Core.TopoDS import topods_Wire
 from OCC.Core.BRepTools import BRepTools_WireExplorer
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeWire
+
+from compas.utilities import pairwise
+from compas.geometry import Polyline
+from compas.geometry import Polygon
 
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
@@ -61,3 +66,62 @@ class BRepLoop:
             edges.append(BRepEdge(edge))
             explorer.Next()
         return edges
+
+    @classmethod
+    def from_edges(cls, edges: List[BRepEdge]) -> "BRepLoop":
+        """Construct a loop from a collection of edges.
+
+        Parameters
+        ----------
+        edges : list[:class:`compas_occ.brep.BRepEdge`]
+            The edges.
+
+        Returns
+        -------
+        ``BRepLoop``
+
+        """
+        builder = BRepBuilderAPI_MakeWire()
+        for edge in edges:
+            builder.Add(edge.edge)
+        return cls(builder.Wire())
+
+    @classmethod
+    def from_polyline(cls, polyline: Polyline) -> "BRepLoop":
+        """Construct a loop from a polyline.
+
+        Parameters
+        ----------
+        polyline : :class:`compas.geometry.Polyline`
+            The polyline.
+
+        Returns
+        -------
+        ``BRepLoop``
+
+        """
+        edges = []
+        for a, b in pairwise(polyline.points):
+            edge = BRepEdge.from_point_point(a, b)
+            edges.append(edge)
+        return cls.from_edges(edges)
+
+    @classmethod
+    def from_polygon(cls, polygon: Polygon) -> "BRepLoop":
+        """Construct a loop from a polygon.
+
+        Parameters
+        ----------
+        polygon : :class:`compas.geometry.Polygon`
+            The polygon.
+
+        Returns
+        -------
+        ``BRepLoop``
+
+        """
+        edges = []
+        for a, b in pairwise(polygon.points):
+            edge = BRepEdge.from_point_point(a, b)
+            edges.append(edge)
+        return cls.from_edges(edges)
