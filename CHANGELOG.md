@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.geometry.OCCNurbsSurface.from_extrusion`.
 * Added implementation for `compas_occ.geometry.OCCCurve.divide_by_count`.
 * Added `compas_occ.geometry.OCCCurve.divide` as alias for `compas_occ.geometry.OCCCurve.divide_by_count`.
+* Added `compas_occ.geometry.OCCCurve.project` and `compas_occ.geometry.OCCCurve.projected`.
+* Added `compas_occ.geometry.OCCCurve.embedded`.
 
 ### Changed
 

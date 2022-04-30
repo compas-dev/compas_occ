@@ -23,6 +23,8 @@ from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
+from OCC.Core.GeomProjLib import geomprojlib_Project
+from OCC.Core.GeomProjLib import geomprojlib_Curve2d
 
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
@@ -515,6 +517,39 @@ class OCCCurve(Curve):
         None
 
         """
+        result = geomprojlib_Project(self.occ_curve, surface.occ_surface)
+        self.occ_curve = result
+
+    def projected(self, surface):
+        """Return a copy of the curve projected onto a surface.
+
+        Parameters
+        ----------
+        surface : :class:`compas_occ.geometry.OCCSurface`
+            The projection surface.
+
+        Returns
+        -------
+        :class:`OCCCurve`
+
+        """
+        curve = self.copy()
+        curve.project(surface)
+        return curve
+
+    def embed(self, surface):
+        """Embed the curve into the parameter space of the surface.
+
+        Parameters
+        ----------
+        surface : :class:`compas_occ.geometry.OCCSurface`
+            The projection surface.
+
+        Returns
+        -------
+        None
+
+        """
         raise NotImplementedError
 
     def embedded(self, surface):
@@ -530,4 +565,7 @@ class OCCCurve(Curve):
         ???
 
         """
-        raise NotImplementedError
+        curve = self.copy()
+        result = geomprojlib_Curve2d(curve.occ_curve, surface.occ_surface)
+        curve.occ_curve = result
+        return curve
