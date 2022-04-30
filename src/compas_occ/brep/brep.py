@@ -1,5 +1,4 @@
 from typing import List
-from typing import Optional
 
 import compas.geometry
 import compas.datastructures
@@ -248,7 +247,9 @@ class BRep:
     def frame(self) -> compas.geometry.Frame:
         location = self.shape.Location()
         transformation = location.Transformation()
-        T = Transformation(matrix=[[transformation.Value(i, j) for j in range(4)] for i in range(4)])
+        T = Transformation(
+            matrix=[[transformation.Value(i, j) for j in range(4)] for i in range(4)]
+        )
         frame = Frame.from_transformation(T)
         return frame
 
@@ -264,36 +265,38 @@ class BRep:
     # Constructors
     # ==============================================================================
 
+    # @classmethod
+    # def from_corners(
+    #     cls,
+    #     p1: compas.geometry.Point,
+    #     p2: compas.geometry.Point,
+    #     p3: compas.geometry.Point,
+    #     p4: Optional[compas.geometry.Point] = None,
+    # ) -> "BRep":
+    #     """Construct a BRep from 3 or 4 corner points.
+
+    #     Parameters
+    #     ----------
+    #     p1 : :class:`~compas.geometry.Point`
+    #     p2 : :class:`~compas.geometry.Point`
+    #     p3 : :class:`~compas.geometry.Point`
+    #     p4 : :class:`~compas.geometry.Point`, optional
+
+    #     Returns
+    #     -------
+    #     :class:`~compas_occ.brep.BRep`
+
+    #     """
+    #     if not p4:
+    #         brep = BRep()
+    #         brep.shape = triangle_to_face([p1, p2, p3])
+    #         return brep
+    #     brep = BRep()
+    #     brep.shape = quad_to_face([p1, p2, p3, p4])
+    #     return brep
+
     @classmethod
-    def from_corners(cls,
-                     p1: compas.geometry.Point,
-                     p2: compas.geometry.Point,
-                     p3: compas.geometry.Point,
-                     p4: Optional[compas.geometry.Point] = None) -> 'BRep':
-        """Construct a BRep from 3 or 4 corner points.
-
-        Parameters
-        ----------
-        p1 : :class:`~compas.geometry.Point`
-        p2 : :class:`~compas.geometry.Point`
-        p3 : :class:`~compas.geometry.Point`
-        p4 : :class:`~compas.geometry.Point`, optional
-
-        Returns
-        -------
-        :class:`~compas_occ.brep.BRep`
-
-        """
-        if not p4:
-            brep = BRep()
-            brep.shape = triangle_to_face([p1, p2, p3])
-            return brep
-        brep = BRep()
-        brep.shape = quad_to_face([p1, p2, p3, p4])
-        return brep
-
-    @classmethod
-    def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> 'BRep':
+    def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> "BRep":
         """Construct a BRep from a set of polygons.
 
         Parameters
@@ -320,7 +323,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_curves(cls, curves: List[compas.geometry.NurbsCurve]) -> 'BRep':
+    def from_curves(cls, curves: List[compas.geometry.NurbsCurve]) -> "BRep":
         """Construct a BRep from a set of curves.
 
         Parameters
@@ -335,7 +338,7 @@ class BRep:
         raise NotImplementedError
 
     @classmethod
-    def from_box(cls, box: compas.geometry.Box) -> 'BRep':
+    def from_box(cls, box: compas.geometry.Box) -> "BRep":
         """Construct a BRep from a COMPAS box.
 
         Parameters
@@ -351,13 +354,13 @@ class BRep:
         yaxis = box.frame.yaxis.scaled(-0.5 * box.ysize)
         zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
         frame = box.frame.transformed(Translation.from_vector(xaxis + yaxis + zaxis))
-        ax2 = gp_Ax2(gp_Pnt(* frame.point), gp_Dir(* frame.zaxis), gp_Dir(* frame.xaxis))
+        ax2 = gp_Ax2(gp_Pnt(*frame.point), gp_Dir(*frame.zaxis), gp_Dir(*frame.xaxis))
         brep = BRep()
         brep.shape = BRepPrimAPI_MakeBox(ax2, box.xsize, box.ysize, box.zsize).Shape()
         return brep
 
     @classmethod
-    def from_sphere(cls, sphere: compas.geometry.Sphere) -> 'BRep':
+    def from_sphere(cls, sphere: compas.geometry.Sphere) -> "BRep":
         """Construct a BRep from a COMPAS sphere.
 
         Parameters
@@ -370,11 +373,13 @@ class BRep:
 
         """
         brep = BRep()
-        brep.shape = BRepPrimAPI_MakeSphere(gp_Pnt(* sphere.point), sphere.radius).Shape()
+        brep.shape = BRepPrimAPI_MakeSphere(
+            gp_Pnt(*sphere.point), sphere.radius
+        ).Shape()
         return brep
 
     @classmethod
-    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> 'BRep':
+    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> "BRep":
         """Construct a BRep from a COMPAS cylinder.
 
         Parameters
@@ -391,13 +396,13 @@ class BRep:
         radius = cylinder.circle.radius
         frame = Frame.from_plane(plane)
         frame.transform(Translation.from_vector(frame.zaxis * (-0.5 * height)))
-        ax2 = gp_Ax2(gp_Pnt(* frame.point), gp_Dir(* frame.zaxis), gp_Dir(* frame.xaxis))
+        ax2 = gp_Ax2(gp_Pnt(*frame.point), gp_Dir(*frame.zaxis), gp_Dir(*frame.xaxis))
         brep = BRep()
         brep.shape = BRepPrimAPI_MakeCylinder(ax2, radius, height).Shape()
         return brep
 
     @classmethod
-    def from_cone(cls, cone: compas.geometry.Cone) -> 'BRep':
+    def from_cone(cls, cone: compas.geometry.Cone) -> "BRep":
         """Construct a BRep from a COMPAS cone.
 
         Parameters
@@ -412,7 +417,7 @@ class BRep:
         raise NotImplementedError
 
     @classmethod
-    def from_torus(cls, torus: compas.geometry.Torus) -> 'BRep':
+    def from_torus(cls, torus: compas.geometry.Torus) -> "BRep":
         """Construct a BRep from a COMPAS torus.
 
         Parameters
@@ -427,70 +432,7 @@ class BRep:
         raise NotImplementedError
 
     @classmethod
-    def from_boolean_difference(cls, A: 'BRep', B: 'BRep') -> 'BRep':
-        """Construct a BRep from the boolean difference of two other BReps.
-
-        Parameters
-        ----------
-        A : :class:`~compas_occ.brep.BRep`
-        B : :class:`~compas_occ.brep.BRep`
-
-        Returns
-        -------
-        :class:`~compas_occ.brep.BRep`
-
-        """
-        cut = BRepAlgoAPI_Cut(A.shape, B.shape)
-        if not cut.IsDone():
-            raise Exception("Boolean difference operation could not be completed.")
-        brep = BRep()
-        brep.shape = cut.Shape()
-        return brep
-
-    @classmethod
-    def from_boolean_intersection(cls, A: 'BRep', B: 'BRep') -> 'BRep':
-        """Construct a BRep from the boolean intersection of two other BReps.
-
-        Parameters
-        ----------
-        A : :class:`~compas_occ.brep.BRep`
-        B : :class:`~compas_occ.brep.BRep`
-
-        Returns
-        -------
-        :class:`~compas_occ.brep.BRep`
-
-        """
-        common = BRepAlgoAPI_Common(A.shape, B.shape)
-        if not common.IsDone():
-            raise Exception("Boolean intersection operation could not be completed.")
-        brep = BRep()
-        brep.shape = common.Shape()
-        return brep
-
-    @classmethod
-    def from_boolean_union(cls, A, B) -> 'BRep':
-        """Construct a BRep from the boolean union of two other BReps.
-
-        Parameters
-        ----------
-        A : :class:`~compas_occ.brep.BRep`
-        B : :class:`~compas_occ.brep.BRep`
-
-        Returns
-        -------
-        :class:`~compas_occ.brep.BRep`
-
-        """
-        fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
-        if not fuse.IsDone():
-            raise Exception("Boolean union operation could not be completed.")
-        brep = BRep()
-        brep.shape = fuse.Shape()
-        return brep
-
-    @classmethod
-    def from_mesh(cls, mesh: compas.datastructures.Mesh) -> 'BRep':
+    def from_mesh(cls, mesh: compas.datastructures.Mesh) -> "BRep":
         """Construct a BRep from a COMPAS mesh.
 
         Parameters
@@ -517,9 +459,88 @@ class BRep:
         brep.shape = shell
         return brep
 
+    @classmethod
+    def from_faces(cls, faces: list[BRepFace]) -> "BRep":
+        """Make a BRep from a list of BRep faces forming an open or closed shell."""
+        shell = TopoDS_Shell()
+        builder = BRep_Builder()
+        builder.MakeShell(shell)
+        for face in faces:
+            builder.Add(shell, face.face)
+        brep = BRep()
+        brep.shape = shell
+        return brep
+
     # create pipe
     # create patch
     # create offset
+
+    # ==============================================================================
+    # Boolean Constructors
+    # ==============================================================================
+
+    @classmethod
+    def from_boolean_difference(cls, A: "BRep", B: "BRep") -> "BRep":
+        """Construct a BRep from the boolean difference of two other BReps.
+
+        Parameters
+        ----------
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BRep`
+
+        """
+        cut = BRepAlgoAPI_Cut(A.shape, B.shape)
+        if not cut.IsDone():
+            raise Exception("Boolean difference operation could not be completed.")
+        brep = BRep()
+        brep.shape = cut.Shape()
+        return brep
+
+    @classmethod
+    def from_boolean_intersection(cls, A: "BRep", B: "BRep") -> "BRep":
+        """Construct a BRep from the boolean intersection of two other BReps.
+
+        Parameters
+        ----------
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BRep`
+
+        """
+        common = BRepAlgoAPI_Common(A.shape, B.shape)
+        if not common.IsDone():
+            raise Exception("Boolean intersection operation could not be completed.")
+        brep = BRep()
+        brep.shape = common.Shape()
+        return brep
+
+    @classmethod
+    def from_boolean_union(cls, A, B) -> "BRep":
+        """Construct a BRep from the boolean union of two other BReps.
+
+        Parameters
+        ----------
+        A : :class:`~compas_occ.brep.BRep`
+        B : :class:`~compas_occ.brep.BRep`
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BRep`
+
+        """
+        fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
+        if not fuse.IsDone():
+            raise Exception("Boolean union operation could not be completed.")
+        brep = BRep()
+        brep.shape = fuse.Shape()
+        return brep
 
     # ==============================================================================
     # Converters
@@ -538,7 +559,7 @@ class BRep:
         None
 
         """
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             self.shape.DumpJson(f)
 
     def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
@@ -575,8 +596,13 @@ class BRep:
         """
         tesselation = ShapeTesselator(self.shape)
         tesselation.Compute()
-        vertices = [tesselation.GetVertex(i) for i in range(tesselation.ObjGetVertexCount())]
-        triangles = [tesselation.GetTriangleIndex(i) for i in range(tesselation.ObjGetTriangleCount())]
+        vertices = [
+            tesselation.GetVertex(i) for i in range(tesselation.ObjGetVertexCount())
+        ]
+        triangles = [
+            tesselation.GetTriangleIndex(i)
+            for i in range(tesselation.ObjGetTriangleCount())
+        ]
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
     def to_meshes(self, u=16, v=16):
@@ -752,8 +778,9 @@ class BRep:
     # translate
     # unjoin edges
 
-    def contours(self,
-                 planes: List[compas.geometry.Plane]) -> List[List[compas.geometry.Polyline]]:
+    def contours(
+        self, planes: List[compas.geometry.Plane]
+    ) -> List[List[compas.geometry.Polyline]]:
         """Generate contour lines by slicing the BRep shape with a series of planes.
 
         Parameters
