@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="compas_mesh_to_occ_shell" href="compas_occ.conversions.compas_mesh_to_occ_shell.html" />
+  <link rel="next" title="compas_cone_to_occ_cone" href="compas_occ.conversions.compas_cone_to_occ_cone.html" />
   
 
   
-  <link rel="prev" title="compas_frame_from_occ_position" href="compas_occ.conversions.compas_frame_from_occ_position.html" />
+  <link rel="prev" title="compas_sphere_to_occ_sphere" href="compas_occ.conversions.compas_sphere_to_occ_sphere.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,8 +99,16 @@
 <h1>compas_cylinder_to_occ_cylinder</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_occ.conversions.compas_cylinder_to_occ_cylinder">
-<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_cylinder_to_occ_cylinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cylinder</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/shapes.py#L21"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_cylinder_to_occ_cylinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cylinder</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/primitives.py#L340"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Convert a COMPAS cylinder to an OCC cylinder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cylinder</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Cylinder.html#compas.geometry.Cylinder" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Cylinder</span></code></a>) – The COMPAS cylinder.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">gp_Cylinder</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -188,20 +196,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.conversions.compas_frame_from_occ_position.html" title="compas_frame_from_occ_position" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.conversions.compas_sphere_to_occ_sphere.html" title="compas_sphere_to_occ_sphere" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          compas_frame_from_occ_position
+          compas_sphere_to_occ_sphere
         </div>
       </a>
       
 
       
-      <a href="compas_occ.conversions.compas_mesh_to_occ_shell.html" title="compas_mesh_to_occ_shell" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.conversions.compas_cone_to_occ_cone.html" title="compas_cone_to_occ_cone" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          compas_mesh_to_occ_shell
+          compas_cone_to_occ_cone
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

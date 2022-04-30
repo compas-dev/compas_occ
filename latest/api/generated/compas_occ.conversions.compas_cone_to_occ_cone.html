@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - compas_circle_to_occ_circle</title>
+  <title>compas_occ - compas_cone_to_occ_cone</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="compas_sphere_to_occ_sphere" href="compas_occ.conversions.compas_sphere_to_occ_sphere.html" />
+  <link rel="next" title="compas_torus_to_occ_torus" href="compas_occ.conversions.compas_torus_to_occ_torus.html" />
   
 
   
-  <link rel="prev" title="compas_line_to_occ_line" href="compas_occ.conversions.compas_line_to_occ_line.html" />
+  <link rel="prev" title="compas_cylinder_to_occ_cylinder" href="compas_occ.conversions.compas_cylinder_to_occ_cylinder.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -88,25 +88,25 @@
             
             <li class="breadcrumb-item"><a href="../compas_occ.conversions.html">compas_occ.conversions</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">compas_circle_to_occ_circle</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">compas_cone_to_occ_cone</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="compas-circle-to-occ-circle">
-<h1>compas_circle_to_occ_circle</h1>
+        <section class="detail" id="compas-cone-to-occ-cone">
+<h1>compas_cone_to_occ_cone</h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="compas_occ.conversions.compas_circle_to_occ_circle">
-<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_circle_to_occ_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circle</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/primitives.py#L307"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Construct an OCC circle from a COMPAS circle.</p>
+<dt class="sig sig-object py" id="compas_occ.conversions.compas_cone_to_occ_cone">
+<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_cone_to_occ_cone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cone</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/primitives.py#L356"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Convert a COMPAS cone to an OCC cone.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>circle</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Cicrle</span></code>) – The COMPAS circle.</p>
+<dd class="field-odd"><p><strong>cone</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Cone.html#compas.geometry.Cone" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Cone</span></code></a>) – The COMPAS cone.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">gp_Circ</span></code></p>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">gp_Cone</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -184,7 +184,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">compas_circle_to_occ_circle</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">compas_cone_to_occ_cone</a></li>
 </ul>
 
       </div>
@@ -196,20 +196,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.conversions.compas_line_to_occ_line.html" title="compas_line_to_occ_line" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.conversions.compas_cylinder_to_occ_cylinder.html" title="compas_cylinder_to_occ_cylinder" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          compas_line_to_occ_line
+          compas_cylinder_to_occ_cylinder
         </div>
       </a>
       
 
       
-      <a href="compas_occ.conversions.compas_sphere_to_occ_sphere.html" title="compas_sphere_to_occ_sphere" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.conversions.compas_torus_to_occ_torus.html" title="compas_torus_to_occ_torus" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          compas_sphere_to_occ_sphere
+          compas_torus_to_occ_torus
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
