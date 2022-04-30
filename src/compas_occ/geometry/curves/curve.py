@@ -501,3 +501,33 @@ class OCCCurve(Curve):
         return params, points
 
     divide = divide_by_count
+
+    def project(self, surface):
+        """Project the curve onto a surface.
+
+        Parameters
+        ----------
+        surface : :class:`compas_occ.geometry.OCCSurface`
+            The projection surface.
+
+        Returns
+        -------
+        None
+
+        """
+        raise NotImplementedError
+
+    def embedded(self, surface):
+        """Return a copy of the curve embedded in the parameter space of the surface.
+
+        Parameters
+        ----------
+        surface : :class:`compas_occ.geometry.OCCSurface`
+            The projection surface.
+
+        Returns
+        -------
+        ???
+
+        """
+        raise NotImplementedError
