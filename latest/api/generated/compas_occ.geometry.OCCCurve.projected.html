@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - OCCCurve.divide</title>
+  <title>compas_occ - OCCCurve.projected</title>
   
 
   <meta charset="utf-8" />
@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="OCCCurve.divide_by_count" href="compas_occ.geometry.OCCCurve.divide_by_count.html" />
+  <link rel="next" title="OCCCurve.reverse" href="compas_occ.geometry.OCCCurve.reverse.html" />
   
 
   
-  <link rel="prev" title="OCCCurve.curvature_at" href="compas_occ.geometry.OCCCurve.curvature_at.html" />
+  <link rel="prev" title="OCCCurve.project" href="compas_occ.geometry.OCCCurve.project.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -90,31 +90,25 @@
             
             <li class="breadcrumb-item"><a href="compas_occ.geometry.OCCCurve.html">OCCCurve</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">OCCCurve.divide</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">OCCCurve.projected</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section class="detail" id="occcurve-divide">
-<h1>OCCCurve.divide</h1>
+        <section class="detail" id="occcurve-projected">
+<h1>OCCCurve.projected</h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve.divide">
-<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">divide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L470"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Divide the curve into a specific number of equal length segments.</p>
+<dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve.projected">
+<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">projected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L523"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Return a copy of the curve projected onto a surface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>count</strong> (<em>int</em>) – The number of segments.</p></li>
-<li><p><strong>return_points</strong> (<em>bool, optional</em>) – If True, return the list of division parameters,
-and the points corresponding to those parameters.
-If False, return only the list of parameters.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>surface</strong> (<a class="reference internal" href="compas_occ.geometry.OCCSurface.html#compas_occ.geometry.OCCSurface" title="compas_occ.geometry.OCCSurface"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_occ.geometry.OCCSurface</span></code></a>) – The projection surface.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list[float] | tuple[list[float], list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]] – If <cite>return_points</cite> is False, the parameters of the discretisation.
-If <cite>return_points</cite> is True, a list of points in addition to the parameters of the discretisation.</p>
+<dd class="field-even"><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.html#compas_occ.geometry.OCCCurve" title="compas_occ.geometry.OCCCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCCurve</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -192,7 +186,7 @@ If <cite>return_points</cite> is True, a list of points in addition to the param
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">OCCCurve.divide</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">OCCCurve.projected</a></li>
 </ul>
 
       </div>
@@ -204,20 +198,20 @@ If <cite>return_points</cite> is True, a list of points in addition to the param
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.geometry.OCCCurve.curvature_at.html" title="OCCCurve.curvature_at" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.geometry.OCCCurve.project.html" title="OCCCurve.project" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          OCCCurve.curvature_at
+          OCCCurve.project
         </div>
       </a>
       
 
       
-      <a href="compas_occ.geometry.OCCCurve.divide_by_count.html" title="OCCCurve.divide_by_count" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.geometry.OCCCurve.reverse.html" title="OCCCurve.reverse" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          OCCCurve.divide_by_count
+          OCCCurve.reverse
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
