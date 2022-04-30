@@ -626,7 +626,7 @@ class BRep:
         meshes = []
         for face in brep.faces:
             srf = OCCNurbsSurface.from_face(face.face)
-            mesh = srf.to_vizmesh(u, v)
+            mesh = srf.to_tesselation()
             meshes.append(mesh)
         return meshes
 
