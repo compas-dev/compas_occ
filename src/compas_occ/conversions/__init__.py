@@ -49,7 +49,7 @@ Primitives
     compas_point_from_occ_point2d
     compas_vector_from_occ_vector
     compas_vector_from_occ_vector2d
-    compas_frame_from_occ_position
+    compas_frame_from_occ_ax3
 
 Shapes
 ======
@@ -96,7 +96,7 @@ from .primitives import compas_plane_to_occ_plane  # noqa: F401
 from .primitives import compas_plane_to_occ_ax2  # noqa: F401
 from .primitives import compas_plane_to_occ_ax3  # noqa: F401
 from .primitives import compas_circle_to_occ_circle  # noqa: F401
-from .primitives import compas_frame_from_occ_position  # noqa: F401
+from .primitives import compas_frame_from_occ_ax3  # noqa: F401
 from .primitives import compas_sphere_to_occ_sphere  # noqa: F401
 from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
 from .primitives import compas_cone_to_occ_cone  # noqa: F401

@@ -320,7 +320,7 @@ def compas_plane_to_occ_ax3(plane: Plane) -> gp_Ax3:
     )
 
 
-def compas_frame_from_occ_position(cls: Type[Frame], position: gp_Ax3) -> Frame:
+def compas_frame_from_occ_ax3(cls: Type[Frame], position: gp_Ax3) -> Frame:
     """Construct a COMPAS frame from an OCC position.
 
     Parameters

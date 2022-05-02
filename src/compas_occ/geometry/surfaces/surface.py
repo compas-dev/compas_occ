@@ -27,13 +27,13 @@ from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_to_occ_vector
-from compas_occ.conversions import compas_frame_from_occ_position
+from compas_occ.conversions import compas_frame_from_occ_ax3
 
 Point.from_occ = classmethod(compas_point_from_occ_point)
 Point.to_occ = compas_point_to_occ_point
 Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
-Frame.from_occ = classmethod(compas_frame_from_occ_position)
+Frame.from_occ = classmethod(compas_frame_from_occ_ax3)
 
 
 class OCCSurface(Surface):

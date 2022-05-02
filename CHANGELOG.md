@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed unused precision parameter in `compas_occ.geometry.OCCCurve.length`.
 * Fixed bug in `compas_occ.brep.BRep.to_meshes`.
+* Changed `compas_frame_from_occ_position` to `compas_frame_from_occ_ax3`.
 
 ### Removed
 
