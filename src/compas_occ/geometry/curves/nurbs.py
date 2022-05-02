@@ -29,7 +29,9 @@ Vector.from_occ = classmethod(compas_vector_from_occ_vector)
 Vector.to_occ = compas_vector_to_occ_vector
 
 
-def occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic):
+def occ_curve_from_parameters(
+    points, weights, knots, multiplicities, degree, is_periodic
+):
     return Geom_BSplineCurve(
         array1_from_points1(points),
         array1_from_floats1(weights),
@@ -120,23 +122,25 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     def data(self):
         """dict : Representation of the curve as a dict containing only native Python objects."""
         return {
-            'points': [point.data for point in self.points],
-            'weights': self.weights,
-            'knots': self.knots,
-            'multiplicities': self.multiplicities,
-            'degree': self.degree,
-            'is_periodic': self.is_periodic
+            "points": [point.data for point in self.points],
+            "weights": self.weights,
+            "knots": self.knots,
+            "multiplicities": self.multiplicities,
+            "degree": self.degree,
+            "is_periodic": self.is_periodic,
         }
 
     @data.setter
     def data(self, data):
-        points = [Point.from_data(point) for point in data['points']]
-        weights = data['weights']
-        knots = data['knots']
-        multiplicities = data['multiplicities']
-        degree = data['degree']
-        is_periodic = data['is_periodic']
-        self.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
+        points = [Point.from_data(point) for point in data["points"]]
+        weights = data["weights"]
+        knots = data["knots"]
+        multiplicities = data["multiplicities"]
+        degree = data["degree"]
+        is_periodic = data["is_periodic"]
+        self.occ_curve = occ_curve_from_parameters(
+            points, weights, knots, multiplicities, degree, is_periodic
+        )
 
     # ==============================================================================
     # OCC Properties
@@ -148,7 +152,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
     @property
     def occ_weights(self):
-        return self.occ_curve.Weights() or array1_from_floats1([1.0] * len(self.occ_points))
+        return self.occ_curve.Weights() or array1_from_floats1(
+            [1.0] * len(self.occ_points)
+        )
 
     @property
     def occ_knots(self):
@@ -230,13 +236,16 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         """
         from compas_occ.brep import BRepEdge
+
         brepedge = BRepEdge(edge)
         if brepedge.is_line:
             line = brepedge.to_line()
             return cls.from_line(line)
 
     @classmethod
-    def from_parameters(cls, points, weights, knots, multiplicities, degree, is_periodic=False):
+    def from_parameters(
+        cls, points, weights, knots, multiplicities, degree, is_periodic=False
+    ):
         """Construct a NURBS curve from explicit curve parameters.
 
         Parameters
@@ -260,7 +269,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         """
         curve = cls()
-        curve.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
+        curve.occ_curve = occ_curve_from_parameters(
+            points, weights, knots, multiplicities, degree, is_periodic
+        )
         return curve
 
     @classmethod
@@ -291,7 +302,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         multiplicities.append(order)
         is_periodic = False
         curve = cls()
-        curve.occ_curve = occ_curve_from_parameters(points, weights, knots, multiplicities, degree, is_periodic)
+        curve.occ_curve = occ_curve_from_parameters(
+            points, weights, knots, multiplicities, degree, is_periodic
+        )
         return curve
 
     @classmethod
@@ -310,6 +323,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         :class:`OCCNurbsCurve`
 
         """
+        # use GeomAPI_PointsToBSpline instead?
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
         interp.Perform()
         curve = cls()
@@ -363,9 +377,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             frame.point + dy + dx,
             frame.point + dx,
             frame.point - dy + dx,
-            frame.point - dy
+            frame.point - dy,
         ]
-        knots = [0, 1/4, 1/2, 3/4, 1]
+        knots = [0, 1 / 4, 1 / 2, 3 / 4, 1]
         mults = [3, 2, 2, 2, 3]
         weights = [1, w, 1, w, 1, w, 1, w, 1]
         return cls.from_parameters(
@@ -400,9 +414,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             frame.point + dy + dx,
             frame.point + dx,
             frame.point - dy + dx,
-            frame.point - dy
+            frame.point - dy,
         ]
-        knots = [0, 1/4, 1/2, 3/4, 1]
+        knots = [0, 1 / 4, 1 / 2, 3 / 4, 1]
         mults = [3, 2, 2, 2, 3]
         weights = [1, w, 1, w, 1, w, 1, w, 1]
         return cls.from_parameters(
@@ -428,7 +442,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             weights=[1.0, 1.0],
             knots=[0.0, 1.0],
             multiplicities=[2, 2],
-            degree=1
+            degree=1,
         )
 
     # ==============================================================================
@@ -470,9 +484,11 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             u, v = v, u
         s, e = self.domain
         if u < s or v > e:
-            raise ValueError('At least one of the given parameters is outside the curve domain.')
+            raise ValueError(
+                "At least one of the given parameters is outside the curve domain."
+            )
         if u == v:
-            raise ValueError('The given domain is zero length.')
+            raise ValueError("The given domain is zero length.")
         self.occ_curve.Segment(u, v, precision)
 
     def segmented(self, u, v, precision=1e-3):
