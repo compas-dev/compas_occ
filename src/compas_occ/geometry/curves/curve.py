@@ -503,22 +503,6 @@ class OCCCurve(Curve):
 
     divide = divide_by_count
 
-    def project(self, surface):
-        """Project the curve onto a surface.
-
-        Parameters
-        ----------
-        surface : :class:`compas_occ.geometry.OCCSurface`
-            The projection surface.
-
-        Returns
-        -------
-        None
-
-        """
-        result = geomprojlib_Project(self.occ_curve, surface.occ_surface)
-        self.occ_curve = result
-
     def projected(self, surface):
         """Return a copy of the curve projected onto a surface.
 
@@ -532,24 +516,9 @@ class OCCCurve(Curve):
         :class:`OCCCurve`
 
         """
-        curve = self.copy()
-        curve.project(surface)
+        result = geomprojlib_Project(self.occ_curve, surface.occ_surface)
+        curve = OCCCurve.from_occ(result)
         return curve
-
-    def embed(self, surface):
-        """Embed the curve into the parameter space of the surface.
-
-        Parameters
-        ----------
-        surface : :class:`compas_occ.geometry.OCCSurface`
-            The projection surface.
-
-        Returns
-        -------
-        None
-
-        """
-        raise NotImplementedError
 
     def embedded(self, surface):
         """Return a copy of the curve embedded in the parameter space of the surface.
@@ -561,11 +530,10 @@ class OCCCurve(Curve):
 
         Returns
         -------
-        ???
+        :class:`OCCCurve`
 
         """
-        curve = self.copy()
-        result = geomprojlib_Curve2d(curve.occ_curve, surface.occ_surface)
-        curve.occ_curve = result
+        result = geomprojlib_Curve2d(self.occ_curve, surface.occ_surface)
+        curve = OCCCurve.from_occ(result)
         curve._dimension = 2
         return curve

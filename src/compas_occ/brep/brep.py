@@ -37,7 +37,11 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Common
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 
-from OCC.Core.Tesselator import ShapeTesselator
+from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
+from OCC.Core.BRep import BRep_Tool
+from OCC.Core.TopLoc import TopLoc_Location
+
+# from OCC.Core.Tesselator import ShapeTesselator
 
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
@@ -47,6 +51,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
+from compas_occ.conversions import points1_from_array1
 from compas_occ.geometry import OCCNurbsSurface
 
 from compas_occ.brep import BRepVertex
@@ -466,10 +471,20 @@ class BRep:
         builder = BRep_Builder()
         builder.MakeShell(shell)
         for face in faces:
+            if not face.is_valid():
+                face.fix()
             builder.Add(shell, face.face)
         brep = BRep()
         brep.shape = shell
         return brep
+
+    @classmethod
+    def from_extrusion(cls, curve, vector) -> "BRep":
+        pass
+
+    @classmethod
+    def from_sweep(cls, profile, path) -> "BRep":
+        pass
 
     # create pipe
     # create patch
@@ -586,24 +601,36 @@ class BRep:
         status = step_writer.Write(filepath)
         assert status == IFSelect_RetDone, "STEP writing failed."
 
-    def to_tesselation(self) -> Mesh:
+    def to_tesselation(self, linear_deflection: float = 1e-3) -> Mesh:
         """Create a tesselation of the shape for visualisation.
+
+        Parameters
+        ----------
+        linear_deflection : float, optional
+            Allowable deviation between curved geometry and mesh discretisation.
 
         Returns
         -------
         :class:`~compas.datastructures.Mesh`
 
         """
-        tesselation = ShapeTesselator(self.shape)
-        tesselation.Compute()
-        vertices = [
-            tesselation.GetVertex(i) for i in range(tesselation.ObjGetVertexCount())
-        ]
-        triangles = [
-            tesselation.GetTriangleIndex(i)
-            for i in range(tesselation.ObjGetTriangleCount())
-        ]
-        return Mesh.from_vertices_and_faces(vertices, triangles)
+        mesh = Mesh()
+        BRepMesh_IncrementalMesh(self.shape, linear_deflection)
+        bt = BRep_Tool()
+        for face in self.faces:
+            location = TopLoc_Location()
+            triangulation = bt.Triangulation(face.face, location)
+            nodes = triangulation.Nodes()
+            vertices = points1_from_array1(nodes)
+            faces = []
+            triangles = triangulation.Triangles()
+            for i in range(1, triangulation.NbTriangles() + 1):
+                triangle = triangles.Value(i)
+                u, v, w = triangle.Get()
+                faces.append([u - 1, v - 1, w - 1])
+            other = Mesh.from_vertices_and_faces(vertices, faces)
+            mesh.join(other)
+        return mesh
 
     def to_meshes(self, u=16, v=16):
         """Convert the faces of the BRep shape to meshes.
