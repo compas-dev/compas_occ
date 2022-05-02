@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from compas.geometry import Point
 from compas.geometry import Line
 from compas.geometry import Translation
@@ -522,3 +524,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # ==============================================================================
     # Methods
     # ==============================================================================
+
+    def copy(self):
+        """Make an independent copy of the current surface.
+
+        Returns
+        -------
+        :class:`compas_occ.geometry.OCCNurbsSurface`
+
+        """
+        cls = type(self)
+        return cls.from_data(deepcopy(self.data))

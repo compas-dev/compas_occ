@@ -225,6 +225,19 @@ class OCCSurface(Surface):
     # Methods
     # ==============================================================================
 
+    def copy(self):
+        """Make an independent copy of the current surface.
+
+        Returns
+        -------
+        :class:`compas_occ.geometry.OCCSurface`
+
+        """
+        cls = type(self)
+        surface = cls()
+        surface.occ_surface = self.occ_surface.Copy()
+        return surface
+
     def transform(self, T):
         """Transform this surface.
 
