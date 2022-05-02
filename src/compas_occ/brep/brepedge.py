@@ -84,6 +84,7 @@ class BRepEdge:
         Bezier = 5
         BSpline = 6
         Other = 7
+        Curve2D = 8
 
     def __init__(self, edge: TopoDS_Edge):
         self._edge = None
