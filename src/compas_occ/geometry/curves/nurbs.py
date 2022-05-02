@@ -458,7 +458,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCCurve`
+        :class:`compas_occ.geometry.OCCNurbsCurve`
 
         """
         cls = type(self)
