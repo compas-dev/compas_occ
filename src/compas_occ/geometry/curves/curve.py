@@ -27,10 +27,9 @@ from OCC.Core.GeomProjLib import geomprojlib_Project
 from OCC.Core.GeomProjLib import geomprojlib_Curve2d
 
 from compas_occ.conversions import compas_point_from_occ_point
+from compas_occ.conversions import compas_point_from_occ_point2d
 from compas_occ.conversions import compas_vector_from_occ_vector
-
-Point.from_occ = classmethod(compas_point_from_occ_point)
-Vector.from_occ = classmethod(compas_vector_from_occ_vector)
+from compas_occ.conversions import compas_vector_from_occ_vector2d
 
 
 class OCCCurve(Curve):
@@ -65,6 +64,7 @@ class OCCCurve(Curve):
 
     def __init__(self, name=None):
         super().__init__(name=name)
+        self._dimension = 3
         self._occ_curve = None
 
     def __eq__(self, other):
@@ -100,8 +100,7 @@ class OCCCurve(Curve):
 
     @property
     def dimension(self):
-        if self.occ_curve:
-            return 3
+        return self._dimension
 
     @property
     def domain(self):
@@ -151,21 +150,6 @@ class OCCCurve(Curve):
         curve.occ_curve = occ_curve
         return curve
 
-    # @classmethod
-    # def from_circle(cls, circle):
-    #     """Construct a general parametric curve from a circle.
-
-    #     Parameters
-    #     ----------
-    #     circle : :class:`~compas.geometry.Circle`
-    #         A primitive circle.
-
-    #     Returns
-    #     -------
-    #     :class:`OCCCurve`
-
-    #     """
-
     # ==============================================================================
     # Conversions
     # ==============================================================================
@@ -205,6 +189,7 @@ class OCCCurve(Curve):
         cls = type(self)
         curve = cls()
         curve.occ_curve = self.occ_curve.Copy()
+        curve._dimension = self._dimension
         return curve
 
     def transform(self, T):
@@ -255,7 +240,9 @@ class OCCCurve(Curve):
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
         point = self.occ_curve.Value(t)
-        return Point.from_occ(point)
+        if self.dimension == 2:
+            return compas_point_from_occ_point2d(Point, point)
+        return compas_point_from_occ_point(Point, point)
 
     def tangent_at(self, t):
         """Compute the tangent vector at a curve parameter.
@@ -281,7 +268,9 @@ class OCCCurve(Curve):
         point = gp_Pnt()
         uvec = gp_Vec()
         self.occ_curve.D1(t, point, uvec)
-        return Vector.from_occ(uvec)
+        if self.dimension == 2:
+            return compas_vector_from_occ_vector2d(Vector, uvec)
+        return compas_vector_from_occ_vector(Vector, uvec)
 
     def curvature_at(self, t):
         """Compute the curvature vector at a curve parameter.
@@ -308,7 +297,9 @@ class OCCCurve(Curve):
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
-        return Vector.from_occ(vvec)
+        if self.dimension == 2:
+            return compas_vector_from_occ_vector2d(Vector, vvec)
+        return compas_vector_from_occ_vector(Vector, vvec)
 
     def frame_at(self, t):
         """Compute the local frame at a curve parameter.
@@ -335,8 +326,16 @@ class OCCCurve(Curve):
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
+        if self.dimension == 2:
+            return Frame(
+                compas_point_from_occ_point2d(Point, point),
+                compas_vector_from_occ_vector2d(Vector, uvec),
+                compas_vector_from_occ_vector2d(Vector, vvec),
+            )
         return Frame(
-            Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec)
+            compas_point_from_occ_point(Point, point),
+            compas_vector_from_occ_vector(Vector, uvec),
+            compas_vector_from_occ_vector(Vector, vvec),
         )
 
     # ==============================================================================
@@ -568,4 +567,5 @@ class OCCCurve(Curve):
         curve = self.copy()
         result = geomprojlib_Curve2d(curve.occ_curve, surface.occ_surface)
         curve.occ_curve = result
+        curve._dimension = 2
         return curve
