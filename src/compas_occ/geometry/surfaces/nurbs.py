@@ -20,6 +20,8 @@ from OCC.Core.GeomFill import GeomFill_BSplineCurves
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
+from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
+from OCC.Core.GeomAbs import GeomAbs_C2
 
 from .surface import OCCSurface
 
@@ -451,6 +453,28 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         """
         other = curve.transformed(Translation.from_vector(vector))
         return cls.from_fill(curve, other)
+
+    @classmethod
+    def from_interpolation(cls, points, precision=1e-3):
+        """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
+
+        Parameters
+        ----------
+        points : [list[:class:`compas.geometry.Point`], list[:class:`compas.geometry.Point`]]
+            The 2D collection of points.
+        precision : float, optional
+            The fitting precision.
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+
+        """
+        points = array2_from_points2(points)
+        surface = GeomAPI_PointsToBSplineSurface(
+            points, 3, 8, GeomAbs_C2, precision
+        ).Surface()
+        return cls(surface)
 
     # ==============================================================================
     # Conversions
