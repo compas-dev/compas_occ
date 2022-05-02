@@ -16,7 +16,9 @@ from OCC.Core.gp import gp_Ax1
 from OCC.Core.gp import gp_Ax2
 from OCC.Core.gp import gp_Ax3
 from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt2d
 from OCC.Core.gp import gp_Vec
+from OCC.Core.gp import gp_Vec2d
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Lin
 from OCC.Core.gp import gp_Circ
@@ -27,12 +29,12 @@ from OCC.Core.gp import gp_Cone
 from OCC.Core.gp import gp_Torus
 
 
-def compas_point_to_occ_point(self: Point) -> gp_Pnt:
+def compas_point_to_occ_point(point: Point) -> gp_Pnt:
     """Convert a COMPAS point to an OCC point.
 
     Parameters
     ----------
-    self : :class:`~compas.geometry.Point`
+    point : :class:`~compas.geometry.Point`
         The COMPAS point to convert.
 
     Returns
@@ -48,7 +50,7 @@ def compas_point_to_occ_point(self: Point) -> gp_Pnt:
     <class 'gp_Pnt'>
 
     """
-    return gp_Pnt(*self)
+    return gp_Pnt(*point)
 
 
 def compas_point_from_occ_point(cls: Type[Point], point: gp_Pnt) -> Point:
@@ -69,12 +71,30 @@ def compas_point_from_occ_point(cls: Type[Point], point: gp_Pnt) -> Point:
     return cls(point.X(), point.Y(), point.Z())
 
 
-def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
+def compas_point_from_occ_point2d(cls: Type[Point], point: gp_Pnt2d) -> Point:
+    """Construct a COMPAS point from an OCC 2D point.
+
+    Parameters
+    ----------
+    cls : Type[:class:`~compas.geometry.Point`]
+        The type of COMPAS point.
+    point : ``gp_Pnt2d``
+        The OCC point.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Point`
+
+    """
+    return cls(point.X(), point.Y(), 0)
+
+
+def compas_vector_to_occ_vector(vector: Vector) -> gp_Vec:
     """Convert a COMPAS vector to an OCC vector.
 
     Parameters
     ----------
-    self : :class:`~compas.geometry.Vector`
+    vector : :class:`~compas.geometry.Vector`
         The COMPAS vector to convert.
 
     Returns
@@ -90,7 +110,7 @@ def compas_vector_to_occ_vector(self: Vector) -> gp_Vec:
     <class 'gp_Vec'>
 
     """
-    return gp_Vec(*self)
+    return gp_Vec(*vector)
 
 
 def compas_vector_from_occ_vector(cls: Type[Vector], vector: gp_Vec) -> Vector:
@@ -111,12 +131,30 @@ def compas_vector_from_occ_vector(cls: Type[Vector], vector: gp_Vec) -> Vector:
     return cls(vector.X(), vector.Y(), vector.Z())
 
 
-def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
+def compas_vector_from_occ_vector2d(cls: Type[Vector], vector: gp_Vec2d) -> Vector:
+    """Construct a COMPAS vector from an OCC 2D vector.
+
+    Parameters
+    ----------
+    cls : Type[:class:`~compas.geometry.Vector`]
+        The type of COMPAS vector.
+    vector : ``gp_Vec2d``
+        The OCC vector.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Vector`
+
+    """
+    return cls(vector.X(), vector.Y(), 0)
+
+
+def compas_vector_to_occ_direction(vector: Vector) -> gp_Dir:
     """Convert a COMPAS vector to an OCC direction.
 
     Parameters
     ----------
-    self : :class:`~compas.geometry.Vector`
+    vector : :class:`~compas.geometry.Vector`
         The COMPAS vector to convert.
 
     Returns
@@ -132,7 +170,7 @@ def compas_vector_to_occ_direction(self: Vector) -> gp_Dir:
     <class 'gp_Dir'>
 
     """
-    return gp_Dir(*self)
+    return gp_Dir(*vector)
 
 
 def compas_vector_from_occ_direction(cls: Type[Vector], vector: gp_Dir) -> Vector:
@@ -198,12 +236,12 @@ def compas_axis_from_occ_axis(axis: gp_Ax1) -> Tuple[Point, Vector]:
     return point, vector
 
 
-def compas_line_to_occ_line(self: Line) -> gp_Lin:
+def compas_line_to_occ_line(line: Line) -> gp_Lin:
     """Convert a COMPAS line to an OCC line.
 
     Parameters
     ----------
-    self : :class:`~compas.geometry.Line`
+    line : :class:`~compas.geometry.Line`
         The COMPAS line to convert.
 
     Returns
@@ -220,8 +258,8 @@ def compas_line_to_occ_line(self: Line) -> gp_Lin:
 
     """
     return gp_Lin(
-        compas_point_to_occ_point(self.start),
-        compas_vector_to_occ_direction(self.direction),
+        compas_point_to_occ_point(line.start),
+        compas_vector_to_occ_direction(line.direction),
     )
 
 

@@ -46,7 +46,9 @@ Primitives
     :nosignatures:
 
     compas_point_from_occ_point
+    compas_point_from_occ_point2d
     compas_vector_from_occ_vector
+    compas_vector_from_occ_vector2d
     compas_frame_from_occ_position
 
 Shapes
@@ -84,9 +86,11 @@ from .arrays import floats2_from_array2  # noqa: F401
 
 from .primitives import compas_point_to_occ_point  # noqa: F401
 from .primitives import compas_point_from_occ_point  # noqa: F401
+from .primitives import compas_point_from_occ_point2d  # noqa: F401
 from .primitives import compas_vector_to_occ_vector  # noqa: F401
 from .primitives import compas_vector_to_occ_direction  # noqa: F401
 from .primitives import compas_vector_from_occ_vector  # noqa: F401
+from .primitives import compas_vector_from_occ_vector2d  # noqa: F401
 from .primitives import compas_line_to_occ_line  # noqa: F401
 from .primitives import compas_plane_to_occ_plane  # noqa: F401
 from .primitives import compas_plane_to_occ_ax2  # noqa: F401
