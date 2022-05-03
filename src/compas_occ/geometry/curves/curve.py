@@ -3,6 +3,7 @@ from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
+from compas.geometry import Polyline
 from compas.geometry import distance_point_point
 
 
@@ -173,6 +174,21 @@ class OCCCurve(Curve):
         status = step_writer.Write(filepath)
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
+
+    def to_polyline(self, n=100):
+        """Convert the curve to a polyline.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of polyline points.
+
+        Returns
+        -------
+        :class:`compas.geometry.Polyline`
+
+        """
+        return Polyline(self.locus(resolution=n))
 
     # ==============================================================================
     # Methods
