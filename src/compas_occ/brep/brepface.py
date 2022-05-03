@@ -359,7 +359,7 @@ class BRepFace:
             raise Exception(builder.Error())
         self.face = builder.Face()
 
-    def add_loops(self, loops: list[BRepLoop], reverse: bool = False) -> None:
+    def add_loops(self, loops: List[BRepLoop], reverse: bool = False) -> None:
         """Add an inner loop to the face.
 
         Parameters
