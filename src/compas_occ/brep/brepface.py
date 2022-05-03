@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import topods_Face
@@ -6,9 +6,14 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_EDGE
 from OCC.Core.TopAbs import TopAbs_WIRE
+from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+from OCC.Core.BRepAlgo import brepalgo_IsValid
+from OCC.Core.ShapeFix import ShapeFix_Face
+
+# from OCC.Core.BRepAlgo import brepalgo_IsTopologicallyValid
 
 from compas.geometry import Plane
 from compas.geometry import Cylinder
@@ -75,7 +80,7 @@ class BRepFace:
     @property
     def vertices(self) -> List[BRepVertex]:
         vertices = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_VERTEX)
+        explorer = TopExp_Explorer(self.face, TopAbs_VERTEX)
         while explorer.More():
             vertex = explorer.Current()
             vertices.append(BRepVertex(vertex))
@@ -85,7 +90,7 @@ class BRepFace:
     @property
     def edges(self) -> List[BRepEdge]:
         edges = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_EDGE)
+        explorer = TopExp_Explorer(self.face, TopAbs_EDGE)
         while explorer.More():
             edge = explorer.Current()
             edges.append(BRepEdge(edge))
@@ -95,7 +100,7 @@ class BRepFace:
     @property
     def loops(self) -> List[BRepLoop]:
         loops = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_WIRE)
+        explorer = TopExp_Explorer(self.face, TopAbs_WIRE)
         while explorer.More():
             wire = explorer.Current()
             loops.append(BRepLoop(wire))
@@ -114,9 +119,18 @@ class BRepFace:
             self._surface = self.adaptor.Surface()
         return self._surface
 
+    @property
+    def orientation(self) -> TopAbs_Orientation:
+        return self.shape.Orientation()
+
     @classmethod
     def from_plane(
-        cls, plane: Plane, loop: BRepLoop = None, inside: bool = True
+        cls,
+        plane: Plane,
+        udomain: Tuple[float, float] = None,
+        vdomain: Tuple[float, float] = None,
+        loop: BRepLoop = None,
+        inside: bool = True,
     ) -> "BRepFace":
         """Construct a face from a plane.
 
@@ -124,6 +138,10 @@ class BRepFace:
         ----------
         plane : :class:`compas.geometry.Plane`
             The plane.
+        udomain : Tuple[float, float], optional
+            U parameter minimum and maximum.
+        vdomain : Tuple[float, float], optional
+            V parameter minimum and maximum.
         loop : :class:`compas_occ.brep.BRepLoop`, optional
             A boundary loop.
         inside : bool, optional
@@ -134,12 +152,15 @@ class BRepFace:
         :class:`BRepFace`
 
         """
-        if loop:
-            builder = BRepBuilderAPI_MakeFace(
-                compas_plane_to_occ_plane(plane), loop.loop, inside
-            )
+        plane = compas_plane_to_occ_plane(plane)
+        if udomain and vdomain:
+            umin, umax = udomain
+            vmin, vmax = vdomain
+            builder = BRepBuilderAPI_MakeFace(plane, umin, umax, vmin, vmax)
+        elif loop:
+            builder = BRepBuilderAPI_MakeFace(plane, loop.loop, inside)
         else:
-            builder = BRepBuilderAPI_MakeFace(compas_plane_to_occ_plane(plane))
+            builder = BRepBuilderAPI_MakeFace(plane)
         return cls(builder.Face())
 
     @classmethod
@@ -258,6 +279,8 @@ class BRepFace:
     def from_surface(
         cls,
         surface: OCCSurface,
+        udomain: Tuple[float, float] = None,
+        vdomain: Tuple[float, float] = None,
         precision: float = 1e-6,
         loop: BRepLoop = None,
         inside: bool = True,
@@ -280,8 +303,81 @@ class BRepFace:
         :class:`BRepFace`
 
         """
-        if loop:
+        if udomain and vdomain:
+            umin, umax = udomain
+            vmin, vmax = vdomain
+            builder = BRepBuilderAPI_MakeFace(
+                surface.occ_surface, umin, umax, vmin, vmax, precision
+            )
+        elif loop:
             builder = BRepBuilderAPI_MakeFace(surface.occ_surface, loop.loop, inside)
         else:
             builder = BRepBuilderAPI_MakeFace(surface.occ_surface, precision)
         return cls(builder.Face())
+
+    def is_valid(self) -> bool:
+        """Verify that the face is valid.
+
+        Returns
+        -------
+        bool
+
+        """
+        return brepalgo_IsValid(self.face)
+
+    def fix(self) -> None:
+        """Try to fix the face.
+
+        Returns
+        -------
+        None
+
+        """
+        fixer = ShapeFix_Face(self.face)
+        fixer.Perform()
+        self.face = fixer.Face()
+
+    def add_loop(self, loop: BRepLoop, reverse: bool = False) -> None:
+        """Add an inner loop to the face.
+
+        Parameters
+        ----------
+        loop : :class:`compas_occ.brep.BRepLoop`
+            The additional loop.
+
+        Returns
+        -------
+        None
+
+        """
+        builder = BRepBuilderAPI_MakeFace(self.face)
+        if reverse:
+            builder.Add(loop.loop.Reversed())
+        else:
+            builder.Add(loop.loop)
+        if not builder.IsDone():
+            raise Exception(builder.Error())
+        self.face = builder.Face()
+
+    def add_loops(self, loops: list[BRepLoop], reverse: bool = False) -> None:
+        """Add an inner loop to the face.
+
+        Parameters
+        ----------
+        loops : list[:class:`compas_occ.brep.BRepLoop`]
+            The additional loops.
+
+        Returns
+        -------
+        None
+
+        """
+        builder = BRepBuilderAPI_MakeFace(self.face)
+        for loop in loops:
+            if reverse:
+                builder.Add(loop.loop.Reversed())
+            else:
+                builder.Add(loop.loop)
+        if not builder.IsDone():
+            raise Exception(builder.Error())
+        self.face = builder.Face()

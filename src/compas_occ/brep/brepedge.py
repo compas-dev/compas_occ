@@ -1,17 +1,15 @@
-from typing import List
+from typing import List, Tuple
 from enum import Enum
 
 from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.TopoDS import topods_Edge
-
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_VERTEX
-
 from OCC.Core.BRepAdaptor import BRepAdaptor_Curve
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
-
 from OCC.Core.TopExp import topexp_FirstVertex
 from OCC.Core.TopExp import topexp_LastVertex
+from OCC.Core.BRepAlgo import brepalgo_IsValid
 
 from compas.geometry import Point
 from compas.geometry import Line
@@ -185,9 +183,9 @@ class BRepEdge:
     def from_line(
         cls,
         line: Line,
-        params: tuple[float, float] = None,
-        points: tuple[Point, Point] = None,
-        vertices: tuple[BRepVertex, BRepVertex] = None,
+        params: Tuple[float, float] = None,
+        points: Tuple[Point, Point] = None,
+        vertices: Tuple[BRepVertex, BRepVertex] = None,
     ) -> "BRepEdge":
         """Construct an edge from a line."""
         if params:
@@ -210,9 +208,9 @@ class BRepEdge:
     def from_circle(
         cls,
         circle: Circle,
-        params: tuple[float, float] = None,
-        points: tuple[Point, Point] = None,
-        vertices: tuple[BRepVertex, BRepVertex] = None,
+        params: Tuple[float, float] = None,
+        points: Tuple[Point, Point] = None,
+        vertices: Tuple[BRepVertex, BRepVertex] = None,
     ) -> "BRepEdge":
         """Construct an edge from a circle."""
         if params:
@@ -244,9 +242,9 @@ class BRepEdge:
         cls,
         curve: OCCCurve,
         surface: OCCSurface = None,
-        params: tuple[float, float] = None,
-        points: tuple[Point, Point] = None,
-        vertices: tuple[BRepVertex, BRepVertex] = None,
+        params: Tuple[float, float] = None,
+        points: Tuple[Point, Point] = None,
+        vertices: Tuple[BRepVertex, BRepVertex] = None,
     ) -> "BRepEdge":
         """Construct an edge from a curve."""
         if points:
@@ -484,3 +482,13 @@ class BRepEdge:
 
         """
         return self.curve
+
+    def is_valid(self) -> bool:
+        """Verify that the edge is valid.
+
+        Returns
+        -------
+        bool
+
+        """
+        return brepalgo_IsValid(self.edge)

@@ -4,6 +4,8 @@ from OCC.Core.TopoDS import TopoDS_Wire
 from OCC.Core.TopoDS import topods_Wire
 from OCC.Core.BRepTools import BRepTools_WireExplorer
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeWire
+from OCC.Core.BRepAlgo import brepalgo_IsValid
+from OCC.Core.ShapeFix import ShapeFix_Wire
 
 from compas.utilities import pairwise
 from compas.geometry import Polyline
@@ -125,3 +127,25 @@ class BRepLoop:
             edge = BRepEdge.from_point_point(a, b)
             edges.append(edge)
         return cls.from_edges(edges)
+
+    def is_valid(self) -> bool:
+        """Verify that the loop is valid.
+
+        Returns
+        -------
+        bool
+
+        """
+        return brepalgo_IsValid(self.loop)
+
+    def fix(self) -> None:
+        """Try to fix the loop.
+
+        Returns
+        -------
+        None
+
+        """
+        fixer = ShapeFix_Wire(self.loop)
+        fixer.Perform()
+        self.loop = fixer.Wire()
