@@ -465,7 +465,7 @@ class BRep:
         return brep
 
     @classmethod
-    def from_faces(cls, faces: list[BRepFace]) -> "BRep":
+    def from_faces(cls, faces: List[BRepFace]) -> "BRep":
         """Make a BRep from a list of BRep faces forming an open or closed shell."""
         shell = TopoDS_Shell()
         builder = BRep_Builder()
