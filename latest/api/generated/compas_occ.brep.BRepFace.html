@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="compas_occ.conversions" href="../compas_occ.conversions.html" />
+  <link rel="next" title="BRepFace.add_loop" href="compas_occ.brep.BRepFace.add_loop.html" />
   
 
   
-  <link rel="prev" title="BRepLoop" href="compas_occ.brep.BRepLoop.html" />
+  <link rel="prev" title="BRepLoop.is_valid" href="compas_occ.brep.BRepLoop.is_valid.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,7 +99,7 @@
 <h1>BRepFace</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.brep.BRepFace">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepFace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepface.py#L20"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepFace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepface.py#L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class representing a face in the BRep of a geometric shape.</p>
 <dl class="field-list simple">
@@ -121,6 +121,45 @@
 </ul>
 </dd>
 </dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.add_loop.html#compas_occ.brep.BRepFace.add_loop" title="compas_occ.brep.BRepFace.add_loop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_loop</span></code></a></p></td>
+<td><p>Add an inner loop to the face.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.add_loops.html#compas_occ.brep.BRepFace.add_loops" title="compas_occ.brep.BRepFace.add_loops"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_loops</span></code></a></p></td>
+<td><p>Add an inner loop to the face.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.fix.html#compas_occ.brep.BRepFace.fix" title="compas_occ.brep.BRepFace.fix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix</span></code></a></p></td>
+<td><p>Try to fix the face.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_cone.html#compas_occ.brep.BRepFace.from_cone" title="compas_occ.brep.BRepFace.from_cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cone</span></code></a></p></td>
+<td><p>Construct a face from a cone.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_cylinder.html#compas_occ.brep.BRepFace.from_cylinder" title="compas_occ.brep.BRepFace.from_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cylinder</span></code></a></p></td>
+<td><p>Construct a face from a cylinder.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_plane.html#compas_occ.brep.BRepFace.from_plane" title="compas_occ.brep.BRepFace.from_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_plane</span></code></a></p></td>
+<td><p>Construct a face from a plane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_sphere.html#compas_occ.brep.BRepFace.from_sphere" title="compas_occ.brep.BRepFace.from_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sphere</span></code></a></p></td>
+<td><p>Construct a face from a sphere.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_surface.html#compas_occ.brep.BRepFace.from_surface" title="compas_occ.brep.BRepFace.from_surface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_surface</span></code></a></p></td>
+<td><p>Construct a face from a surface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_torus.html#compas_occ.brep.BRepFace.from_torus" title="compas_occ.brep.BRepFace.from_torus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_torus</span></code></a></p></td>
+<td><p>Construct a face from a torus.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.is_valid.html#compas_occ.brep.BRepFace.is_valid" title="compas_occ.brep.BRepFace.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
+<td><p>Verify that the face is valid.</p></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </section>
@@ -146,8 +185,9 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a><ul class="nav flex-column collapse">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brep_from_booleans.html">BRep Shape From Booleans</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brep_from_corners.html">BRep From Corners</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brep_from_mesh.html">BRep From Mesh</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brepface_with_hole.html">BRepFace with Hole</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brepface_with_holes.html">BRepFace with Holes</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_closest_point.html">Curve Closest Point</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_comparison1.html">Curve Comparison 1</a></li>
@@ -209,20 +249,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.brep.BRepLoop.html" title="BRepLoop" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.brep.BRepLoop.is_valid.html" title="BRepLoop.is_valid" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRepLoop
+          BRepLoop.is_valid
         </div>
       </a>
       
 
       
-      <a href="../compas_occ.conversions.html" title="compas_occ.conversions" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.brep.BRepFace.add_loop.html" title="BRepFace.add_loop" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          compas_occ.conversions
+          BRepFace.add_loop
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

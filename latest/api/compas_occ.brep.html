@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_occ - &lt;no title&gt;</title>
+  <title>compas_occ - compas_occ.brep</title>
   
 
   <meta charset="utf-8" />
@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="compas_occ.conversions" href="compas_occ.conversions.html" />
+  <link rel="next" title="BRep" href="generated/compas_occ.brep.BRep.html" />
   
 
   
@@ -86,14 +86,43 @@
             
             <li class="breadcrumb-item"><a href="compas_occ.html">compas_occ</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">compas_occ.brep</li> -->
           </ol>
         </nav>
         
 
         
         
-        
+        <span class="target" id="module-compas_occ.brep"></span><section id="compas-occ-brep">
+<h1>compas_occ.brep</h1>
+<section id="classes">
+<h2>Classes</h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.brep.BRep.html#compas_occ.brep.BRep" title="compas_occ.brep.BRep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BRep</span></code></a></p></td>
+<td><p>Class for Boundary Representation of geometric entities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.brep.BRepVertex.html#compas_occ.brep.BRepVertex" title="compas_occ.brep.BRepVertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BRepVertex</span></code></a></p></td>
+<td><p>Class representing a vertex in the BRep of a geometric shape.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.brep.BRepEdge.html#compas_occ.brep.BRepEdge" title="compas_occ.brep.BRepEdge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BRepEdge</span></code></a></p></td>
+<td><p>Class representing an edge in the BRep of a geometric shape.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.brep.BRepLoop.html#compas_occ.brep.BRepLoop" title="compas_occ.brep.BRepLoop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BRepLoop</span></code></a></p></td>
+<td><p>Class representing an edge loop in the BRep of a geometric shape.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.brep.BRepFace.html#compas_occ.brep.BRepFace" title="compas_occ.brep.BRepFace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BRepFace</span></code></a></p></td>
+<td><p>Class representing a face in the BRep of a geometric shape.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
         
       </main>
       <!-- content -->
@@ -110,7 +139,7 @@
         
         
         <div id="compas-navigation" class="collapse compas-navigation">
-          <ul class="nav flex-column collapse">
+          <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
@@ -147,8 +176,9 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_occ.html">compas_occ</a><ul class="nav flex-column collapse">
+<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="compas_occ.html">compas_occ</a><ul class="nav flex-column collapse show active">
+<li class="toctree-l3 nav-item active"><a class="nav-link active reference internal" href="#">compas_occ.brep</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_occ.conversions.html">compas_occ.conversions</a></li>
 <li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="compas_occ.geometry.html">compas_occ.geometry</a></li>
 </ul>
@@ -165,7 +195,11 @@
       <!-- toc -->
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
-        <ul class="simple">
+        <ul class="nav flex-column" id="compas-toc">
+<li class="nav-item"><a class="nav-link reference internal" href="#">compas_occ.brep</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
 </ul>
 
       </div>
@@ -187,10 +221,10 @@
       
 
       
-      <a href="compas_occ.conversions.html" title="compas_occ.conversions" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="generated/compas_occ.brep.BRep.html" title="BRep" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          compas_occ.conversions
+          BRep
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
