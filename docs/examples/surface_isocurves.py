@@ -18,11 +18,11 @@ surface = OCCNurbsSurface.from_points(points=points)
 # ==============================================================================
 
 u_curves = []
-for u in surface.u_space():
+for u in surface.u_space(5):
     u_curves.append(surface.u_isocurve(u))
 
 v_curves = []
-for v in surface.v_space():
+for v in surface.v_space(10):
     v_curves.append(surface.v_isocurve(v))
 
 # ==============================================================================
