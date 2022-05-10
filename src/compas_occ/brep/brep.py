@@ -3,9 +3,11 @@ from typing import List
 import compas.geometry
 import compas.datastructures
 
+from compas.data import Data
 from compas.geometry import Frame
 from compas.geometry import Transformation
 from compas.geometry import Translation
+from compas.geometry import Point
 from compas.datastructures import Mesh
 
 from OCC.Core.gp import gp_Pnt
@@ -27,7 +29,9 @@ from OCC.Core.TopAbs import TopAbs_ShapeEnum
 from OCC.Core.BRep import BRep_Builder
 
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
+
+# from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Sewing
 
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
@@ -41,17 +45,21 @@ from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.BRep import BRep_Tool
 from OCC.Core.TopLoc import TopLoc_Location
 
-# from OCC.Core.Tesselator import ShapeTesselator
-
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.IFSelect import IFSelect_RetDone
 
+from OCC.Core.ShapeFix import ShapeFix_Shell
+from OCC.Core.BRepCheck import BRepCheck_Shell
+from OCC.Core.BRepCheck import BRepCheck_Status
+
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
 from compas_occ.conversions import points1_from_array1
+
+from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
 
 from compas_occ.brep import BRepVertex
@@ -60,7 +68,7 @@ from compas_occ.brep import BRepLoop
 from compas_occ.brep import BRepFace
 
 
-class BRep:
+class BRep(Data):
     """Class for Boundary Representation of geometric entities.
 
     Attributes
@@ -82,11 +90,11 @@ class BRep:
 
     Other Attributes
     ----------------
-    shape : ``TopoDS_Shape``
+    occ_shape : ``TopoDS_Shape``
         The underlying OCC shape of the BRep.
-    type : ``TopAbs_ShapeEnum``, read-only
+    type : {TopAbs_COMPOUND, TopAbs_COMPSOLID, TopAbs_SOLID, TopAbs_SHELL, TopAbs_FACE, TopAbs_WIRE, TopAbs_EDGE, TopAbs_VERTEX, TopAbs_SHAPE}, read-only
         The type of BRep shape.
-    orientation : ``TopAbs_Orientation``, read-only
+    orientation : {TopAbs_FORWARD, TopAbs_REVERSED, TopAbs_INTERNAL, TopAbs_EXTERNAL}, read-only
         Orientation of the shape.
 
     Examples
@@ -126,7 +134,57 @@ class BRep:
     """
 
     def __init__(self) -> None:
-        self._shape = None
+        super().__init__()
+        self._occ_shape = None
+
+    # ==============================================================================
+    # Data
+    # ==============================================================================
+
+    @property
+    def data(self):
+        faces = []
+        for face in self.faces:
+            boundary = []
+            for edge in face.loops[0].edges:
+                curvedata = edge.nurbscurve.data
+                boundary.append(curvedata)
+            holes = []
+            for loop in face.loops[1:]:
+                pass
+            surfacedata = face.nurbssurface.data
+            faces.append({"boundary": boundary, "surface": surfacedata, "holes": holes})
+        return {"faces": faces}
+
+    @data.setter
+    def data(self, data):
+        faces = []
+        for j, facedata in enumerate(data["faces"]):
+            # underlying geometry
+            surface = OCCNurbsSurface.from_data(facedata["surface"])
+            # boundary loop from edge curves
+            edges = []
+            for curvedata in facedata["boundary"]:
+                curve = OCCNurbsCurve.from_data(curvedata)
+                edge = BRepEdge.from_curve(curve)
+                edges.append(edge)
+            loop = BRepLoop.from_edges(edges)
+            # boundary loop of the first face needs to be flipped
+            # store orientation?
+            # reverse based on orientation info?
+            # if j == 0:
+            #     loop.occ_wire.Reverse()
+            # face from surface and boundary
+            face = BRepFace.from_surface(surface, loop=loop)
+            # add holes
+            for hole in facedata["holes"]:
+                pass
+            # collect
+            faces.append(face)
+        # recreate shape
+        self.occ_shape = BRep.from_faces(faces).occ_shape
+        # self.sew()
+        # self.fix()
 
     # ==============================================================================
     # Customization
@@ -185,21 +243,42 @@ class BRep:
     # ==============================================================================
 
     @property
-    def shape(self) -> TopoDS_Shape:
-        return self._shape
+    def occ_shape(self) -> TopoDS_Shape:
+        return self._occ_shape
 
-    @shape.setter
-    def shape(self, shape: TopoDS_Shape) -> None:
-        self._shape = shape
+    @occ_shape.setter
+    def occ_shape(self, shape: TopoDS_Shape) -> None:
+        self._occ_shape = shape
 
     @property
     def type(self) -> TopAbs_ShapeEnum:
-        return self.shape.ShapeType()
+        return self.occ_shape.ShapeType()
+
+    @property
+    def points(self) -> List[Point]:
+        points = []
+        for vertex in self.vertices:
+            points.append(vertex.point)
+        return points
+
+    @property
+    def curves(self) -> List[OCCNurbsCurve]:
+        curves = []
+        for edge in self.edges:
+            curves.append(edge.nurbscurve)
+        return curves
+
+    @property
+    def surfaces(self) -> List[OCCNurbsSurface]:
+        surfaces = []
+        for face in self.faces:
+            surfaces.append(face.nurbssurface)
+        return surfaces
 
     @property
     def vertices(self) -> List[BRepVertex]:
         vertices = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_VERTEX)
+        explorer = TopExp_Explorer(self.occ_shape, TopAbs_VERTEX)
         while explorer.More():
             vertex = explorer.Current()
             vertices.append(BRepVertex(vertex))
@@ -209,7 +288,7 @@ class BRep:
     @property
     def edges(self) -> List[BRepEdge]:
         edges = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_EDGE)
+        explorer = TopExp_Explorer(self.occ_shape, TopAbs_EDGE)
         while explorer.More():
             edge = explorer.Current()
             edges.append(BRepEdge(edge))
@@ -219,7 +298,7 @@ class BRep:
     @property
     def loops(self) -> List[BRepLoop]:
         loops = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_WIRE)
+        explorer = TopExp_Explorer(self.occ_shape, TopAbs_WIRE)
         while explorer.More():
             wire = explorer.Current()
             loops.append(BRepLoop(wire))
@@ -229,28 +308,20 @@ class BRep:
     @property
     def faces(self) -> List[BRepFace]:
         faces = []
-        explorer = TopExp_Explorer(self.shape, TopAbs_FACE)
+        explorer = TopExp_Explorer(self.occ_shape, TopAbs_FACE)
         while explorer.More():
             face = explorer.Current()
             faces.append(BRepFace(face))
             explorer.Next()
         return faces
 
-    # trims
-    # curves2D
-    # curves3D
-    # surfaces
-
-    # regions
-    # point inside (of solid brep)
-
     @property
     def orientation(self) -> TopAbs_Orientation:
-        return self.shape.Orientation()
+        return TopAbs_Orientation(self.occ_shape.Orientation())
 
     @property
     def frame(self) -> compas.geometry.Frame:
-        location = self.shape.Location()
+        location = self.occ_shape.Location()
         transformation = location.Transformation()
         T = Transformation(
             matrix=[[transformation.Value(i, j) for j in range(4)] for i in range(4)]
@@ -269,36 +340,6 @@ class BRep:
     # ==============================================================================
     # Constructors
     # ==============================================================================
-
-    # @classmethod
-    # def from_corners(
-    #     cls,
-    #     p1: compas.geometry.Point,
-    #     p2: compas.geometry.Point,
-    #     p3: compas.geometry.Point,
-    #     p4: Optional[compas.geometry.Point] = None,
-    # ) -> "BRep":
-    #     """Construct a BRep from 3 or 4 corner points.
-
-    #     Parameters
-    #     ----------
-    #     p1 : :class:`~compas.geometry.Point`
-    #     p2 : :class:`~compas.geometry.Point`
-    #     p3 : :class:`~compas.geometry.Point`
-    #     p4 : :class:`~compas.geometry.Point`, optional
-
-    #     Returns
-    #     -------
-    #     :class:`~compas_occ.brep.BRep`
-
-    #     """
-    #     if not p4:
-    #         brep = BRep()
-    #         brep.shape = triangle_to_face([p1, p2, p3])
-    #         return brep
-    #     brep = BRep()
-    #     brep.shape = quad_to_face([p1, p2, p3, p4])
-    #     return brep
 
     @classmethod
     def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> "BRep":
@@ -323,8 +364,10 @@ class BRep:
                 builder.Add(shell, quad_to_face(points))
             else:
                 builder.Add(shell, ngon_to_face(points))
-        brep = BRep()
-        brep.shape = shell
+        brep = cls()
+        brep.occ_shape = shell
+        brep.sew()
+        brep.fix()
         return brep
 
     @classmethod
@@ -360,8 +403,10 @@ class BRep:
         zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
         frame = box.frame.transformed(Translation.from_vector(xaxis + yaxis + zaxis))
         ax2 = gp_Ax2(gp_Pnt(*frame.point), gp_Dir(*frame.zaxis), gp_Dir(*frame.xaxis))
-        brep = BRep()
-        brep.shape = BRepPrimAPI_MakeBox(ax2, box.xsize, box.ysize, box.zsize).Shape()
+        brep = cls()
+        brep.occ_shape = BRepPrimAPI_MakeBox(
+            ax2, box.xsize, box.ysize, box.zsize
+        ).Shape()
         return brep
 
     @classmethod
@@ -377,8 +422,8 @@ class BRep:
         :class:`~compas_occ.brep.BRep`
 
         """
-        brep = BRep()
-        brep.shape = BRepPrimAPI_MakeSphere(
+        brep = cls()
+        brep.occ_shape = BRepPrimAPI_MakeSphere(
             gp_Pnt(*sphere.point), sphere.radius
         ).Shape()
         return brep
@@ -402,8 +447,8 @@ class BRep:
         frame = Frame.from_plane(plane)
         frame.transform(Translation.from_vector(frame.zaxis * (-0.5 * height)))
         ax2 = gp_Ax2(gp_Pnt(*frame.point), gp_Dir(*frame.zaxis), gp_Dir(*frame.xaxis))
-        brep = BRep()
-        brep.shape = BRepPrimAPI_MakeCylinder(ax2, radius, height).Shape()
+        brep = cls()
+        brep.occ_shape = BRepPrimAPI_MakeCylinder(ax2, radius, height).Shape()
         return brep
 
     @classmethod
@@ -446,7 +491,7 @@ class BRep:
 
         Returns
         -------
-        :class:`~compas_occ.brep.BRep`
+        :class:`BRep`
 
         """
         shell = TopoDS_Shell()
@@ -460,22 +505,36 @@ class BRep:
                 builder.Add(shell, quad_to_face(points))
             else:
                 builder.Add(shell, ngon_to_face(points))
-        brep = BRep()
-        brep.shape = shell
+        brep = cls()
+        brep.occ_shape = shell
+        brep.sew()
+        brep.fix()
         return brep
 
     @classmethod
     def from_faces(cls, faces: List[BRepFace]) -> "BRep":
-        """Make a BRep from a list of BRep faces forming an open or closed shell."""
+        """Make a BRep from a list of BRep faces forming an open or closed shell.
+
+        Parameters
+        ----------
+        faces : list[:class:`BRepFace`]
+
+        Returns
+        -------
+        :class:`BRep`
+
+        """
         shell = TopoDS_Shell()
         builder = BRep_Builder()
         builder.MakeShell(shell)
         for face in faces:
             if not face.is_valid():
                 face.fix()
-            builder.Add(shell, face.face)
-        brep = BRep()
-        brep.shape = shell
+            builder.Add(shell, face.occ_face)
+        brep = cls()
+        brep.occ_shape = shell
+        brep.sew()
+        brep.fix()
         return brep
 
     @classmethod
@@ -508,11 +567,11 @@ class BRep:
         :class:`~compas_occ.brep.BRep`
 
         """
-        cut = BRepAlgoAPI_Cut(A.shape, B.shape)
+        cut = BRepAlgoAPI_Cut(A.occ_shape, B.occ_shape)
         if not cut.IsDone():
             raise Exception("Boolean difference operation could not be completed.")
-        brep = BRep()
-        brep.shape = cut.Shape()
+        brep = cls()
+        brep.occ_shape = cut.Shape()
         return brep
 
     @classmethod
@@ -529,15 +588,15 @@ class BRep:
         :class:`~compas_occ.brep.BRep`
 
         """
-        common = BRepAlgoAPI_Common(A.shape, B.shape)
+        common = BRepAlgoAPI_Common(A.occ_shape, B.occ_shape)
         if not common.IsDone():
             raise Exception("Boolean intersection operation could not be completed.")
-        brep = BRep()
-        brep.shape = common.Shape()
+        brep = cls()
+        brep.occ_shape = common.Shape()
         return brep
 
     @classmethod
-    def from_boolean_union(cls, A, B) -> "BRep":
+    def from_boolean_union(cls, A: "BRep", B: "BRep") -> "BRep":
         """Construct a BRep from the boolean union of two other BReps.
 
         Parameters
@@ -550,11 +609,11 @@ class BRep:
         :class:`~compas_occ.brep.BRep`
 
         """
-        fuse = BRepAlgoAPI_Fuse(A.shape, B.shape)
+        fuse = BRepAlgoAPI_Fuse(A.occ_shape, B.occ_shape)
         if not fuse.IsDone():
             raise Exception("Boolean union operation could not be completed.")
-        brep = BRep()
-        brep.shape = fuse.Shape()
+        brep = cls()
+        brep.occ_shape = fuse.Shape()
         return brep
 
     # ==============================================================================
@@ -575,7 +634,7 @@ class BRep:
 
         """
         with open(filepath, "w") as f:
-            self.shape.DumpJson(f)
+            self.occ_shape.DumpJson(f)
 
     def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
         """Write the BRep shape to a STEP file.
@@ -597,7 +656,7 @@ class BRep:
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         Interface_Static_SetCVal("write.step.unit", unit)
-        step_writer.Transfer(self.shape, STEPControl_AsIs)
+        step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
         status = step_writer.Write(filepath)
         assert status == IFSelect_RetDone, "STEP writing failed."
 
@@ -615,11 +674,11 @@ class BRep:
 
         """
         mesh = Mesh()
-        BRepMesh_IncrementalMesh(self.shape, linear_deflection)
+        BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection)
         bt = BRep_Tool()
         for face in self.faces:
             location = TopLoc_Location()
-            triangulation = bt.Triangulation(face.face, location)
+            triangulation = bt.Triangulation(face.occ_face, location)
             nodes = triangulation.Nodes()
             vertices = points1_from_array1(nodes)
             faces = []
@@ -647,12 +706,12 @@ class BRep:
         list[:class:`~compas.datastructures.Mesh`]
 
         """
-        converter = BRepBuilderAPI_NurbsConvert(self.shape, False)
+        converter = BRepBuilderAPI_NurbsConvert(self.occ_shape, False)
         brep = BRep()
-        brep.shape = converter.Shape()
+        brep.occ_shape = converter.Shape()
         meshes = []
         for face in brep.faces:
-            srf = OCCNurbsSurface.from_face(face.face)
+            srf = OCCNurbsSurface.from_face(face.occ_face)
             mesh = srf.to_tesselation()
             meshes.append(mesh)
         return meshes
@@ -660,19 +719,59 @@ class BRep:
     # make meshes from the loops
     # use gmsh to generate proper mesh
 
-    def make_solid(self):
-        """Convert the current shape to a solid.
+    # ==============================================================================
+    # Methods
+    # ==============================================================================
+
+    # def make_solid(self):
+    #     """Convert the current shape to a solid.
+
+    #     Returns
+    #     -------
+    #     None
+
+    #     """
+    #     self.occ_shape = BRepBuilderAPI_MakeSolid(self.occ_shape).Solid()
+
+    def check(self):
+        """Check the shape.
 
         Returns
         -------
         None
 
         """
-        self.shape = BRepBuilderAPI_MakeSolid(self.shape).Solid()
+        if self.type == TopAbs_ShapeEnum.TopAbs_SHELL:
+            check = BRepCheck_Shell(self.occ_shape)
+            print(BRepCheck_Status(check.Closed()))
+            print(BRepCheck_Status(check.Orientation()))
 
-    # ==============================================================================
-    # Methods
-    # ==============================================================================
+    def sew(self):
+        """Sew together the individual parts of the shape.
+
+        Returns
+        -------
+        None
+
+        """
+        if len(self.faces) > 1:
+            sewer = BRepBuilderAPI_Sewing()
+            sewer.Load(self.occ_shape)
+            sewer.Perform()
+            self.occ_shape = sewer.SewedShape()
+
+    def fix(self):
+        """Fix the shell.
+
+        Returns
+        -------
+        None
+
+        """
+        if self.type == TopAbs_ShapeEnum.TopAbs_SHELL:
+            fixer = ShapeFix_Shell(self.occ_shape)
+            fixer.Perform()
+            self.occ_shape = fixer.Shell()
 
     def is_orientable(self) -> bool:
         """Check if the shape is orientable.
@@ -682,7 +781,7 @@ class BRep:
         bool
 
         """
-        return self.shape.Orientable()
+        return self.occ_shape.Orientable()
 
     def is_closed(self) -> bool:
         """Check if the shape is closed.
@@ -692,7 +791,7 @@ class BRep:
         bool
 
         """
-        return self.shape.Closed()
+        return self.occ_shape.Closed()
 
     def is_infinite(self) -> bool:
         """Check if the shape is infinite.
@@ -702,7 +801,7 @@ class BRep:
         bool
 
         """
-        return self.shape.Infinite()
+        return self.occ_shape.Infinite()
 
     def is_convex(self) -> bool:
         """Check if the shape is convex.
@@ -712,7 +811,7 @@ class BRep:
         bool
 
         """
-        return self.shape.Convex()
+        return self.occ_shape.Convex()
 
     def is_manifold(self) -> bool:
         """Check if the shape is manifold.
