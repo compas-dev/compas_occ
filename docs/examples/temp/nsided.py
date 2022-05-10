@@ -1,10 +1,13 @@
+import random
 import math
 from compas.geometry import Polygon, Polyline, Rotation
 from compas.geometry import normal_polygon
+from compas.datastructures import Mesh
 
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.brep import BRep
+from compas_occ.conversions import ngon_to_face
 
 from compas_view2.app import App
 
@@ -26,76 +29,79 @@ from OCC.Core.TopLoc import TopLoc_Location
 # Input polygon
 # ==============================================================================
 
-R = Rotation.from_axis_and_angle([1, 1, 0], math.radians(30))
+# R = Rotation.from_axis_and_angle([1, 1, 0], math.radians(30))
 
 polygon = Polygon.from_sides_and_radius_xy(5, 2)
-polygon.transform(R)
+# polygon.transform(R)
+
+for point in polygon.points:
+    point.z += random.random()
 
 # ==============================================================================
 # BRep Polygon
 # ==============================================================================
 
-points = [gp_Pnt(* point) for point in polygon]
+# points = [gp_Pnt(*point) for point in polygon]
 
-poly = BRepBuilderAPI_MakePolygon()
-for point in points:
-    poly.Add(point)
-poly.Build()
-poly.Close()
+# poly = BRepBuilderAPI_MakePolygon()
+# for point in points:
+#     poly.Add(point)
+# poly.Build()
+# poly.Close()
 
 # ==============================================================================
 # BRep Filling
 # ==============================================================================
 
-edges = list(TopologyExplorer(poly.Wire()).edges())
+# edges = list(TopologyExplorer(poly.Wire()).edges())
 
-nsided = BRepFill_Filling()
-for edge in edges:
-    nsided.Add(edge, GeomAbs_C0)
-nsided.Add(gp_Pnt(* (polygon.centroid + normal_polygon(polygon))))
-nsided.Build()
+# nsided = BRepFill_Filling()
+# for edge in edges:
+#     nsided.Add(edge, GeomAbs_C0)
+# nsided.Add(gp_Pnt(*(polygon.centroid + polygon.normal * 0.1)))
+# nsided.Build()
 
 # ==============================================================================
 # Surface from BRep Filling Face
 # ==============================================================================
 
-face = nsided.Face()
-surface = OCCNurbsSurface.from_face(face)
+# face = nsided.Face()
+# surface = OCCNurbsSurface.from_face(face)
+
+# face = ngon_to_face(polygon)
 
 # ==============================================================================
 # BRep
 # ==============================================================================
 
-brep = BRep()
-brep.shape = face
+brep = BRep.from_mesh(Mesh.from_polygons([polygon]))
+mesh = brep.to_tesselation()
 
-# mesh = brep.to_tesselation()
+# BRepMesh_IncrementalMesh(brep.shape, 0.1, False, 0.1, False)
 
-BRepMesh_IncrementalMesh(brep.shape, 0.1, False, 0.1, False)
-
-bt = BRep_Tool()
-ex = TopExp_Explorer(brep.shape, TopAbs_FACE)
-while ex.More():
-    face = topods_Face(ex.Current())
-    location = TopLoc_Location()
-    facing = (bt.Triangulation(face, location))
-    tab = facing.Nodes()
-    tri = facing.Triangles()
-    for i in range(1, facing.NbTriangles() + 1):
-        trian = tri.Value(i)
-        index1, index2, index3 = trian.Get()
-        # for j in range(1, 4):
-        #     if j == 1:
-        #         m = index1
-        #         n = index2
-        #     elif j == 2:
-        #         n = index3
-        #     elif j == 3:
-        #         m = index2
-        #     me = BRepBuilderAPI_MakeEdge(tab.Value(m), tab.Value(n))
-        #     if me.IsDone():
-        #         builder.Add(comp, me.Edge())
-    ex.Next()
+# bt = BRep_Tool()
+# ex = TopExp_Explorer(brep.shape, TopAbs_FACE)
+# while ex.More():
+#     face = topods_Face(ex.Current())
+#     location = TopLoc_Location()
+#     facing = (bt.Triangulation(face, location))
+#     tab = facing.Nodes()
+#     tri = facing.Triangles()
+#     for i in range(1, facing.NbTriangles() + 1):
+#         trian = tri.Value(i)
+#         index1, index2, index3 = trian.Get()
+#         # for j in range(1, 4):
+#         #     if j == 1:
+#         #         m = index1
+#         #         n = index2
+#         #     elif j == 2:
+#         #         n = index3
+#         #     elif j == 3:
+#         #         m = index2
+#         #     me = BRepBuilderAPI_MakeEdge(tab.Value(m), tab.Value(n))
+#         #     if me.IsDone():
+#         #         builder.Add(comp, me.Edge())
+#     ex.Next()
 
 # ==============================================================================
 # Viz
@@ -104,10 +110,10 @@ while ex.More():
 viewer = App()
 
 # viewer.add(surface.to_mesh())
-viewer.add(mesh)
+viewer.add(mesh, show_edges=True)
 
-for edge in edges:
-    curve = OCCNurbsCurve.from_edge(edge)
+for edge in brep.edges:
+    curve = OCCNurbsCurve.from_edge(edge.edge)
     viewer.add(Polyline(curve.locus(resolution=16)), linecolor=(1, 0, 0), linewidth=5)
 
 viewer.run()
