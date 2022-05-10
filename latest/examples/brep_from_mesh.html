@@ -104,10 +104,10 @@
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
 
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tubemesh.obj&#39;</span><span class="p">))</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tubemesh.obj&quot;</span><span class="p">))</span>
 
 <span class="n">centroid</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
-<span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_attribute</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))</span>
+<span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_attribute</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">))</span>
 <span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">centroid</span><span class="p">)</span>
 <span class="n">vector</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">zmin</span>
 <span class="n">vector</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
@@ -118,6 +118,7 @@
 <span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
 
 <span class="n">brep</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">brep</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
 
 <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">curves</span> <span class="o">=</span> <span class="p">[]</span>
@@ -128,7 +129,7 @@
     <span class="k">elif</span> <span class="n">edge</span><span class="o">.</span><span class="n">is_bspline</span><span class="p">:</span>
         <span class="n">curves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">curve</span><span class="o">.</span><span class="n">locus</span><span class="p">()))</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s2">&quot;ghosted&quot;</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">brep</span><span class="o">.</span><span class="n">to_tesselation</span><span class="p">(),</span> <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>

@@ -24,7 +24,7 @@
   
 
   
-  <link rel="prev" title="BRep.to_tesselation" href="compas_occ.brep.BRep.to_tesselation.html" />
+  <link rel="prev" title="BRep.validate_json" href="compas_occ.brep.BRep.validate_json.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,21 +99,18 @@
 <h1>BRepVertex</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.brep.BRepVertex">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepvertex.py#L13"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_vertex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepvertex.py#L11"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.data.data.Data</span></code></a></p>
 <p>Class representing a vertex in the BRep of a geometric shape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vertex</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Vertex</span></code>) – An OCC topological vertex data structure.</p>
+<dd class="field-odd"><p><strong>occ_vertex</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Vertex</span></code>) – An OCC topological vertex data structure.</p>
 </dd>
 <dt class="field-even">Attributes</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>vertex</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Vertex</span></code>) – The underlying OCC vertex.</p></li>
-<li><p><strong>point</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The geometric point underlying the topological vertex.</p></li>
-</ul>
+<dd class="field-even"><p><strong>point</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The geometric point underlying the topological vertex.</p>
 </dd>
 <dt class="field-odd">Other Attributes</dt>
-<dd class="field-odd"><p><strong>vertex</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Vertex</span></code>) – The underlying OCC vertex.</p>
+<dd class="field-odd"><p><strong>occ_vertex</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Vertex</span></code>) – The underlying OCC vertex.</p>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
@@ -125,6 +122,42 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.from_point.html#compas_occ.brep.BRepVertex.from_point" title="compas_occ.brep.BRepVertex.from_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_point</span></code></a></p></td>
 <td><p>Construct a vertex from a point.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Inherited Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.copy.html#compas_occ.brep.BRepVertex.copy" title="compas_occ.brep.BRepVertex.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Make an independent copy of the data object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.from_data.html#compas_occ.brep.BRepVertex.from_data" title="compas_occ.brep.BRepVertex.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
+<td><p>Construct an object of this type from the provided data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.from_json.html#compas_occ.brep.BRepVertex.from_json" title="compas_occ.brep.BRepVertex.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.from_jsonstring.html#compas_occ.brep.BRepVertex.from_jsonstring" title="compas_occ.brep.BRepVertex.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.to_data.html#compas_occ.brep.BRepVertex.to_data" title="compas_occ.brep.BRepVertex.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<td><p>Convert an object to its native data representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.to_json.html#compas_occ.brep.BRepVertex.to_json" title="compas_occ.brep.BRepVertex.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.to_jsonstring.html#compas_occ.brep.BRepVertex.to_jsonstring" title="compas_occ.brep.BRepVertex.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.validate_data.html#compas_occ.brep.BRepVertex.validate_data" title="compas_occ.brep.BRepVertex.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<td><p>Validate the object's data against its data schema.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepVertex.validate_json.html#compas_occ.brep.BRepVertex.validate_json" title="compas_occ.brep.BRepVertex.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
+<td><p>Validate the object's data against its json schema.</p></td>
 </tr>
 </tbody>
 </table>
@@ -205,7 +238,9 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">BRepVertex</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">BRepVertex</a><ul class="nav flex-column">
+</ul>
+</li>
 </ul>
 
       </div>
@@ -217,11 +252,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.brep.BRep.to_tesselation.html" title="BRep.to_tesselation" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.brep.BRep.validate_json.html" title="BRep.validate_json" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRep.to_tesselation
+          BRep.validate_json
         </div>
       </a>
       

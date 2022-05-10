@@ -24,7 +24,7 @@
   
 
   
-  <link rel="prev" title="BRepLoop.is_valid" href="compas_occ.brep.BRepLoop.is_valid.html" />
+  <link rel="prev" title="BRepLoop.validate_json" href="compas_occ.brep.BRepLoop.validate_json.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,12 +99,12 @@
 <h1>BRepFace</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.brep.BRepFace">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepFace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">face</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepface.py#L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepFace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_face</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepface.py#L42"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.data.data.Data</span></code></a></p>
 <p>Class representing a face in the BRep of a geometric shape.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>face</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Face</span></code>) – An OCC BRep face.</p>
+<dd class="field-odd"><p><strong>occ_face</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Face</span></code>) – An OCC BRep face.</p>
 </dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><ul class="simple">
@@ -116,8 +116,8 @@
 </dd>
 <dt class="field-odd">Other Attributes</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>face</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Face</span></code>) – The OCC BRep face.</p></li>
-<li><p><strong>adaptor</strong> (<code class="docutils literal notranslate"><span class="pre">BRepAdaptor_Surface</span></code>) – Adaptor for extracting surface geometry from the BRep face.</p></li>
+<li><p><strong>occ_face</strong> (<code class="docutils literal notranslate"><span class="pre">TopoDS_Face</span></code>) – The OCC BRep face.</p></li>
+<li><p><strong>occ_adaptor</strong> (<code class="docutils literal notranslate"><span class="pre">BRepAdaptor_Surface</span></code>) – Adaptor for extracting surface geometry from the BRep face.</p></li>
 </ul>
 </dd>
 </dl>
@@ -157,6 +157,42 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.is_valid.html#compas_occ.brep.BRepFace.is_valid" title="compas_occ.brep.BRepFace.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
 <td><p>Verify that the face is valid.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Inherited Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.copy.html#compas_occ.brep.BRepFace.copy" title="compas_occ.brep.BRepFace.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Make an independent copy of the data object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_data.html#compas_occ.brep.BRepFace.from_data" title="compas_occ.brep.BRepFace.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
+<td><p>Construct an object of this type from the provided data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_json.html#compas_occ.brep.BRepFace.from_json" title="compas_occ.brep.BRepFace.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.from_jsonstring.html#compas_occ.brep.BRepFace.from_jsonstring" title="compas_occ.brep.BRepFace.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<td><p>Construct an object from serialized data contained in a JSON string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.to_data.html#compas_occ.brep.BRepFace.to_data" title="compas_occ.brep.BRepFace.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<td><p>Convert an object to its native data representation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.to_json.html#compas_occ.brep.BRepFace.to_json" title="compas_occ.brep.BRepFace.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.to_jsonstring.html#compas_occ.brep.BRepFace.to_jsonstring" title="compas_occ.brep.BRepFace.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<td><p>Serialize the data representation of an object to a JSON string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.validate_data.html#compas_occ.brep.BRepFace.validate_data" title="compas_occ.brep.BRepFace.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<td><p>Validate the object's data against its data schema.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepFace.validate_json.html#compas_occ.brep.BRepFace.validate_json" title="compas_occ.brep.BRepFace.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
+<td><p>Validate the object's data against its json schema.</p></td>
 </tr>
 </tbody>
 </table>
@@ -237,7 +273,9 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">BRepFace</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">BRepFace</a><ul class="nav flex-column">
+</ul>
+</li>
 </ul>
 
       </div>
@@ -249,11 +287,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.brep.BRepLoop.is_valid.html" title="BRepLoop.is_valid" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.brep.BRepLoop.validate_json.html" title="BRepLoop.validate_json" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRepLoop.is_valid
+          BRepLoop.validate_json
         </div>
       </a>
       
