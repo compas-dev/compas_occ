@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.geometry.OCCCurve.divide` as alias for `compas_occ.geometry.OCCCurve.divide_by_count`.
 * Added `compas_occ.geometry.OCCCurve.projected`.
 * Added `compas_occ.geometry.OCCCurve.embedded`.
+* Added `compas_occ.brep.BRep.from_faces`.
+* Added `compas_occ.brep.BRep.from_polygons`.
+* Added `compas_occ.brep.BRep.check`.
+* Added `compas_occ.brep.BRep.sew`.
+* Added `compas_occ.brep.BRep.fix`.
 
 ### Changed
 
@@ -25,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed bug in `compas_occ.brep.BRep.to_meshes`.
 * Changed `compas_frame_from_occ_position` to `compas_frame_from_occ_ax3`.
 * Changed `compas_occ.brep.BRep.to_tesselation` to use `BRepMesh_IncrementalMesh`.
+* Changes base of `compas_occ.brep.BRepVertex`, `compas_occ.brep.BRepEdge`, `compas_occ.brep.BRepLoop`, `compas_occ.brep.BRepFace`, `compas_occ.brep.BRep` to `compas.data.Data`.
 
 ### Removed
 
