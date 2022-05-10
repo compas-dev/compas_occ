@@ -48,7 +48,7 @@ def triangle_to_face(points: Triangle) -> TopoDS_Face:
 
     polygon = BRepBuilderAPI_MakePolygon()
     for point in points:
-        polygon.Add(gp_Pnt(* point))
+        polygon.Add(gp_Pnt(*point))
     polygon.Close()
     wire = polygon.Wire()
     return BRepBuilderAPI_MakeFace(wire).Face()
@@ -74,9 +74,13 @@ def quad_to_face(points: Quad) -> TopoDS_Face:
     """
     assert len(points) == 4, "The number of input points should be four."
 
-    points = [Point(* point) for point in points]
-    curve1 = GeomAPI_PointsToBSpline(array1_from_points1([points[0], points[1]])).Curve()
-    curve2 = GeomAPI_PointsToBSpline(array1_from_points1([points[3], points[2]])).Curve()
+    points = [Point(*point) for point in points]
+    curve1 = GeomAPI_PointsToBSpline(
+        array1_from_points1([points[0], points[1]])
+    ).Curve()
+    curve2 = GeomAPI_PointsToBSpline(
+        array1_from_points1([points[3], points[2]])
+    ).Curve()
     srf = geomfill_Surface(curve1, curve2)
     return BRepBuilderAPI_MakeFace(srf, 1e-6).Face()
 
@@ -94,7 +98,7 @@ def ngon_to_face(points: NGon) -> TopoDS_Face:
     TopoDS_Face
 
     """
-    points = [gp_Pnt(* point) for point in points]
+    points = [gp_Pnt(*point) for point in points]
     poly = BRepBuilderAPI_MakePolygon()
     for point in points:
         poly.Add(point)
