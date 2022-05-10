@@ -254,7 +254,11 @@ class OCCCurve(Curve):
         """
         start, end = self.domain
         if t < start or t > end:
-            raise ValueError("The parameter is not in the domain of the curve.")
+            raise ValueError(
+                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(
+                    t, self.domain
+                )
+            )
         point = self.occ_curve.Value(t)
         if self.dimension == 2:
             return compas_point_from_occ_point2d(Point, point)
