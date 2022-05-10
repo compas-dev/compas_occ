@@ -6,10 +6,10 @@ from compas_occ.brep import BRep
 from compas_view2.app import App
 
 
-mesh = Mesh.from_obj(compas.get('tubemesh.obj'))
+mesh = Mesh.from_obj(compas.get("tubemesh.obj"))
 
 centroid = mesh.centroid()
-zmin = min(mesh.vertices_attribute('z'))
+zmin = min(mesh.vertices_attribute("z"))
 vector = Vector(*centroid)
 vector.z = zmin
 vector *= -1
@@ -20,6 +20,7 @@ S = Scale.from_factors([0.3, 0.3, 0.3])
 mesh.transform(S * T)
 
 brep = BRep.from_mesh(mesh)
+brep.check()
 
 lines = []
 curves = []
@@ -30,7 +31,7 @@ for edge in brep.edges:
     elif edge.is_bspline:
         curves.append(Polyline(edge.curve.locus()))
 
-viewer = App(viewmode='ghosted')
+viewer = App(viewmode="ghosted")
 viewer.add(brep.to_tesselation(), show_edges=False)
 
 for curve in curves:
