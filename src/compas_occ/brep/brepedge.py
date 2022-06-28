@@ -128,7 +128,7 @@ class BRepEdge(Data):
 
     @property
     def type(self) -> int:
-        return BRepEdge.CurveType(self.occ_adaptor.Curve().GetType())
+        return BRepEdge.CurveType(self.occ_adaptor.GetType())
 
     @property
     def is_line(self) -> bool:
