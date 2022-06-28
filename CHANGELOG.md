@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.conversions.compas_axis_from_occ_axis`.
 * Added `compas_occ.geometry.OCCExtrusionSurface`.
 * Added `compas_occ.geometry.OCCNurbsSurface.from_extrusion`.
-* Added implementation for `compas_occ.geometry.OCCCurve.divide_by_count`.
+* Added `compas_occ.geometry.OCCCurve.divide_by_count`.
 * Added `compas_occ.geometry.OCCCurve.divide` as alias for `compas_occ.geometry.OCCCurve.divide_by_count`.
 * Added `compas_occ.geometry.OCCCurve.projected`.
 * Added `compas_occ.geometry.OCCCurve.embedded`.
@@ -23,6 +23,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.brep.BRep.check`.
 * Added `compas_occ.brep.BRep.sew`.
 * Added `compas_occ.brep.BRep.fix`.
+* Added `compas_occ.brep.BRep.transform`.
+* Added `compas_occ.brep.BRep.transformed`.
+* Added `compas_occ.brep.BRep.from_step`.
+* Added `compas_occ.brep.BRep.from_shape`.
+* Added `compas_occ.brep.BRep.make_solid`.
+* Added `compas_occ.brep.BRep.centroid`.
+* Added `compas_occ.brep.BRep.volume`.
+* Added `compas_occ.brep.BRep.shells`.
+* Added `compas_occ.brep.BRep.solids`.
+* Added `compas_occ.brep.BRep.is_shell`.
+* Added `compas_occ.brep.BRep.is_solid`.
+* Added `compas_occ.brep.BRep.slice`.
+* Added `compas_occ.brep.BRep.split`.
 
 ### Changed
 
