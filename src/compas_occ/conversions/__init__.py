@@ -59,6 +59,16 @@ Shapes
     :nosignatures:
 
 
+Transformations
+===============
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    compas_transformation_to_trsf
+
+
 Meshes
 ======
 
@@ -101,6 +111,8 @@ from .primitives import compas_sphere_to_occ_sphere  # noqa: F401
 from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
 from .primitives import compas_cone_to_occ_cone  # noqa: F401
 from .primitives import compas_torus_to_occ_torus  # noqa: F401
+
+from .transformations import compas_transformation_to_trsf  # noqa: F401
 
 from .meshes import triangle_to_face  # noqa: F401
 from .meshes import quad_to_face  # noqa: F401
