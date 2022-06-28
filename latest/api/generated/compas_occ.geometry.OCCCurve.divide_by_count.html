@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="OCCCurve.embedded" href="compas_occ.geometry.OCCCurve.embedded.html" />
+  <link rel="next" title="OCCCurve.divide_by_length" href="compas_occ.geometry.OCCCurve.divide_by_length.html" />
   
 
   
@@ -101,7 +101,7 @@
 <h1>OCCCurve.divide_by_count</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve.divide_by_count">
-<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">divide_by_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L489"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">divide_by_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L491"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Divide the curve into a specific number of equal length segments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -113,7 +113,7 @@ If False, return only the list of parameters.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list[float] | tuple[list[float], list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]] – If <cite>return_points</cite> is False, the parameters of the discretisation.
+<dd class="field-even"><p>list[float] | tuple[list[float], list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>]] – If <cite>return_points</cite> is False, the parameters of the discretisation.
 If <cite>return_points</cite> is True, a list of points in addition to the parameters of the discretisation.</p>
 </dd>
 </dl>
@@ -216,10 +216,10 @@ If <cite>return_points</cite> is True, a list of points in addition to the param
       
 
       
-      <a href="compas_occ.geometry.OCCCurve.embedded.html" title="OCCCurve.embedded" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.geometry.OCCCurve.divide_by_length.html" title="OCCCurve.divide_by_length" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          OCCCurve.embedded
+          OCCCurve.divide_by_length
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

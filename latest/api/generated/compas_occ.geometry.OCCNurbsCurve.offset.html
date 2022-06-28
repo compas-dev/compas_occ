@@ -101,8 +101,24 @@
 <h1>OCCNurbsCurve.offset</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCNurbsCurve.offset">
-<span class="sig-prename descclassname"><span class="pre">OCCNurbsCurve.</span></span><span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/nurbs.py#L448"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">OCCNurbsCurve.</span></span><span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/nurbs.py#L581"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Offset the curve over the specified distance in the given direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – The offset distance.</p></li>
+<li><p><strong>direction</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Vector.html#compas.geometry.Vector" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Vector</span></code></a>) – The offset direction.
+Note that this direction defines the normal of the offset plane.
+At every point of the curve, a positive offset ditance
+will generate a corresponding offset point in the direction of
+the cross product vector of the curve tangent and the offset plane normal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 

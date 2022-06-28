@@ -99,8 +99,8 @@
 <h1>OCCCurve</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L36"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Curve.html#compas.geometry.Curve" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.curves.curve.Curve</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Curve.html#compas.geometry.Curve" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.curves.curve.Curve</span></code></a></p>
 <p>Class representing a general curve object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -110,8 +110,8 @@
 <dd class="field-even"><ul class="simple">
 <li><p><strong>dimension</strong> (<em>int, read-only</em>) – The dimension of the curve.</p></li>
 <li><p><strong>domain</strong> (<em>tuple[float, float], read-only</em>) – The domain of the parameter space of the curve.</p></li>
-<li><p><strong>start</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The start point of the curve.</p></li>
-<li><p><strong>end</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The end point of the curve.</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The start point of the curve.</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>, read-only) – The end point of the curve.</p></li>
 <li><p><strong>is_closed</strong> (<em>bool, read-only</em>) – Flag indicating that the curve is closed.</p></li>
 <li><p><strong>is_periodic</strong> (<em>bool, read-only</em>) – Flag indicating that the curve is periodic.</p></li>
 </ul>
@@ -151,17 +151,23 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.divide_by_count.html#compas_occ.geometry.OCCCurve.divide_by_count" title="compas_occ.geometry.OCCCurve.divide_by_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">divide_by_count</span></code></a></p></td>
 <td><p>Divide the curve into a specific number of equal length segments.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.embedded.html#compas_occ.geometry.OCCCurve.embedded" title="compas_occ.geometry.OCCCurve.embedded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">embedded</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.divide_by_length.html#compas_occ.geometry.OCCCurve.divide_by_length" title="compas_occ.geometry.OCCCurve.divide_by_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">divide_by_length</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.embedded.html#compas_occ.geometry.OCCCurve.embedded" title="compas_occ.geometry.OCCCurve.embedded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">embedded</span></code></a></p></td>
 <td><p>Return a copy of the curve embedded in the parameter space of the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.frame_at.html#compas_occ.geometry.OCCCurve.frame_at" title="compas_occ.geometry.OCCCurve.frame_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_at</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.frame_at.html#compas_occ.geometry.OCCCurve.frame_at" title="compas_occ.geometry.OCCCurve.frame_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_at</span></code></a></p></td>
 <td><p>Compute the local frame at a curve parameter.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.from_occ.html#compas_occ.geometry.OCCCurve.from_occ" title="compas_occ.geometry.OCCCurve.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.from_occ.html#compas_occ.geometry.OCCCurve.from_occ" title="compas_occ.geometry.OCCCurve.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
 <td><p>Construct a NURBS curve from an existing OCC BSplineCurve.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.length.html#compas_occ.geometry.OCCCurve.length" title="compas_occ.geometry.OCCCurve.length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">length</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.length.html#compas_occ.geometry.OCCCurve.length" title="compas_occ.geometry.OCCCurve.length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">length</span></code></a></p></td>
 <td><p>Compute the length of the curve.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.offset.html#compas_occ.geometry.OCCCurve.offset" title="compas_occ.geometry.OCCCurve.offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offset</span></code></a></p></td>
+<td><p>Offset the curve over the specified distance in the given direction.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.point_at.html#compas_occ.geometry.OCCCurve.point_at" title="compas_occ.geometry.OCCCurve.point_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_at</span></code></a></p></td>
 <td><p>Compute the point at a curve parameter.</p></td>
@@ -193,8 +199,8 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.divide_by_length.html#compas_occ.geometry.OCCCurve.divide_by_length" title="compas_occ.geometry.OCCCurve.divide_by_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">divide_by_length</span></code></a></p></td>
-<td><p>Divide the curve into segments of specified length.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.ToString.html#compas_occ.geometry.OCCCurve.ToString" title="compas_occ.geometry.OCCCurve.ToString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToString</span></code></a></p></td>
+<td><p>Converts the instance to a string.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.fair.html#compas_occ.geometry.OCCCurve.fair" title="compas_occ.geometry.OCCCurve.fair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fair</span></code></a></p></td>
 <td><p></p></td>
@@ -217,11 +223,11 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.locus.html#compas_occ.geometry.OCCCurve.locus" title="compas_occ.geometry.OCCCurve.locus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locus</span></code></a></p></td>
 <td><p>Compute the locus of points on the curve.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.offset.html#compas_occ.geometry.OCCCurve.offset" title="compas_occ.geometry.OCCCurve.offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offset</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.reversed.html#compas_occ.geometry.OCCCurve.reversed" title="compas_occ.geometry.OCCCurve.reversed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reversed</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.reversed.html#compas_occ.geometry.OCCCurve.reversed" title="compas_occ.geometry.OCCCurve.reversed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reversed</span></code></a></p></td>
 <td><p>Reverse a copy of the curve.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.sha256.html#compas_occ.geometry.OCCCurve.sha256" title="compas_occ.geometry.OCCCurve.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCCurve.smooth.html#compas_occ.geometry.OCCCurve.smooth" title="compas_occ.geometry.OCCCurve.smooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth</span></code></a></p></td>
 <td><p></p></td>

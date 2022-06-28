@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="OCCCurve.reversed" href="compas_occ.geometry.OCCCurve.reversed.html" />
+  <link rel="next" title="OCCCurve.point_at" href="compas_occ.geometry.OCCCurve.point_at.html" />
   
 
   
-  <link rel="prev" title="OCCCurve.locus" href="compas_occ.geometry.OCCCurve.locus.html" />
+  <link rel="prev" title="OCCCurve.length" href="compas_occ.geometry.OCCCurve.length.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -101,8 +101,24 @@
 <h1>OCCCurve.offset</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve.offset">
-<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L448"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/curve.py#L581"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Offset the curve over the specified distance in the given direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distance</strong> (<em>float</em>) – The offset distance.</p></li>
+<li><p><strong>direction</strong> (<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Vector.html#compas.geometry.Vector" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Vector</span></code></a>) – The offset direction.
+Note that this direction defines the normal of the offset plane.
+At every point of the curve, a positive offset ditance
+will generate a corresponding offset point in the direction of
+the cross product vector of the curve tangent and the offset plane normal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>None</em></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -191,20 +207,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.geometry.OCCCurve.locus.html" title="OCCCurve.locus" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.geometry.OCCCurve.length.html" title="OCCCurve.length" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          OCCCurve.locus
+          OCCCurve.length
         </div>
       </a>
       
 
       
-      <a href="compas_occ.geometry.OCCCurve.reversed.html" title="OCCCurve.reversed" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.geometry.OCCCurve.point_at.html" title="OCCCurve.point_at" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          OCCCurve.reversed
+          OCCCurve.point_at
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
