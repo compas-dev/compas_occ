@@ -11,6 +11,7 @@ from compas.geometry import Point
 from compas.datastructures import Mesh
 
 from OCC.Extend.DataExchange import read_step_file
+
 # from OCC.Extend.DataExchange import write_step_file
 
 from OCC.Core.gp import gp_Pnt
@@ -686,6 +687,7 @@ class BRep(Data):
         brep = cls.from_shape(cut.Shape())
         brep.sew()
         brep.fix()
+        brep.make_solid()
         return brep
 
     @classmethod
@@ -708,6 +710,7 @@ class BRep(Data):
         brep = cls.from_shape(common.Shape())
         brep.sew()
         brep.fix()
+        brep.make_solid()
         return brep
 
     @classmethod
@@ -730,6 +733,7 @@ class BRep(Data):
         brep = cls.from_shape(fuse.Shape())
         brep.sew()
         brep.fix()
+        brep.make_solid()
         return brep
 
     # ==============================================================================

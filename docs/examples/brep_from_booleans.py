@@ -57,7 +57,7 @@ for edge in C.edges:
     else:
         raise NotImplementedError
 
-viewer = App(viewmode='ghosted', width=1600, height=900)
+viewer = App(viewmode="ghosted", width=1600, height=900)
 viewer.view.camera.rz = -30
 viewer.view.camera.rx = -75
 viewer.view.camera.distance = 7
