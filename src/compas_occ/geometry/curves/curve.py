@@ -11,6 +11,7 @@ from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
 
+from OCC.Core.Geom import Geom_OffsetCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint
@@ -31,6 +32,7 @@ from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_from_occ_point2d
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_from_occ_vector2d
+from compas_occ.conversions import compas_vector_to_occ_direction
 
 
 class OCCCurve(Curve):
@@ -523,6 +525,24 @@ class OCCCurve(Curve):
 
     divide = divide_by_count
 
+    def divide_by_length(self, length, return_points=False, precision=1e-6):
+        """"""
+        L = self.length(precision=precision)
+        count = int(L / length)
+        a, b = self.domain
+        t = a
+        params = [t]
+        adaptor = GeomAdaptor_Curve(self.occ_curve)
+        for _ in range(count - 1):
+            a = GCPnts_AbscissaPoint(adaptor, length, t, precision)
+            t = a.Parameter()
+            params.append(t)
+        params.append(b)
+        if not return_points:
+            return params
+        points = [self.point_at(t) for t in params]
+        return params, points
+
     def projected(self, surface):
         """Return a copy of the curve projected onto a surface.
 
@@ -557,3 +577,27 @@ class OCCCurve(Curve):
         curve = OCCCurve.from_occ(result)
         curve._dimension = 2
         return curve
+
+    def offset(self, distance, direction):
+        """Offset the curve over the specified distance in the given direction.
+
+        Parameters
+        ----------
+        distance : float
+            The offset distance.
+        direction : :class:`compas.geometry.Vector`
+            The offset direction.
+            Note that this direction defines the normal of the offset plane.
+            At every point of the curve, a positive offset ditance
+            will generate a corresponding offset point in the direction of
+            the cross product vector of the curve tangent and the offset plane normal.
+
+        Returns
+        -------
+        None
+
+        """
+        occ_curve = Geom_OffsetCurve(
+            self.occ_curve, distance, compas_vector_to_occ_direction(direction)
+        )
+        self.occ_curve = occ_curve
