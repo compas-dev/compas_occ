@@ -1,4 +1,5 @@
 from typing import List, Tuple
+from enum import Enum
 
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import topods_Face
@@ -36,6 +37,7 @@ from compas_occ.conversions import compas_torus_to_occ_torus
 from compas.data import Data
 from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
+
 # from compas_occ.geometry import OCCNurbsCurve
 
 
@@ -66,6 +68,19 @@ class BRepFace(Data):
         Adaptor for extracting surface geometry from the BRep face.
 
     """
+
+    class SurfaceType(Enum):
+        Plane = 0
+        Cylinder = 1
+        Cone = 2
+        Sphere = 3
+        Torus = 4
+        BezierSurface = 5
+        BSplineSurface = 6
+        SurfaceOfRevolution = 7
+        SurfaceOfExtrusion = 8
+        OffsetSurface = 9
+        OtherSurface = 10
 
     def __init__(self, occ_face: TopoDS_Face = None):
         super().__init__()
@@ -104,11 +119,15 @@ class BRepFace(Data):
     # ==============================================================================
 
     @property
+    def occ_shape(self) -> TopoDS_Face:
+        return self.occ_face
+
+    @property
     def occ_face(self) -> TopoDS_Face:
         return self._occ_face
 
     @occ_face.setter
-    def occ_face(self, face) -> None:
+    def occ_face(self, face: TopoDS_Face) -> None:
         self._occ_face = topods_Face(face)
 
     @property
@@ -116,6 +135,18 @@ class BRepFace(Data):
         if not self._occ_adaptor:
             self._occ_adaptor = BRepAdaptor_Surface(self.occ_face)
         return self._occ_adaptor
+
+    @property
+    def type(self) -> int:
+        return BRepFace.SurfaceType(self.occ_adaptor.GetType())
+
+    @property
+    def is_plane(self) -> bool:
+        return self.type == BRepFace.SurfaceType.Plane
+
+    @property
+    def is_bspline(self) -> bool:
+        return self.type == BRepFace.SurfaceType.BSplineSurface
 
     @property
     def vertices(self) -> List[BRepVertex]:
