@@ -36,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.brep.BRep.is_solid`.
 * Added `compas_occ.brep.BRep.slice`.
 * Added `compas_occ.brep.BRep.split`.
+* Added `compas_occ.brep.BRepFace.data`.
+* Added `compas_occ.brep.BRepLoop.data`.
+* Added `compas_occ.brep.BRepEdge.data`.
+* Added `compas_occ.brep.BRepVertex.data`.
 
 ### Changed
 
@@ -43,7 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed bug in `compas_occ.brep.BRep.to_meshes`.
 * Changed `compas_frame_from_occ_position` to `compas_frame_from_occ_ax3`.
 * Changed `compas_occ.brep.BRep.to_tesselation` to use `BRepMesh_IncrementalMesh`.
-* Changes base of `compas_occ.brep.BRepVertex`, `compas_occ.brep.BRepEdge`, `compas_occ.brep.BRepLoop`, `compas_occ.brep.BRepFace`, `compas_occ.brep.BRep` to `compas.data.Data`.
+* Changed base of `compas_occ.brep.BRepVertex`, `compas_occ.brep.BRepEdge`, `compas_occ.brep.BRepLoop`, `compas_occ.brep.BRepFace`, `compas_occ.brep.BRep` to `compas.data.Data`.
+* Changed conversion functions (`compas_occ.conversions`) to take optional COMPAS type parameter.
+* Changed `compas_occ.brep.BRep.data` to use component data.
 
 ### Removed
 

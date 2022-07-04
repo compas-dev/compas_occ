@@ -10,12 +10,9 @@ from OCC.Core.TopAbs import TopAbs_WIRE
 from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 
-# from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepAlgo import brepalgo_IsValid
 from OCC.Core.ShapeFix import ShapeFix_Face
-
-# from OCC.Core.BRepAlgo import brepalgo_IsTopologicallyValid
 
 from compas.geometry import Plane
 from compas.geometry import Cylinder
@@ -29,7 +26,9 @@ from compas_occ.brep import BRepEdge
 from compas_occ.brep import BRepLoop
 
 from compas_occ.conversions import compas_plane_to_occ_plane
+from compas_occ.conversions import compas_plane_from_occ_plane
 from compas_occ.conversions import compas_cylinder_to_occ_cylinder
+from compas_occ.conversions import compas_cylinder_from_occ_cylinder
 from compas_occ.conversions import compas_cone_to_occ_cone
 from compas_occ.conversions import compas_sphere_to_occ_sphere
 from compas_occ.conversions import compas_torus_to_occ_torus
@@ -37,8 +36,6 @@ from compas_occ.conversions import compas_torus_to_occ_torus
 from compas.data import Data
 from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
-
-# from compas_occ.geometry import OCCNurbsCurve
 
 
 class BRepFace(Data):
@@ -96,23 +93,36 @@ class BRepFace(Data):
     # Data
     # ==============================================================================
 
-    # @property
-    # def data(self):
-    #     return {
-    #         "boundary": [edge.nurbscurve.data for edge in self.loops[0].edges],
-    #         "surface": self.nurbssurface.data,
-    #     }
+    @property
+    def data(self):
+        boundary = self.loops[0].data
+        holes = [loop.data for loop in self.loops[1:]]
+        if self.is_plane:
+            plane = compas_plane_from_occ_plane(self.occ_adaptor.Plane())
+            surfacedata = {"type": "plane", "value": plane.data}
+        elif self.is_cylinder:
+            cylinder = compas_cylinder_from_occ_cylinder(self.occ_adaptor.Cylinder())
+            surfacedata = {"type": "cylinder", "value": cylinder.data}
+        else:
+            surface = self.nurbssurface
+            surfacedata = {"type": "nurbs", "value": surface.data}
+        return {"boundary": boundary, "surface": surfacedata, "holes": holes}
 
-    # @data.setter
-    # def data(self, data):
-    #     surface = OCCNurbsSurface.from_data(data["surface"])
-    #     edges = []
-    #     for curvedata in data["boundary"]:
-    #         curve = OCCNurbsCurve.from_data(curvedata)
-    #         edges.append(BRepEdge.from_curve(curve))
-    #     loop = BRepLoop.from_edges(edges)
-    #     builder = BRepBuilderAPI_MakeFace(surface.occ_surface, loop.occ_wire, True)
-    #     self.occ_face = builder.Face()
+    @data.setter
+    def data(self, data):
+        loop = BRepLoop.from_data(data["boundary"])
+        for hole in data["holes"]:
+            pass
+        if data["surface"]["type"] == "plane":
+            plane = Plane.from_data(data["surface"]["value"])
+            face = BRepFace.from_plane(plane, loop=loop)
+        elif data["surface"]["type"] == "cylinder":
+            cylinder = Cylinder.from_data(data["surface"]["value"])
+            face = BRepFace.from_cylinder(cylinder, loop=loop)
+        else:
+            surface = OCCNurbsSurface.from_data(data["surface"]["value"])
+            face = BRepFace.from_surface(surface, loop=loop)
+        self.occ_face = face.occ_face
 
     # ==============================================================================
     # Properties
@@ -128,6 +138,7 @@ class BRepFace(Data):
 
     @occ_face.setter
     def occ_face(self, face: TopoDS_Face) -> None:
+        self._occ_adaptor = None
         self._occ_face = topods_Face(face)
 
     @property
@@ -143,6 +154,22 @@ class BRepFace(Data):
     @property
     def is_plane(self) -> bool:
         return self.type == BRepFace.SurfaceType.Plane
+
+    @property
+    def is_cylinder(self) -> bool:
+        return self.type == BRepFace.SurfaceType.Cylinder
+
+    @property
+    def is_sphere(self) -> bool:
+        return self.type == BRepFace.SurfaceType.Sphere
+
+    @property
+    def is_torus(self) -> bool:
+        return self.type == BRepFace.SurfaceType.Torus
+
+    @property
+    def is_cone(self) -> bool:
+        return self.type == BRepFace.SurfaceType.Cone
 
     @property
     def is_bspline(self) -> bool:

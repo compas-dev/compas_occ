@@ -8,11 +8,10 @@ from compas.geometry import Frame
 from compas.geometry import Transformation
 from compas.geometry import Translation
 from compas.geometry import Point
+from compas.geometry import Polyline
 from compas.datastructures import Mesh
 
 from OCC.Extend.DataExchange import read_step_file
-
-# from OCC.Extend.DataExchange import write_step_file
 
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Dir
@@ -158,46 +157,15 @@ class BRep(Data):
     def data(self):
         faces = []
         for face in self.faces:
-            boundary = []
-            for edge in face.loops[0].edges:
-                if edge.is_line:
-                    curvedata = OCCNurbsCurve.from_line(edge.to_line()).data
-                else:
-                    curvedata = edge.nurbscurve.data
-                boundary.append(curvedata)
-            holes = []
-            for loop in face.loops[1:]:
-                pass
-            if face.is_plane:
-                nurbs = OCCNurbsSurface()
-                nurbs.occ_surface = face.occ_adaptor.BasisSurface().BSpline()
-                surfacedata = nurbs.data
-            else:
-                surfacedata = face.nurbssurface.data
-            faces.append({"boundary": boundary, "surface": surfacedata, "holes": holes})
+            faces.append(face.data)
         return {"faces": faces}
 
     @data.setter
     def data(self, data):
         faces = []
-        for j, facedata in enumerate(data["faces"]):
-            # underlying geometry
-            surface = OCCNurbsSurface.from_data(facedata["surface"])
-            # boundary loop from edge curves
-            edges = []
-            for curvedata in facedata["boundary"]:
-                curve = OCCNurbsCurve.from_data(curvedata)
-                edge = BRepEdge.from_curve(curve)
-                edges.append(edge)
-            loop = BRepLoop.from_edges(edges)
-            # face from surface and boundary
-            face = BRepFace.from_surface(surface, loop=loop)
-            # add holes
-            for hole in facedata["holes"]:
-                pass
-            # collect
+        for facedata in data["faces"]:
+            face = BRepFace.from_data(facedata)
             faces.append(face)
-        # recreate shape
         self.occ_shape = BRep.from_faces(faces).occ_shape
         self.sew()
         self.fix()
@@ -425,7 +393,7 @@ class BRep(Data):
         props = GProp_GProps()
         brepgprop_VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
-        return compas_point_from_occ_point(Point, pnt)
+        return compas_point_from_occ_point(pnt)
 
     # ==============================================================================
     # Constructors
@@ -836,8 +804,20 @@ class BRep(Data):
             meshes.append(mesh)
         return meshes
 
-    # make meshes from the loops
-    # use gmsh to generate proper mesh
+    def to_viewmesh(self):
+        lines = []
+        for edge in self.edges:
+            if edge.is_line:
+                lines.append(
+                    Polyline([edge.vertices[0].point, edge.vertices[-1].point])
+                )
+            elif edge.is_circle:
+                lines.append(Polyline(edge.curve.locus()))
+            elif edge.is_ellipse:
+                lines.append(Polyline(edge.curve.locus()))
+            elif edge.is_bspline:
+                lines.append(Polyline(edge.curve.locus()))
+        return self.to_tesselation(), lines
 
     # ==============================================================================
     # Methods

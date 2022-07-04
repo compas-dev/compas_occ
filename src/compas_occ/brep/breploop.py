@@ -9,6 +9,7 @@ from OCC.Core.ShapeFix import ShapeFix_Wire
 
 from compas.data import Data
 from compas.utilities import pairwise
+
 from compas.geometry import Polyline
 from compas.geometry import Polygon
 
@@ -44,16 +45,20 @@ class BRepLoop(Data):
         if occ_wire:
             self.occ_wire = occ_wire
 
-    # @property
-    # def data(self):
-    #     return {
-    #         "edges": [edge.data for edge in self.edges],
-    #     }
+    @property
+    def data(self):
+        edges = []
+        for edge in self.edges:
+            edges.append(edge.data)
+        return edges
 
-    # @data.setter
-    # def data(self, data):
-    #     edges = [BRepEdge.from_data(edgedata) for edgedata in data["edges"]]
-    #     self.edges = edges
+    @data.setter
+    def data(self, data):
+        edges = []
+        for edgedata in data:
+            edges.append(BRepEdge.from_data(edgedata))
+        loop = BRepLoop.from_edges(edges)
+        self.occ_wire = loop.occ_wire
 
     @property
     def occ_wire(self):

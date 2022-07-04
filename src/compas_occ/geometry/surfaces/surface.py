@@ -1,5 +1,4 @@
 from compas.geometry import Point
-from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Box
 from compas.geometry import Surface
@@ -26,14 +25,8 @@ from compas_occ.geometry.curves import OCCCurve
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
-from compas_occ.conversions import compas_vector_to_occ_vector
 from compas_occ.conversions import compas_frame_from_occ_ax3
-
-Point.from_occ = classmethod(compas_point_from_occ_point)
-Point.to_occ = compas_point_to_occ_point
-Vector.from_occ = classmethod(compas_vector_from_occ_vector)
-Vector.to_occ = compas_vector_to_occ_vector
-Frame.from_occ = classmethod(compas_frame_from_occ_ax3)
+from compas_occ.conversions import compas_line_to_occ_line
 
 
 class OCCSurface(Surface):
@@ -317,7 +310,7 @@ class OCCSurface(Surface):
 
         """
         point = self.occ_surface.Value(u, v)
-        return Point.from_occ(point)
+        return compas_point_from_occ_point(point)
 
     def curvature_at(self, u, v):
         """Compute the curvature at a point on the surface.
@@ -337,7 +330,12 @@ class OCCSurface(Surface):
         mean = props.MeanCurvature()
         point = props.Value()
         normal = props.Normal()
-        return gaussian, mean, Point.from_occ(point), Vector.from_occ(normal)
+        return (
+            gaussian,
+            mean,
+            compas_point_from_occ_point(point),
+            compas_vector_from_occ_vector(normal),
+        )
 
     def frame_at(self, u, v):
         """Compute the local frame at a point on the curve.
@@ -357,7 +355,9 @@ class OCCSurface(Surface):
         vvec = gp_Vec()
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(
-            Point.from_occ(point), Vector.from_occ(uvec), Vector.from_occ(vvec)
+            compas_point_from_occ_point(point),
+            compas_vector_from_occ_vector(uvec),
+            compas_vector_from_occ_vector(vvec),
         )
 
     def aabb(self, precision=0.0, optimal=False):
@@ -380,7 +380,10 @@ class OCCSurface(Surface):
             add = BndLib_AddSurface_Add
         add(GeomAdaptor_Surface(self.occ_surface), precision, box)
         return Box.from_diagonal(
-            (Point.from_occ(box.CornerMin()), Point.from_occ(box.CornerMax()))
+            (
+                compas_point_from_occ_point(box.CornerMin()),
+                compas_point_from_occ_point(box.CornerMax()),
+            )
         )
 
     def closest_point(self, point, return_parameters=False):
@@ -400,7 +403,9 @@ class OCCSurface(Surface):
             If `return_parameters` is True, the UV parameters in addition to the nearest point on the surface.
 
         """
-        projector = GeomAPI_ProjectPointOnSurf(point.to_occ(), self.occ_surface)
+        projector = GeomAPI_ProjectPointOnSurf(
+            compas_point_to_occ_point(), self.occ_surface
+        )
         point = Point.from_occ(projector.NearestPoint())
         if not return_parameters:
             return point
@@ -421,7 +426,10 @@ class OCCSurface(Surface):
         box = Bnd_OBB()
         brepbndlib_AddOBB(self.occ_shape, box, True, True, True)
         return Box(
-            Frame.from_occ(box.Position()), box.XHSize(), box.YHSize(), box.ZHSize()
+            compas_frame_from_occ_ax3(box.Position()),
+            box.XHSize(),
+            box.YHSize(),
+            box.ZHSize(),
         )
 
     def intersections_with_line(self, line):
@@ -436,10 +444,12 @@ class OCCSurface(Surface):
         list[:class:`~compas.geometry.Point`]
 
         """
-        intersection = GeomAPI_IntCS(Geom_Line(line.to_occ()), self.occ_surface)
+        intersection = GeomAPI_IntCS(
+            Geom_Line(compas_line_to_occ_line(line)), self.occ_surface
+        )
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)
-            point = Point.from_occ(pnt)
+            point = compas_point_from_occ_point(pnt)
             points.append(point)
         return points

@@ -1,11 +1,9 @@
 from copy import deepcopy
 
 from compas.geometry import Point
-from compas.geometry import Line
 from compas.geometry import Translation
 from compas.utilities import flatten
 
-from compas_occ.conversions import compas_line_to_occ_line
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import array2_from_points2
@@ -28,11 +26,6 @@ from OCC.Core.GeomAbs import GeomAbs_C2
 from .surface import OCCSurface
 
 
-Point.from_occ = classmethod(compas_point_from_occ_point)
-Point.to_occ = compas_point_to_occ_point
-Line.to_occ = compas_line_to_occ_line
-
-
 class ControlPoints:
     def __init__(self, surface):
         self.occ_surface = surface
@@ -48,15 +41,14 @@ class ControlPoints:
             return self.points[index]
         else:
             pnt = self.occ_surface.Pole(u + 1, v + 1)
-            return Point.from_occ(pnt)
+            return compas_point_from_occ_point(pnt)
 
     def __setitem__(self, index, point):
         u, v = index
-        self.occ_surface.SetPole(u + 1, v + 1, point.to_occ())
+        self.occ_surface.SetPole(u + 1, v + 1, compas_point_to_occ_point(point))
 
     def __len__(self):
         return self.occ_surface.NbVPoles()
-        # return self.occ_surface.Poles().NbColumns()
 
     def __iter__(self):
         return iter(self.points)

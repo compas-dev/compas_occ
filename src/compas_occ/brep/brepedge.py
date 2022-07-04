@@ -19,10 +19,12 @@ from compas.geometry import Circle
 from compas.geometry import Ellipse
 
 from compas_occ.brep import BRepVertex
-from compas_occ.conversions.primitives import (
+from compas_occ.conversions import (
     compas_line_to_occ_line,
     compas_point_to_occ_point,
     compas_circle_to_occ_circle,
+    compas_line_from_occ_line,
+    compas_circle_from_occ_circle,
 )
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCNurbsCurve
@@ -95,22 +97,46 @@ class BRepEdge(Data):
         if occ_edge:
             self.occ_edge = occ_edge
 
-    # @property
-    # def data(self):
-    #     return {
-    #         "curve": self.nurbscurve.data,
-    #         "first": self.first_vertex.data,
-    #         "last": self.last_vertex.data,
-    #     }
+    @property
+    def data(self):
+        if self.is_line:
+            line = compas_line_from_occ_line(self.occ_adaptor.Line())
+            data = {
+                "type": "line",
+                "value": line.data,
+                "points": [self.vertices[0].point, self.vertices[-1].point],
+            }
+        elif self.is_circle:
+            circle = compas_circle_from_occ_circle(self.occ_adaptor.Circle())
+            data = {
+                "type": "circle",
+                "value": circle.data,
+                "points": [self.vertices[0].point, self.vertices[-1].point],
+            }
+        else:
+            curve = self.nurbscurve
+            data = {
+                "type": "nurbs",
+                "value": curve.data,
+                "points": [self.vertices[0].point, self.vertices[-1].point],
+            }
+        return data
 
-    # @data.setter
-    # def data(self, data):
-    #     builder = BRepBuilderAPI_MakeEdge(
-    #         OCCNurbsCurve.from_data(data["curve"]).occ_curve,
-    #         BRepVertex.from_data(data["first"]).occ_vertex,
-    #         BRepVertex.from_data(data["last"]).occ_vertex,
-    #     )
-    #     self.occ_edge = builder.Edge()
+    @data.setter
+    def data(self, data):
+        if data["type"] == "line":
+            line = Line.from_data(data["value"])
+            points = data["points"]
+            edge = BRepEdge.from_line(line, points=points)
+        elif data["type"] == "circle":
+            circle = Circle.from_data(data["value"])
+            points = data["points"]
+            edge = BRepEdge.from_circle(circle, points=points)
+        else:
+            curve = OCCNurbsCurve.from_data(data["value"])
+            points = data["points"]
+            edge = BRepEdge.from_curve(curve, points=points)
+        self.occ_edge = edge.occ_edge
 
     @property
     def occ_edge(self) -> TopoDS_Edge:
@@ -118,6 +144,7 @@ class BRepEdge(Data):
 
     @occ_edge.setter
     def occ_edge(self, edge: TopoDS_Edge) -> None:
+        self._occ_adaptor = None
         self._occ_edge = topods_Edge(edge)
 
     @property

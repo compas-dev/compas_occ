@@ -1,5 +1,4 @@
 from compas.geometry import Point
-from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
@@ -33,6 +32,7 @@ from compas_occ.conversions import compas_point_from_occ_point2d
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_vector_from_occ_vector2d
 from compas_occ.conversions import compas_vector_to_occ_direction
+from compas_occ.conversions import compas_point_to_occ_point
 
 
 class OCCCurve(Curve):
@@ -263,8 +263,8 @@ class OCCCurve(Curve):
             )
         point = self.occ_curve.Value(t)
         if self.dimension == 2:
-            return compas_point_from_occ_point2d(Point, point)
-        return compas_point_from_occ_point(Point, point)
+            return compas_point_from_occ_point2d(point)
+        return compas_point_from_occ_point(point)
 
     def tangent_at(self, t):
         """Compute the tangent vector at a curve parameter.
@@ -291,8 +291,8 @@ class OCCCurve(Curve):
         uvec = gp_Vec()
         self.occ_curve.D1(t, point, uvec)
         if self.dimension == 2:
-            return compas_vector_from_occ_vector2d(Vector, uvec)
-        return compas_vector_from_occ_vector(Vector, uvec)
+            return compas_vector_from_occ_vector2d(uvec)
+        return compas_vector_from_occ_vector(uvec)
 
     def curvature_at(self, t):
         """Compute the curvature vector at a curve parameter.
@@ -320,8 +320,8 @@ class OCCCurve(Curve):
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
         if self.dimension == 2:
-            return compas_vector_from_occ_vector2d(Vector, vvec)
-        return compas_vector_from_occ_vector(Vector, vvec)
+            return compas_vector_from_occ_vector2d(vvec)
+        return compas_vector_from_occ_vector(vvec)
 
     def frame_at(self, t):
         """Compute the local frame at a curve parameter.
@@ -350,14 +350,14 @@ class OCCCurve(Curve):
         self.occ_curve.D2(t, point, uvec, vvec)
         if self.dimension == 2:
             return Frame(
-                compas_point_from_occ_point2d(Point, point),
-                compas_vector_from_occ_vector2d(Vector, uvec),
-                compas_vector_from_occ_vector2d(Vector, vvec),
+                compas_point_from_occ_point2d(point),
+                compas_vector_from_occ_vector2d(uvec),
+                compas_vector_from_occ_vector2d(vvec),
             )
         return Frame(
-            compas_point_from_occ_point(Point, point),
-            compas_vector_from_occ_vector(Vector, uvec),
-            compas_vector_from_occ_vector(Vector, vvec),
+            compas_point_from_occ_point(point),
+            compas_vector_from_occ_vector(uvec),
+            compas_vector_from_occ_vector(vvec),
         )
 
     # ==============================================================================
@@ -414,9 +414,11 @@ class OCCCurve(Curve):
             If `return_parameter` is True, the nearest point on the curve and the corresponding parameter.
 
         """
-        projector = GeomAPI_ProjectPointOnCurve(point.to_occ(), self.occ_curve)
+        projector = GeomAPI_ProjectPointOnCurve(
+            compas_point_to_occ_point(point), self.occ_curve
+        )
         try:
-            point = Point.from_occ(projector.NearestPoint())
+            point = compas_point_from_occ_point(projector.NearestPoint())
             if return_parameter:
                 parameter = projector.LowerDistanceParameter()
         except RuntimeError as e:
@@ -483,7 +485,7 @@ class OCCCurve(Curve):
         a, b = gp_Pnt(), gp_Pnt()
         extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
         extrema.NearestPoints(a, b)
-        points = Point.from_occ(a), Point.from_occ(b)
+        points = compas_point_from_occ_point(a), compas_point_from_occ_point(b)
         if not return_distance:
             return points
         return points, extrema.LowerDistance()

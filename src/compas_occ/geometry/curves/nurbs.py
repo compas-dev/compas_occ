@@ -2,7 +2,6 @@ from math import sqrt
 from copy import deepcopy
 
 from compas.geometry import Point
-from compas.geometry import Vector
 from compas.geometry import Frame
 
 from compas.geometry import NurbsCurve
@@ -12,21 +11,12 @@ from compas_occ.conversions import array1_from_points1
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import points1_from_array1
-from compas_occ.conversions import compas_point_from_occ_point
-from compas_occ.conversions import compas_point_to_occ_point
-from compas_occ.conversions import compas_vector_from_occ_vector
-from compas_occ.conversions import compas_vector_to_occ_vector
 
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomConvert import GeomConvert_CompCurveToBSplineCurve
 
 from .curve import OCCCurve
-
-Point.from_occ = classmethod(compas_point_from_occ_point)
-Point.to_occ = compas_point_to_occ_point
-Vector.from_occ = classmethod(compas_vector_from_occ_vector)
-Vector.to_occ = compas_vector_to_occ_vector
 
 
 def occ_curve_from_parameters(

@@ -34,15 +34,16 @@ class BRepVertex(Data):
         if occ_vertex:
             self.occ_vertex = occ_vertex
 
-    # @property
-    # def data(self):
-    #     return {
-    #         "point": self.point.data,
-    #     }
+    @property
+    def data(self):
+        return {
+            "point": self.point.data,
+        }
 
-    # @data.setter
-    # def data(self, data):
-    #     self.point = Point.from_data(data["point"])
+    @data.setter
+    def data(self, data):
+        point = BRepVertex.from_point(Point.from_data(data["point"]))
+        self.occ_vertex = point.occ_vertex
 
     @property
     def occ_vertex(self) -> TopoDS_Vertex:
