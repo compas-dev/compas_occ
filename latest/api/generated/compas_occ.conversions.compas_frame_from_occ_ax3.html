@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="compas_transformation_to_trsf" href="compas_occ.conversions.compas_transformation_to_trsf.html" />
+  <link rel="next" title="compas_line_from_occ_line" href="compas_occ.conversions.compas_line_from_occ_line.html" />
   
 
   
-  <link rel="prev" title="compas_vector_from_occ_vector2d" href="compas_occ.conversions.compas_vector_from_occ_vector2d.html" />
+  <link rel="prev" title="compas_cylinder_to_occ_cylinder" href="compas_occ.conversions.compas_cylinder_to_occ_cylinder.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -99,13 +99,13 @@
 <h1>compas_frame_from_occ_ax3</h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="compas_occ.conversions.compas_frame_from_occ_ax3">
-<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_frame_from_occ_ax3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/primitives.py#L323"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">compas_occ.conversions.</span></span><span class="sig-name descname"><span class="pre">compas_frame_from_occ_ax3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/conversions/primitives.py#L367"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Construct a COMPAS frame from an OCC position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cls</strong> (Type[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Frame.html#compas.geometry.Frame" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Frame</span></code></a>]) – The type of COMPAS frame.</p></li>
 <li><p><strong>position</strong> (<code class="docutils literal notranslate"><span class="pre">gp_Ax3</span></code>) – The OCC position.</p></li>
+<li><p><strong>cls</strong> (Type[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Frame.html#compas.geometry.Frame" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Frame</span></code></a>], optional) – The type of COMPAS frame.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -201,20 +201,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.conversions.compas_vector_from_occ_vector2d.html" title="compas_vector_from_occ_vector2d" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.conversions.compas_cylinder_to_occ_cylinder.html" title="compas_cylinder_to_occ_cylinder" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          compas_vector_from_occ_vector2d
+          compas_cylinder_to_occ_cylinder
         </div>
       </a>
       
 
       
-      <a href="compas_occ.conversions.compas_transformation_to_trsf.html" title="compas_transformation_to_trsf" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.conversions.compas_line_from_occ_line.html" title="compas_line_from_occ_line" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          compas_transformation_to_trsf
+          compas_line_from_occ_line
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
