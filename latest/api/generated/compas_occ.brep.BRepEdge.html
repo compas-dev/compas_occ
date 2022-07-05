@@ -99,7 +99,7 @@
 <h1>BRepEdge</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.brep.BRepEdge">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepedge.py#L34"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRepEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">occ_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/brep/brepedge.py#L37"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.data.data.Data</span></code></a></p>
 <p>Class representing an edge in the BRep of a geometric shape.</p>
 <dl class="field-list simple">
@@ -155,31 +155,28 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.from_vertex_vertex.html#compas_occ.brep.BRepEdge.from_vertex_vertex" title="compas_occ.brep.BRepEdge.from_vertex_vertex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_vertex_vertex</span></code></a></p></td>
 <td><p>Construct an edge from two vertices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.is_valid.html#compas_occ.brep.BRepEdge.is_valid" title="compas_occ.brep.BRepEdge.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
-<td><p>Verify that the edge is valid.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_bezier.html#compas_occ.brep.BRepEdge.to_bezier" title="compas_occ.brep.BRepEdge.to_bezier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_bezier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_bezier.html#compas_occ.brep.BRepEdge.to_bezier" title="compas_occ.brep.BRepEdge.to_bezier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_bezier</span></code></a></p></td>
 <td><p>Convert the edge geometry to a bezier curve.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_bspline.html#compas_occ.brep.BRepEdge.to_bspline" title="compas_occ.brep.BRepEdge.to_bspline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_bspline</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_bspline.html#compas_occ.brep.BRepEdge.to_bspline" title="compas_occ.brep.BRepEdge.to_bspline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_bspline</span></code></a></p></td>
 <td><p>Convert the edge geometry to a bspline.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_circle.html#compas_occ.brep.BRepEdge.to_circle" title="compas_occ.brep.BRepEdge.to_circle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_circle</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_circle.html#compas_occ.brep.BRepEdge.to_circle" title="compas_occ.brep.BRepEdge.to_circle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_circle</span></code></a></p></td>
 <td><p>Convert the edge geometry to a circle.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_curve.html#compas_occ.brep.BRepEdge.to_curve" title="compas_occ.brep.BRepEdge.to_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_curve</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_curve.html#compas_occ.brep.BRepEdge.to_curve" title="compas_occ.brep.BRepEdge.to_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_curve</span></code></a></p></td>
 <td><p>Convert the edge geometry to a NURBS curve.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_ellipse.html#compas_occ.brep.BRepEdge.to_ellipse" title="compas_occ.brep.BRepEdge.to_ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_ellipse</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_ellipse.html#compas_occ.brep.BRepEdge.to_ellipse" title="compas_occ.brep.BRepEdge.to_ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_ellipse</span></code></a></p></td>
 <td><p>Convert the edge geometry to an ellipse.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_hyperbola.html#compas_occ.brep.BRepEdge.to_hyperbola" title="compas_occ.brep.BRepEdge.to_hyperbola"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hyperbola</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_hyperbola.html#compas_occ.brep.BRepEdge.to_hyperbola" title="compas_occ.brep.BRepEdge.to_hyperbola"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hyperbola</span></code></a></p></td>
 <td><p>Convert the edge geometry to a hyperbola.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_line.html#compas_occ.brep.BRepEdge.to_line" title="compas_occ.brep.BRepEdge.to_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_line</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_line.html#compas_occ.brep.BRepEdge.to_line" title="compas_occ.brep.BRepEdge.to_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_line</span></code></a></p></td>
 <td><p>Convert the edge geometry to a line.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_parabola.html#compas_occ.brep.BRepEdge.to_parabola" title="compas_occ.brep.BRepEdge.to_parabola"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_parabola</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRepEdge.to_parabola.html#compas_occ.brep.BRepEdge.to_parabola" title="compas_occ.brep.BRepEdge.to_parabola"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_parabola</span></code></a></p></td>
 <td><p>Convert the edge geometry to a parabola.</p></td>
 </tr>
 </tbody>
