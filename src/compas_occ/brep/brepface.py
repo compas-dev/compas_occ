@@ -9,14 +9,17 @@ from OCC.Core.TopAbs import TopAbs_EDGE
 from OCC.Core.TopAbs import TopAbs_WIRE
 from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
-
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepAlgo import brepalgo_IsValid
+from OCC.Core.BRepGProp import brepgprop_VolumeProperties
+from OCC.Core.BRepGProp import brepgprop_SurfaceProperties
 from OCC.Core.ShapeFix import ShapeFix_Face
+from OCC.Core.GProp import GProp_GProps
 
+import compas.geometry
+from compas.data import Data
 from compas.geometry import Plane
 from compas.geometry import Cylinder
-
 from compas.geometry import Cone
 from compas.geometry import Sphere
 from compas.geometry import Torus
@@ -24,7 +27,7 @@ from compas.geometry import Torus
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
 from compas_occ.brep import BRepLoop
-
+from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_plane_to_occ_plane
 from compas_occ.conversions import compas_plane_from_occ_plane
 from compas_occ.conversions import compas_cylinder_to_occ_cylinder
@@ -32,8 +35,6 @@ from compas_occ.conversions import compas_cylinder_from_occ_cylinder
 from compas_occ.conversions import compas_cone_to_occ_cone
 from compas_occ.conversions import compas_sphere_to_occ_sphere
 from compas_occ.conversions import compas_torus_to_occ_torus
-
-from compas.data import Data
 from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
 
@@ -125,7 +126,7 @@ class BRepFace(Data):
         self.occ_face = face.occ_face
 
     # ==============================================================================
-    # Properties
+    # OCC Properties
     # ==============================================================================
 
     @property
@@ -146,6 +147,14 @@ class BRepFace(Data):
         if not self._occ_adaptor:
             self._occ_adaptor = BRepAdaptor_Surface(self.occ_face)
         return self._occ_adaptor
+
+    @property
+    def orientation(self) -> TopAbs_Orientation:
+        return self.occ_face.Orientation()
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
 
     @property
     def type(self) -> int:
@@ -220,8 +229,17 @@ class BRepFace(Data):
         return self._nurbssurface
 
     @property
-    def orientation(self) -> TopAbs_Orientation:
-        return self.occ_face.Orientation()
+    def area(self) -> float:
+        props = GProp_GProps()
+        brepgprop_SurfaceProperties(self.occ_shape, props)
+        return props.Mass()
+
+    @property
+    def centroid(self) -> compas.geometry.Point:
+        props = GProp_GProps()
+        brepgprop_VolumeProperties(self.occ_shape, props)
+        pnt = props.CentreOfMass()
+        return compas_point_from_occ_point(pnt)
 
     # ==============================================================================
     # Constructors

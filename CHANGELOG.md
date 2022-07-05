@@ -40,6 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.brep.BRepLoop.data`.
 * Added `compas_occ.brep.BRepEdge.data`.
 * Added `compas_occ.brep.BRepVertex.data`.
+* Added `compas_occ.brep.BRep.area`.
+* Added `compas_occ.brep.BRepEdge.length`.
+* Added `compas_occ.brep.BRep.vertex_neighbors`.
+* Added `compas_occ.brep.BRep.vertex_edges`.
+* Added `compas_occ.brep.BRep.vertex_faces`.
 
 ### Changed
 

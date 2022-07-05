@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import compas.geometry
 import compas.datastructures
@@ -19,9 +19,9 @@ from OCC.Core.gp import gp_Ax2
 
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.TopoDS import TopoDS_Shape
-
+from OCC.Core.TopoDS import topods_Edge
+from OCC.Core.TopoDS import topods_Face
 from OCC.Core.TopExp import TopExp_Explorer
-
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_EDGE
 from OCC.Core.TopAbs import TopAbs_WIRE
@@ -30,39 +30,39 @@ from OCC.Core.TopAbs import TopAbs_SHELL
 from OCC.Core.TopAbs import TopAbs_SOLID
 from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.TopAbs import TopAbs_ShapeEnum
-
 from OCC.Core.BRep import BRep_Builder
-
+from OCC.Core.BRep import BRep_Tool
 from OCC.Core.BRepGProp import brepgprop_VolumeProperties
-from OCC.Core.GProp import GProp_GProps
-
+from OCC.Core.BRepGProp import brepgprop_SurfaceProperties
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_NurbsConvert
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeSolid
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Sewing
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Transform
-
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder
-
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Common
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Section
-
 from OCC.Core.BOPAlgo import BOPAlgo_Splitter
-
+from OCC.Core.BRepCheck import BRepCheck_Shell
+from OCC.Core.BRepCheck import BRepCheck_Status
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
-from OCC.Core.BRep import BRep_Tool
+from OCC.Core.BRepExtrema import BRepExtrema_ShapeProximity
+from OCC.Core.ShapeFix import ShapeFix_Shell
+from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopLoc import TopLoc_Location
-
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.IFSelect import IFSelect_RetDone
+from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
+from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape
+from OCC.Core.TopExp import topexp_MapShapesAndUniqueAncestors
 
-from OCC.Core.ShapeFix import ShapeFix_Shell
-from OCC.Core.BRepCheck import BRepCheck_Shell
-from OCC.Core.BRepCheck import BRepCheck_Status
+# from OCC.Core.TopExp import topexp_MapShapesAndAncestors
+# from OCC.Core.TopExp import topexp_FirstVertex
+# from OCC.Core.TopExp import topexp_LastVertex
 
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
@@ -223,7 +223,7 @@ class BRep(Data):
         return BRep.from_boolean_intersection(self, other)
 
     # ==============================================================================
-    # Properties
+    # OCC Properties
     # ==============================================================================
 
     @property
@@ -233,6 +233,14 @@ class BRep(Data):
     @occ_shape.setter
     def occ_shape(self, shape: TopoDS_Shape) -> None:
         self._occ_shape = shape
+
+    @property
+    def orientation(self) -> TopAbs_Orientation:
+        return TopAbs_Orientation(self.occ_shape.Orientation())
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
 
     @property
     def type(self) -> TopAbs_ShapeEnum:
@@ -278,6 +286,10 @@ class BRep(Data):
     def is_surface(self) -> bool:
         pass
 
+    # ==============================================================================
+    # Geometric Components
+    # ==============================================================================
+
     @property
     def points(self) -> List[Point]:
         points = []
@@ -298,6 +310,10 @@ class BRep(Data):
         for face in self.faces:
             surfaces.append(face.nurbssurface)
         return surfaces
+
+    # ==============================================================================
+    # Topological Components
+    # ==============================================================================
 
     @property
     def vertices(self) -> List[BRepVertex]:
@@ -363,9 +379,9 @@ class BRep(Data):
             explorer.Next()
         return solids
 
-    @property
-    def orientation(self) -> TopAbs_Orientation:
-        return TopAbs_Orientation(self.occ_shape.Orientation())
+    # ==============================================================================
+    # Geometric Properties
+    # ==============================================================================
 
     @property
     def frame(self) -> compas.geometry.Frame:
@@ -379,14 +395,15 @@ class BRep(Data):
 
     @property
     def area(self) -> float:
-        pass
+        props = GProp_GProps()
+        brepgprop_SurfaceProperties(self.occ_shape, props)
+        return props.Mass()
 
     @property
     def volume(self) -> float:
         props = GProp_GProps()
         brepgprop_VolumeProperties(self.occ_shape, props)
-        mass = props.Mass()
-        return mass
+        return props.Mass()
 
     @property
     def centroid(self) -> compas.geometry.Point:
@@ -780,7 +797,7 @@ class BRep(Data):
             mesh.join(other)
         return mesh
 
-    def brep_to_meshes(self, u=16, v=16):
+    def to_meshes(self, u=16, v=16):
         """Convert the faces of the BRep shape to meshes.
 
         Parameters
@@ -805,6 +822,7 @@ class BRep(Data):
         return meshes
 
     def to_viewmesh(self):
+        """Convert the BRep to a view mesh."""
         lines = []
         for edge in self.edges:
             if edge.is_line:
@@ -820,8 +838,106 @@ class BRep(Data):
         return self.to_tesselation(), lines
 
     # ==============================================================================
-    # Methods
+    # Relationships
     # ==============================================================================
+
+    def vertex_neighbors(self, vertex: BRepVertex) -> List[BRepVertex]:
+        """Identify the neighbouring vertices of a given vertex.
+
+        Parameters
+        ----------
+        vertex : :class:`BRepVertex`
+
+        Returns
+        -------
+        List[:class:`BRepVertex`]
+
+        """
+        map = TopTools_IndexedDataMapOfShapeListOfShape()
+        topexp_MapShapesAndUniqueAncestors(
+            self.occ_shape, TopAbs_VERTEX, TopAbs_EDGE, map
+        )
+        results = map.FindFromKey(vertex.occ_vertex)
+        iterator = TopTools_ListIteratorOfListOfShape(results)
+        vertices = []
+        while iterator.More():
+            edge = topods_Edge(iterator.Value())
+            edge = BRepEdge(edge)
+            iterator.Next()
+            if not edge.first_vertex.occ_vertex.IsSame(vertex.occ_vertex):
+                vertices.append(edge.first_vertex)
+            else:
+                vertices.append(edge.last_vertex)
+        return vertices
+
+    def vertex_edges(self, vertex: BRepVertex) -> List[BRepEdge]:
+        """Identify the edges connected to a given vertex.
+
+        Parameters
+        ----------
+        vertex : :class:`BRepVertex`
+
+        Returns
+        -------
+        List[:class:`BRepEdge`]
+
+        """
+        map = TopTools_IndexedDataMapOfShapeListOfShape()
+        topexp_MapShapesAndUniqueAncestors(
+            self.occ_shape, TopAbs_VERTEX, TopAbs_EDGE, map
+        )
+        results = map.FindFromKey(vertex.occ_vertex)
+        iterator = TopTools_ListIteratorOfListOfShape(results)
+        edges = []
+        while iterator.More():
+            edge = topods_Edge(iterator.Value())
+            edges.append(BRepEdge(edge))
+            iterator.Next()
+        return edges
+
+    def vertex_faces(self, vertex: BRepVertex) -> List[BRepFace]:
+        """Identify the faces connected to a vertex.
+
+        Parameters
+        ----------
+        vertex : :class:`BRepVertex`
+
+        Returns
+        -------
+        List[:class:`BRepFace`]
+
+        """
+        map = TopTools_IndexedDataMapOfShapeListOfShape()
+        topexp_MapShapesAndUniqueAncestors(
+            self.occ_shape, TopAbs_VERTEX, TopAbs_FACE, map
+        )
+        results = map.FindFromKey(vertex.occ_vertex)
+        iterator = TopTools_ListIteratorOfListOfShape(results)
+        faces = []
+        while iterator.More():
+            face = topods_Face(iterator.Value())
+            faces.append(BRepFace(face))
+            iterator.Next()
+        return faces
+
+    # ==============================================================================
+    # Other Methods
+    # ==============================================================================
+
+    # flip
+    # join
+    # join edges
+    # join naked edges
+    # merge coplanar faces
+    # remove fins
+    # remove holes
+    # repair
+    # rotate
+    # scale
+    # trim
+    # rotate
+    # translate
+    # unjoin edges
 
     def make_solid(self):
         """Convert the current shape to a solid if it is a shell.
@@ -914,32 +1030,37 @@ class BRep(Data):
         """
         pass
 
-    # flip
-    # join
-    # join edges
-    # join naked edges
-    # merge coplanar faces
-    # remove fins
-    # remove holes
-    # repair
-    # rotate
-    # scale
-    # split
-    # trim
-    # transform
-    # rotate
-    # translate
-    # unjoin edges
-
     def transform(self, matrix: compas.geometry.Transformation) -> None:
-        """Transform this BRep."""
+        """Transform this BRep.
+
+        Parameters
+        ----------
+        matrix : :class:`compas.geometry.Transformation`
+            A transformation matrix.
+
+        Returns
+        -------
+        None
+
+        """
         trsf = compas_transformation_to_trsf(matrix)
         builder = BRepBuilderAPI_Transform(self.occ_shape, trsf, False)
         shape = builder.ModifiedShape(self.occ_shape)
         self.occ_shape = shape
 
     def transformed(self, matrix: compas.geometry.Transformation) -> "BRep":
-        """Return a transformed copy of the BRep."""
+        """Return a transformed copy of the BRep.
+
+        Parameters
+        ----------
+        matrix : :class:`compas.geometry.Transformation`
+            A transformation matrix.
+
+        Returns
+        -------
+        :class:`BRep`
+
+        """
         trsf = compas_transformation_to_trsf(matrix)
         builder = BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
         shape = builder.ModifiedShape(self.occ_shape)
@@ -961,7 +1082,7 @@ class BRep(Data):
             A list of polylines per plane.
 
         """
-        pass
+        raise NotImplementedError
 
     def slice(self, plane: compas.geometry.Plane) -> BRepFace:
         """Slice through the BRep with a plane.
@@ -982,9 +1103,64 @@ class BRep(Data):
             return BRep.from_shape(section.Shape())
 
     def split(self, other: "BRep") -> List["BRep"]:
-        """Slice through the BRep with a plane."""
+        """Slice through the BRep with a plane.
+
+        Parameters
+        ----------
+        other : :class:`BRep`
+            Another b-rep.
+
+        Returns
+        -------
+        List[:class:`BRep`]
+
+        """
         splitter = BOPAlgo_Splitter()
         splitter.AddArgument(self.occ_shape)
         splitter.AddTool(other.occ_shape)
         splitter.Perform()
         return BRep.from_shape(splitter.Shape())
+
+    def overlap(
+        self, other: "BRep", deflection: float = 1e-3, tolerance: float = 0.0
+    ) -> Tuple[List[BRepFace], List[BRepFace]]:
+        """Compute the overlap between this BRep and another.
+
+        Parameters
+        ----------
+        other : :class:`BRep`
+            The other b-rep.
+        deflection : float, optional
+            Allowable deflection for mesh generation used for proximity detection.
+        tolerance : float, optional
+            Tolerance for overlap calculation.
+
+        Returns
+        -------
+        Tuple[List[:class:`BRepFace`], List[:class:`BRepFace`]]
+
+        """
+        mesher1 = BRepMesh_IncrementalMesh(self.occ_shape, deflection)
+        mesher2 = BRepMesh_IncrementalMesh(other.occ_shape, deflection)
+        mesher1.Perform()
+        mesher2.Perform()
+        proximity = BRepExtrema_ShapeProximity(
+            self.occ_shape, other.occ_shape, tolerance
+        )
+        proximity.Perform()
+
+        overlaps1 = proximity.OverlapSubShapes1()
+        keys1 = overlaps1.Keys()
+        faces1 = []
+        for key in keys1:
+            face = proximity.GetSubShape1(key)
+            faces1.append(BRepFace(face))
+
+        overlaps2 = proximity.OverlapSubShapes2()
+        keys2 = overlaps2.Keys()
+        faces2 = []
+        for key in keys2:
+            face = proximity.GetSubShape2(key)
+            faces2.append(BRepFace(face))
+
+        return faces1, faces2

@@ -1,15 +1,18 @@
 from typing import List, Tuple
 from enum import Enum
 
+from OCC.Core.TopAbs import TopAbs_VERTEX
+from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.TopoDS import topods_Edge
 from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopAbs import TopAbs_VERTEX
-from OCC.Core.BRepAdaptor import BRepAdaptor_Curve
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.TopExp import topexp_FirstVertex
 from OCC.Core.TopExp import topexp_LastVertex
+from OCC.Core.BRepAdaptor import BRepAdaptor_Curve
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.BRepAlgo import brepalgo_IsValid
+from OCC.Core.BRepGProp import brepgprop_LinearProperties
+from OCC.Core.GProp import GProp_GProps
 
 from compas.data import Data
 from compas.geometry import Point
@@ -97,6 +100,10 @@ class BRepEdge(Data):
         if occ_edge:
             self.occ_edge = occ_edge
 
+    # ==============================================================================
+    # Data
+    # ==============================================================================
+
     @property
     def data(self):
         if self.is_line:
@@ -138,6 +145,14 @@ class BRepEdge(Data):
             edge = BRepEdge.from_curve(curve, points=points)
         self.occ_edge = edge.occ_edge
 
+    # ==============================================================================
+    # OCC Properties
+    # ==============================================================================
+
+    @property
+    def occ_shape(self) -> TopoDS_Edge:
+        return self._occ_edge
+
     @property
     def occ_edge(self) -> TopoDS_Edge:
         return self._occ_edge
@@ -152,6 +167,14 @@ class BRepEdge(Data):
         if not self._occ_adaptor:
             self._occ_adaptor = BRepAdaptor_Curve(self.occ_edge)
         return self._occ_adaptor
+
+    @property
+    def orientation(self) -> TopAbs_Orientation:
+        return self.occ_edge.Orientation()
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
 
     @property
     def type(self) -> int:
@@ -190,6 +213,10 @@ class BRepEdge(Data):
         return self.type == BRepEdge.CurveType.Other
 
     @property
+    def is_valid(self) -> bool:
+        return brepalgo_IsValid(self.occ_edge)
+
+    @property
     def vertices(self) -> List[BRepVertex]:
         vertices = []
         explorer = TopExp_Explorer(self.occ_edge, TopAbs_VERTEX)
@@ -220,6 +247,16 @@ class BRepEdge(Data):
             self._nurbscurve = OCCNurbsCurve()
             self._nurbscurve.occ_curve = self.occ_adaptor.BSpline()
         return self._nurbscurve
+
+    @property
+    def length(self) -> float:
+        props = GProp_GProps()
+        brepgprop_LinearProperties(self.occ_shape, props)
+        return props.Mass()
+
+    # ==============================================================================
+    # Constructors
+    # ==============================================================================
 
     @classmethod
     def from_vertex_vertex(cls, a: BRepVertex, b: BRepVertex) -> "BRepEdge":
@@ -389,6 +426,10 @@ class BRepEdge(Data):
                 builder = BRepBuilderAPI_MakeEdge(curve.occ_curve)
         return cls(builder.Edge())
 
+    # ==============================================================================
+    # Conversions
+    # ==============================================================================
+
     def to_line(self) -> Line:
         """Convert the edge geometry to a line.
 
@@ -541,12 +582,6 @@ class BRepEdge(Data):
         """
         return self.curve
 
-    def is_valid(self) -> bool:
-        """Verify that the edge is valid.
-
-        Returns
-        -------
-        bool
-
-        """
-        return brepalgo_IsValid(self.occ_edge)
+    # ==============================================================================
+    # Methods
+    # ==============================================================================

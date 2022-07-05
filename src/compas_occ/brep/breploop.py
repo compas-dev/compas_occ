@@ -45,6 +45,10 @@ class BRepLoop(Data):
         if occ_wire:
             self.occ_wire = occ_wire
 
+    # ==============================================================================
+    # Data
+    # ==============================================================================
+
     @property
     def data(self):
         edges = []
@@ -60,6 +64,14 @@ class BRepLoop(Data):
         loop = BRepLoop.from_edges(edges)
         self.occ_wire = loop.occ_wire
 
+    # ==============================================================================
+    # OCC Properties
+    # ==============================================================================
+
+    @property
+    def occ_shape(self):
+        return self._occ_wire
+
     @property
     def occ_wire(self):
         return self._occ_wire
@@ -67,6 +79,14 @@ class BRepLoop(Data):
     @occ_wire.setter
     def occ_wire(self, loop: TopoDS_Wire):
         self._occ_wire = topods_Wire(loop)
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
+
+    @property
+    def is_valid(self) -> bool:
+        return brepalgo_IsValid(self.occ_wire)
 
     @property
     def vertices(self) -> List[BRepVertex]:
@@ -94,6 +114,10 @@ class BRepLoop(Data):
         for edge in edges:
             builder.Add(edge.occ_edge)
         self.occ_wire = builder.Wire()
+
+    # ==============================================================================
+    # Constructors
+    # ==============================================================================
 
     @classmethod
     def from_edges(cls, edges: List[BRepEdge]) -> "BRepLoop":
@@ -157,15 +181,9 @@ class BRepLoop(Data):
         loop.edges = edges
         return loop
 
-    def is_valid(self) -> bool:
-        """Verify that the loop is valid.
-
-        Returns
-        -------
-        bool
-
-        """
-        return brepalgo_IsValid(self.occ_wire)
+    # ==============================================================================
+    # Methods
+    # ==============================================================================
 
     def fix(self) -> None:
         """Try to fix the loop.
