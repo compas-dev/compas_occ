@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import compas.geometry
 import compas.datastructures
@@ -59,6 +59,7 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape
 from OCC.Core.TopExp import topexp_MapShapesAndUniqueAncestors
+from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 
 # from OCC.Core.TopExp import topexp_MapShapesAndAncestors
 # from OCC.Core.TopExp import topexp_FirstVertex
@@ -638,13 +639,18 @@ class BRep(Data):
 
     @classmethod
     def from_extrusion(cls, curve, vector) -> "BRep":
+        """Construct a BRep by extruding a closed curve along a direction vector."""
         pass
 
     @classmethod
-    def from_sweep(cls, profile, path) -> "BRep":
-        pass
+    def from_sweep(cls, profile: Union[BRepEdge, BRepFace], path: BRepLoop) -> "BRep":
+        """Construct a BRep by sweeping a profile along a path."""
+        brep = cls()
+        brep.occ_shape = BRepOffsetAPI_MakePipe(
+            path.occ_wire, profile.occ_shape
+        ).Shape()
+        return brep
 
-    # create pipe
     # create patch
     # create offset
 
