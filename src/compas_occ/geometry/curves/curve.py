@@ -114,13 +114,13 @@ class OCCCurve(Curve):
     def start(self):
         if self.occ_curve:
             pnt = self.occ_curve.StartPoint()
-            return Point.from_occ(pnt)
+            return compas_point_from_occ_point(pnt)
 
     @property
     def end(self):
         if self.occ_curve:
             pnt = self.occ_curve.EndPoint()
-            return Point.from_occ(pnt)
+            return compas_point_from_occ_point(pnt)
 
     @property
     def is_closed(self):
@@ -379,7 +379,7 @@ class OCCCurve(Curve):
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal(
-            (Point.from_occ(box.CornerMin()), Point.from_occ(box.CornerMax()))
+            (compas_point_from_occ_point(box.CornerMin()), compas_point_from_occ_point(box.CornerMax()))
         )
 
     def length(self, precision=1e-3):
