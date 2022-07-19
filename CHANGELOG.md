@@ -46,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.brep.BRep.vertex_edges`.
 * Added `compas_occ.brep.BRep.vertex_faces`.
 * Added `compas_occ.brep.BRep.from_sweep`.
+* Added nurbs conversion to `compas_occ.brep.BRepEdge.data`.
+* Added nurbs conversion to `compas_occ.brep.BRepFace.data`.
 
 ### Changed
 
