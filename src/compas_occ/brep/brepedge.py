@@ -13,6 +13,8 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.BRepAlgo import brepalgo_IsValid
 from OCC.Core.BRepGProp import brepgprop_LinearProperties
 from OCC.Core.GProp import GProp_GProps
+from OCC.Core.GeomConvert import GeomConvert_ApproxCurve
+from OCC.Core.GeomAbs import GeomAbs_Shape
 
 from compas.data import Data
 from compas.geometry import Point
@@ -106,32 +108,51 @@ class BRepEdge(Data):
 
     @property
     def data(self):
-        if self.is_line:
-            line = compas_line_from_occ_line(self.occ_adaptor.Line())
-            data = {
-                "type": "line",
-                "value": line.data,
-                "points": [self.vertices[0].point, self.vertices[-1].point],
-            }
-        elif self.is_circle:
-            circle = compas_circle_from_occ_circle(self.occ_adaptor.Circle())
-            data = {
-                "type": "circle",
-                "value": circle.data,
-                "points": [self.vertices[0].point, self.vertices[-1].point],
-            }
-        else:
+        if self.is_bspline:
             curve = self.nurbscurve
+            return {
+                "type": "nurbs",
+                "value": curve.data,
+                "points": [self.vertices[0].point, self.vertices[-1].point],
+            }
+
+        try:
+            convert = GeomConvert_ApproxCurve(
+                self.curve, 1e-3, GeomAbs_Shape.GeomAbs_C1, 1, 5
+            )
+            curve = OCCNurbsCurve()
+            curve.occ_curve = convert.Curve()
             data = {
                 "type": "nurbs",
                 "value": curve.data,
                 "points": [self.vertices[0].point, self.vertices[-1].point],
             }
+        except Exception:
+            if self.is_line:
+                line = compas_line_from_occ_line(self.occ_adaptor.Line())
+                data = {
+                    "type": "line",
+                    "value": line.data,
+                    "points": [self.vertices[0].point, self.vertices[-1].point],
+                }
+            elif self.is_circle:
+                circle = compas_circle_from_occ_circle(self.occ_adaptor.Circle())
+                data = {
+                    "type": "circle",
+                    "value": circle.data,
+                    "points": [self.vertices[0].point, self.vertices[-1].point],
+                }
+            else:
+                raise
         return data
 
     @data.setter
     def data(self, data):
-        if data["type"] == "line":
+        if data["type"] == "nurbs":
+            curve = OCCNurbsCurve.from_data(data["value"])
+            points = data["points"]
+            edge = BRepEdge.from_curve(curve, points=points)
+        elif data["type"] == "line":
             line = Line.from_data(data["value"])
             points = data["points"]
             edge = BRepEdge.from_line(line, points=points)
@@ -140,9 +161,7 @@ class BRepEdge(Data):
             points = data["points"]
             edge = BRepEdge.from_circle(circle, points=points)
         else:
-            curve = OCCNurbsCurve.from_data(data["value"])
-            points = data["points"]
-            edge = BRepEdge.from_curve(curve, points=points)
+            raise NotImplementedError
         self.occ_edge = edge.occ_edge
 
     # ==============================================================================
