@@ -9,6 +9,7 @@ from compas.geometry import Transformation
 from compas.geometry import Translation
 from compas.geometry import Point
 from compas.geometry import Polyline
+from compas.geometry import Polygon
 from compas.datastructures import Mesh
 
 from OCC.Extend.DataExchange import read_step_file
@@ -56,6 +57,7 @@ from OCC.Core.TopLoc import TopLoc_Location
 from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.IFSelect import IFSelect_RetDone
+from OCC.Core.Interface import Interface_Static_SetCVal
 from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape
 from OCC.Core.TopExp import topexp_MapShapesAndUniqueAncestors
@@ -747,7 +749,7 @@ class BRep(Data):
         with open(filepath, "w") as f:
             self.occ_shape.DumpJson(f)
 
-    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
+    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "M") -> None:
         """Write the BRep shape to a STEP file.
 
         Parameters
@@ -767,7 +769,7 @@ class BRep(Data):
         # write_step_file(self.occ_shape, filepath)
         step_writer = STEPControl_Writer()
         # Interface_Static_SetCVal("write.step.schema", schema)
-        # Interface_Static_SetCVal("write.step.unit", unit)
+        Interface_Static_SetCVal("write.step.unit", unit)
         step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
         status = step_writer.Write(filepath)
         assert status == IFSelect_RetDone, status
@@ -827,7 +829,17 @@ class BRep(Data):
             meshes.append(mesh)
         return meshes
 
-    def to_viewmesh(self):
+    def to_polygons(self):
+        """Convert the faces of the BRep to simple polygons without underlying geometry."""
+        polygons = []
+        for face in self.faces:
+            points = []
+            for vertex in face.loops[0].vertices:
+                points.append(vertex.point)
+            polygons.append(Polygon(points))
+        return polygons
+
+    def to_viewmesh(self, linear_deflection=1e-3):
         """Convert the BRep to a view mesh."""
         lines = []
         for edge in self.edges:
@@ -841,7 +853,7 @@ class BRep(Data):
                 lines.append(Polyline(edge.curve.locus()))
             elif edge.is_bspline:
                 lines.append(Polyline(edge.curve.locus()))
-        return self.to_tesselation(), lines
+        return self.to_tesselation(linear_deflection=linear_deflection), lines
 
     # ==============================================================================
     # Relationships
