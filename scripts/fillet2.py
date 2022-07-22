@@ -7,7 +7,7 @@ from compas_occ.brep import BRep
 from compas_view2.app import App
 from compas_view2.objects import Collection
 
-from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
+from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeChamfer
 
 HERE = os.path.dirname(__file__)
 FILE = os.path.join(HERE, "fillet.stp")
@@ -16,7 +16,7 @@ box = Box(Frame.worldXY(), 1.8, 1.8, 2)
 box.frame.point.z += 0.2
 box = BRep.from_box(box)
 
-fillet = BRepFilletAPI_MakeFillet(box.occ_shape)
+fillet = BRepFilletAPI_MakeChamfer(box.occ_shape)
 for edge in box.edges:
     fillet.Add(0.1, edge.occ_edge)
 fillet.Build()
