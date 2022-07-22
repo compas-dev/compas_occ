@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Curve Closest Parameters Curve" href="curve_closest_parameters_curve.html" />
+  <link rel="next" title="BRepFace with Hole" href="brepface_with_hole.html" />
   
 
   
-  <link rel="prev" title="BRep From Corners" href="brep_from_corners.html" />
+  <link rel="prev" title="BRep Shape From Booleans" href="brep_from_booleans.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.4.2
+            0.5.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -104,10 +104,10 @@
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
 
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tubemesh.obj&#39;</span><span class="p">))</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">from_obj</span><span class="p">(</span><span class="n">compas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tubemesh.obj&quot;</span><span class="p">))</span>
 
 <span class="n">centroid</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">centroid</span><span class="p">()</span>
-<span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_attribute</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">))</span>
+<span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices_attribute</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">))</span>
 <span class="n">vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="n">centroid</span><span class="p">)</span>
 <span class="n">vector</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">zmin</span>
 <span class="n">vector</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
@@ -118,6 +118,7 @@
 <span class="n">mesh</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">S</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span>
 
 <span class="n">brep</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">brep</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
 
 <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">curves</span> <span class="o">=</span> <span class="p">[]</span>
@@ -128,7 +129,7 @@
     <span class="k">elif</span> <span class="n">edge</span><span class="o">.</span><span class="n">is_bspline</span><span class="p">:</span>
         <span class="n">curves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">curve</span><span class="o">.</span><span class="n">locus</span><span class="p">()))</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s1">&#39;ghosted&#39;</span><span class="p">)</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s2">&quot;ghosted&quot;</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">brep</span><span class="o">.</span><span class="n">to_tesselation</span><span class="p">(),</span> <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
@@ -160,12 +161,14 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse show active">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brep_from_booleans.html">BRep Shape From Booleans</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brep_from_corners.html">BRep From Corners</a></li>
 <li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">BRep From Mesh</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brepface_with_hole.html">BRepFace with Hole</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="brepface_with_holes.html">BRepFace with Holes</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_closest_point.html">Curve Closest Point</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_comparison1.html">Curve Comparison 1</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_divide.html">Curve Divide</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_circle.html">Curve From Circle</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_from_line.html">Curve From Line</a></li>
@@ -175,6 +178,8 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="curve_segmentation.html">Curve Segmentation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_meshgrid.html">Surface From Meshgrid</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_from_parameters.html">Surface From Parameters</a></li>
@@ -182,6 +187,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
@@ -219,20 +225,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="brep_from_corners.html" title="BRep From Corners" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="brep_from_booleans.html" title="BRep Shape From Booleans" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRep From Corners
+          BRep Shape From Booleans
         </div>
       </a>
       
 
       
-      <a href="curve_closest_parameters_curve.html" title="Curve Closest Parameters Curve" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="brepface_with_hole.html" title="BRepFace with Hole" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Curve Closest Parameters Curve
+          BRepFace with Hole
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

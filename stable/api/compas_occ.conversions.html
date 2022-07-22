@@ -24,7 +24,7 @@
   
 
   
-  <link rel="prev" title="BRepFace" href="generated/compas_occ.brep.BRepFace.html" />
+  <link rel="prev" title="BRepFace.validate_json" href="generated/compas_occ.brep.BRepFace.validate_json.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.4.2
+            0.5.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -106,14 +106,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array1_from_floats1.html#compas_occ.conversions.array1_from_floats1" title="compas_occ.conversions.array1_from_floats1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array1_from_floats1</span></code></a></p></td>
 <td><p>Construct a one-dimensional float array from a list of floats.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array2_from_floats2.html#compas_occ.conversions.array2_from_floats2" title="compas_occ.conversions.array2_from_floats2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array2_from_floats2</span></code></a></p></td>
-<td><p>Construct a two-dimensional real array from a list of lists of floats.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array1_from_integers1.html#compas_occ.conversions.array1_from_integers1" title="compas_occ.conversions.array1_from_integers1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array1_from_integers1</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array1_from_integers1.html#compas_occ.conversions.array1_from_integers1" title="compas_occ.conversions.array1_from_integers1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array1_from_integers1</span></code></a></p></td>
 <td><p>Construct a one-dimensional integer array from a list of integers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array1_from_points1.html#compas_occ.conversions.array1_from_points1" title="compas_occ.conversions.array1_from_points1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array1_from_points1</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array1_from_points1.html#compas_occ.conversions.array1_from_points1" title="compas_occ.conversions.array1_from_points1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array1_from_points1</span></code></a></p></td>
 <td><p>Construct a one-dimensional point array from a list of points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array2_from_floats2.html#compas_occ.conversions.array2_from_floats2" title="compas_occ.conversions.array2_from_floats2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array2_from_floats2</span></code></a></p></td>
+<td><p>Construct a two-dimensional real array from a list of lists of floats.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.array2_from_points2.html#compas_occ.conversions.array2_from_points2" title="compas_occ.conversions.array2_from_points2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array2_from_points2</span></code></a></p></td>
 <td><p>Construct a two-dimensional point array from a list of lists of points.</p></td>
@@ -121,10 +121,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.floats2_from_array2.html#compas_occ.conversions.floats2_from_array2" title="compas_occ.conversions.floats2_from_array2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">floats2_from_array2</span></code></a></p></td>
 <td><p>Construct a list of lists of floats from two-dimensional real array.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.points1_from_array1.html#compas_occ.conversions.points1_from_array1" title="compas_occ.conversions.points1_from_array1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points1_from_array1</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.harray1_from_points1.html#compas_occ.conversions.harray1_from_points1" title="compas_occ.conversions.harray1_from_points1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">harray1_from_points1</span></code></a></p></td>
+<td><p>Construct a horizontal one-dimensional point array from a list of points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.points1_from_array1.html#compas_occ.conversions.points1_from_array1" title="compas_occ.conversions.points1_from_array1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points1_from_array1</span></code></a></p></td>
 <td><p>Construct a list of points from a one-dimensional point array.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.points2_from_array2.html#compas_occ.conversions.points2_from_array2" title="compas_occ.conversions.points2_from_array2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points2_from_array2</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.points2_from_array2.html#compas_occ.conversions.points2_from_array2" title="compas_occ.conversions.points2_from_array2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points2_from_array2</span></code></a></p></td>
 <td><p>Construct a list of lists of points from two-dimensional point array.</p></td>
 </tr>
 </tbody>
@@ -138,11 +141,65 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_point_to_occ_point.html#compas_occ.conversions.compas_point_to_occ_point" title="compas_occ.conversions.compas_point_to_occ_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_point_to_occ_point</span></code></a></p></td>
-<td><p>Convert a COMPAS point to an OCC point.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_circle_from_occ_circle.html#compas_occ.conversions.compas_circle_from_occ_circle" title="compas_occ.conversions.compas_circle_from_occ_circle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_circle_from_occ_circle</span></code></a></p></td>
+<td><p>Construct a COMPAS circle from an OCC circle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_circle_to_occ_circle.html#compas_occ.conversions.compas_circle_to_occ_circle" title="compas_occ.conversions.compas_circle_to_occ_circle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_circle_to_occ_circle</span></code></a></p></td>
+<td><p>Construct an OCC circle from a COMPAS circle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_cone_to_occ_cone.html#compas_occ.conversions.compas_cone_to_occ_cone" title="compas_occ.conversions.compas_cone_to_occ_cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_cone_to_occ_cone</span></code></a></p></td>
+<td><p>Convert a COMPAS cone to an OCC cone.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_cylinder_from_occ_cylinder.html#compas_occ.conversions.compas_cylinder_from_occ_cylinder" title="compas_occ.conversions.compas_cylinder_from_occ_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_cylinder_from_occ_cylinder</span></code></a></p></td>
+<td><p>Convert an OCC cylinder to a COMPAS cylinder.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_cylinder_to_occ_cylinder.html#compas_occ.conversions.compas_cylinder_to_occ_cylinder" title="compas_occ.conversions.compas_cylinder_to_occ_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_cylinder_to_occ_cylinder</span></code></a></p></td>
+<td><p>Convert a COMPAS cylinder to an OCC cylinder.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_frame_from_occ_ax3.html#compas_occ.conversions.compas_frame_from_occ_ax3" title="compas_occ.conversions.compas_frame_from_occ_ax3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_frame_from_occ_ax3</span></code></a></p></td>
+<td><p>Construct a COMPAS frame from an OCC position.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_line_from_occ_line.html#compas_occ.conversions.compas_line_from_occ_line" title="compas_occ.conversions.compas_line_from_occ_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_line_from_occ_line</span></code></a></p></td>
+<td><p>Convert an OCC line to a COMPAS line.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_line_to_occ_line.html#compas_occ.conversions.compas_line_to_occ_line" title="compas_occ.conversions.compas_line_to_occ_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_line_to_occ_line</span></code></a></p></td>
+<td><p>Convert a COMPAS line to an OCC line.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_plane_from_occ_plane.html#compas_occ.conversions.compas_plane_from_occ_plane" title="compas_occ.conversions.compas_plane_from_occ_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_plane_from_occ_plane</span></code></a></p></td>
+<td><p>Convert an OCC plane to a COMPAS plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_point_from_occ_point.html#compas_occ.conversions.compas_point_from_occ_point" title="compas_occ.conversions.compas_point_from_occ_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_point_from_occ_point</span></code></a></p></td>
 <td><p>Construct a COMPAS point from an OCC point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_point_from_occ_point2d.html#compas_occ.conversions.compas_point_from_occ_point2d" title="compas_occ.conversions.compas_point_from_occ_point2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_point_from_occ_point2d</span></code></a></p></td>
+<td><p>Construct a COMPAS point from an OCC 2D point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_plane_to_occ_plane.html#compas_occ.conversions.compas_plane_to_occ_plane" title="compas_occ.conversions.compas_plane_to_occ_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_plane_to_occ_plane</span></code></a></p></td>
+<td><p>Convert a COMPAS plane to an OCC plane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_point_to_occ_point.html#compas_occ.conversions.compas_point_to_occ_point" title="compas_occ.conversions.compas_point_to_occ_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_point_to_occ_point</span></code></a></p></td>
+<td><p>Convert a COMPAS point to an OCC point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_plane_to_occ_ax2.html#compas_occ.conversions.compas_plane_to_occ_ax2" title="compas_occ.conversions.compas_plane_to_occ_ax2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_plane_to_occ_ax2</span></code></a></p></td>
+<td><p>Convert a COMPAS plane to a right-handed OCC coordinate system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_plane_to_occ_ax3.html#compas_occ.conversions.compas_plane_to_occ_ax3" title="compas_occ.conversions.compas_plane_to_occ_ax3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_plane_to_occ_ax3</span></code></a></p></td>
+<td><p>Convert a COMPAS plane to a right-handed OCC coordinate system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_sphere_to_occ_sphere.html#compas_occ.conversions.compas_sphere_to_occ_sphere" title="compas_occ.conversions.compas_sphere_to_occ_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_sphere_to_occ_sphere</span></code></a></p></td>
+<td><p>Convert a COMPAS sphere to an OCC sphere.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_torus_to_occ_torus.html#compas_occ.conversions.compas_torus_to_occ_torus" title="compas_occ.conversions.compas_torus_to_occ_torus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_torus_to_occ_torus</span></code></a></p></td>
+<td><p>Convert a COMPAS torus to an OCC torus.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_from_occ_axis.html#compas_occ.conversions.compas_vector_from_occ_axis" title="compas_occ.conversions.compas_vector_from_occ_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_from_occ_axis</span></code></a></p></td>
+<td><p>Convert an OCC axis to a COMPAS vector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_from_occ_vector.html#compas_occ.conversions.compas_vector_from_occ_vector" title="compas_occ.conversions.compas_vector_from_occ_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_from_occ_vector</span></code></a></p></td>
+<td><p>Construct a COMPAS vector from an OCC vector.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_from_occ_vector2d.html#compas_occ.conversions.compas_vector_from_occ_vector2d" title="compas_occ.conversions.compas_vector_from_occ_vector2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_from_occ_vector2d</span></code></a></p></td>
+<td><p>Construct a COMPAS vector from an OCC 2D vector.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_to_occ_vector.html#compas_occ.conversions.compas_vector_to_occ_vector" title="compas_occ.conversions.compas_vector_to_occ_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_to_occ_vector</span></code></a></p></td>
 <td><p>Convert a COMPAS vector to an OCC vector.</p></td>
@@ -150,14 +207,19 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_to_occ_direction.html#compas_occ.conversions.compas_vector_to_occ_direction" title="compas_occ.conversions.compas_vector_to_occ_direction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_to_occ_direction</span></code></a></p></td>
 <td><p>Convert a COMPAS vector to an OCC direction.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_vector_from_occ_vector.html#compas_occ.conversions.compas_vector_from_occ_vector" title="compas_occ.conversions.compas_vector_from_occ_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_vector_from_occ_vector</span></code></a></p></td>
-<td><p>Construct a COMPAS vector from an OCC vector.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_line_to_occ_line.html#compas_occ.conversions.compas_line_to_occ_line" title="compas_occ.conversions.compas_line_to_occ_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_line_to_occ_line</span></code></a></p></td>
-<td><p>Convert a COMPAS line to an OCC line.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_frame_from_occ_position.html#compas_occ.conversions.compas_frame_from_occ_position" title="compas_occ.conversions.compas_frame_from_occ_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_frame_from_occ_position</span></code></a></p></td>
-<td><p>Construct a COMPAS frame from an OCC position.</p></td>
+</tbody>
+</table>
+</section>
+<section id="transformations">
+<h2>Transformations</h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_occ.conversions.compas_transformation_to_trsf.html#compas_occ.conversions.compas_transformation_to_trsf" title="compas_occ.conversions.compas_transformation_to_trsf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compas_transformation_to_trsf</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -214,12 +276,14 @@
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="nav flex-column collapse">
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/brep_from_booleans.html">BRep Shape From Booleans</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/brep_from_corners.html">BRep From Corners</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/brep_from_mesh.html">BRep From Mesh</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/brepface_with_hole.html">BRepFace with Hole</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/brepface_with_holes.html">BRepFace with Holes</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_closest_point.html">Curve Closest Point</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_comparison1.html">Curve Comparison 1</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_divide.html">Curve Divide</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_from_circle.html">Curve From Circle</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_from_line.html">Curve From Line</a></li>
@@ -229,6 +293,8 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/curve_segmentation.html">Curve Segmentation</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_from_parameters.html">Surface From Parameters</a></li>
@@ -236,6 +302,7 @@
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
 <li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
@@ -264,6 +331,7 @@
 <li class="nav-item"><a class="nav-link reference internal" href="#">compas_occ.conversions</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#arrays">Arrays</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#primitives">Primitives</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#transformations">Transformations</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#meshes">Meshes</a></li>
 </ul>
 </li>
@@ -278,11 +346,11 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="generated/compas_occ.brep.BRepFace.html" title="BRepFace" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="generated/compas_occ.brep.BRepFace.validate_json.html" title="BRepFace.validate_json" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRepFace
+          BRepFace.validate_json
         </div>
       </a>
       
