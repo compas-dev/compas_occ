@@ -23,7 +23,6 @@ print(len(faces))
 viewer = App()
 
 viewmesh = A.to_viewmesh()
-# viewer.add(viewmesh[0], show_edges=False, opacity=0.5)
 viewer.add(Collection(viewmesh[1]), linewidth=1, linecolor=Color(0.2, 0.2, 0.2))
 
 viewer.add(vertex.point, color=Color.red(), size=20)

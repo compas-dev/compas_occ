@@ -14,9 +14,6 @@ B = BRep.from_box(box)
 
 FA, FB = A.overlap(B)
 
-# for face in faces:
-#     print(face)
-
 viewer = App()
 
 viewmesh = A.to_viewmesh()
