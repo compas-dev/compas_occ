@@ -1,4 +1,3 @@
-from compas.geometry import Point
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
@@ -379,7 +378,10 @@ class OCCCurve(Curve):
         box = Bnd_Box()
         BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal(
-            (compas_point_from_occ_point(box.CornerMin()), compas_point_from_occ_point(box.CornerMax()))
+            (
+                compas_point_from_occ_point(box.CornerMin()),
+                compas_point_from_occ_point(box.CornerMax()),
+            )
         )
 
     def length(self, precision=1e-3):
