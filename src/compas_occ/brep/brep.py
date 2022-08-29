@@ -3,7 +3,6 @@ from typing import List, Tuple, Union
 import compas.geometry
 import compas.datastructures
 
-from compas.data import Data
 from compas.geometry import Frame
 from compas.geometry import Transformation
 from compas.geometry import Translation
