@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `BRep` plugins for `compas.geometry.Brep`
+
 ### Changed
+
+* Fixed Matrix indexing bug in `BRep.frame`
 
 ### Removed
 
