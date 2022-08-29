@@ -10,6 +10,7 @@ from compas.geometry import Translation
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.geometry import Polygon
+from compas.geometry import Brep as BrepPluggable
 from compas.datastructures import Mesh
 
 from OCC.Extend.DataExchange import read_step_file
@@ -83,7 +84,7 @@ from compas_occ.brep import BRepLoop
 from compas_occ.brep import BRepFace
 
 
-class BRep(Data):
+class BRep(BrepPluggable):
     """Class for Boundary Representation of geometric entities.
 
     Attributes
@@ -147,6 +148,11 @@ class BRep(Data):
     >>> E = A & B
 
     """
+
+    # this makes de-serialization backend-agnostic.
+    # The deserializing type is determined by plugin availability when de-serializing
+    # regardless of the context available when serializing.
+    __class__ = BrepPluggable
 
     def __init__(self) -> None:
         super().__init__()

@@ -19,8 +19,25 @@ Classes
     BRepFace
 
 """
+from compas.plugins import plugin
+
 from .brepvertex import BRepVertex  # noqa: F401
 from .brepedge import BRepEdge  # noqa: F401
 from .breploop import BRepLoop  # noqa: F401
 from .brepface import BRepFace  # noqa: F401
 from .brep import BRep  # noqa: F401
+
+
+@plugin(category="factories", requires=["OCC"])
+def new_brep(*args, **kwargs):
+    return object.__new__(BRep)
+
+
+@plugin(category="factories", requires=["OCC"])
+def from_brep(*args, **kwargs):
+    return BRep.from_shape(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["OCC"])
+def from_box(*args, **kwargs):
+    return BRep.from_box(*args, **kwargs)
