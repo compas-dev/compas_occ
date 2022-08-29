@@ -389,11 +389,13 @@ class BRep(Data):
     @property
     def frame(self) -> compas.geometry.Frame:
         location = self.occ_shape.Location()
-        transformation = location.Transformation()
-        T = Transformation(
-            matrix=[[transformation.Value(i, j) for j in range(4)] for i in range(4)]
-        )
-        frame = Frame.from_transformation(T)
+        t = location.Transformation()
+
+        # transformation.Value is a 1-based 3x4 matrix
+        rows, columns = 3, 4
+        matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
+        matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
+        frame = Frame.from_transformation(Transformation(matrix))
         return frame
 
     @property
