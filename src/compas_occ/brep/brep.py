@@ -289,11 +289,11 @@ class BRep(BrepPluggable):
 
     @property
     def is_manifold(self) -> bool:
-        pass
+        raise NotImplementedError
 
     @property
     def is_surface(self) -> bool:
-        pass
+        raise NotImplementedError
 
     # ==============================================================================
     # Geometric Components
