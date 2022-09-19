@@ -1,6 +1,7 @@
 from pytest import fixture
 
-from compas.geometry import Box
+from compas.geometry import Box, Frame
+from compas.geometry import close
 
 from compas_occ.brep import BRep
 
@@ -11,13 +12,16 @@ def box():
 
 
 def test_create_brep():
-    _ = BRep()
+    brep = BRep()
+    assert brep is not None
 
 
 def test_brep_from_box(box):
-    _ = BRep.from_box(box)
+    box_brep = BRep.from_box(box)
+    assert close(box_brep.volume, box.volume)
+    assert close(box_brep.area, box.area)
 
 
 def test_brep_from_box_properties(box):
     brep = BRep.from_box(box)
-    _ = brep.frame
+    assert brep.frame == Frame.worldXY()
