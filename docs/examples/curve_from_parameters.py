@@ -11,7 +11,7 @@ curve = OCCNurbsCurve.from_parameters(
     weights=[1.0, 1.0, 1.0, 1.0],
     knots=[0.0, 1.0],
     multiplicities=[4, 4],
-    degree=3
+    degree=3,
 )
 
 # ==============================================================================
@@ -21,6 +21,13 @@ curve = OCCNurbsCurve.from_parameters(
 view = App()
 
 view.add(Polyline(curve.locus()), linewidth=3)
-view.add(Polyline(curve.points), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+view.add(
+    Polyline(curve.points),
+    show_points=True,
+    pointsize=20,
+    pointcolor=(1, 0, 0),
+    linewidth=1,
+    linecolor=(0.3, 0.3, 0.3),
+)
 
 view.run()

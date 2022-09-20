@@ -19,7 +19,7 @@ brep = BRep.from_faces([face])
 mesh = brep.to_tesselation()
 
 viewer = App()
-viewer.add(mesh, show_edges=False)
+viewer.add(mesh, show_lines=False)
 
 for edge in brep.edges:
     if edge.is_line:

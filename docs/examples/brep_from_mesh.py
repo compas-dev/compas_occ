@@ -32,7 +32,7 @@ for edge in brep.edges:
         curves.append(Polyline(edge.curve.locus()))
 
 viewer = App(viewmode="ghosted")
-viewer.add(brep.to_tesselation(), show_edges=False)
+viewer.add(brep.to_tesselation(), show_lines=False)
 
 for curve in curves:
     viewer.add(curve, linewidth=2)

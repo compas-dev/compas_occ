@@ -18,6 +18,6 @@ surface = OCCNurbsSurface.from_points(points=points)
 
 view = App()
 
-view.add(surface, show_edges=True, show_points=True)
+view.add(surface, show_lines=True, show_points=True)
 
 view.run()

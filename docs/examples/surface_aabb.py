@@ -32,12 +32,19 @@ box = surface.aabb()
 view = App()
 
 for row in surface.points:
-    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(1.0, 0, 0))
+    view.add(
+        Polyline(row),
+        show_points=True,
+        pointsize=20,
+        pointcolor=(1, 0, 0),
+        linewidth=2,
+        linecolor=(1.0, 0, 0),
+    )
 
-for col in zip(* surface.points):
+for col in zip(*surface.points):
     view.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
 
-view.add(surface.to_mesh(), show_edges=False)
+view.add(surface.to_mesh(), show_lines=False)
 view.add(box, show_faces=False)
 
 view.run()

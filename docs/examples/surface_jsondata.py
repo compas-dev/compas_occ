@@ -40,6 +40,6 @@ view.add(Polyline(v.locus()), linewidth=1, linecolor=(0.3, 0.3, 0.3))
 for curve in surface.boundary():
     view.add(Polyline(curve.locus()), linewidth=2, linecolor=(0, 0, 0))
 
-view.add(other.to_mesh(), show_edges=False)
+view.add(other.to_mesh(), show_lines=False)
 
 view.run()

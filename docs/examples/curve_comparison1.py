@@ -14,7 +14,7 @@ curve1 = OCCNurbsCurve.from_parameters(
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0],
     multiplicities=[3, 3],
-    degree=2
+    degree=2,
 )
 
 curve2 = OCCNurbsCurve.from_parameters(
@@ -22,7 +22,7 @@ curve2 = OCCNurbsCurve.from_parameters(
     weights=[1.0, 2.0, 1.0],
     knots=[0.0, 1.0],
     multiplicities=[3, 3],
-    degree=2
+    degree=2,
 )
 
 curve3 = OCCNurbsCurve.from_parameters(
@@ -30,7 +30,7 @@ curve3 = OCCNurbsCurve.from_parameters(
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
     multiplicities=[1, 1, 1, 1, 1, 1],
-    degree=2
+    degree=2,
 )
 
 # ==============================================================================
@@ -39,10 +39,24 @@ curve3 = OCCNurbsCurve.from_parameters(
 
 view = App()
 
-view.add(Polyline(bezier.points), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+view.add(
+    Polyline(bezier.points),
+    show_points=True,
+    pointsize=20,
+    pointcolor=(1, 0, 0),
+    linewidth=1,
+    linecolor=(0.3, 0.3, 0.3),
+)
 view.add(Polyline(bezier.locus()), linewidth=5, linecolor=(0, 0, 0))
 
-view.add(Polyline(curve1.points), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+view.add(
+    Polyline(curve1.points),
+    show_points=True,
+    pointsize=20,
+    pointcolor=(1, 0, 0),
+    linewidth=1,
+    linecolor=(0.3, 0.3, 0.3),
+)
 view.add(Polyline(curve1.locus()), linewidth=5, linecolor=(0, 0, 0))
 view.add(Polyline(curve2.locus()), linewidth=5, linecolor=(0, 1, 1))
 view.add(Polyline(curve3.locus()), linewidth=5, linecolor=(0, 0, 1))

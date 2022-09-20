@@ -14,6 +14,6 @@ viewer = App()
 viewer.view.camera.position = [-7, -10, 6]
 viewer.view.camera.target = [2, 0, 5]
 
-viewer.add(curve.to_polyline(), linewidth=5, color=(1, 0, 0))
+viewer.add(curve.to_polyline(), linewidth=5, linecolor=(1, 0, 0))
 viewer.add(surface.to_mesh())
 viewer.show()

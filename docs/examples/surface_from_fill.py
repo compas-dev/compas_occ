@@ -1,4 +1,3 @@
-
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
 
@@ -26,7 +25,9 @@ nurbscurve4 = NurbsCurve.from_interpolation(points4)
 nurbscurve5 = NurbsCurve.from_interpolation(points5)
 nurbscurve6 = NurbsCurve.from_interpolation(points6)
 
-nurbssurface_4curves = NurbsSurface.from_fill(nurbscurve3, nurbscurve4, nurbscurve5, nurbscurve6, style='curved')
+nurbssurface_4curves = NurbsSurface.from_fill(
+    nurbscurve3, nurbscurve4, nurbscurve5, nurbscurve6, style="curved"
+)
 
 
 # ==============================================================================

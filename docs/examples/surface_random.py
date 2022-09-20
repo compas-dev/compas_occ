@@ -26,10 +26,24 @@ for u in range(1, U):
 view = App()
 
 for row in surface.points:
-    view.add(Polyline(row), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+    view.add(
+        Polyline(row),
+        show_points=True,
+        pointsize=20,
+        pointcolor=(1, 0, 0),
+        linewidth=2,
+        linecolor=(0.3, 0.3, 0.3),
+    )
 
-for col in zip(* surface.points):
-    view.add(Polyline(col), show_points=True, pointsize=20, pointcolor=(1, 0, 0), linewidth=2, linecolor=(0.3, 0.3, 0.3))
+for col in zip(*surface.points):
+    view.add(
+        Polyline(col),
+        show_points=True,
+        pointsize=20,
+        pointcolor=(1, 0, 0),
+        linewidth=2,
+        linecolor=(0.3, 0.3, 0.3),
+    )
 
 view.add(surface.to_mesh(nu=100, nv=100))
 

@@ -17,7 +17,7 @@ surface = OCCNurbsSurface.from_points(points=points)
 # Frames
 # ==============================================================================
 
-U, V = meshgrid(surface.u_space(), surface.v_space(), 'ij')
+U, V = meshgrid(surface.u_space(), surface.v_space(), "ij")
 frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 # ==============================================================================
@@ -26,9 +26,9 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 view = App()
 
-view.add(surface.to_mesh(), show_edges=False)
+view.add(surface.to_mesh(), show_lines=False)
 
 for frame in frames:
-    view.add(frame, size=0.25)
+    view.add(frame, pointsize=0.25)
 
 view.run()

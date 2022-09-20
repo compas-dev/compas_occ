@@ -41,7 +41,7 @@ viewer.view.camera.distance = 7
 
 viewmesh = C.to_viewmesh()
 
-viewer.add(viewmesh[0], show_edges=False)
+viewer.add(viewmesh[0], show_lines=False)
 viewer.add(Collection(viewmesh[1]), linewidth=2)
 
 viewer.run()

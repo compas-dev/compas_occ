@@ -17,25 +17,25 @@ FA, FB = A.overlap(B)
 viewer = App()
 
 viewmesh = A.to_viewmesh()
-viewer.add(viewmesh[0], show_edges=False, opacity=0.5)
+viewer.add(viewmesh[0], show_lines=False, opacity=0.5)
 viewer.add(Collection(viewmesh[1]), linewidth=3)
 
 viewmesh = B.to_viewmesh()
-viewer.add(viewmesh[0], show_edges=False, opacity=0.5)
+viewer.add(viewmesh[0], show_lines=False, opacity=0.5)
 viewer.add(Collection(viewmesh[1]), linewidth=3)
 
 for face in FA[:1]:
     brep = BRep()
     brep.occ_shape = face.occ_face
     viewmesh = brep.to_viewmesh()
-    viewer.add(viewmesh[0], show_edges=False, facecolor=Color.red().lightened(50))
+    viewer.add(viewmesh[0], show_lines=False, facecolor=Color.red().lightened(50))
     viewer.add(Collection(viewmesh[1]), linewidth=3, linecolor=Color.red())
 
 for face in FB[:1]:
     brep = BRep()
     brep.occ_shape = face.occ_face
     viewmesh = brep.to_viewmesh()
-    viewer.add(viewmesh[0], show_edges=False, facecolor=Color.blue().lightened(50))
+    viewer.add(viewmesh[0], show_lines=False, facecolor=Color.blue().lightened(50))
     viewer.add(Collection(viewmesh[1]), linewidth=3, linecolor=Color.blue())
 
 viewer.show()
