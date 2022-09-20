@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fixed bug in `compas_occ.brep.BRep.transform`.
+* Changed `vertices`, `edges`, `loops`, `faces`, `shells`, `solids` attributes of `compas_occ.brep.BRep` to only be recreated once unerlying shape is changed.
+
 ### Removed
 
 
