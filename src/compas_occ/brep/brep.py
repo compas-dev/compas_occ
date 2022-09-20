@@ -151,6 +151,12 @@ class BRep(Data):
     def __init__(self) -> None:
         super().__init__()
         self._occ_shape = None
+        self._vertices = None
+        self._edges = None
+        self._wires = None
+        self._faces = None
+        self._shells = None
+        self._solids = None
 
     # ==============================================================================
     # Data
@@ -236,6 +242,12 @@ class BRep(Data):
     @occ_shape.setter
     def occ_shape(self, shape: TopoDS_Shape) -> None:
         self._occ_shape = shape
+        self._vertices = None
+        self._edges = None
+        self._wires = None
+        self._faces = None
+        self._shells = None
+        self._solids = None
 
     @property
     def orientation(self) -> TopAbs_Orientation:
@@ -320,67 +332,79 @@ class BRep(Data):
 
     @property
     def vertices(self) -> List[BRepVertex]:
-        vertices = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_VERTEX)
-        while explorer.More():
-            vertex = explorer.Current()
-            vertices.append(BRepVertex(vertex))
-            explorer.Next()
-        return vertices
+        if self._vertices is None:
+            vertices = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_VERTEX)
+            while explorer.More():
+                vertex = explorer.Current()
+                vertices.append(BRepVertex(vertex))
+                explorer.Next()
+            self._vertices = vertices
+        return self._vertices
 
     @property
     def edges(self) -> List[BRepEdge]:
-        edges = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_EDGE)
-        while explorer.More():
-            edge = explorer.Current()
-            edges.append(BRepEdge(edge))
-            explorer.Next()
-        return edges
+        if self._edges is None:
+            edges = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_EDGE)
+            while explorer.More():
+                edge = explorer.Current()
+                edges.append(BRepEdge(edge))
+                explorer.Next()
+            self._edges = edges
+        return self._edges
 
     @property
     def loops(self) -> List[BRepLoop]:
-        loops = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_WIRE)
-        while explorer.More():
-            wire = explorer.Current()
-            loops.append(BRepLoop(wire))
-            explorer.Next()
-        return loops
+        if self._loops is None:
+            loops = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_WIRE)
+            while explorer.More():
+                wire = explorer.Current()
+                loops.append(BRepLoop(wire))
+                explorer.Next()
+            self._loops = loops
+        return self._loops
 
     @property
     def faces(self) -> List[BRepFace]:
-        faces = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_FACE)
-        while explorer.More():
-            face = explorer.Current()
-            faces.append(BRepFace(face))
-            explorer.Next()
-        return faces
+        if self._faces is None:
+            faces = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_FACE)
+            while explorer.More():
+                face = explorer.Current()
+                faces.append(BRepFace(face))
+                explorer.Next()
+            self._faces = faces
+        return self._faces
 
     @property
     def shells(self) -> List["BRep"]:
-        shells = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_SHELL)
-        while explorer.More():
-            shell = explorer.Current()
-            brep = BRep()
-            brep.occ_shape = shell
-            shells.append(brep)
-            explorer.Next()
-        return shells
+        if self._shells is None:
+            shells = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_SHELL)
+            while explorer.More():
+                shell = explorer.Current()
+                brep = BRep()
+                brep.occ_shape = shell
+                shells.append(brep)
+                explorer.Next()
+            self._shells = shells
+        return self._shells
 
     @property
     def solids(self) -> List["BRep"]:
-        solids = []
-        explorer = TopExp_Explorer(self.occ_shape, TopAbs_SOLID)
-        while explorer.More():
-            solid = explorer.Current()
-            brep = BRep()
-            brep.occ_shape = solid
-            solids.append(brep)
-            explorer.Next()
-        return solids
+        if self._solids is None:
+            solids = []
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_SOLID)
+            while explorer.More():
+                solid = explorer.Current()
+                brep = BRep()
+                brep.occ_shape = solid
+                solids.append(brep)
+                explorer.Next()
+            self._solids = solids
+        return self._solids
 
     # ==============================================================================
     # Geometric Properties
