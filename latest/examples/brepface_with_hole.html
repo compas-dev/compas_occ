@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.4.2
+            0.5.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -123,7 +123,7 @@
 <span class="n">mesh</span> <span class="o">=</span> <span class="n">brep</span><span class="o">.</span><span class="n">to_tesselation</span><span class="p">()</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">show_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">show_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">brep</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">is_line</span><span class="p">:</span>
         <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">edge</span><span class="o">.</span><span class="n">to_line</span><span class="p">(),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>

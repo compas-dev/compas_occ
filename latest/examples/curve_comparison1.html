@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.4.2
+            0.5.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -112,7 +112,7 @@
     <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
     <span class="n">knots</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
     <span class="n">multiplicities</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span>
+    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">curve2</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_parameters</span><span class="p">(</span>
@@ -120,7 +120,7 @@
     <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
     <span class="n">knots</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
     <span class="n">multiplicities</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span>
+    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">curve3</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_parameters</span><span class="p">(</span>
@@ -128,7 +128,7 @@
     <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
     <span class="n">knots</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
     <span class="n">multiplicities</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span>
+    <span class="n">degree</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
@@ -137,10 +137,24 @@
 
 <span class="n">view</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">bezier</span><span class="o">.</span><span class="n">points</span><span class="p">),</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="n">Polyline</span><span class="p">(</span><span class="n">bezier</span><span class="o">.</span><span class="n">points</span><span class="p">),</span>
+    <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+<span class="p">)</span>
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">bezier</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve1</span><span class="o">.</span><span class="n">points</span><span class="p">),</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="n">Polyline</span><span class="p">(</span><span class="n">curve1</span><span class="o">.</span><span class="n">points</span><span class="p">),</span>
+    <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+<span class="p">)</span>
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve1</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve2</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Polyline</span><span class="p">(</span><span class="n">curve3</span><span class="o">.</span><span class="n">locus</span><span class="p">()),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
