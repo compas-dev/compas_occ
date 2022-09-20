@@ -1,7 +1,11 @@
 from math import sqrt
 from copy import deepcopy
+from typing import Dict, List
 
 from compas.geometry import Point
+from compas.geometry import Circle
+from compas.geometry import Ellipse
+from compas.geometry import Line
 from compas.geometry import Frame
 
 from compas.geometry import NurbsCurve
@@ -15,13 +19,22 @@ from compas_occ.conversions import points1_from_array1
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomConvert import GeomConvert_CompCurveToBSplineCurve
+from OCC.Core.TColgp import TColgp_Array1OfPnt
+from OCC.Core.TColStd import TColStd_Array1OfReal
+from OCC.Core.TColStd import TColStd_Array1OfInteger
+from OCC.Core.TopoDS import TopoDS_Edge
 
 from .curve import OCCCurve
 
 
 def occ_curve_from_parameters(
-    points, weights, knots, multiplicities, degree, is_periodic
-):
+    points: List[Point],
+    weights: List[float],
+    knots: List[float],
+    multiplicities: List[int],
+    degree: int,
+    is_periodic: bool,
+) -> Geom_BSplineCurve:
     return Geom_BSplineCurve(
         array1_from_points1(points),
         array1_from_floats1(weights),
@@ -101,7 +114,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
     """
 
-    def __init__(self, name=None):
+    def __init__(self, name: str = None):
         super(OCCNurbsCurve, self).__init__(name=name)
 
     # ==============================================================================
@@ -109,7 +122,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @property
-    def data(self):
+    def data(self) -> Dict:
         """dict : Representation of the curve as a dict containing only native Python objects."""
         return {
             "points": [point.data for point in self.points],
@@ -121,7 +134,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         }
 
     @data.setter
-    def data(self, data):
+    def data(self, data: Dict) -> None:
         points = [Point.from_data(point) for point in data["points"]]
         weights = data["weights"]
         knots = data["knots"]
@@ -137,25 +150,25 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @property
-    def occ_points(self):
+    def occ_points(self) -> TColgp_Array1OfPnt:
         return self.occ_curve.Poles()
 
     @property
-    def occ_weights(self):
+    def occ_weights(self) -> TColStd_Array1OfReal:
         return self.occ_curve.Weights() or array1_from_floats1(
             [1.0] * len(self.occ_points)
         )
 
     @property
-    def occ_knots(self):
+    def occ_knots(self) -> TColStd_Array1OfReal:
         return self.occ_curve.Knots()
 
     @property
-    def occ_knotsequence(self):
+    def occ_knotsequence(self) -> TColStd_Array1OfReal:
         return self.occ_curve.KnotSequence()
 
     @property
-    def occ_multiplicities(self):
+    def occ_multiplicities(self) -> TColStd_Array1OfInteger:
         return self.occ_curve.Multiplicities()
 
     # ==============================================================================
@@ -163,47 +176,47 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @property
-    def points(self):
+    def points(self) -> List[Point]:
         if self.occ_curve:
             return points1_from_array1(self.occ_points)
 
     @property
-    def weights(self):
+    def weights(self) -> List[float]:
         if self.occ_curve:
             return list(self.occ_weights)
 
     @property
-    def knots(self):
+    def knots(self) -> List[float]:
         if self.occ_curve:
             return list(self.occ_knots)
 
     @property
-    def knotsequence(self):
+    def knotsequence(self) -> List[float]:
         if self.occ_curve:
             return list(self.occ_knotsequence)
 
     @property
-    def multiplicities(self):
+    def multiplicities(self) -> List[int]:
         if self.occ_curve:
             return list(self.occ_multiplicities)
 
     @property
-    def continuity(self):
+    def continuity(self) -> int:
         if self.occ_curve:
             return self.occ_curve.Continuity()
 
     @property
-    def degree(self):
+    def degree(self) -> int:
         if self.occ_curve:
             return self.occ_curve.Degree()
 
     @property
-    def order(self):
+    def order(self) -> int:
         if self.occ_curve:
             return self.degree + 1
 
     @property
-    def is_rational(self):
+    def is_rational(self) -> bool:
         if self.occ_curve:
             return self.occ_curve.IsRational()
 
@@ -212,7 +225,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @classmethod
-    def from_edge(cls, edge):
+    def from_edge(cls, edge: TopoDS_Edge) -> "OCCNurbsCurve":
         """Construct a NURBS curve from an existing OCC TopoDS_Edge.
 
         Parameters
@@ -234,8 +247,14 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
     @classmethod
     def from_parameters(
-        cls, points, weights, knots, multiplicities, degree, is_periodic=False
-    ):
+        cls,
+        points: List[Point],
+        weights: List[float],
+        knots: List[float],
+        multiplicities: List[int],
+        degree: int,
+        is_periodic: bool = False,
+    ) -> "OCCNurbsCurve":
         """Construct a NURBS curve from explicit curve parameters.
 
         Parameters
@@ -265,7 +284,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return curve
 
     @classmethod
-    def from_points(cls, points, degree=3):
+    def from_points(cls, points: List[Point], degree: int = 3) -> "OCCNurbsCurve":
         """Construct a NURBS curve from control points.
 
         Parameters
@@ -298,7 +317,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return curve
 
     @classmethod
-    def from_interpolation(cls, points, precision=1e-3):
+    def from_interpolation(
+        cls, points: List[Point], precision: float = 1e-3
+    ) -> "OCCNurbsCurve":
         """Construct a NURBS curve by interpolating a set of points.
 
         Parameters
@@ -321,7 +342,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return curve
 
     @classmethod
-    def from_arc(cls, arc, degree, pointcount=None):
+    def from_arc(cls, arc, degree, pointcount=None) -> "OCCNurbsCurve":
         """Construct a NURBS curve from an arc.
 
         Parameters
@@ -341,7 +362,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         raise NotImplementedError
 
     @classmethod
-    def from_circle(cls, circle):
+    def from_circle(cls, circle: Circle) -> "OCCNurbsCurve":
         """Construct a NURBS curve from a circle.
 
         Parameters
@@ -377,7 +398,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         )
 
     @classmethod
-    def from_ellipse(cls, ellipse):
+    def from_ellipse(cls, ellipse: Ellipse) -> "OCCNurbsCurve":
         """Construct a NURBS curve from an ellipse.
 
         Parameters
@@ -414,7 +435,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         )
 
     @classmethod
-    def from_line(cls, line):
+    def from_line(cls, line: Line) -> "OCCNurbsCurve":
         """Construct a NURBS curve from a line.
 
         Parameters
@@ -443,7 +464,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # Methods
     # ==============================================================================
 
-    def copy(self):
+    def copy(self) -> "OCCNurbsCurve":
         """Make an independent copy of the current curve.
 
         Returns
@@ -454,7 +475,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         cls = type(self)
         return cls.from_data(deepcopy(self.data))
 
-    def segment(self, u, v, precision=1e-3):
+    def segment(self, u: float, v: float, precision: float = 1e-3) -> None:
         """Modifies this curve by segmenting it between the parameters u and v.
 
         Parameters
@@ -481,7 +502,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             raise ValueError("The given domain is zero length.")
         self.occ_curve.Segment(u, v, precision)
 
-    def segmented(self, u, v, precision=1e-3):
+    def segmented(self, u: float, v: float, precision: float = 1e-3) -> "OCCNurbsCurve":
         """Returns a copy of this curve by segmenting it between the parameters u and v.
 
         Parameters
@@ -501,7 +522,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         copy.segment(u, v, precision)
         return copy
 
-    def join(self, curve, precision=1e-4):
+    def join(self, curve: "OCCNurbsCurve", precision: float = 1e-4) -> None:
         """Modifies this curve by joining it with another curve.
 
         Parameters
@@ -521,7 +542,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         if success:
             self.occ_curve = converter.BSplineCurve()
 
-    def joined(self, curve, precision=1e-4):
+    def joined(
+        self, curve: "OCCNurbsCurve", precision: float = 1e-4
+    ) -> "OCCNurbsCurve":
         """Returns a new curve that is the result of joining this curve with another.
 
         Parameters
