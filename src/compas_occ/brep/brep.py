@@ -1086,9 +1086,9 @@ class BRep(Data):
 
         """
         trsf = compas_transformation_to_trsf(matrix)
-        builder = BRepBuilderAPI_Transform(self.occ_shape, trsf, False)
+        builder = BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
         shape = builder.ModifiedShape(self.occ_shape)
-        self.occ_shape = shape
+        self._occ_shape = shape
 
     def transformed(self, matrix: compas.geometry.Transformation) -> "BRep":
         """Return a transformed copy of the BRep.
@@ -1145,7 +1145,7 @@ class BRep(Data):
             return BRep.from_shape(section.Shape())
 
     def split(self, other: "BRep") -> List["BRep"]:
-        """Slice through the BRep with a plane.
+        """Split a BRep using another BRep as splitter.
 
         Parameters
         ----------
