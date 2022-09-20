@@ -1,7 +1,12 @@
+from typing import List, Tuple, Union
+
+from compas.geometry import Point
+from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Curve
 from compas.geometry import Box
 from compas.geometry import Polyline
+from compas.geometry import Transformation
 from compas.geometry import distance_point_point
 
 
@@ -25,6 +30,10 @@ from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.GeomProjLib import geomprojlib_Project
 from OCC.Core.GeomProjLib import geomprojlib_Curve2d
+
+from OCC.Core.Geom import Geom_Curve
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Edge
 
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_from_occ_point2d
@@ -69,7 +78,7 @@ class OCCCurve(Curve):
         self._dimension = 3
         self._occ_curve = None
 
-    def __eq__(self, other):
+    def __eq__(self, other: "OCCCurve") -> bool:
         return self.occ_curve.IsEqual(other.occ_curve)
 
     # ==============================================================================
@@ -81,19 +90,19 @@ class OCCCurve(Curve):
     # ==============================================================================
 
     @property
-    def occ_curve(self):
+    def occ_curve(self) -> Geom_Curve:
         return self._occ_curve
 
     @occ_curve.setter
-    def occ_curve(self, curve):
+    def occ_curve(self, curve: Geom_Curve):
         self._occ_curve = curve
 
     @property
-    def occ_shape(self):
+    def occ_shape(self) -> TopoDS_Shape:
         return BRepBuilderAPI_MakeEdge(self.occ_curve).Shape()
 
     @property
-    def occ_edge(self):
+    def occ_edge(self) -> TopoDS_Edge:
         return topods_Edge(self.occ_shape)
 
     # ==============================================================================
@@ -101,33 +110,33 @@ class OCCCurve(Curve):
     # ==============================================================================
 
     @property
-    def dimension(self):
+    def dimension(self) -> int:
         return self._dimension
 
     @property
-    def domain(self):
+    def domain(self) -> Tuple[float, float]:
         if self.occ_curve:
             return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
 
     @property
-    def start(self):
+    def start(self) -> Point:
         if self.occ_curve:
             pnt = self.occ_curve.StartPoint()
             return compas_point_from_occ_point(pnt)
 
     @property
-    def end(self):
+    def end(self) -> Point:
         if self.occ_curve:
             pnt = self.occ_curve.EndPoint()
             return compas_point_from_occ_point(pnt)
 
     @property
-    def is_closed(self):
+    def is_closed(self) -> bool:
         if self.occ_curve:
             return self.occ_curve.IsClosed()
 
     @property
-    def is_periodic(self):
+    def is_periodic(self) -> bool:
         if self.occ_curve:
             return self.occ_curve.IsPeriodic()
 
@@ -136,7 +145,7 @@ class OCCCurve(Curve):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve):
+    def from_occ(cls, occ_curve: Geom_Curve) -> "OCCCurve":
         """Construct a NURBS curve from an existing OCC BSplineCurve.
 
         Parameters
@@ -156,7 +165,7 @@ class OCCCurve(Curve):
     # Conversions
     # ==============================================================================
 
-    def to_step(self, filepath, schema="AP203"):
+    def to_step(self, filepath: str, schema: str = "AP203") -> None:
         """Write the curve geometry to a STP file.
 
         Parameters
@@ -176,7 +185,7 @@ class OCCCurve(Curve):
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
-    def to_polyline(self, n=100):
+    def to_polyline(self, n: int = 100) -> Polyline:
         """Convert the curve to a polyline.
 
         Parameters
@@ -195,12 +204,12 @@ class OCCCurve(Curve):
     # Methods
     # ==============================================================================
 
-    def copy(self):
+    def copy(self) -> "OCCCurve":
         """Make an independent copy of the current curve.
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCCurve`
+        :class:`OCCCurve`
 
         """
         cls = type(self)
@@ -209,7 +218,7 @@ class OCCCurve(Curve):
         curve._dimension = self._dimension
         return curve
 
-    def transform(self, T):
+    def transform(self, T: Transformation) -> None:
         """Transform this curve.
 
         Parameters
@@ -225,7 +234,7 @@ class OCCCurve(Curve):
         occ_T.SetValues(*T.list[:12])
         self.occ_curve.Transform(occ_T)
 
-    def reverse(self):
+    def reverse(self) -> None:
         """Reverse the parametrisation of the curve.
 
         Returns
@@ -235,7 +244,7 @@ class OCCCurve(Curve):
         """
         self.occ_curve.Reverse()
 
-    def point_at(self, t):
+    def point_at(self, t: float) -> Point:
         """Compute the point at a curve parameter.
 
         Parameters
@@ -265,7 +274,7 @@ class OCCCurve(Curve):
             return compas_point_from_occ_point2d(point)
         return compas_point_from_occ_point(point)
 
-    def tangent_at(self, t):
+    def tangent_at(self, t: float) -> Vector:
         """Compute the tangent vector at a curve parameter.
 
         Parameters
@@ -293,7 +302,7 @@ class OCCCurve(Curve):
             return compas_vector_from_occ_vector2d(uvec)
         return compas_vector_from_occ_vector(uvec)
 
-    def curvature_at(self, t):
+    def curvature_at(self, t: float) -> Vector:
         """Compute the curvature vector at a curve parameter.
 
         Parameters
@@ -322,7 +331,7 @@ class OCCCurve(Curve):
             return compas_vector_from_occ_vector2d(vvec)
         return compas_vector_from_occ_vector(vvec)
 
-    def frame_at(self, t):
+    def frame_at(self, t: float) -> Frame:
         """Compute the local frame at a curve parameter.
 
         Parameters
@@ -363,7 +372,7 @@ class OCCCurve(Curve):
     # Methods continued
     # ==============================================================================
 
-    def aabb(self, precision=0.0):
+    def aabb(self, precision: float = 0.0) -> Box:
         """Compute the axis aligned bounding box of the curve.
 
         Parameters
@@ -384,7 +393,7 @@ class OCCCurve(Curve):
             )
         )
 
-    def length(self, precision=1e-3):
+    def length(self, precision: float = 1e-3) -> float:
         """Compute the length of the curve.
 
         Parameters
@@ -398,8 +407,13 @@ class OCCCurve(Curve):
         """
         return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve), precision)
 
-    def closest_point(self, point, return_parameter=False):
-        """Compute the closest point on the curve to a given point.
+    def closest_point(
+        self,
+        point: Point,
+        return_parameter: bool = False,
+    ) -> Union[Point, Tuple[Point, float]]:
+        """
+        Compute the closest point on the curve to a given point.
         If an orthogonal projection is not possible, the start or end point is returned, whichever is closer.
 
         Parameters
@@ -445,7 +459,11 @@ class OCCCurve(Curve):
             return point
         return point, parameter
 
-    def closest_parameters_curve(self, curve, return_distance=False):
+    def closest_parameters_curve(
+        self,
+        curve: "OCCCurve",
+        return_distance: bool = False,
+    ) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
         """Computes the curve parameters where the curve is the closest to another given curve.
 
         Parameters
@@ -467,7 +485,11 @@ class OCCCurve(Curve):
             return extrema.LowerDistanceParameters()
         return extrema.LowerDistanceParameters(), extrema.LowerDistance()
 
-    def closest_points_curve(self, curve, return_distance=False):
+    def closest_points_curve(
+        self,
+        curve: "OCCCurve",
+        return_distance: bool = False,
+    ) -> Union[Tuple[Point, Point], Tuple[Tuple[Point, Point], float]]:
         """Computes the points on curves where the curve is the closest to another given curve.
 
         Parameters
@@ -479,7 +501,7 @@ class OCCCurve(Curve):
 
         Returns
         -------
-        tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`] | tuple[tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Point`], float]
+        tuple[:class:`Point`, :class:`Point`] | tuple[tuple[:class:`Point`, :class:`Point`], float]
             If `return_distance` is False, the closest points.
             If `return_distance` is True, the distance in addition to the closest points.
 
@@ -492,7 +514,12 @@ class OCCCurve(Curve):
             return points
         return points, extrema.LowerDistance()
 
-    def divide_by_count(self, count, return_points=False, precision=1e-6):
+    def divide_by_count(
+        self,
+        count: int,
+        return_points: bool = False,
+        precision: float = 1e-6,
+    ) -> Union[List[float], Tuple[List[float], List[Point]]]:
         """Divide the curve into a specific number of equal length segments.
 
         Parameters
@@ -503,6 +530,8 @@ class OCCCurve(Curve):
             If True, return the list of division parameters,
             and the points corresponding to those parameters.
             If False, return only the list of parameters.
+        precision : float, optional
+            The precision used for calculating the segments.
 
         Returns
         -------
@@ -529,8 +558,35 @@ class OCCCurve(Curve):
 
     divide = divide_by_count
 
-    def divide_by_length(self, length, return_points=False, precision=1e-6):
-        """"""
+    def divide_by_length(
+        self,
+        length: float,
+        return_points: bool = False,
+        precision: float = 1e-6,
+    ) -> Union[List[float], Tuple[List[float], List[Point]]]:
+        """Divide the curve into segments of a given length.
+
+        Note that the end point of the last segment might not coincide
+        with the end point of the curve.
+
+        Parameters
+        ----------
+        length : float
+            The length of the segments.
+        return_points : bool, optional
+            If True, return the list of division parameters,
+            and the points corresponding to those parameters.
+            If False, return only the list of parameters.
+        precision : float, optional
+            The precision used for calculating the segments.
+
+        Returns
+        -------
+        list[float] | tuple[list[float], list[:class:`~compas.geometry.Point`]]
+            If `return_points` is False, the parameters of the discretisation.
+            If `return_points` is True, a list of points in addition to the parameters of the discretisation.
+
+        """
         L = self.length(precision=precision)
         count = int(L / length)
         a, b = self.domain
@@ -547,7 +603,7 @@ class OCCCurve(Curve):
         points = [self.point_at(t) for t in params]
         return params, points
 
-    def projected(self, surface):
+    def projected(self, surface) -> "OCCCurve":
         """Return a copy of the curve projected onto a surface.
 
         Parameters
@@ -564,7 +620,7 @@ class OCCCurve(Curve):
         curve = OCCCurve.from_occ(result)
         return curve
 
-    def embedded(self, surface):
+    def embedded(self, surface) -> "OCCCurve":
         """Return a copy of the curve embedded in the parameter space of the surface.
 
         Parameters
@@ -582,7 +638,7 @@ class OCCCurve(Curve):
         curve._dimension = 2
         return curve
 
-    def offset(self, distance, direction):
+    def offset(self, distance: float, direction: Vector) -> "OCCCurve":
         """Offset the curve over the specified distance in the given direction.
 
         Parameters
