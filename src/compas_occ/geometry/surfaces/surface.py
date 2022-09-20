@@ -1,7 +1,12 @@
+from typing import List, Tuple
+
 from compas.geometry import Point
+from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Box
+from compas.geometry import Line
 from compas.geometry import Surface
+from compas.geometry import Transformation
 from compas.datastructures import Mesh
 
 from OCC.Core.gp import gp_Trsf
@@ -20,7 +25,11 @@ from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BRepBndLib import brepbndlib_AddOBB
 
-from compas_occ.geometry.curves import OCCCurve
+from OCC.Core.Geom import Geom_Surface
+from OCC.Core.TopoDS import TopoDS_Face
+from OCC.Core.TopoDS import TopoDS_Shape
+
+from compas_occ.geometry import OCCCurve
 
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_point_to_occ_point
@@ -65,16 +74,16 @@ class OCCSurface(Surface):
 
     """
 
-    def __init__(self, name=None):
+    def __init__(self, name: str = None):
         super().__init__(name=name)
         self._occ_surface = None
 
     @property
-    def occ_surface(self):
+    def occ_surface(self) -> Geom_Surface:
         return self._occ_surface
 
     @occ_surface.setter
-    def occ_surface(self, surface):
+    def occ_surface(self, surface: Geom_Surface) -> None:
         self._occ_surface = surface
 
     # ==============================================================================
@@ -86,7 +95,7 @@ class OCCSurface(Surface):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_surface):
+    def from_occ(cls, occ_surface: Geom_Surface) -> "OCCSurface":
         """Construct a NUBRS surface from an existing OCC BSplineSurface.
 
         Parameters
@@ -105,7 +114,7 @@ class OCCSurface(Surface):
         return surface
 
     @classmethod
-    def from_face(cls, face):
+    def from_face(cls, face: TopoDS_Face) -> "OCCSurface":
         """Construct surface from an existing OCC TopoDS_Face.
 
         Parameters
@@ -125,7 +134,7 @@ class OCCSurface(Surface):
     # Conversions
     # ==============================================================================
 
-    def to_step(self, filepath, schema="AP203"):
+    def to_step(self, filepath: str, schema: str = "AP203") -> None:
         """Write the surface geometry to a STP file.
 
         Parameters
@@ -150,7 +159,7 @@ class OCCSurface(Surface):
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
-    def to_tesselation(self):
+    def to_tesselation(self) -> Mesh:
         """Convert the surface to a triangle mesh.
 
         Returns
@@ -175,13 +184,13 @@ class OCCSurface(Surface):
     # ==============================================================================
 
     @property
-    def occ_shape(self):
+    def occ_shape(self) -> TopoDS_Shape:
         from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 
         return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
 
     @property
-    def occ_face(self):
+    def occ_face(self) -> TopoDS_Face:
         return topods_Face(self.occ_shape)
 
     # ==============================================================================
@@ -189,36 +198,36 @@ class OCCSurface(Surface):
     # ==============================================================================
 
     @property
-    def u_degree(self):
+    def u_degree(self) -> int:
         return self.occ_surface.UDegree()
 
     @property
-    def v_degree(self):
+    def v_degree(self) -> int:
         return self.occ_surface.VDegree()
 
     @property
-    def u_domain(self):
+    def u_domain(self) -> Tuple[float, float]:
         umin, umax, _, _ = self.occ_surface.Bounds()
         return umin, umax
 
     @property
-    def v_domain(self):
+    def v_domain(self) -> Tuple[float, float]:
         _, _, vmin, vmax = self.occ_surface.Bounds()
         return vmin, vmax
 
     @property
-    def is_u_periodic(self):
+    def is_u_periodic(self) -> bool:
         return self.occ_surface.IsUPeriodic()
 
     @property
-    def is_v_periodic(self):
+    def is_v_periodic(self) -> bool:
         return self.occ_surface.IsVPeriodic()
 
     # ==============================================================================
     # Methods
     # ==============================================================================
 
-    def copy(self):
+    def copy(self) -> "OCCSurface":
         """Make an independent copy of the current surface.
 
         Returns
@@ -231,7 +240,7 @@ class OCCSurface(Surface):
         surface.occ_surface = self.occ_surface.Copy()
         return surface
 
-    def transform(self, T):
+    def transform(self, T: Transformation) -> None:
         """Transform this surface.
 
         Parameters
@@ -247,7 +256,7 @@ class OCCSurface(Surface):
         _T.SetValues(*T.list[:12])
         self.occ_surface.Transform(_T)
 
-    def u_isocurve(self, u):
+    def u_isocurve(self, u: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter u.
 
         Parameters
@@ -262,7 +271,7 @@ class OCCSurface(Surface):
         occ_curve = self.occ_surface.UIso(u)
         return OCCCurve.from_occ(occ_curve)
 
-    def v_isocurve(self, v):
+    def v_isocurve(self, v: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter v.
 
         Parameters
@@ -277,7 +286,7 @@ class OCCSurface(Surface):
         occ_curve = self.occ_surface.VIso(v)
         return OCCCurve.from_occ(occ_curve)
 
-    def boundary(self):
+    def boundary(self) -> List[OCCCurve]:
         """Compute the boundary curves of the surface.
 
         Returns
@@ -296,7 +305,7 @@ class OCCSurface(Surface):
         curves[-1].reverse()
         return curves
 
-    def point_at(self, u, v):
+    def point_at(self, u: float, v: float) -> Point:
         """Compute a point on the surface.
 
         Parameters
@@ -312,7 +321,7 @@ class OCCSurface(Surface):
         point = self.occ_surface.Value(u, v)
         return compas_point_from_occ_point(point)
 
-    def curvature_at(self, u, v):
+    def curvature_at(self, u: float, v: float) -> Vector:
         """Compute the curvature at a point on the surface.
 
         Parameters
@@ -337,7 +346,7 @@ class OCCSurface(Surface):
             compas_vector_from_occ_vector(normal),
         )
 
-    def frame_at(self, u, v):
+    def frame_at(self, u: float, v: float) -> Frame:
         """Compute the local frame at a point on the curve.
 
         Parameters
@@ -360,7 +369,7 @@ class OCCSurface(Surface):
             compas_vector_from_occ_vector(vvec),
         )
 
-    def aabb(self, precision=0.0, optimal=False):
+    def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box:
         """Compute the axis aligned bounding box of the surface.
 
         Parameters
@@ -386,7 +395,7 @@ class OCCSurface(Surface):
             )
         )
 
-    def closest_point(self, point, return_parameters=False):
+    def closest_point(self, point: Point, return_parameters: bool = False) -> Point:
         """Compute the closest point on the curve to a given point.
 
         Parameters
@@ -411,7 +420,7 @@ class OCCSurface(Surface):
             return point
         return point, projector.LowerDistanceParameters()
 
-    def obb(self, precision=0.0):
+    def obb(self, precision: float = 0.0) -> Box:
         """Compute the oriented bounding box of the surface.
 
         Parameters
@@ -432,7 +441,7 @@ class OCCSurface(Surface):
             box.ZHSize(),
         )
 
-    def intersections_with_line(self, line):
+    def intersections_with_line(self, line: Line) -> List[Point]:
         """Compute the intersections with a line.
 
         Parameters

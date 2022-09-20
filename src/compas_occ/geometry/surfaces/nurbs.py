@@ -1,7 +1,15 @@
 from copy import deepcopy
+from typing import Dict, Literal
+from typing import Iterable
+from typing import List
+from typing import Tuple
+from typing import Union
 
 from compas.geometry import Point
 from compas.geometry import Translation
+from compas.geometry import NurbsSurface
+from compas.geometry import Curve
+from compas.geometry import Vector
 from compas.utilities import flatten
 
 from compas_occ.conversions import compas_point_from_occ_point
@@ -13,7 +21,7 @@ from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import floats2_from_array2
 from compas_occ.conversions import points2_from_array2
 
-from compas.geometry import NurbsSurface
+from compas_occ.geometry import OCCNurbsCurve
 
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
@@ -27,14 +35,14 @@ from .surface import OCCSurface
 
 
 class ControlPoints:
-    def __init__(self, surface):
+    def __init__(self, surface: "OCCNurbsSurface") -> None:
         self.occ_surface = surface
 
     @property
-    def points(self):
+    def points(self) -> List[List[Point]]:
         return points2_from_array2(self.occ_surface.Poles())
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: Union[int, Tuple[int, int]]) -> Point:
         try:
             u, v = index
         except TypeError:
@@ -43,14 +51,14 @@ class ControlPoints:
             pnt = self.occ_surface.Pole(u + 1, v + 1)
             return compas_point_from_occ_point(pnt)
 
-    def __setitem__(self, index, point):
+    def __setitem__(self, index: Tuple[int, int], point: Point) -> None:
         u, v = index
         self.occ_surface.SetPole(u + 1, v + 1, compas_point_to_occ_point(point))
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.occ_surface.NbVPoles()
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable:
         return iter(self.points)
 
 
@@ -138,11 +146,11 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
     """
 
-    def __init__(self, name=None):
+    def __init__(self, name: str = None) -> None:
         super().__init__(name=name)
         self._points = None
 
-    def __eq__(self, other):
+    def __eq__(self, other: "OCCNurbsSurface") -> bool:
         for a, b in zip(flatten(self.points), flatten(other.points)):
             if a != b:
                 return False
@@ -166,7 +174,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # ==============================================================================
 
     @property
-    def data(self):
+    def data(self) -> Dict:
         """dict : Represenation of the surface as a Python dict."""
         return {
             "points": [[point.data for point in row] for row in self.points],
@@ -182,7 +190,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         }
 
     @data.setter
-    def data(self, data):
+    def data(self, data: Dict) -> None:
         points = [[Point.from_data(point) for point in row] for row in data["points"]]
         weights = data["weights"]
         u_knots = data["u_knots"]
@@ -207,7 +215,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         )
 
     @classmethod
-    def from_data(cls, data):
+    def from_data(cls, data: Dict) -> "OCCNurbsSurface":
         """Construct a BSpline surface from its data representation.
 
         Parameters
@@ -251,17 +259,17 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     @classmethod
     def from_parameters(
         cls,
-        points,
-        weights,
-        u_knots,
-        v_knots,
-        u_mults,
-        v_mults,
-        u_degree,
-        v_degree,
-        is_u_periodic=False,
-        is_v_periodic=False,
-    ):
+        points: List[List[Point]],
+        weights: List[List[float]],
+        u_knots: List[float],
+        v_knots: List[float],
+        u_mults: List[int],
+        v_mults: List[int],
+        u_degree: int,
+        v_degree: int,
+        is_u_periodic: bool = False,
+        is_v_periodic: bool = False,
+    ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from explicit parameters.
 
         Parameters
@@ -308,7 +316,12 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return surface
 
     @classmethod
-    def from_points(cls, points, u_degree=3, v_degree=3):
+    def from_points(
+        cls,
+        points: List[List[Point]],
+        u_degree: int = 3,
+        v_degree: int = 3,
+    ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from control points.
 
         Parameters
@@ -358,7 +371,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         )
 
     @classmethod
-    def from_step(cls, filepath):
+    def from_step(cls, filepath: str) -> "OCCNurbsSurface":
         """Load a NURBS surface from a STP file.
 
         Parameters
@@ -373,7 +386,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         raise NotImplementedError
 
     @classmethod
-    def from_fill(cls, curve1, curve2, curve3=None, curve4=None, style="stretch"):
+    def from_fill(
+        cls,
+        curve1: OCCNurbsCurve,
+        curve2: OCCNurbsCurve,
+        curve3: OCCNurbsCurve = None,
+        curve4: OCCNurbsCurve = None,
+        style: Literal["stretch", "coons", "curved"] = "stretch",
+    ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from the infill between two, three or four contiguous NURBS curves.
 
         Parameters
@@ -427,7 +447,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return surface
 
     @classmethod
-    def from_extrusion(cls, curve, vector):
+    def from_extrusion(cls, curve: Curve, vector: Vector) -> "OCCNurbsSurface":
         """Construct a NURBS surface from an extrusion of a basis curve.
 
         Note that the extrusion surface is constructed by generating an infill
@@ -449,7 +469,9 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return cls.from_fill(curve, other)
 
     @classmethod
-    def from_interpolation(cls, points, precision=1e-3):
+    def from_interpolation(
+        cls, points: List[Point], precision: float = 1e-3
+    ) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
         Parameters
@@ -483,13 +505,13 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # ==============================================================================
 
     @property
-    def points(self):
+    def points(self) -> List[List[Point]]:
         if not self._points:
             self._points = ControlPoints(self.occ_surface)
         return self._points
 
     @property
-    def weights(self):
+    def weights(self) -> List[List[float]]:
         weights = self.occ_surface.Weights()
         if not weights:
             weights = [[1.0] * len(self.points[0]) for _ in range(len(self.points))]
@@ -498,26 +520,26 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return weights
 
     @property
-    def u_knots(self):
+    def u_knots(self) -> List[float]:
         return list(self.occ_surface.UKnots())
 
     @property
-    def v_knots(self):
+    def v_knots(self) -> List[float]:
         return list(self.occ_surface.VKnots())
 
     @property
-    def u_mults(self):
+    def u_mults(self) -> List[int]:
         return list(self.occ_surface.UMultiplicities())
 
     @property
-    def v_mults(self):
+    def v_mults(self) -> List[int]:
         return list(self.occ_surface.VMultiplicities())
 
     # ==============================================================================
     # Methods
     # ==============================================================================
 
-    def copy(self):
+    def copy(self) -> 'OCCNurbsSurface':
         """Make an independent copy of the current surface.
 
         Returns
