@@ -871,7 +871,9 @@ class BRep(Data):
         for face in self.faces:
             location = TopLoc_Location()
             triangulation = bt.Triangulation(face.occ_face, location)
-            nodes = triangulation.Nodes()
+            nodes = []
+            for i in range(1, triangulation.NbNodes() + 1):
+                nodes.append(triangulation.Node(i))
             vertices = points1_from_array1(nodes)
             faces = []
             triangles = triangulation.Triangles()

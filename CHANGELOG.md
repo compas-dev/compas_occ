@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Fixed bug in `compas_occ.brep.BRep.transform`.
 * Changed `vertices`, `edges`, `loops`, `faces`, `shells`, `solids` attributes of `compas_occ.brep.BRep` to only be recreated once unerlying shape is changed.
+* Changed implementation of `BRep.to_tessellation` to use range loop over individual nodes of triangulation instead of node list accessor.
 
 ### Removed
 
