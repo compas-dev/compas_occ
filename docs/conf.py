@@ -153,37 +153,38 @@ intersphinx_mapping = {
 
 
 def linkcode_resolve(domain, info):
-    if domain != 'py':
-        return None
-    if not info['module']:
-        return None
-    if not info['fullname']:
-        return None
+    pass
+    # if domain != 'py':
+    #     return None
+    # if not info['module']:
+    #     return None
+    # if not info['fullname']:
+    #     return None
 
-    package = info['module'].split('.')[0]
-    if not package.startswith('compas_occ'):
-        return None
+    # package = info['module'].split('.')[0]
+    # if not package.startswith('compas_occ'):
+    #     return None
 
-    module = importlib.import_module(info['module'])
-    parts = info['fullname'].split('.')
+    # module = importlib.import_module(info['module'])
+    # parts = info['fullname'].split('.')
 
-    if len(parts) == 1:
-        obj = getattr(module, info['fullname'])
-        filename = inspect.getmodule(obj).__name__.replace('.', '/')
-        lineno = inspect.getsourcelines(obj)[1]
-    elif len(parts) == 2:
-        obj_name, attr_name = parts
-        obj = getattr(module, obj_name)
-        attr = getattr(obj, attr_name)
-        if inspect.isfunction(attr):
-            filename = inspect.getmodule(obj).__name__.replace('.', '/')
-            lineno = inspect.getsourcelines(attr)[1]
-        else:
-            return None
-    else:
-        return None
+    # if len(parts) == 1:
+    #     obj = getattr(module, info['fullname'])
+    #     filename = inspect.getmodule(obj).__name__.replace('.', '/')
+    #     lineno = inspect.getsourcelines(obj)[1]
+    # elif len(parts) == 2:
+    #     obj_name, attr_name = parts
+    #     obj = getattr(module, obj_name)
+    #     attr = getattr(obj, attr_name)
+    #     if inspect.isfunction(attr):
+    #         filename = inspect.getmodule(obj).__name__.replace('.', '/')
+    #         lineno = inspect.getsourcelines(attr)[1]
+    #     else:
+    #         return None
+    # else:
+    #     return None
 
-    return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
+    # return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
 
 
 # extlinks
