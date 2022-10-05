@@ -17,18 +17,23 @@ from OCC.Core.ShapeFix import ShapeFix_Face
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.GeomConvert import GeomConvert_ApproxSurface
 from OCC.Core.GeomAbs import GeomAbs_Shape
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
+from OCC.Core.gp import gp_Pnt
 
 import compas.geometry
+
 from compas.data import Data
 from compas.geometry import Plane
 from compas.geometry import Cylinder
 from compas.geometry import Cone
 from compas.geometry import Sphere
 from compas.geometry import Torus
+from compas.geometry import Polygon
 
 from compas_occ.brep import BRepVertex
 from compas_occ.brep import BRepEdge
 from compas_occ.brep import BRepLoop
+
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_plane_to_occ_plane
 from compas_occ.conversions import compas_plane_from_occ_plane
@@ -37,12 +42,14 @@ from compas_occ.conversions import compas_cylinder_from_occ_cylinder
 from compas_occ.conversions import compas_cone_to_occ_cone
 from compas_occ.conversions import compas_sphere_to_occ_sphere
 from compas_occ.conversions import compas_torus_to_occ_torus
+
 from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
 
 
 class BRepFace(Data):
-    """Class representing a face in the BRep of a geometric shape.
+    """
+    Class representing a face in the BRep of a geometric shape.
 
     Parameters
     ----------
@@ -107,51 +114,34 @@ class BRepFace(Data):
                 "type": "nurbs",
                 "value": surface.data,
             }
+        elif self.is_plane:
+            plane = compas_plane_from_occ_plane(self.occ_adaptor.Plane())
+            surfacedata = {
+                "type": "plane",
+                "value": plane.data,
+            }
+        elif self.is_cylinder:
+            cylinder = compas_cylinder_from_occ_cylinder(self.occ_adaptor.Cylinder())
+            surfacedata = {
+                "type": "cylinder",
+                "value": cylinder.data,
+            }
+        elif self.is_cone:
+            raise NotImplementedError
+        elif self.is_sphere:
+            raise NotImplementedError
+        elif self.is_torus:
+            raise NotImplementedError
         else:
-            try:
-                convert = GeomConvert_ApproxSurface(
-                    self.surface,
-                    1e-3,
-                    GeomAbs_Shape.GeomAbs_C1,
-                    GeomAbs_Shape.GeomAbs_C1,
-                    5,
-                    5,
-                    1,
-                    1,
-                )
-                surface = OCCNurbsSurface()
-                surface.occ_surface = convert.Surface()
-                surfacedata = {
-                    "type": "nurbs",
-                    "value": surface.data,
-                }
-            except Exception:
-                if self.is_plane:
-                    plane = compas_plane_from_occ_plane(self.occ_adaptor.Plane())
-                    surfacedata = {
-                        "type": "plane",
-                        "value": plane.data,
-                    }
-                elif self.is_cylinder:
-                    cylinder = compas_cylinder_from_occ_cylinder(
-                        self.occ_adaptor.Cylinder()
-                    )
-                    surfacedata = {
-                        "type": "cylinder",
-                        "value": cylinder.data,
-                    }
-                elif self.is_cone:
-                    raise NotImplementedError
-                elif self.is_sphere:
-                    raise NotImplementedError
-                elif self.is_torus:
-                    raise NotImplementedError
-                else:
-                    raise
+            surface = self.try_get_nurbssurface()
+            surfacedata = {
+                "type": "nurbs",
+                "value": surface.data,
+            }
 
         return {
-            "boundary": boundary,
             "surface": surfacedata,
+            "boundary": boundary,
             "holes": holes,
         }
 
@@ -190,6 +180,8 @@ class BRepFace(Data):
     @occ_face.setter
     def occ_face(self, face: TopoDS_Face) -> None:
         self._occ_adaptor = None
+        self._surface = None
+        self._nurbssurface = None
         self._occ_face = topods_Face(face)
 
     @property
@@ -201,6 +193,20 @@ class BRepFace(Data):
     @property
     def orientation(self) -> TopAbs_Orientation:
         return self.occ_face.Orientation()
+
+    @property
+    def surface(self) -> OCCSurface:
+        if not self._surface:
+            self._surface = OCCSurface()
+            self._surface.occ_surface = self.occ_adaptor.Surface().Surface()
+        return self._surface
+
+    @property
+    def nurbssurface(self) -> OCCNurbsSurface:
+        if not self._nurbssurface:
+            self._nurbssurface = OCCNurbsSurface()
+            self._nurbssurface.occ_surface = self.occ_adaptor.BSpline()
+        return self._nurbssurface
 
     # ==============================================================================
     # Properties
@@ -265,20 +271,6 @@ class BRepFace(Data):
         return loops
 
     @property
-    def surface(self) -> OCCSurface:
-        if not self._surface:
-            self._surface = OCCSurface()
-            self._surface.occ_surface = self.occ_adaptor.Surface()
-        return self._surface
-
-    @property
-    def nurbssurface(self) -> OCCNurbsSurface:
-        if not self._nurbssurface:
-            self._nurbssurface = OCCNurbsSurface()
-            self._nurbssurface.occ_surface = self.occ_adaptor.BSpline()
-        return self._nurbssurface
-
-    @property
     def area(self) -> float:
         props = GProp_GProps()
         brepgprop_SurfaceProperties(self.occ_shape, props)
@@ -296,6 +288,27 @@ class BRepFace(Data):
     # ==============================================================================
 
     @classmethod
+    def from_polygon(cls, points: Polygon) -> "BRepFace":
+        """
+        Construct a BRep face from a polygon.
+
+        Parameters
+        ----------
+        polygon : :class:`compas.geometry.Polygon`
+
+        Returns
+        -------
+        :class:`BRepFace`
+
+        """
+        polygon = BRepBuilderAPI_MakePolygon()
+        for point in points:
+            polygon.Add(gp_Pnt(*point))
+        polygon.Close()
+        wire = polygon.Wire()
+        return cls(BRepBuilderAPI_MakeFace(wire).Face())
+
+    @classmethod
     def from_plane(
         cls,
         plane: Plane,
@@ -304,7 +317,8 @@ class BRepFace(Data):
         loop: BRepLoop = None,
         inside: bool = True,
     ) -> "BRepFace":
-        """Construct a face from a plane.
+        """
+        Construct a face from a plane.
 
         Parameters
         ----------
@@ -339,7 +353,8 @@ class BRepFace(Data):
     def from_cylinder(
         cls, cylinder: Cylinder, loop: BRepLoop = None, inside: bool = True
     ) -> "BRepFace":
-        """Construct a face from a cylinder.
+        """
+        Construct a face from a cylinder.
 
         Parameters
         ----------
@@ -367,7 +382,8 @@ class BRepFace(Data):
     def from_cone(
         cls, cone: Cone, loop: BRepLoop = None, inside: bool = True
     ) -> "BRepFace":
-        """Construct a face from a cone.
+        """
+        Construct a face from a cone.
 
         Parameters
         ----------
@@ -395,7 +411,8 @@ class BRepFace(Data):
     def from_sphere(
         cls, sphere: Sphere, loop: BRepLoop = None, inside: bool = True
     ) -> "BRepFace":
-        """Construct a face from a sphere.
+        """
+        Construct a face from a sphere.
 
         Parameters
         ----------
@@ -423,7 +440,8 @@ class BRepFace(Data):
     def from_torus(
         cls, torus: Torus, loop: BRepLoop = None, inside: bool = True
     ) -> "BRepFace":
-        """Construct a face from a torus.
+        """
+        Construct a face from a torus.
 
         Parameters
         ----------
@@ -457,7 +475,8 @@ class BRepFace(Data):
         loop: BRepLoop = None,
         inside: bool = True,
     ) -> "BRepFace":
-        """Construct a face from a surface.
+        """
+        Construct a face from a surface.
 
         Parameters
         ----------
@@ -499,8 +518,41 @@ class BRepFace(Data):
     # Methods
     # ==============================================================================
 
+    def try_get_nurbssurface(
+        self,
+        precision=1e-3,
+        u_continuity=None,
+        v_continuity=None,
+        u_maxdegree=5,
+        v_maxdegree=5,
+        u_maxsegments=1,
+        v_maxsegments=1,
+    ) -> OCCNurbsSurface:
+        """
+        Try to convert the underlying geometry to a Nurbs surface.
+
+        """
+        nurbs = OCCNurbsSurface()
+        try:
+            occ_surface = self.occ_adaptor.BSpline()
+        except Exception:
+            convert = GeomConvert_ApproxSurface(
+                self.occ_adaptor.Surface().Surface(),
+                precision,
+                GeomAbs_Shape.GeomAbs_C1,
+                GeomAbs_Shape.GeomAbs_C1,
+                u_maxdegree,
+                v_maxdegree,
+                u_maxsegments,
+                v_maxsegments,
+            )
+            occ_surface = convert.Surface()
+        nurbs.occ_surface = occ_surface
+        return nurbs
+
     def is_valid(self) -> bool:
-        """Verify that the face is valid.
+        """
+        Verify that the face is valid.
 
         Returns
         -------
@@ -510,7 +562,8 @@ class BRepFace(Data):
         return brepalgo_IsValid(self.occ_face)
 
     def fix(self) -> None:
-        """Try to fix the face.
+        """
+        Try to fix the face.
 
         Returns
         -------
@@ -522,7 +575,8 @@ class BRepFace(Data):
         self.occ_face = fixer.Face()
 
     def add_loop(self, loop: BRepLoop, reverse: bool = False) -> None:
-        """Add an inner loop to the face.
+        """
+        Add an inner loop to the face.
 
         Parameters
         ----------
@@ -544,7 +598,8 @@ class BRepFace(Data):
         self.occ_face = builder.Face()
 
     def add_loops(self, loops: List[BRepLoop], reverse: bool = False) -> None:
-        """Add an inner loop to the face.
+        """
+        Add an inner loop to the face.
 
         Parameters
         ----------
