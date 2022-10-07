@@ -36,9 +36,7 @@ from compas_occ.brep import BRepLoop
 
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_plane_to_occ_plane
-from compas_occ.conversions import compas_plane_from_occ_plane
 from compas_occ.conversions import compas_cylinder_to_occ_cylinder
-from compas_occ.conversions import compas_cylinder_from_occ_cylinder
 from compas_occ.conversions import compas_cone_to_occ_cone
 from compas_occ.conversions import compas_sphere_to_occ_sphere
 from compas_occ.conversions import compas_torus_to_occ_torus
@@ -105,65 +103,11 @@ class BRepFace(Data):
 
     @property
     def data(self):
-        boundary = self.loops[0].data
-        holes = [loop.data for loop in self.loops[1:]]
-
-        if self.is_bspline:
-            surface = self.nurbssurface
-            surfacedata = {
-                "type": "nurbs",
-                "value": surface.data,
-            }
-        elif self.is_plane:
-            plane = compas_plane_from_occ_plane(self.occ_adaptor.Plane())
-            surfacedata = {
-                "type": "plane",
-                "value": plane.data,
-            }
-        elif self.is_cylinder:
-            cylinder = compas_cylinder_from_occ_cylinder(self.occ_adaptor.Cylinder())
-            surfacedata = {
-                "type": "cylinder",
-                "value": cylinder.data,
-            }
-        elif self.is_cone:
-            raise NotImplementedError
-        elif self.is_sphere:
-            raise NotImplementedError
-        elif self.is_torus:
-            raise NotImplementedError
-        else:
-            surface = self.try_get_nurbssurface()
-            surfacedata = {
-                "type": "nurbs",
-                "value": surface.data,
-            }
-
-        return {
-            "surface": surfacedata,
-            "boundary": boundary,
-            "holes": holes,
-        }
+        raise NotImplementedError
 
     @data.setter
     def data(self, data):
-        loop = BRepLoop.from_data(data["boundary"])
-        for hole in data["holes"]:
-            pass
-
-        if data["surface"]["type"] == "nurbs":
-            surface = OCCNurbsSurface.from_data(data["surface"]["value"])
-            face = BRepFace.from_surface(surface, loop=loop)
-        elif data["surface"]["type"] == "plane":
-            plane = Plane.from_data(data["surface"]["value"])
-            face = BRepFace.from_plane(plane, loop=loop)
-        elif data["surface"]["type"] == "cylinder":
-            cylinder = Cylinder.from_data(data["surface"]["value"])
-            face = BRepFace.from_cylinder(cylinder, loop=loop)
-        else:
-            raise NotImplementedError
-
-        self.occ_face = face.occ_face
+        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties
