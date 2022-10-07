@@ -13,7 +13,7 @@ import importlib
 import sphinx_compas_theme
 from sphinx.ext.napoleon.docstring import NumpyDocstring
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 # -- General configuration ------------------------------------------------
 
@@ -24,14 +24,14 @@ release = "0.5.0"
 version = ".".join(release.split(".")[0:2])
 
 master_doc = "index"
-source_suffix = [".rst", ]
+source_suffix = [".rst"]
 templates_path = sphinx_compas_theme.get_autosummary_templates_path()
 exclude_patterns = []
 
-pygments_style   = "sphinx"
-show_authors     = True
+pygments_style = "sphinx"
+show_authors = True
 add_module_names = True
-language         = None
+language = None
 
 
 # -- Extension configuration ------------------------------------------------
@@ -69,7 +69,7 @@ autodoc_mock_imports = [
     "rhinoscriptsyntax",
     "bpy",
     "bmesh",
-    "mathutils"
+    "mathutils",
 ]
 
 autodoc_default_options = {
@@ -83,7 +83,7 @@ autoclass_content = "class"
 
 
 def skip(app, what, name, obj, would_skip, options):
-    if name.startswith('_'):
+    if name.startswith("_"):
         return True
     return would_skip
 
@@ -197,13 +197,13 @@ html_theme = "compaspkg"
 html_theme_path = sphinx_compas_theme.get_html_theme_path()
 
 html_theme_options = {
-    "package_name"    : "compas_occ",
-    "package_title"   : project,
-    "package_version" : release,
-    "package_author"  : "compas-dev",
-    "package_docs"    : "https://compas.dev/compas_occ/",
-    "package_repo"    : "https://github.com/compas-dev/compas_occ",
-    "package_old_versions_txt": "https://compas.dev/compas_occ/doc_versions.txt"
+    "package_name": "compas_occ",
+    "package_title": project,
+    "package_version": release,
+    "package_author": "compas-dev",
+    "package_docs": "https://compas.dev/compas_occ/",
+    "package_repo": "https://github.com/compas-dev/compas_occ",
+    "package_old_versions_txt": "https://compas.dev/compas_occ/doc_versions.txt",
 }
 
 html_context = {}
