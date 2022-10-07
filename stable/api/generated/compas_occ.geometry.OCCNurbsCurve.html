@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.5.0
+            0.6.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -99,8 +99,8 @@
 <h1>OCCNurbsCurve</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCNurbsCurve">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCNurbsCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_occ/blob/main/src/compas_occ/geometry/curves/nurbs.py#L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <a class="reference internal" href="compas_occ.geometry.OCCCurve.html#compas_occ.geometry.OCCCurve" title="compas_occ.geometry.curves.curve.OCCCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas_occ.geometry.curves.curve.OCCCurve</span></code></a>, <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.NurbsCurve.html#compas.geometry.NurbsCurve" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.curves.nurbs.NurbsCurve</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.geometry.</span></span><span class="sig-name descname"><span class="pre">OCCNurbsCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <a class="reference internal" href="compas_occ.geometry.OCCCurve.html#compas_occ.geometry.OCCCurve" title="compas_occ.geometry.curves.curve.OCCCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCCurve</span></code></a>, <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.NurbsCurve.html#compas.geometry.NurbsCurve" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NurbsCurve</span></code></a></p>
 <p>Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -108,7 +108,7 @@
 </dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>points</strong> (list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.16)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>], read-only) – The control points of the curve.</p></li>
+<li><p><strong>points</strong> (list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a>], read-only) – The control points of the curve.</p></li>
 <li><p><strong>weights</strong> (<em>list[float], read-only</em>) – The weights of the control points of the curve.</p></li>
 <li><p><strong>knots</strong> (<em>list[float], read-only</em>) – The knots of the curve, without multiplicities.</p></li>
 <li><p><strong>knotsequence</strong> (<em>list[float], read-only</em>) – The full vector of knots of the curve.</p></li>
@@ -152,7 +152,7 @@
 </code></pre></div>
 </div>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -200,7 +200,7 @@
 </tbody>
 </table>
 <p class="rubric">Inherited Methods</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -231,7 +231,7 @@
 <td><p>Divide the curve into a specific number of equal length segments.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.divide_by_length.html#compas_occ.geometry.OCCNurbsCurve.divide_by_length" title="compas_occ.geometry.OCCNurbsCurve.divide_by_length"><code class="xref py py-obj docutils literal notranslate"><span class="pre">divide_by_length</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Divide the curve into segments of a given length.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.embedded.html#compas_occ.geometry.OCCNurbsCurve.embedded" title="compas_occ.geometry.OCCNurbsCurve.embedded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">embedded</span></code></a></p></td>
 <td><p>Return a copy of the curve embedded in the parameter space of the surface.</p></td>
