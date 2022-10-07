@@ -10,14 +10,13 @@ invoke >=0.14
 ipykernel
 ipython >=5.8
 isort
-jinja2
-m2r
+jinja2 >= 3.0
+m2r2
 nbsphinx
 pydocstyle
-pytest >=3.2
-requests >=2.24
+pytest <7.1
 sphinx_compas_theme >=0.15.18
-sphinx
+sphinx ==4.5
 twine
 wheel
 -e .
