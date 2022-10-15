@@ -134,9 +134,9 @@ class OCCSurface(Surface):
         return cls.from_occ(srf)
 
     @classmethod
-    def from_plane(cls, plane: Plane) -> 'OCCSurface':
+    def from_plane(cls, plane: Plane) -> "OCCSurface":
         """Construct a surface from a plane.
-        
+
         Parameters
         ----------
         plane : :class:`compas.geometry.Plane`
@@ -503,4 +503,3 @@ class OCCSurface(Surface):
             point = compas_point_from_occ_point(pnt)
             points.append(point)
         return points
-
