@@ -5,6 +5,7 @@ from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Box
 from compas.geometry import Line
+from compas.geometry import Plane
 from compas.geometry import Surface
 from compas.geometry import Transformation
 from compas.datastructures import Mesh
@@ -25,6 +26,7 @@ from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BRepBndLib import brepbndlib_AddOBB
 
+from OCC.Core.Geom import Geom_Plane
 from OCC.Core.Geom import Geom_Surface
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
@@ -36,6 +38,7 @@ from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_vector_from_occ_vector
 from compas_occ.conversions import compas_frame_from_occ_ax3
 from compas_occ.conversions import compas_line_to_occ_line
+from compas_occ.conversions import compas_plane_to_occ_plane
 
 
 class OCCSurface(Surface):
@@ -128,6 +131,24 @@ class OCCSurface(Surface):
 
         """
         srf = BRep_Tool_Surface(face)
+        return cls.from_occ(srf)
+
+    @classmethod
+    def from_plane(cls, plane: Plane) -> 'OCCSurface':
+        """Construct a surface from a plane.
+        
+        Parameters
+        ----------
+        plane : :class:`compas.geometry.Plane`
+            The plane.
+
+        Returns
+        -------
+        :class:`OCCSurface`
+
+        """
+        plane = compas_plane_to_occ_plane(plane)
+        srf = Geom_Plane(plane)
         return cls.from_occ(srf)
 
     # ==============================================================================
@@ -462,3 +483,24 @@ class OCCSurface(Surface):
             point = compas_point_from_occ_point(pnt)
             points.append(point)
         return points
+
+    def intersections_with_curve(self, curve: OCCCurve) -> List[Point]:
+        """Compute the intersections with a curve.
+
+        Parameters
+        ----------
+        curve : :class:`compas_occ.geometry.OCCCurve`
+
+        Returns
+        -------
+        list[:class:`compas.geometry.Point`]
+
+        """
+        intersection = GeomAPI_IntCS(curve.occ_curve, self.occ_surface)
+        points = []
+        for index in range(intersection.NbPoints()):
+            pnt = intersection.Point(index + 1)
+            point = compas_point_from_occ_point(pnt)
+            points.append(point)
+        return points
+

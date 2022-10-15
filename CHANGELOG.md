@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.geometry.OCCSurface.from_plane`.
+* Added `compas_occ.geometry.OCCSurface.intersections_with_curve`.
+
 ### Changed
 
 * Fixed bug in `compas_occ.brep.BRep.transform`.
