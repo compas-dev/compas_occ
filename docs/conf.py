@@ -13,25 +13,25 @@ import importlib
 import sphinx_compas_theme
 from sphinx.ext.napoleon.docstring import NumpyDocstring
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 
 # -- General configuration ------------------------------------------------
 
 project = "COMPAS OCC"
 copyright = "Block Research Group - ETH Zurich"
 author = "tom van mele"
-release = "0.5.0"
+release = "0.6.0"
 version = ".".join(release.split(".")[0:2])
 
 master_doc = "index"
-source_suffix = [".rst", ]
+source_suffix = [".rst"]
 templates_path = sphinx_compas_theme.get_autosummary_templates_path()
 exclude_patterns = []
 
-pygments_style   = "sphinx"
-show_authors     = True
+pygments_style = "sphinx"
+show_authors = True
 add_module_names = True
-language         = None
+language = None
 
 
 # -- Extension configuration ------------------------------------------------
@@ -69,7 +69,7 @@ autodoc_mock_imports = [
     "rhinoscriptsyntax",
     "bpy",
     "bmesh",
-    "mathutils"
+    "mathutils",
 ]
 
 autodoc_default_options = {
@@ -83,7 +83,7 @@ autoclass_content = "class"
 
 
 def skip(app, what, name, obj, would_skip, options):
-    if name.startswith('_'):
+    if name.startswith("_"):
         return True
     return would_skip
 
@@ -153,37 +153,38 @@ intersphinx_mapping = {
 
 
 def linkcode_resolve(domain, info):
-    if domain != 'py':
-        return None
-    if not info['module']:
-        return None
-    if not info['fullname']:
-        return None
+    pass
+    # if domain != 'py':
+    #     return None
+    # if not info['module']:
+    #     return None
+    # if not info['fullname']:
+    #     return None
 
-    package = info['module'].split('.')[0]
-    if not package.startswith('compas_occ'):
-        return None
+    # package = info['module'].split('.')[0]
+    # if not package.startswith('compas_occ'):
+    #     return None
 
-    module = importlib.import_module(info['module'])
-    parts = info['fullname'].split('.')
+    # module = importlib.import_module(info['module'])
+    # parts = info['fullname'].split('.')
 
-    if len(parts) == 1:
-        obj = getattr(module, info['fullname'])
-        filename = inspect.getmodule(obj).__name__.replace('.', '/')
-        lineno = inspect.getsourcelines(obj)[1]
-    elif len(parts) == 2:
-        obj_name, attr_name = parts
-        obj = getattr(module, obj_name)
-        attr = getattr(obj, attr_name)
-        if inspect.isfunction(attr):
-            filename = inspect.getmodule(obj).__name__.replace('.', '/')
-            lineno = inspect.getsourcelines(attr)[1]
-        else:
-            return None
-    else:
-        return None
+    # if len(parts) == 1:
+    #     obj = getattr(module, info['fullname'])
+    #     filename = inspect.getmodule(obj).__name__.replace('.', '/')
+    #     lineno = inspect.getsourcelines(obj)[1]
+    # elif len(parts) == 2:
+    #     obj_name, attr_name = parts
+    #     obj = getattr(module, obj_name)
+    #     attr = getattr(obj, attr_name)
+    #     if inspect.isfunction(attr):
+    #         filename = inspect.getmodule(obj).__name__.replace('.', '/')
+    #         lineno = inspect.getsourcelines(attr)[1]
+    #     else:
+    #         return None
+    # else:
+    #     return None
 
-    return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
+    # return f"https://github.com/compas-dev/compas_occ/blob/main/src/{filename}.py#L{lineno}"
 
 
 # extlinks
@@ -196,13 +197,13 @@ html_theme = "compaspkg"
 html_theme_path = sphinx_compas_theme.get_html_theme_path()
 
 html_theme_options = {
-    "package_name"    : "compas_occ",
-    "package_title"   : project,
-    "package_version" : release,
-    "package_author"  : "compas-dev",
-    "package_docs"    : "https://compas.dev/compas_occ/",
-    "package_repo"    : "https://github.com/compas-dev/compas_occ",
-    "package_old_versions_txt": "https://compas.dev/compas_occ/doc_versions.txt"
+    "package_name": "compas_occ",
+    "package_title": project,
+    "package_version": release,
+    "package_author": "compas-dev",
+    "package_docs": "https://compas.dev/compas_occ/",
+    "package_repo": "https://github.com/compas-dev/compas_occ",
+    "package_old_versions_txt": "https://compas.dev/compas_occ/doc_versions.txt",
 }
 
 html_context = {}

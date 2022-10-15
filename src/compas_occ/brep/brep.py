@@ -4,6 +4,7 @@ import compas.geometry
 import compas.datastructures
 
 from compas.data import Data
+from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Transformation
 from compas.geometry import Translation
@@ -62,6 +63,7 @@ from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape
 from OCC.Core.TopExp import topexp_MapShapesAndUniqueAncestors
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
 
 # from OCC.Core.TopExp import topexp_MapShapesAndAncestors
 # from OCC.Core.TopExp import topexp_FirstVertex
@@ -73,6 +75,7 @@ from compas_occ.conversions import ngon_to_face
 from compas_occ.conversions import points1_from_array1
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import compas_point_from_occ_point
+from compas_occ.conversions import compas_vector_to_occ_vector
 
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
@@ -84,7 +87,8 @@ from compas_occ.brep import BRepFace
 
 
 class BRep(Data):
-    """Class for Boundary Representation of geometric entities.
+    """
+    Class for Boundary Representation of geometric entities.
 
     Attributes
     ----------
@@ -184,7 +188,8 @@ class BRep(Data):
     # ==============================================================================
 
     def __add__(self, other):
-        """Compute the boolean union using the "+" operator of this BRep and another.
+        """
+        Compute the boolean union using the "+" operator of this BRep and another.
 
         Parameters
         ----------
@@ -200,7 +205,8 @@ class BRep(Data):
         return BRep.from_boolean_union(self, other)
 
     def __sub__(self, other):
-        """Compute the boolean difference using the "-" operator of this shape and another.
+        """
+        Compute the boolean difference using the "-" operator of this shape and another.
 
         Parameters
         ----------
@@ -216,7 +222,8 @@ class BRep(Data):
         return BRep.from_boolean_difference(self, other)
 
     def __and__(self, other):
-        """Compute the boolean intersection using the "&" operator of this shape and another.
+        """
+        Compute the boolean intersection using the "&" operator of this shape and another.
 
         Parameters
         ----------
@@ -445,7 +452,8 @@ class BRep(Data):
 
     @classmethod
     def from_shape(cls, shape: TopoDS_Shape) -> "BRep":
-        """Construct a BRep from an OCC shape.
+        """
+        Construct a BRep from an OCC shape.
 
         Parameters
         ----------
@@ -463,7 +471,8 @@ class BRep(Data):
 
     @classmethod
     def from_step(cls, filename: str) -> "BRep":
-        """Conctruct a BRep from the data contained in a STEP file.
+        """
+        Conctruct a BRep from the data contained in a STEP file.
 
         Parameters
         ----------
@@ -479,7 +488,8 @@ class BRep(Data):
 
     @classmethod
     def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> "BRep":
-        """Construct a BRep from a set of polygons.
+        """
+        Construct a BRep from a set of polygons.
 
         Parameters
         ----------
@@ -507,7 +517,8 @@ class BRep(Data):
 
     @classmethod
     def from_curves(cls, curves: List[compas.geometry.NurbsCurve]) -> "BRep":
-        """Construct a BRep from a set of curves.
+        """
+        Construct a BRep from a set of curves.
 
         Parameters
         ----------
@@ -522,7 +533,8 @@ class BRep(Data):
 
     @classmethod
     def from_box(cls, box: compas.geometry.Box) -> "BRep":
-        """Construct a BRep from a COMPAS box.
+        """
+        Construct a BRep from a COMPAS box.
 
         Parameters
         ----------
@@ -543,7 +555,8 @@ class BRep(Data):
 
     @classmethod
     def from_sphere(cls, sphere: compas.geometry.Sphere) -> "BRep":
-        """Construct a BRep from a COMPAS sphere.
+        """
+        Construct a BRep from a COMPAS sphere.
 
         Parameters
         ----------
@@ -559,7 +572,8 @@ class BRep(Data):
 
     @classmethod
     def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> "BRep":
-        """Construct a BRep from a COMPAS cylinder.
+        """
+        Construct a BRep from a COMPAS cylinder.
 
         Parameters
         ----------
@@ -581,7 +595,8 @@ class BRep(Data):
 
     @classmethod
     def from_cone(cls, cone: compas.geometry.Cone) -> "BRep":
-        """Construct a BRep from a COMPAS cone.
+        """
+        Construct a BRep from a COMPAS cone.
 
         Parameters
         ----------
@@ -596,7 +611,8 @@ class BRep(Data):
 
     @classmethod
     def from_torus(cls, torus: compas.geometry.Torus) -> "BRep":
-        """Construct a BRep from a COMPAS torus.
+        """
+        Construct a BRep from a COMPAS torus.
 
         Parameters
         ----------
@@ -611,7 +627,8 @@ class BRep(Data):
 
     @classmethod
     def from_mesh(cls, mesh: compas.datastructures.Mesh) -> "BRep":
-        """Construct a BRep from a COMPAS mesh.
+        """
+        Construct a BRep from a COMPAS mesh.
 
         Parameters
         ----------
@@ -640,7 +657,8 @@ class BRep(Data):
 
     @classmethod
     def from_faces(cls, faces: List[BRepFace]) -> "BRep":
-        """Make a BRep from a list of BRep faces forming an open or closed shell.
+        """
+        Make a BRep from a list of BRep faces forming an open or closed shell.
 
         Parameters
         ----------
@@ -664,16 +682,46 @@ class BRep(Data):
         return brep
 
     @classmethod
-    def from_extrusion(cls, curve, vector) -> "BRep":
-        """Construct a BRep by extruding a closed curve along a direction vector."""
-        pass
+    def from_extrusion(
+        cls,
+        profile: Union[BRepEdge, BRepFace],
+        vector: Vector,
+    ) -> "BRep":
+        """
+        Construct a BRep by extruding a closed curve along a direction vector.
+
+        References
+        ----------
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_prim_a_p_i___make_prism.html
+
+        """
+        brep = cls()
+        brep.occ_shape = BRepPrimAPI_MakePrism(
+            profile.occ_shape,
+            compas_vector_to_occ_vector(vector),
+        ).Shape()
+        return brep
 
     @classmethod
-    def from_sweep(cls, profile: Union[BRepEdge, BRepFace], path: BRepLoop) -> "BRep":
-        """Construct a BRep by sweeping a profile along a path."""
+    def from_sweep(
+        cls,
+        profile: Union[BRepEdge, BRepFace],
+        path: BRepLoop,
+    ) -> "BRep":
+        """
+        Construct a BRep by sweeping a profile along a path.
+
+        References
+        ----------
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_prim_a_p_i___make_sweep.html
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe.html
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe_shell.html
+
+        """
         brep = cls()
         brep.occ_shape = BRepOffsetAPI_MakePipe(
-            path.occ_wire, profile.occ_shape
+            path.occ_wire,
+            profile.occ_shape,
         ).Shape()
         return brep
 
@@ -686,7 +734,8 @@ class BRep(Data):
 
     @classmethod
     def from_boolean_difference(cls, A: "BRep", B: "BRep") -> "BRep":
-        """Construct a BRep from the boolean difference of two other BReps.
+        """
+        Construct a BRep from the boolean difference of two other BReps.
 
         Parameters
         ----------
@@ -709,7 +758,8 @@ class BRep(Data):
 
     @classmethod
     def from_boolean_intersection(cls, A: "BRep", B: "BRep") -> "BRep":
-        """Construct a BRep from the boolean intersection of two other BReps.
+        """
+        Construct a BRep from the boolean intersection of two other BReps.
 
         Parameters
         ----------
@@ -732,7 +782,8 @@ class BRep(Data):
 
     @classmethod
     def from_boolean_union(cls, A: "BRep", B: "BRep") -> "BRep":
-        """Construct a BRep from the boolean union of two other BReps.
+        """
+        Construct a BRep from the boolean union of two other BReps.
 
         Parameters
         ----------
@@ -758,7 +809,8 @@ class BRep(Data):
     # ==============================================================================
 
     def to_json(self, filepath: str):
-        """Export the BRep to a JSON file.
+        """
+        Export the BRep to a JSON file.
 
         Parameters
         ----------
@@ -774,7 +826,8 @@ class BRep(Data):
             self.occ_shape.DumpJson(f)
 
     def to_step(self, filepath: str, schema: str = "AP203", unit: str = "M") -> None:
-        """Write the BRep shape to a STEP file.
+        """
+        Write the BRep shape to a STEP file.
 
         Parameters
         ----------
@@ -799,7 +852,8 @@ class BRep(Data):
         assert status == IFSelect_RetDone, status
 
     def to_tesselation(self, linear_deflection: float = 1e-3) -> Mesh:
-        """Create a tesselation of the shape for visualisation.
+        """
+        Create a tesselation of the shape for visualisation.
 
         Parameters
         ----------
@@ -817,7 +871,9 @@ class BRep(Data):
         for face in self.faces:
             location = TopLoc_Location()
             triangulation = bt.Triangulation(face.occ_face, location)
-            nodes = triangulation.Nodes()
+            nodes = []
+            for i in range(1, triangulation.NbNodes() + 1):
+                nodes.append(triangulation.Node(i))
             vertices = points1_from_array1(nodes)
             faces = []
             triangles = triangulation.Triangles()
@@ -830,7 +886,8 @@ class BRep(Data):
         return mesh
 
     def to_meshes(self, u=16, v=16):
-        """Convert the faces of the BRep shape to meshes.
+        """
+        Convert the faces of the BRep shape to meshes.
 
         Parameters
         ----------
@@ -854,7 +911,8 @@ class BRep(Data):
         return meshes
 
     def to_polygons(self):
-        """Convert the faces of the BRep to simple polygons without underlying geometry."""
+        """
+        Convert the faces of the BRep to simple polygons without underlying geometry."""
         polygons = []
         for face in self.faces:
             points = []
@@ -864,7 +922,8 @@ class BRep(Data):
         return polygons
 
     def to_viewmesh(self, linear_deflection=1e-3):
-        """Convert the BRep to a view mesh."""
+        """
+        Convert the BRep to a view mesh."""
         lines = []
         for edge in self.edges:
             if edge.is_line:
@@ -884,7 +943,8 @@ class BRep(Data):
     # ==============================================================================
 
     def vertex_neighbors(self, vertex: BRepVertex) -> List[BRepVertex]:
-        """Identify the neighbouring vertices of a given vertex.
+        """
+        Identify the neighbouring vertices of a given vertex.
 
         Parameters
         ----------
@@ -913,7 +973,8 @@ class BRep(Data):
         return vertices
 
     def vertex_edges(self, vertex: BRepVertex) -> List[BRepEdge]:
-        """Identify the edges connected to a given vertex.
+        """
+        Identify the edges connected to a given vertex.
 
         Parameters
         ----------
@@ -938,7 +999,8 @@ class BRep(Data):
         return edges
 
     def vertex_faces(self, vertex: BRepVertex) -> List[BRepFace]:
-        """Identify the faces connected to a vertex.
+        """
+        Identify the faces connected to a vertex.
 
         Parameters
         ----------
@@ -982,7 +1044,8 @@ class BRep(Data):
     # unjoin edges
 
     def make_solid(self):
-        """Convert the current shape to a solid if it is a shell.
+        """
+        Convert the current shape to a solid if it is a shell.
 
         Returns
         -------
@@ -993,7 +1056,8 @@ class BRep(Data):
             self.occ_shape = BRepBuilderAPI_MakeSolid(self.occ_shape).Shape()
 
     def check(self):
-        """Check the shape.
+        """
+        Check the shape.
 
         Returns
         -------
@@ -1006,7 +1070,8 @@ class BRep(Data):
             print(BRepCheck_Status(check.Orientation()))
 
     def sew(self):
-        """Sew together the individual parts of the shape.
+        """
+        Sew together the individual parts of the shape.
 
         Returns
         -------
@@ -1020,7 +1085,8 @@ class BRep(Data):
             self.occ_shape = sewer.SewedShape()
 
     def fix(self):
-        """Fix the shell.
+        """
+        Fix the shell.
 
         Returns
         -------
@@ -1033,7 +1099,8 @@ class BRep(Data):
             self.occ_shape = fixer.Shell()
 
     def cull_unused_vertices(self) -> None:
-        """Remove all unused vertices.
+        """
+        Remove all unused vertices.
 
         Returns
         -------
@@ -1043,7 +1110,8 @@ class BRep(Data):
         pass
 
     def cull_unused_edges(self) -> None:
-        """Remove all unused edges.
+        """
+        Remove all unused edges.
 
         Returns
         -------
@@ -1053,7 +1121,8 @@ class BRep(Data):
         pass
 
     def cull_unused_loops(self) -> None:
-        """Remove all unused loops.
+        """
+        Remove all unused loops.
 
         Returns
         -------
@@ -1063,7 +1132,8 @@ class BRep(Data):
         pass
 
     def cull_unused_faces(self) -> None:
-        """Remove all unused faces.
+        """
+        Remove all unused faces.
 
         Returns
         -------
@@ -1073,7 +1143,8 @@ class BRep(Data):
         pass
 
     def transform(self, matrix: compas.geometry.Transformation) -> None:
-        """Transform this BRep.
+        """
+        Transform this BRep.
 
         Parameters
         ----------
@@ -1091,7 +1162,8 @@ class BRep(Data):
         self._occ_shape = shape
 
     def transformed(self, matrix: compas.geometry.Transformation) -> "BRep":
-        """Return a transformed copy of the BRep.
+        """
+        Return a transformed copy of the BRep.
 
         Parameters
         ----------
@@ -1111,7 +1183,8 @@ class BRep(Data):
     def contours(
         self, planes: List[compas.geometry.Plane]
     ) -> List[List[compas.geometry.Polyline]]:
-        """Generate contour lines by slicing the BRep shape with a series of planes.
+        """
+        Generate contour lines by slicing the BRep shape with a series of planes.
 
         Parameters
         ----------
@@ -1127,7 +1200,8 @@ class BRep(Data):
         raise NotImplementedError
 
     def slice(self, plane: compas.geometry.Plane) -> BRepFace:
-        """Slice through the BRep with a plane.
+        """
+        Slice through the BRep with a plane.
 
         Parameters
         ----------
@@ -1145,7 +1219,8 @@ class BRep(Data):
             return BRep.from_shape(section.Shape())
 
     def split(self, other: "BRep") -> List["BRep"]:
-        """Split a BRep using another BRep as splitter.
+        """
+        Split a BRep using another BRep as splitter.
 
         Parameters
         ----------
@@ -1166,7 +1241,8 @@ class BRep(Data):
     def overlap(
         self, other: "BRep", deflection: float = 1e-3, tolerance: float = 0.0
     ) -> Tuple[List[BRepFace], List[BRepFace]]:
-        """Compute the overlap between this BRep and another.
+        """
+        Compute the overlap between this BRep and another.
 
         Parameters
         ----------

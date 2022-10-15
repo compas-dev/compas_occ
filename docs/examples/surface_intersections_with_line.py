@@ -67,7 +67,9 @@ for col in zip(*surface.points):
 view.add(Collection(intersections), pointsize=30, pointcolor=(0, 0, 1))
 
 for x in intersections:
-    view.add(Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1))
+    view.add(
+        Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1)
+    )
 
 view.add(surface.to_mesh(), show_lines=False)
 

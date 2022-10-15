@@ -539,7 +539,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> 'OCCNurbsSurface':
+    def copy(self) -> "OCCNurbsSurface":
         """Make an independent copy of the current surface.
 
         Returns

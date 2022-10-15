@@ -14,8 +14,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Fixed bug in `compas_occ.brep.BRep.transform`.
-* Changed `vertices`, `edges`, `loops`, `faces`, `shells`, `solids` attributes of `compas_occ.brep.BRep` to only be recreated once unerlying shape is changed.
+### Removed
+
+
+## [0.6.0] 2022-10-07
+
+### Added
+
+* Added `BRep.from_polygons`.
+* Added `BRep.from_extrusion`.
+* Added `BRep.from_sweep`.
+* Added `BRep.to_viewmesh`.
+* Added `BRep.overlap`.
+* Added `BRepFace.from_polygon`.
+
+### Changed
+
+* Fixed bug in `BRep.transform`.
+* Changed `BRep.vertices`, `BRep.edges`, `BRep.loops`, `BRep.faces`, `BRep.shells`, `BRep.solids` to only be recreated once unerlying shape is changed.
+* Changed implementation of `BRep.to_tessellation` to use range loop over individual nodes of triangulation instead of node list accessor.
 
 ### Removed
 

@@ -7,6 +7,7 @@ from compas.geometry import Line
 from compas.geometry import Plane
 from compas.geometry import Frame
 from compas.geometry import Circle
+from compas.geometry import Ellipse
 from compas.geometry import Sphere
 from compas.geometry import Cylinder
 from compas.geometry import Cone
@@ -22,6 +23,7 @@ from OCC.Core.gp import gp_Vec2d
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Lin
 from OCC.Core.gp import gp_Circ
+from OCC.Core.gp import gp_Elips
 from OCC.Core.gp import gp_Pln
 from OCC.Core.gp import gp_Sphere
 from OCC.Core.gp import gp_Cylinder
@@ -404,10 +406,25 @@ def compas_circle_to_occ_circle(circle: Circle) -> gp_Circ:
 
 
 def compas_circle_from_occ_circle(circ: gp_Circ, cls: Type[Circle] = None) -> Circle:
-    """Construct a COMPAS circle from an OCC circle."""
+    """
+    Construct a COMPAS circle from an OCC circle.
+    """
     cls = cls or Circle
     point, vector = compas_axis_from_occ_axis(circ.Axis())
     return cls(Plane(point, vector), circ.Radius())
+
+
+def compas_ellipse_from_occ_ellipse(
+    elips: gp_Elips, cls: Type[Ellipse] = None
+) -> Ellipse:
+    """
+    Construc a COMPAS ellipse from an OCC ellipse.
+    """
+    # cls = cls or Ellipse
+    # return cls(Plane(), major, minor)
+    # this will only work in COMPAS 2.0
+    # when we have a local coordinate system for all parametric shapes.
+    raise NotImplementedError
 
 
 def compas_sphere_to_occ_sphere(sphere: Sphere) -> gp_Sphere:

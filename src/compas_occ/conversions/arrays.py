@@ -25,7 +25,7 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
     """
     array = TColgp_Array1OfPnt(1, len(points))
     for index, point in enumerate(points):
-        array.SetValue(index + 1, gp_Pnt(* point))
+        array.SetValue(index + 1, gp_Pnt(*point))
     return array
 
 
@@ -43,7 +43,7 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
     """
     array = TColgp_HArray1OfPnt(1, len(points))
     for index, point in enumerate(points):
-        array.SetValue(index + 1, gp_Pnt(* point))
+        array.SetValue(index + 1, gp_Pnt(*point))
     return array
 
 
@@ -74,13 +74,13 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     TColgp_Array2OfPnt
 
     """
-    points = list(zip(* points))
+    points = list(zip(*points))
     rows = len(points)
     cols = len(points[0])
     array = TColgp_Array2OfPnt(1, rows, 1, cols)
     for i, row in enumerate(points):
         for j, point in enumerate(row):
-            array.SetValue(i + 1, j + 1, gp_Pnt(* point))
+            array.SetValue(i + 1, j + 1, gp_Pnt(*point))
     return array
 
 
@@ -152,7 +152,7 @@ def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
     TColStd_Array2OfReal
 
     """
-    numbers = list(zip(* numbers))
+    numbers = list(zip(*numbers))
     rows = len(numbers)
     cols = len(numbers[0])
     array = TColStd_Array2OfReal(1, rows, 1, cols)
@@ -181,4 +181,4 @@ def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
             number = array.Value(i, j)
             row.append(number)
         numbers.append(row)
-    return list(zip(* numbers))
+    return list(zip(*numbers))

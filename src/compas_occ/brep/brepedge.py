@@ -16,6 +16,8 @@ from OCC.Core.GProp import GProp_GProps
 from OCC.Core.GeomConvert import GeomConvert_ApproxCurve
 from OCC.Core.GeomAbs import GeomAbs_Shape
 
+# from OCC.Core.Adaptor3d import Adaptor3d_CurveOnSurface
+
 from compas.data import Data
 from compas.geometry import Point
 from compas.geometry import Line
@@ -24,13 +26,10 @@ from compas.geometry import Circle
 from compas.geometry import Ellipse
 
 from compas_occ.brep import BRepVertex
-from compas_occ.conversions import (
-    compas_line_to_occ_line,
-    compas_point_to_occ_point,
-    compas_circle_to_occ_circle,
-    compas_line_from_occ_line,
-    compas_circle_from_occ_circle,
-)
+from compas_occ.conversions import compas_line_to_occ_line
+from compas_occ.conversions import compas_point_to_occ_point
+from compas_occ.conversions import compas_circle_to_occ_circle
+
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCSurface
@@ -108,61 +107,11 @@ class BRepEdge(Data):
 
     @property
     def data(self):
-        if self.is_bspline:
-            curve = self.nurbscurve
-            return {
-                "type": "nurbs",
-                "value": curve.data,
-                "points": [self.vertices[0].point, self.vertices[-1].point],
-            }
-
-        try:
-            convert = GeomConvert_ApproxCurve(
-                self.curve, 1e-3, GeomAbs_Shape.GeomAbs_C1, 1, 5
-            )
-            curve = OCCNurbsCurve()
-            curve.occ_curve = convert.Curve()
-            data = {
-                "type": "nurbs",
-                "value": curve.data,
-                "points": [self.vertices[0].point, self.vertices[-1].point],
-            }
-        except Exception:
-            if self.is_line:
-                line = compas_line_from_occ_line(self.occ_adaptor.Line())
-                data = {
-                    "type": "line",
-                    "value": line.data,
-                    "points": [self.vertices[0].point, self.vertices[-1].point],
-                }
-            elif self.is_circle:
-                circle = compas_circle_from_occ_circle(self.occ_adaptor.Circle())
-                data = {
-                    "type": "circle",
-                    "value": circle.data,
-                    "points": [self.vertices[0].point, self.vertices[-1].point],
-                }
-            else:
-                raise
-        return data
+        raise NotImplementedError
 
     @data.setter
     def data(self, data):
-        if data["type"] == "nurbs":
-            curve = OCCNurbsCurve.from_data(data["value"])
-            points = data["points"]
-            edge = BRepEdge.from_curve(curve, points=points)
-        elif data["type"] == "line":
-            line = Line.from_data(data["value"])
-            points = data["points"]
-            edge = BRepEdge.from_line(line, points=points)
-        elif data["type"] == "circle":
-            circle = Circle.from_data(data["value"])
-            points = data["points"]
-            edge = BRepEdge.from_circle(circle, points=points)
-        else:
-            raise NotImplementedError
-        self.occ_edge = edge.occ_edge
+        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties
@@ -179,6 +128,8 @@ class BRepEdge(Data):
     @occ_edge.setter
     def occ_edge(self, edge: TopoDS_Edge) -> None:
         self._occ_adaptor = None
+        self._curve = None
+        self._nurbscurve = None
         self._occ_edge = topods_Edge(edge)
 
     @property
@@ -191,6 +142,21 @@ class BRepEdge(Data):
     def orientation(self) -> TopAbs_Orientation:
         return self.occ_edge.Orientation()
 
+    @property
+    def curve(self) -> OCCCurve:
+        if not self._curve:
+            self._curve = OCCCurve()
+            self._curve.occ_curve = self.occ_adaptor.Curve()
+        return self._curve
+
+    @property
+    def nurbscurve(self) -> OCCNurbsCurve:
+        if not self._nurbscurve:
+            self._nurbscurve = OCCNurbsCurve()
+            occ_curve = self.occ_adaptor.BSpline()
+            self._nurbscurve.occ_curve = occ_curve
+        return self._nurbscurve
+
     # ==============================================================================
     # Properties
     # ==============================================================================
@@ -198,6 +164,10 @@ class BRepEdge(Data):
     @property
     def type(self) -> int:
         return BRepEdge.CurveType(self.occ_adaptor.GetType())
+
+    @property
+    def is_curve2d(self) -> bool:
+        return self.type == BRepEdge.CurveType.Curve2D
 
     @property
     def is_line(self) -> bool:
@@ -252,20 +222,6 @@ class BRepEdge(Data):
     @property
     def last_vertex(self) -> BRepVertex:
         return BRepVertex(topexp_LastVertex(self.occ_edge))
-
-    @property
-    def curve(self) -> OCCCurve:
-        if not self._curve:
-            self._curve = OCCCurve()
-            self._curve.occ_curve = self.occ_adaptor.Curve()
-        return self._curve
-
-    @property
-    def nurbscurve(self) -> OCCNurbsCurve:
-        if not self._nurbscurve:
-            self._nurbscurve = OCCNurbsCurve()
-            self._nurbscurve.occ_curve = self.occ_adaptor.BSpline()
-        return self._nurbscurve
 
     @property
     def length(self) -> float:
@@ -604,3 +560,27 @@ class BRepEdge(Data):
     # ==============================================================================
     # Methods
     # ==============================================================================
+
+    def try_get_nurbscurve(
+        self,
+        precision=1e-3,
+        continuity=None,
+        maxsegments=1,
+        maxdegree=5,
+    ) -> OCCNurbsCurve:
+        """Try to convert the underlying geometry to a Nurbs curve."""
+        nurbs = OCCNurbsCurve()
+        try:
+            occ_curve = self.occ_adaptor.BSpline()
+        except Exception as e:  # noqa: E722
+            print(e)
+            convert = GeomConvert_ApproxCurve(
+                self.occ_adaptor,
+                precision,
+                GeomAbs_Shape.GeomAbs_C1,
+                maxsegments,
+                maxdegree,
+            )
+            occ_curve = convert.Curve()
+        nurbs.occ_curve = occ_curve
+        return nurbs
