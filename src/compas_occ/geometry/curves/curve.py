@@ -623,6 +623,9 @@ class OCCCurve(Curve):
     def embedded(self, surface) -> "OCCCurve":
         """Return a copy of the curve embedded in the parameter space of the surface.
 
+        Note that no implicit projection will be performed.
+        Therefore, the curve should already lie on the surface.
+
         Parameters
         ----------
         surface : :class:`compas_occ.geometry.OCCSurface`
@@ -648,7 +651,7 @@ class OCCCurve(Curve):
         direction : :class:`compas.geometry.Vector`
             The offset direction.
             Note that this direction defines the normal of the offset plane.
-            At every point of the curve, a positive offset ditance
+            At every point of the curve, a positive offset distance
             will generate a corresponding offset point in the direction of
             the cross product vector of the curve tangent and the offset plane normal.
 

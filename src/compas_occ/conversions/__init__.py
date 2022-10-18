@@ -105,6 +105,7 @@ from .primitives import compas_circle_to_occ_circle  # noqa: F401
 from .primitives import compas_circle_from_occ_circle  # noqa: F401
 from .primitives import compas_frame_from_occ_ax3  # noqa: F401
 from .primitives import compas_sphere_to_occ_sphere  # noqa: F401
+from .primitives import compas_sphere_from_occ_sphere  # noqa: F401
 from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
 from .primitives import compas_cylinder_from_occ_cylinder  # noqa: F401
 from .primitives import compas_cone_to_occ_cone  # noqa: F401

@@ -389,6 +389,14 @@ def compas_frame_from_occ_ax3(position: gp_Ax3, cls: Type[Frame] = None) -> Fram
     )
 
 
+def compas_frame_to_occ_ax2(frame: Frame) -> gp_Ax2:
+    return gp_Ax2(
+        compas_point_to_occ_point(frame.point),
+        compas_vector_to_occ_direction(frame.zaxis),
+        compas_vector_to_occ_direction(frame.xaxis),
+    )
+
+
 def compas_circle_to_occ_circle(circle: Circle) -> gp_Circ:
     """Construct an OCC circle from a COMPAS circle.
 
@@ -427,6 +435,14 @@ def compas_ellipse_from_occ_ellipse(
     raise NotImplementedError
 
 
+def compas_ellipse_to_occ_ellipse(ellipse: Ellipse, frame: Frame) -> gp_Elips:
+    return gp_Elips(
+        compas_frame_to_occ_ax2(frame),
+        ellipse.major,
+        ellipse.minor,
+    )
+
+
 def compas_sphere_to_occ_sphere(sphere: Sphere) -> gp_Sphere:
     """Convert a COMPAS sphere to an OCC sphere.
 
@@ -442,6 +458,12 @@ def compas_sphere_to_occ_sphere(sphere: Sphere) -> gp_Sphere:
     """
     plane = Plane(sphere.point, [0, 0, 1])
     return gp_Sphere(compas_plane_to_occ_ax3(plane), sphere.radius)
+
+
+def compas_sphere_from_occ_sphere(sphere: gp_Sphere) -> Sphere:
+    point = compas_point_from_occ_point(sphere.Location())
+    radius = sphere.Radius()
+    return Sphere(point, radius)
 
 
 def compas_cylinder_to_occ_cylinder(cylinder: Cylinder) -> gp_Cylinder:

@@ -29,6 +29,7 @@ from compas_occ.brep import BRepVertex
 from compas_occ.conversions import compas_line_to_occ_line
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_circle_to_occ_circle
+from compas_occ.conversions import compas_ellipse_to_occ_ellipse
 
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCNurbsCurve
@@ -304,8 +305,33 @@ class BRepEdge(Data):
         return cls(builder.Edge())
 
     @classmethod
-    def from_ellipse(cls, ellipse: Ellipse) -> "BRepEdge":
-        raise NotImplementedError
+    def from_ellipse(
+        cls,
+        ellipse: Circle,
+        params: Tuple[float, float] = None,
+        points: Tuple[Point, Point] = None,
+        vertices: Tuple[BRepVertex, BRepVertex] = None,
+    ) -> "BRepEdge":
+        """Construct an edge from a ellipse."""
+        if params:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_ellipse_to_occ_ellipse(ellipse), *params
+            )
+        elif points:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_ellipse_to_occ_ellipse(ellipse),
+                compas_point_to_occ_point(points[0]),
+                compas_point_to_occ_point(points[1]),
+            )
+        elif vertices:
+            builder = BRepBuilderAPI_MakeEdge(
+                compas_ellipse_to_occ_ellipse(ellipse),
+                vertices[0].occ_vertex,
+                vertices[1].occ_vertex,
+            )
+        else:
+            builder = BRepBuilderAPI_MakeEdge(compas_ellipse_to_occ_ellipse(ellipse))
+        return cls(builder.Edge())
 
     @classmethod
     def from_curve(
