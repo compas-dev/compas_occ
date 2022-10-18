@@ -42,6 +42,8 @@ print(f"\nFaces ({len(brep.faces)})")
 print("=" * 17)
 
 for face in brep.faces:
+    facedata = {"surface": None, "loops": []}
+
     if face.is_plane:
         surface = BRepAdaptor_Surface(face.occ_face).Plane()
         surfdata = compas_plane_from_occ_plane(surface)
@@ -80,22 +82,34 @@ for face in brep.faces:
     outer = face.loops[0]
     inner = face.loops[1:]
 
+    loops = []
+
     print("\nOuter loop")
+
+    loopdata = []
+
     for edge in outer.edges:
         if edge.is_line:
             curve = BRepAdaptor_Curve(edge.occ_edge).Line()
+
         elif edge.is_circle:
             curve = BRepAdaptor_Curve(edge.occ_edge).Circle()
+
         elif edge.is_ellipse:
             curve = BRepAdaptor_Curve(edge.occ_edge).Ellipse()
+
         elif edge.is_parabola:
             curve = BRepAdaptor_Curve(edge.occ_edge).Parabola()
+
         elif edge.is_hyperbola:
             curve = BRepAdaptor_Curve(edge.occ_edge).Hyperbola()
+
         elif edge.is_bezier:
             curve = BRepAdaptor_Curve(edge.occ_edge).Bezier()
+
         elif edge.is_bspline:
             curve = BRepAdaptor_Curve(edge.occ_edge).BSpline()
+
         else:
             print(edge.type)
 
@@ -137,3 +151,8 @@ for face in brep.faces:
             print(f"- {curve} ({orientation})")
 
         print()
+
+    facedata["surface"] = surfdata
+    facedata["loops"] = loops
+
+    data["faces"].append(facedata)
