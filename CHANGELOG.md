@@ -11,8 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added `compas_occ.geometry.OCCSurface.from_plane`.
 * Added `compas_occ.geometry.OCCSurface.intersections_with_curve`.
+* Added `compas_occ.brep.BRepFace.to_polygon`.
+* Added `compas_occ.brep.BRep.edge_faces`.
 
 ### Changed
+
+* Changed default units to MM in `compas_occ.brep.BRep`.
 
 ### Removed
 
