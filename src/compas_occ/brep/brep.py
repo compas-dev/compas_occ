@@ -59,6 +59,8 @@ from OCC.Core.STEPControl import STEPControl_Writer
 from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.Interface import Interface_Static_SetCVal
+
+# from OCC.Core.Interface import Interface_Static_CVal
 from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape
 from OCC.Core.TopExp import topexp_MapShapesAndUniqueAncestors
@@ -825,7 +827,7 @@ class BRep(Data):
         with open(filepath, "w") as f:
             self.occ_shape.DumpJson(f)
 
-    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "M") -> None:
+    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
         """
         Write the BRep shape to a STEP file.
 
@@ -843,7 +845,6 @@ class BRep(Data):
         None
 
         """
-        # write_step_file(self.occ_shape, filepath)
         step_writer = STEPControl_Writer()
         # Interface_Static_SetCVal("write.step.schema", schema)
         Interface_Static_SetCVal("write.step.unit", unit)
@@ -921,7 +922,7 @@ class BRep(Data):
             polygons.append(Polygon(points))
         return polygons
 
-    def to_viewmesh(self, linear_deflection=1e-3):
+    def to_viewmesh(self, linear_deflection=1):
         """
         Convert the BRep to a view mesh."""
         lines = []
@@ -1016,6 +1017,32 @@ class BRep(Data):
             self.occ_shape, TopAbs_VERTEX, TopAbs_FACE, map
         )
         results = map.FindFromKey(vertex.occ_vertex)
+        iterator = TopTools_ListIteratorOfListOfShape(results)
+        faces = []
+        while iterator.More():
+            face = topods_Face(iterator.Value())
+            faces.append(BRepFace(face))
+            iterator.Next()
+        return faces
+
+    def edge_faces(self, edge: BRepEdge) -> List[BRepFace]:
+        """
+        Identify the faces connected to an edge.
+
+        Parameters
+        ----------
+        edge : :class:`BRepEdge`
+
+        Returns
+        -------
+        List[:class:`BRepFace`]
+
+        """
+        map = TopTools_IndexedDataMapOfShapeListOfShape()
+        topexp_MapShapesAndUniqueAncestors(
+            self.occ_shape, TopAbs_EDGE, TopAbs_FACE, map
+        )
+        results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools_ListIteratorOfListOfShape(results)
         faces = []
         while iterator.More():

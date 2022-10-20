@@ -458,6 +458,20 @@ class BRepFace(Data):
     # Conversions
     # ==============================================================================
 
+    def to_polygon(self) -> Polygon:
+        """
+        Convert the face to a polygon without underlying geometry.
+
+        Returns
+        -------
+        :class:`Polygon`
+
+        """
+        points = []
+        for vertex in self.loops[0].vertices:
+            points.append(vertex.point)
+        return Polygon(points)
+
     # ==============================================================================
     # Methods
     # ==============================================================================
