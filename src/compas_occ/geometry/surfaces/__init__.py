@@ -16,6 +16,10 @@ else:
         return super(Surface, cls).__new__(cls)
 
     @plugin(category="factories", requires=["compas_occ"])
+    def new_surface_from_plane(cls, *args, **kwargs):
+        return OCCSurface.from_plane(*args, **kwargs)
+
+    @plugin(category="factories", requires=["compas_occ"])
     def new_nurbssurface(cls, *args, **kwargs):
         return super(NurbsSurface, cls).__new__(cls)
 
