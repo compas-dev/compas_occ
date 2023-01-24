@@ -1259,6 +1259,8 @@ class BRep(BrepPluggable):
             The trimming plane. The bit in the plane's normal direction will be discarded.
 
         """
+        # I added this for compatibility with the RhinoBrep.trim operation which is performed in-place.
+        # It might make more sense to adapt the Rhino one to return a trimmed copy (?)
         if isinstance(plane, compas.geometry.Plane):
             plane = Frame.from_plane(plane)
 
