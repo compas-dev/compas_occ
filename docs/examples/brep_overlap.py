@@ -26,14 +26,14 @@ viewer.add(Collection(viewmesh[1]), linewidth=3)
 
 for face in FA[:1]:
     brep = BRep()
-    brep.occ_shape = face.occ_face
+    brep.native_brep = face.occ_face
     viewmesh = brep.to_viewmesh()
     viewer.add(viewmesh[0], show_lines=False, facecolor=Color.red().lightened(50))
     viewer.add(Collection(viewmesh[1]), linewidth=3, linecolor=Color.red())
 
 for face in FB[:1]:
     brep = BRep()
-    brep.occ_shape = face.occ_face
+    brep.native_brep = face.occ_face
     viewmesh = brep.to_viewmesh()
     viewer.add(viewmesh[0], show_lines=False, facecolor=Color.blue().lightened(50))
     viewer.add(Collection(viewmesh[1]), linewidth=3, linecolor=Color.blue())

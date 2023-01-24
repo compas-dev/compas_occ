@@ -35,7 +35,7 @@ for edge in edges:
 
 for face in faces:
     brep = BRep()
-    brep.occ_shape = face.occ_face
+    brep.native_brep = face.occ_face
     viewer.add(brep.to_viewmesh()[0], show_lines=False, opacity=0.5)
 
 viewer.show()
