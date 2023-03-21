@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.7.0
+            0.7.1
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -96,11 +96,11 @@
 <section id="install-with-conda">
 <h3>Install with conda</h3>
 <p>In an existing environment, for example “research”.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda install -n research compas_occ compas_view2 --yes
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas_occ<span class="w"> </span>compas_view2<span class="w"> </span>--yes
 </code></pre></div>
 </div>
 <p>In a new environment, for example … “research” 😀</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n research compas_occ compas_view2 --yes
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas_occ<span class="w"> </span>compas_view2<span class="w"> </span>--yes
 </code></pre></div>
 </div>
 <p>In both cases, <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_view2</span></code> is optional.</p>
@@ -108,9 +108,9 @@
 <section id="install-with-pip">
 <h3>Install with pip</h3>
 <p>To install <a class="reference internal" href="api/compas_occ.html#module-compas_occ" title="compas_occ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ</span></code></a> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>, some of its dependencies have to be installed from <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> first.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n research compas compas_view2 pythonocc-core
-conda activate occ
-pip install compas_occ
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
+conda<span class="w"> </span>activate<span class="w"> </span>occ
+pip<span class="w"> </span>install<span class="w"> </span>compas_occ
 </code></pre></div>
 </div>
 </section>
@@ -118,16 +118,16 @@ pip install compas_occ
 <section id="development">
 <h2>Development</h2>
 <p>To get the latest development version, you can install from local source, or directly from the github repo.</p>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n occ <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9 compas compas_view2 pythonocc-core
-conda activate occ
-pip install git+https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
+conda<span class="w"> </span>activate<span class="w"> </span>occ
+pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
 </code></pre></div>
 </div>
-<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda create -n occ <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9 compas compas_view2 pythonocc-core
-conda activate occ
-git pull https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
-<span class="nb">cd</span> compas_occ
-pip install -e .
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
+conda<span class="w"> </span>activate<span class="w"> </span>occ
+git<span class="w"> </span>pull<span class="w"> </span>https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
+<span class="nb">cd</span><span class="w"> </span>compas_occ
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </code></pre></div>
 </div>
 <p>You can use whichever Python version you prefer, but <code class="docutils literal notranslate"><span class="pre">3.9</span></code> is compatible with Blender…</p>
