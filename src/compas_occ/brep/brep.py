@@ -71,6 +71,8 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
 # from OCC.Core.TopExp import topexp_FirstVertex
 # from OCC.Core.TopExp import topexp_LastVertex
 
+from OCC.Core.TopoDS import TopoDS_Compound
+
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
 from compas_occ.conversions import ngon_to_face
@@ -628,7 +630,7 @@ class BRep(Data):
         raise NotImplementedError
 
     @classmethod
-    def from_mesh(cls, mesh: compas.datastructures.Mesh) -> "BRep":
+    def from_mesh(cls, mesh: compas.datastructures.Mesh, solid: bool = True) -> "BRep":
         """
         Construct a BRep from a COMPAS mesh.
 
@@ -655,6 +657,8 @@ class BRep(Data):
         brep = cls.from_shape(shell)
         brep.sew()
         brep.fix()
+        if solid:
+            brep.make_solid()
         return brep
 
     @classmethod
@@ -729,6 +733,18 @@ class BRep(Data):
 
     # create patch
     # create offset
+
+    @classmethod
+    def from_breps(cls, breps: List["BRep"]) -> "BRep":
+        """
+        Construct one compound BRep out of multiple individual BReps.
+        """
+        compound = TopoDS_Compound()
+        builder = BRep_Builder()
+        builder.MakeCompound(compound)
+        for brep in breps:
+            builder.Add(compound, brep.occ_shape)
+        return cls.from_shape(compound)
 
     # ==============================================================================
     # Boolean Constructors
