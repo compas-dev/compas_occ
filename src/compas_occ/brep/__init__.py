@@ -27,6 +27,7 @@ from .breploop import BRepLoop  # noqa: F401
 from .brepface import BRepFace  # noqa: F401
 from .brep import BRep  # noqa: F401
 
+
 @plugin(category="factories", requires=["OCC"])
 def new_brep(*args, **kwargs):
     return object.__new__(BRep)
@@ -45,6 +46,7 @@ def from_box(*args, **kwargs):
 @plugin(category="factories", requires=["OCC"])
 def from_sphere(*args, **kwargs):
     return BRep.from_sphere(*args, **kwargs)
+
 
 @plugin(category="factories", requires=["OCC"])
 def from_cylinder(*args, **kwargs):

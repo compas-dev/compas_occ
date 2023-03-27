@@ -5,7 +5,6 @@ from compas.geometry import Brep as BrepPluggable
 
 import compas.datastructures
 
-from compas.data import Data
 from compas.geometry import Vector
 from compas.geometry import Frame
 from compas.geometry import Transformation
