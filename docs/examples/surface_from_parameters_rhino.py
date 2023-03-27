@@ -1,7 +1,7 @@
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_occ.geometry import OCCNurbsSurface
-from compas_view2.app import App
+from compas.geometry import NurbsSurface
+from compas.artists import Artist
 
 
 points = [
@@ -64,7 +64,7 @@ weights = [
     [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
 ]
 
-surface = OCCNurbsSurface.from_parameters(
+surface = NurbsSurface.from_parameters(
     points=points,
     weights=weights,
     u_knots=[
@@ -90,28 +90,6 @@ surface = OCCNurbsSurface.from_parameters(
 # Visualisation
 # ==============================================================================
 
-view = App()
+artist = Artist(surface)
+artist.draw()
 
-for row in surface.points:
-    view.add(
-        Polyline(row),
-        show_points=True,
-        pointsize=20,
-        pointcolor=(1, 0, 0),
-        linewidth=2,
-        linecolor=(0.3, 0.3, 0.3),
-    )
-
-for col in zip(*surface.points):
-    view.add(
-        Polyline(col),
-        show_points=True,
-        pointsize=20,
-        pointcolor=(1, 0, 0),
-        linewidth=2,
-        linecolor=(0.3, 0.3, 0.3),
-    )
-
-view.add(surface)
-
-view.run()

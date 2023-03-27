@@ -368,6 +368,35 @@ class OCCCurve(Curve):
             compas_vector_from_occ_vector(vvec),
         )
 
+    def parameter_at_distance(
+        self,
+        t: float,
+        distance: float,
+        precision: float = 0.1,
+    ) -> float:
+        """
+        Compute the parameter of a point on the curve at a given distance along the curve from a point at a given parameter.
+
+        Parameters
+        ----------
+        t : float
+            The parameter of the starting point.
+        distance : float
+            The distance along the curve from the point at the given parameter.
+        precision : float, optional
+            The required precision of the result.
+
+        Returns
+        -------
+        float
+            The new parameter.
+
+        """
+        a = GCPnts_AbscissaPoint(
+            GeomAdaptor_Curve(self.occ_curve), distance, t, precision
+        )
+        return a.Parameter()
+
     # ==============================================================================
     # Methods continued
     # ==============================================================================
