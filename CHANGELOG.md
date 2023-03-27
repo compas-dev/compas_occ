@@ -10,10 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added `BRep.trim` as in-place variation of `slice`.
+* Added `compas_occ.geometry.OCCCurve.parameter_at_distance`.
 
 ### Changed
 
-* Added `compas_occ.geometry.OCCCurve.parameter_at_distance`.
 * Changed `compas_occ.brep.BRep` to be a pluggin for `compas.geometry.Brep`.
 * Renamed `BRep.occ_shape` to `native_brep` for compatibility with `RhinoBrep`.
 * Fixed the error when calling `BRep.frame`.
