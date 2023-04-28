@@ -46,6 +46,7 @@ Primitives
     compas_plane_to_occ_ax3
     compas_sphere_to_occ_sphere
     compas_torus_to_occ_torus
+    compas_frame_from_location
     compas_vector_from_occ_axis
     compas_vector_from_occ_vector
     compas_vector_from_occ_vector2d
@@ -109,6 +110,7 @@ from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
 from .primitives import compas_cylinder_from_occ_cylinder  # noqa: F401
 from .primitives import compas_cone_to_occ_cone  # noqa: F401
 from .primitives import compas_torus_to_occ_torus  # noqa: F401
+from .primitives import compas_frame_from_location # noqa: F401
 
 from .transformations import compas_transformation_to_trsf  # noqa: F401
 
