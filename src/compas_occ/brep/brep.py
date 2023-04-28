@@ -7,11 +7,11 @@ import compas.datastructures
 
 from compas.geometry import Vector
 from compas.geometry import Frame
-from compas.geometry import Transformation
 from compas.geometry import Translation
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.geometry import Polygon
+from compas.geometry import Plane
 from compas.datastructures import Mesh
 
 from OCC.Extend.DataExchange import read_step_file
@@ -20,6 +20,7 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Ax2
 
+from OCC.Core.TopoDS import TopoDS_Iterator
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods_Edge
@@ -82,6 +83,7 @@ from compas_occ.conversions import points1_from_array1
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_vector_to_occ_vector
+from compas_occ.conversions import compas_frame_from_location
 
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
@@ -165,7 +167,7 @@ class BRep(BrepPluggable):
         self._occ_shape = None
         self._vertices = None
         self._edges = None
-        self._wires = None
+        self._loops = None
         self._faces = None
         self._shells = None
         self._solids = None
@@ -274,7 +276,7 @@ class BRep(BrepPluggable):
         self._occ_shape = shape
         self._vertices = None
         self._edges = None
-        self._wires = None
+        self._loops = None
         self._faces = None
         self._shells = None
         self._solids = None
@@ -443,14 +445,7 @@ class BRep(BrepPluggable):
     @property
     def frame(self) -> compas.geometry.Frame:
         location = self.native_brep.Location()
-        t = location.Transformation()
-
-        # transformation.Value is a 1-based 3x4 matrix
-        rows, columns = 3, 4
-        matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
-        matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
-        frame = Frame.from_transformation(Transformation(matrix))
-        return frame
+        return compas_frame_from_location(location)
 
     @property
     def area(self) -> float:
@@ -1266,10 +1261,10 @@ class BRep(BrepPluggable):
         """
         raise NotImplementedError
 
-    def trim(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
+    def trimmed(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
         """Trim a BRep with a plane.
 
-        Same as BRep.slice but performed in-place.
+        This BRep is not modified, the BRep resulting from the trimming operation is returned.
 
         Parameters
         ----------
@@ -1277,17 +1272,33 @@ class BRep(BrepPluggable):
             The trimming plane. The bit in the plane's normal direction will be discarded.
 
         """
-        # I added this for compatibility with the RhinoBrep.trim operation which is performed in-place.
-        # It might make more sense to adapt the Rhino one to return a trimmed copy (?)
-        if isinstance(plane, compas.geometry.Plane):
-            plane = Frame.from_plane(plane)
+        if isinstance(plane, Frame):
+            plane = Plane.from_frame(plane)
+        face = BRepFace.from_plane(plane).occ_face
+        results = self._split_shape(self.native_brep, face)
+        if results:
+            # since we're trimming, take first and discard the rest
+            return BRep.from_native(results[0])
 
-        brep = self.slice(plane)
-        self.native_brep = brep.native_brep
+    def trim(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
+        """Trim a BRep with a plane.
 
-    def slice(self, plane: compas.geometry.Plane) -> BRepFace:
+        In-place variant of `BRep.trimmed()`.
+
+        Parameters
+        ----------
+        plane : :class:`~compas.geometry.Plane` | :class:`~compas.geometry.Frame`
+            The trimming plane. The bit in the plane's normal direction will be discarded.
+
         """
-        Slice through the BRep with a plane.
+        trimmed = self.trimmed(plane)
+        if trimmed is not None:
+            self.native_brep = trimmed.native_brep
+
+    def sliced(self, plane: compas.geometry.Plane) -> BRepFace:
+        """
+        Returns a new Brep which is a slice of this Brep and the given plane.
+
 
         Parameters
         ----------
@@ -1295,7 +1306,7 @@ class BRep(BrepPluggable):
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`~compas_occ.brep.BRep`
 
         """
         face = BRepFace.from_plane(plane)
@@ -1304,9 +1315,22 @@ class BRep(BrepPluggable):
         if section.IsDone():
             return BRep.from_native(section.Shape())
 
-    def split(self, other: "BRep") -> List["BRep"]:
+    def slice(self, plane: compas.geometry.Plane) -> BRepFace:
         """
-        Split a BRep using another BRep as splitter.
+        Perform in-place slice of this Brep with the given plane.
+
+        Parameters
+        ----------
+        plane : :class:`~compas.geometry.Plane`
+            The slicing plane.
+
+        """
+        sliced = self.sliced(plane)
+        if sliced:
+            self.native_brep = sliced.native_brep
+
+    def split(self, other: "BRep") -> List["BRep"]:
+        """Split a BRep using another BRep as splitter.
 
         Parameters
         ----------
@@ -1315,14 +1339,28 @@ class BRep(BrepPluggable):
 
         Returns
         -------
-        List[:class:`BRep`]
+        List[:class:`~compas_occ.brep.BRep`]
 
         """
+        results = BRep._split_shape(self.native_brep, other.native_brep)
+        return [BRep.from_native(shape) for shape in results]
+
+    @staticmethod
+    def _split_shape(argument: TopoDS_Shape, tool: TopoDS_Shape) -> List[TopoDS_Shape]:
         splitter = BOPAlgo_Splitter()
-        splitter.AddArgument(self.native_brep)
-        splitter.AddTool(other.native_brep)
+        splitter.AddArgument(argument)
+        splitter.AddTool(tool)
         splitter.Perform()
-        return BRep.from_native(splitter.Shape())
+        shape = splitter.Shape()
+        results = []
+        if isinstance(shape, TopoDS_Compound):
+            it = TopoDS_Iterator(shape)
+            while it.More():
+                results.append(it.Value())
+                it.Next()
+        else:
+            results.append(shape)
+        return results
 
     def overlap(
         self, other: "BRep", deflection: float = 1e-3, tolerance: float = 0.0
