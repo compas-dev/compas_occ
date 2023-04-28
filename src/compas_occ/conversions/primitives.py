@@ -369,13 +369,13 @@ def compas_plane_to_occ_ax3(plane: Plane) -> gp_Ax3:
 
 
 def compas_frame_from_location(location: TopLoc_Location):
-        t = location.Transformation()
+    t = location.Transformation()
 
-        # transformation.Value is a 1-based 3x4 matrix
-        rows, columns = 3, 4
-        matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
-        matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
-        return Frame.from_transformation(Transformation(matrix))
+    # transformation.Value is a 1-based 3x4 matrix
+    rows, columns = 3, 4
+    matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
+    matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
+    return Frame.from_transformation(Transformation(matrix))
 
 
 def compas_frame_from_occ_ax3(position: gp_Ax3, cls: Type[Frame] = None) -> Frame:

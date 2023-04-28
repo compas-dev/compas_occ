@@ -110,7 +110,7 @@ from .primitives import compas_cylinder_to_occ_cylinder  # noqa: F401
 from .primitives import compas_cylinder_from_occ_cylinder  # noqa: F401
 from .primitives import compas_cone_to_occ_cone  # noqa: F401
 from .primitives import compas_torus_to_occ_torus  # noqa: F401
-from .primitives import compas_frame_from_location # noqa: F401
+from .primitives import compas_frame_from_location  # noqa: F401
 
 from .transformations import compas_transformation_to_trsf  # noqa: F401
 
