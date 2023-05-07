@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added `BRep.trim` as in-place variation of `slice`.
+* Added `BRep.trim` and `BRep.trimmed`.
+* Added `BRep.sliced` as an operation on a copy of `BRep.slice`.
 * Added `compas_occ.geometry.OCCCurve.parameter_at_distance`.
 * Added `compas_occ.conversions.compas_frame_from_location`.
 
