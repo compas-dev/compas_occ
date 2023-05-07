@@ -461,7 +461,7 @@ class BRep(BrepPluggable):
 
     @property
     def centroid(self) -> compas.geometry.Point:
-        return self._get_brep_centroid(self.native_brep)
+        return _get_brep_centroid(self.native_brep)
 
     # ==============================================================================
     # Constructors
@@ -1268,18 +1268,22 @@ class BRep(BrepPluggable):
         plane : :class:`~compas.geometry.Plane` | :class:`~compas.geometry.Frame`
             The trimming plane. The bit in the plane's normal direction will be discarded.
 
+        Returns
+        -------
+        :class:`~compas_occ.brep.BRep`
+
         """
         if isinstance(plane, Frame):
             plane = Plane.from_frame(plane)
         face = BRepFace.from_plane(plane).occ_face
-        results = self._split_shape(self.native_brep, face)
+        results = _split_shape(self.native_brep, face)
 
         # The order of solids in `results` does not depend on the orientation of the cutting plane but rather
         # on the orientation of the Brep being trimmed. This is how we ensure we always keep the part that's in the
         # half-space on the opposite side of the plane's normal.
         for solid in results:
-            centroid = self._get_brep_centroid(solid)
-            if not self._is_point_in_pos_half_space(centroid, plane):
+            centroid = _get_brep_centroid(solid)
+            if not _is_point_in_pos_half_space(centroid, plane):
                 return  BRep.from_native(solid)
 
     def trim(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
@@ -1344,39 +1348,8 @@ class BRep(BrepPluggable):
         List[:class:`~compas_occ.brep.BRep`]
 
         """
-        results = BRep._split_shape(self.native_brep, other.native_brep)
+        results = _split_shape(self.native_brep, other.native_brep)
         return [BRep.from_native(shape) for shape in results]
-
-    @staticmethod
-    def _split_shape(argument: TopoDS_Shape, tool: TopoDS_Shape) -> List[TopoDS_Shape]:
-        splitter = BOPAlgo_Splitter()
-        splitter.AddArgument(argument)
-        splitter.AddTool(tool)
-        splitter.Perform()
-        shape = splitter.Shape()
-        results = []
-        if isinstance(shape, TopoDS_Compound):
-            it = TopoDS_Iterator(shape)
-            while it.More():
-                results.append(it.Value())
-                it.Next()
-        else:
-            results.append(shape)
-        return results
-
-    @staticmethod
-    def _get_brep_centroid(native_brep):
-        props = GProp_GProps()
-        brepgprop_VolumeProperties(native_brep, props)
-        pnt = props.CentreOfMass()
-        return compas_point_from_occ_point(pnt)
-
-    @staticmethod
-    def _is_point_in_pos_half_space(point, plane):
-        # TODO: Plane.is_in_half_space()
-        a, b, c, d = plane.abcd
-        x, y, z = point
-        return a * x + b * y + c * z + d > 1e-6
 
     def overlap(
         self, other: "BRep", deflection: float = 1e-3, tolerance: float = 0.0
@@ -1422,3 +1395,37 @@ class BRep(BrepPluggable):
             faces2.append(BRepFace(face))
 
         return faces1, faces2
+
+
+def _split_shape(argument: TopoDS_Shape, tool: TopoDS_Shape) -> List[TopoDS_Shape]:
+    """Split shape with tool and extract the resulting shapes from the compound"""
+    splitter = BOPAlgo_Splitter()
+    splitter.AddArgument(argument)
+    splitter.AddTool(tool)
+    splitter.Perform()
+    shape = splitter.Shape()
+    results = []
+    if isinstance(shape, TopoDS_Compound):
+        it = TopoDS_Iterator(shape)
+        while it.More():
+            results.append(it.Value())
+            it.Next()
+    else:
+        results.append(shape)
+    return results
+
+
+def _get_brep_centroid(native_brep: TopoDS_Shape) -> Point:
+    """Return a COMPAS Point at the centroid of a brep"""
+    props = GProp_GProps()
+    brepgprop_VolumeProperties(native_brep, props)
+    pnt = props.CentreOfMass()
+    return compas_point_from_occ_point(pnt)
+
+
+def _is_point_in_pos_half_space(point: Point, plane: Plane) -> bool:
+    """Return True of point is in the positive half-space side of the plane, False otherwise."""
+    # TODO: Plane.is_in_half_space()
+    a, b, c, d = plane.abcd
+    x, y, z = point
+    return a * x + b * y + c * z + d > 1e-6
