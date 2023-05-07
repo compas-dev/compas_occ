@@ -461,10 +461,7 @@ class BRep(BrepPluggable):
 
     @property
     def centroid(self) -> compas.geometry.Point:
-        props = GProp_GProps()
-        brepgprop_VolumeProperties(self.native_brep, props)
-        pnt = props.CentreOfMass()
-        return compas_point_from_occ_point(pnt)
+        return self._get_brep_centroid(self.native_brep)
 
     # ==============================================================================
     # Constructors
@@ -1276,9 +1273,14 @@ class BRep(BrepPluggable):
             plane = Plane.from_frame(plane)
         face = BRepFace.from_plane(plane).occ_face
         results = self._split_shape(self.native_brep, face)
-        if results:
-            # since we're trimming, take first and discard the rest
-            return BRep.from_native(results[0])
+
+        # The order of solids in `results` does not depend on the orientation of the cutting plane but rather
+        # on the orientation of the Brep being trimmed. This is how we ensure we always keep the part that's in the
+        # half-space on the opposite side of the plane's normal.
+        for solid in results:
+            centroid = self._get_brep_centroid(solid)
+            if not self._is_point_in_pos_half_space(centroid, plane):
+                return  BRep.from_native(solid)
 
     def trim(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
         """Trim a BRep with a plane.
@@ -1361,6 +1363,20 @@ class BRep(BrepPluggable):
         else:
             results.append(shape)
         return results
+
+    @staticmethod
+    def _get_brep_centroid(native_brep):
+        props = GProp_GProps()
+        brepgprop_VolumeProperties(native_brep, props)
+        pnt = props.CentreOfMass()
+        return compas_point_from_occ_point(pnt)
+
+    @staticmethod
+    def _is_point_in_pos_half_space(point, plane):
+        # TODO: Plane.is_in_half_space()
+        a, b, c, d = plane.abcd
+        x, y, z = point
+        return a * x + b * y + c * z + d > 1e-6
 
     def overlap(
         self, other: "BRep", deflection: float = 1e-3, tolerance: float = 0.0
