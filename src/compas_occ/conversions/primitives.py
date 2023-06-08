@@ -369,6 +369,18 @@ def compas_plane_to_occ_ax3(plane: Plane) -> gp_Ax3:
 
 
 def compas_frame_from_location(location: TopLoc_Location):
+    """Convert an OCC Location to COMPAS Frame.
+
+    Parameters
+    ----------
+    location : ``TopLoc_Location``
+        The OCC Location to convert to frame.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Frame`
+
+    """
     t = location.Transformation()
 
     # transformation.Value is a 1-based 3x4 matrix
