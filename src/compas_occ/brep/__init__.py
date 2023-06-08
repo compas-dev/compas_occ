@@ -34,7 +34,7 @@ def new_brep(*args, **kwargs):
 
 
 @plugin(category="factories", requires=["OCC"])
-def from_brep(*args, **kwargs):
+def from_native(*args, **kwargs):
     return BRep.from_native(*args, **kwargs)
 
 

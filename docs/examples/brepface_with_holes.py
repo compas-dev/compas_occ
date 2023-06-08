@@ -16,10 +16,9 @@ face = BRepFace.from_plane(plane, udomain=(-5, 5), vdomain=(-5, 5))
 face.add_loops([loop1, loop2, loop3], reverse=True)
 
 brep = BRep.from_faces([face])
-mesh = brep.to_tesselation()
 
 viewer = App()
-viewer.add(mesh, show_lines=False)
+viewer.add(brep, show_lines=False)
 
 for edge in brep.edges:
     if edge.is_line:
