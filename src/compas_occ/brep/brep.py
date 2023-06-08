@@ -757,7 +757,7 @@ class BRep(BrepPluggable):
         builder.MakeCompound(compound)
         for brep in breps:
             builder.Add(compound, brep.occ_shape)
-        return cls.from_shape(compound)
+        return cls.from_native(compound)
 
     # ==============================================================================
     # Boolean Constructors
