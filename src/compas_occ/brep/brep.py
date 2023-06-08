@@ -1284,7 +1284,7 @@ class BRep(BrepPluggable):
         for solid in results:
             centroid = _get_brep_centroid(solid)
             if not _is_point_in_pos_half_space(centroid, plane):
-                return  BRep.from_native(solid)
+                return BRep.from_native(solid)
 
     def trim(self, plane: Union[compas.geometry.Plane, compas.geometry.Frame]):
         """Trim a BRep with a plane.
