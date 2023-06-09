@@ -1,0 +1,7 @@
+name: occ
+channels:
+  - conda-forge
+dependencies:
+  - pythonocc-core
+  - pip:
+    - -r requirements-dev.txt

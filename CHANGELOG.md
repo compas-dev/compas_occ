@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-### Removed
+- Updated github workflow to latest version.
 
+### Removed
 
 ## [0.7.1] 2023-03-21
 
@@ -25,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fixed bug in generation of tessellation mesh.
 
 ### Removed
-
 
 ## [0.7.0] 2022-11-06
 
@@ -41,7 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed default units to MM in `compas_occ.brep.BRep`.
 
 ### Removed
-
 
 ## [0.6.0] 2022-10-07
 
@@ -61,7 +60,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed implementation of `BRep.to_tessellation` to use range loop over individual nodes of triangulation instead of node list accessor.
 
 ### Removed
-
 
 ## [0.5.0] 2022-07-22
 
@@ -119,7 +117,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-
 ## [0.4.2] 2022-03-22
 
 ### Added
@@ -133,7 +130,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-
 ## [0.4.1] 2022-03-22
 
 ### Added
@@ -141,7 +137,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Removed
-
 
 ## [0.4.0] 2022-02-07
 
@@ -165,7 +160,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-
 ## [0.3.4] 2022-01-17
 
 ### Added
@@ -177,7 +171,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-
 ## [0.3.3] 2021-12-16
 
 ### Added
@@ -185,7 +178,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Removed
-
 
 ## [0.3.2] 2021-12-14
 
