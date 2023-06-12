@@ -128,8 +128,6 @@ class BRep(BrepPluggable):
     --------
     Constructors
 
-    >>> brep = BRep.from_corners([0, 0, 0], [1, 0, 0], [1, 1, 1], [1, 1, 0])
-
     >>> from compas.geometry import Box
     >>> box = Box.from_width_height_depth(1, 1, 1)
     >>> vertices, faces = box.to_vertices_and_faces()

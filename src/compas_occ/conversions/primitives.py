@@ -236,10 +236,11 @@ def compas_axis_to_occ_axis(axis: Tuple[Point, Vector]) -> gp_Ax1:
 
     Examples
     --------
-    >>> from compas.geometry import Vector
+    >>> from compas.geometry import Point, Vector
     >>> from compas_occ.conversions import compas_axis_to_occ_axis
+    >>> point = Point(0, 0, 0)
     >>> vector = Vector(1, 0, 0)
-    >>> axis = compas_axis_to_occ_axis(vector)
+    >>> compas_axis_to_occ_axis((point, vector))
     <class 'gp_Ax1'>
 
     """
@@ -385,7 +386,9 @@ def compas_frame_from_location(location: TopLoc_Location):
 
     # transformation.Value is a 1-based 3x4 matrix
     rows, columns = 3, 4
-    matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
+    matrix = [
+        [t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)
+    ]
     matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
     return Frame.from_transformation(Transformation(matrix))
 
