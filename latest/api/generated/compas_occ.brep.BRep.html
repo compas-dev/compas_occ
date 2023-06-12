@@ -99,8 +99,8 @@
 <h1>BRep</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_occ.brep.BRep">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRep</span></span></dt>
-<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_occ.brep.</span></span><span class="sig-name descname"><span class="pre">BRep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Brep.html#compas.geometry.Brep" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Brep</span></code></a></p>
 <p>Class for Boundary Representation of geometric entities.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
@@ -124,9 +124,6 @@
 </dl>
 <p class="rubric">Examples</p>
 <p>Constructors</p>
-<div class="doctest language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">brep</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_corners</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-</code></pre></div>
-</div>
 <div class="doctest language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="o">.</span><span class="n">from_width_height_depth</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vertices</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">to_vertices_and_faces</span><span class="p">()</span>
@@ -171,86 +168,92 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.contours.html#compas_occ.brep.BRep.contours" title="compas_occ.brep.BRep.contours"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contours</span></code></a></p></td>
 <td><p>Generate contour lines by slicing the BRep shape with a series of planes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_edges.html#compas_occ.brep.BRep.cull_unused_edges" title="compas_occ.brep.BRep.cull_unused_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_edges</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.copy.html#compas_occ.brep.BRep.copy" title="compas_occ.brep.BRep.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Deep-copy this BRep using the native OCC copying mechanism.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_edges.html#compas_occ.brep.BRep.cull_unused_edges" title="compas_occ.brep.BRep.cull_unused_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_edges</span></code></a></p></td>
 <td><p>Remove all unused edges.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_faces.html#compas_occ.brep.BRep.cull_unused_faces" title="compas_occ.brep.BRep.cull_unused_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_faces</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_faces.html#compas_occ.brep.BRep.cull_unused_faces" title="compas_occ.brep.BRep.cull_unused_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_faces</span></code></a></p></td>
 <td><p>Remove all unused faces.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_loops.html#compas_occ.brep.BRep.cull_unused_loops" title="compas_occ.brep.BRep.cull_unused_loops"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_loops</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_loops.html#compas_occ.brep.BRep.cull_unused_loops" title="compas_occ.brep.BRep.cull_unused_loops"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_loops</span></code></a></p></td>
 <td><p>Remove all unused loops.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_vertices.html#compas_occ.brep.BRep.cull_unused_vertices" title="compas_occ.brep.BRep.cull_unused_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_vertices</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.cull_unused_vertices.html#compas_occ.brep.BRep.cull_unused_vertices" title="compas_occ.brep.BRep.cull_unused_vertices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cull_unused_vertices</span></code></a></p></td>
 <td><p>Remove all unused vertices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.edge_faces.html#compas_occ.brep.BRep.edge_faces" title="compas_occ.brep.BRep.edge_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_faces</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.edge_faces.html#compas_occ.brep.BRep.edge_faces" title="compas_occ.brep.BRep.edge_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">edge_faces</span></code></a></p></td>
 <td><p>Identify the faces connected to an edge.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.fix.html#compas_occ.brep.BRep.fix" title="compas_occ.brep.BRep.fix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.fix.html#compas_occ.brep.BRep.fix" title="compas_occ.brep.BRep.fix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fix</span></code></a></p></td>
 <td><p>Fix the shell.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_difference.html#compas_occ.brep.BRep.from_boolean_difference" title="compas_occ.brep.BRep.from_boolean_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_difference</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_difference.html#compas_occ.brep.BRep.from_boolean_difference" title="compas_occ.brep.BRep.from_boolean_difference"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_difference</span></code></a></p></td>
 <td><p>Construct a BRep from the boolean difference of two other BReps.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_intersection.html#compas_occ.brep.BRep.from_boolean_intersection" title="compas_occ.brep.BRep.from_boolean_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_intersection</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_intersection.html#compas_occ.brep.BRep.from_boolean_intersection" title="compas_occ.brep.BRep.from_boolean_intersection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_intersection</span></code></a></p></td>
 <td><p>Construct a BRep from the boolean intersection of two other BReps.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_union.html#compas_occ.brep.BRep.from_boolean_union" title="compas_occ.brep.BRep.from_boolean_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_union</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_boolean_union.html#compas_occ.brep.BRep.from_boolean_union" title="compas_occ.brep.BRep.from_boolean_union"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_boolean_union</span></code></a></p></td>
 <td><p>Construct a BRep from the boolean union of two other BReps.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_box.html#compas_occ.brep.BRep.from_box" title="compas_occ.brep.BRep.from_box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_box</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_box.html#compas_occ.brep.BRep.from_box" title="compas_occ.brep.BRep.from_box"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_box</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS box.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_breps.html#compas_occ.brep.BRep.from_breps" title="compas_occ.brep.BRep.from_breps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_breps</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_breps.html#compas_occ.brep.BRep.from_breps" title="compas_occ.brep.BRep.from_breps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_breps</span></code></a></p></td>
 <td><p>Construct one compound BRep out of multiple individual BReps.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_cone.html#compas_occ.brep.BRep.from_cone" title="compas_occ.brep.BRep.from_cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cone</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_cone.html#compas_occ.brep.BRep.from_cone" title="compas_occ.brep.BRep.from_cone"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cone</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS cone.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_curves.html#compas_occ.brep.BRep.from_curves" title="compas_occ.brep.BRep.from_curves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_curves</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_curves.html#compas_occ.brep.BRep.from_curves" title="compas_occ.brep.BRep.from_curves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_curves</span></code></a></p></td>
 <td><p>Construct a BRep from a set of curves.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_cylinder.html#compas_occ.brep.BRep.from_cylinder" title="compas_occ.brep.BRep.from_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cylinder</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_cylinder.html#compas_occ.brep.BRep.from_cylinder" title="compas_occ.brep.BRep.from_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cylinder</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS cylinder.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_extrusion.html#compas_occ.brep.BRep.from_extrusion" title="compas_occ.brep.BRep.from_extrusion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_extrusion</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_extrusion.html#compas_occ.brep.BRep.from_extrusion" title="compas_occ.brep.BRep.from_extrusion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_extrusion</span></code></a></p></td>
 <td><p>Construct a BRep by extruding a closed curve along a direction vector.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_faces.html#compas_occ.brep.BRep.from_faces" title="compas_occ.brep.BRep.from_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_faces</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_faces.html#compas_occ.brep.BRep.from_faces" title="compas_occ.brep.BRep.from_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_faces</span></code></a></p></td>
 <td><p>Make a BRep from a list of BRep faces forming an open or closed shell.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_mesh.html#compas_occ.brep.BRep.from_mesh" title="compas_occ.brep.BRep.from_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_mesh</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_mesh.html#compas_occ.brep.BRep.from_mesh" title="compas_occ.brep.BRep.from_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_mesh</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS mesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_native.html#compas_occ.brep.BRep.from_native" title="compas_occ.brep.BRep.from_native"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_native</span></code></a></p></td>
+<td><p>Construct a BRep from an OCC shape.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_polygons.html#compas_occ.brep.BRep.from_polygons" title="compas_occ.brep.BRep.from_polygons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_polygons</span></code></a></p></td>
 <td><p>Construct a BRep from a set of polygons.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_shape.html#compas_occ.brep.BRep.from_shape" title="compas_occ.brep.BRep.from_shape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_shape</span></code></a></p></td>
-<td><p>Construct a BRep from an OCC shape.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_sphere.html#compas_occ.brep.BRep.from_sphere" title="compas_occ.brep.BRep.from_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sphere</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_sphere.html#compas_occ.brep.BRep.from_sphere" title="compas_occ.brep.BRep.from_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sphere</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS sphere.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_step.html#compas_occ.brep.BRep.from_step" title="compas_occ.brep.BRep.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_step.html#compas_occ.brep.BRep.from_step" title="compas_occ.brep.BRep.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
 <td><p>Conctruct a BRep from the data contained in a STEP file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_sweep.html#compas_occ.brep.BRep.from_sweep" title="compas_occ.brep.BRep.from_sweep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sweep</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_sweep.html#compas_occ.brep.BRep.from_sweep" title="compas_occ.brep.BRep.from_sweep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sweep</span></code></a></p></td>
 <td><p>Construct a BRep by sweeping a profile along a path.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_torus.html#compas_occ.brep.BRep.from_torus" title="compas_occ.brep.BRep.from_torus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_torus</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_torus.html#compas_occ.brep.BRep.from_torus" title="compas_occ.brep.BRep.from_torus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_torus</span></code></a></p></td>
 <td><p>Construct a BRep from a COMPAS torus.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.make_solid.html#compas_occ.brep.BRep.make_solid" title="compas_occ.brep.BRep.make_solid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_solid</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.make_solid.html#compas_occ.brep.BRep.make_solid" title="compas_occ.brep.BRep.make_solid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_solid</span></code></a></p></td>
 <td><p>Convert the current shape to a solid if it is a shell.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.overlap.html#compas_occ.brep.BRep.overlap" title="compas_occ.brep.BRep.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.overlap.html#compas_occ.brep.BRep.overlap" title="compas_occ.brep.BRep.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a></p></td>
 <td><p>Compute the overlap between this BRep and another.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.sew.html#compas_occ.brep.BRep.sew" title="compas_occ.brep.BRep.sew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sew</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.sew.html#compas_occ.brep.BRep.sew" title="compas_occ.brep.BRep.sew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sew</span></code></a></p></td>
 <td><p>Sew together the individual parts of the shape.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.slice.html#compas_occ.brep.BRep.slice" title="compas_occ.brep.BRep.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a></p></td>
-<td><p>Slice through the BRep with a plane.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.slice.html#compas_occ.brep.BRep.slice" title="compas_occ.brep.BRep.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a></p></td>
+<td><p>Perform in-place slice of this Brep with the given plane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.sliced.html#compas_occ.brep.BRep.sliced" title="compas_occ.brep.BRep.sliced"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sliced</span></code></a></p></td>
+<td><p>Returns a new Brep which is a slice of this Brep and the given plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.split.html#compas_occ.brep.BRep.split" title="compas_occ.brep.BRep.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a></p></td>
 <td><p>Split a BRep using another BRep as splitter.</p></td>
@@ -279,6 +282,12 @@
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.transformed.html#compas_occ.brep.BRep.transformed" title="compas_occ.brep.BRep.transformed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed</span></code></a></p></td>
 <td><p>Return a transformed copy of the BRep.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.trim.html#compas_occ.brep.BRep.trim" title="compas_occ.brep.BRep.trim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trim</span></code></a></p></td>
+<td><p>Trim a BRep with a plane.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.trimmed.html#compas_occ.brep.BRep.trimmed" title="compas_occ.brep.BRep.trimmed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trimmed</span></code></a></p></td>
+<td><p>Trim a BRep with a plane.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.vertex_edges.html#compas_occ.brep.BRep.vertex_edges" title="compas_occ.brep.BRep.vertex_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vertex_edges</span></code></a></p></td>
 <td><p>Identify the edges connected to a given vertex.</p></td>
 </tr>
@@ -300,8 +309,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.ToString.html#compas_occ.brep.BRep.ToString" title="compas_occ.brep.BRep.ToString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToString</span></code></a></p></td>
 <td><p>Converts the instance to a string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.copy.html#compas_occ.brep.BRep.copy" title="compas_occ.brep.BRep.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
-<td><p>Make an independent copy of the data object.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_brepfaces.html#compas_occ.brep.BRep.from_brepfaces" title="compas_occ.brep.BRep.from_brepfaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_brepfaces</span></code></a></p></td>
+<td><p>Make a Brep from a list of Brep faces forming an open or closed shell.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_data.html#compas_occ.brep.BRep.from_data" title="compas_occ.brep.BRep.from_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_data</span></code></a></p></td>
 <td><p>Construct an object of this type from the provided data.</p></td>
@@ -312,19 +321,22 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_jsonstring.html#compas_occ.brep.BRep.from_jsonstring" title="compas_occ.brep.BRep.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
 <td><p>Construct an object from serialized data contained in a JSON string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.sha256.html#compas_occ.brep.BRep.sha256" title="compas_occ.brep.BRep.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.from_step_file.html#compas_occ.brep.BRep.from_step_file" title="compas_occ.brep.BRep.from_step_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step_file</span></code></a></p></td>
+<td><p>Conctruct a Brep from the data contained in a STEP file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.sha256.html#compas_occ.brep.BRep.sha256" title="compas_occ.brep.BRep.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
 <td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.to_data.html#compas_occ.brep.BRep.to_data" title="compas_occ.brep.BRep.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.to_data.html#compas_occ.brep.BRep.to_data" title="compas_occ.brep.BRep.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
 <td><p>Convert an object to its native data representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.to_jsonstring.html#compas_occ.brep.BRep.to_jsonstring" title="compas_occ.brep.BRep.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.to_jsonstring.html#compas_occ.brep.BRep.to_jsonstring" title="compas_occ.brep.BRep.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
 <td><p>Serialize the data representation of an object to a JSON string.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.validate_data.html#compas_occ.brep.BRep.validate_data" title="compas_occ.brep.BRep.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.validate_data.html#compas_occ.brep.BRep.validate_data" title="compas_occ.brep.BRep.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
 <td><p>Validate the object's data against its data schema.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.BRep.validate_json.html#compas_occ.brep.BRep.validate_json" title="compas_occ.brep.BRep.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.BRep.validate_json.html#compas_occ.brep.BRep.validate_json" title="compas_occ.brep.BRep.validate_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_json</span></code></a></p></td>
 <td><p>Validate the object's data against its json schema.</p></td>
 </tr>
 </tbody>

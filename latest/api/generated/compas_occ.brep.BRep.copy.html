@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="BRep.from_data" href="compas_occ.brep.BRep.from_data.html" />
+  <link rel="next" title="BRep.cull_unused_edges" href="compas_occ.brep.BRep.cull_unused_edges.html" />
   
 
   
-  <link rel="prev" title="BRep.ToString" href="compas_occ.brep.BRep.ToString.html" />
+  <link rel="prev" title="BRep.contours" href="compas_occ.brep.BRep.contours.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -101,15 +101,11 @@
 <h1>BRep.copy</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.brep.BRep.copy">
-<span class="sig-prename descclassname"><span class="pre">BRep.</span></span><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Make an independent copy of the data object.</p>
+<span class="sig-prename descclassname"><span class="pre">BRep.</span></span><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Deep-copy this BRep using the native OCC copying mechanism.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cls</strong> (Type[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a>], optional) – The type of data object to return.
-Defaults to the type of the current data object.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.data.Data.html#compas.data.Data" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Data</span></code></a> – An independent copy of this object.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><a class="reference internal" href="compas_occ.brep.BRep.html#compas_occ.brep.BRep" title="compas_occ.brep.BRep"><code class="xref py py-class docutils literal notranslate"><span class="pre">BRep</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -201,20 +197,20 @@ Defaults to the type of the current data object.</p>
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="compas_occ.brep.BRep.ToString.html" title="BRep.ToString" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="compas_occ.brep.BRep.contours.html" title="BRep.contours" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          BRep.ToString
+          BRep.contours
         </div>
       </a>
       
 
       
-      <a href="compas_occ.brep.BRep.from_data.html" title="BRep.from_data" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="compas_occ.brep.BRep.cull_unused_edges.html" title="BRep.cull_unused_edges" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          BRep.from_data
+          BRep.cull_unused_edges
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

@@ -98,7 +98,7 @@
 </figure>
 <div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">Plane</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">Cylinder</span>
-<span class="kn">from</span> <span class="nn">compas_occ.brep</span> <span class="kn">import</span> <span class="n">BRep</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Brep</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 <span class="kn">from</span> <span class="nn">compas_view2.objects</span> <span class="kn">import</span> <span class="n">Collection</span>
 
@@ -116,10 +116,10 @@
 <span class="n">cy</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">ZX</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 <span class="n">cz</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">((</span><span class="n">XY</span><span class="p">,</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">R</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">R</span><span class="p">)</span>
 
-<span class="n">A</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_box</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
-<span class="n">B1</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
-<span class="n">B2</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
-<span class="n">B3</span> <span class="o">=</span> <span class="n">BRep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cz</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_box</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+<span class="n">B1</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cx</span><span class="p">)</span>
+<span class="n">B2</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cy</span><span class="p">)</span>
+<span class="n">B3</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_cylinder</span><span class="p">(</span><span class="n">cz</span><span class="p">)</span>
 
 <span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="p">(</span><span class="n">B1</span> <span class="o">+</span> <span class="n">B2</span> <span class="o">+</span> <span class="n">B3</span><span class="p">)</span>
 
@@ -127,20 +127,12 @@
 <span class="c1"># Visualisation</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="c1"># C.data = C.data</span>
-
-<span class="c1"># Currently, the viewer does not suppport BRep shapes.</span>
-<span class="c1"># Therefore we have to convert the components of the BRep to something the viewer does understand.</span>
-
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s2">&quot;ghosted&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rz</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">75</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="mi">7</span>
 
-<span class="n">viewmesh</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_viewmesh</span><span class="p">()</span>
-
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">viewmesh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">show_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="n">viewmesh</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
