@@ -1,8 +1,10 @@
-from typing import List, Tuple
+from typing import List
+from typing import Tuple
+from typing import Optional
 from enum import Enum
 
 from OCC.Core.TopoDS import TopoDS_Face
-from OCC.Core.TopoDS import topods_Face
+from OCC.Core.TopoDS import topods
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_EDGE
@@ -19,20 +21,21 @@ from OCC.Core.GeomConvert import GeomConvert_ApproxSurface
 from OCC.Core.GeomAbs import GeomAbs_Shape
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
 from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Pln
 
 import compas.geometry
 
-from compas.data import Data
 from compas.geometry import Plane
 from compas.geometry import Cylinder
 from compas.geometry import Cone
 from compas.geometry import Sphere
 from compas.geometry import Torus
 from compas.geometry import Polygon
+from compas.brep import BrepFace
 
-from compas_occ.brep import BRepVertex
-from compas_occ.brep import BRepEdge
-from compas_occ.brep import BRepLoop
+from compas_occ.brep import OCCBrepVertex
+from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepLoop
 
 from compas_occ.conversions import compas_point_from_occ_point
 from compas_occ.conversions import compas_plane_to_occ_plane
@@ -45,7 +48,7 @@ from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
 
 
-class BRepFace(Data):
+class OCCBrepFace(BrepFace):
     """
     Class representing a face in the BRep of a geometric shape.
 
@@ -56,11 +59,11 @@ class BRepFace(Data):
 
     Attributes
     ----------
-    vertices : list[:class:`~compas_occ.brep.BRepVertex`], read-only
+    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
         List of BRep vertices.
-    edges : list[:class:`~compas_occ.brep.BRepEdge`], read-only
+    edges : list[:class:`~compas_occ.brep.BrepEdge`], read-only
         List of BRep edges.
-    loops : list[:class:`~compas_occ.brep.BRepLoop`], read-only
+    loops : list[:class:`~compas_occ.brep.BrepLoop`], read-only
         List of BRep loops.
     surface : ``GeomAdaptor_Surface``
         Surface geometry from the adaptor.
@@ -87,15 +90,14 @@ class BRepFace(Data):
         OffsetSurface = 9
         OtherSurface = 10
 
-    def __init__(self, occ_face: TopoDS_Face = None):
+    def __init__(self, occ_face: TopoDS_Face):
         super().__init__()
         self.precision = 1e-6
         self._surface = None
         self._nurbssurface = None
         self._occ_face = None
         self._occ_adaptor = None
-        if occ_face:
-            self.occ_face = occ_face
+        self.occ_face = occ_face
 
     # ==============================================================================
     # Data
@@ -119,14 +121,14 @@ class BRepFace(Data):
 
     @property
     def occ_face(self) -> TopoDS_Face:
-        return self._occ_face
+        return self._occ_face  # type: ignore
 
     @occ_face.setter
     def occ_face(self, face: TopoDS_Face) -> None:
         self._occ_adaptor = None
         self._surface = None
         self._nurbssurface = None
-        self._occ_face = topods_Face(face)
+        self._occ_face = topods.Face(face)
 
     @property
     def occ_adaptor(self) -> BRepAdaptor_Surface:
@@ -158,59 +160,59 @@ class BRepFace(Data):
 
     @property
     def type(self) -> int:
-        return BRepFace.SurfaceType(self.occ_adaptor.GetType())
+        return OCCBrepFace.SurfaceType(self.occ_adaptor.GetType())  # type: ignore
 
     @property
     def is_plane(self) -> bool:
-        return self.type == BRepFace.SurfaceType.Plane
+        return self.type == OCCBrepFace.SurfaceType.Plane
 
     @property
     def is_cylinder(self) -> bool:
-        return self.type == BRepFace.SurfaceType.Cylinder
+        return self.type == OCCBrepFace.SurfaceType.Cylinder
 
     @property
     def is_sphere(self) -> bool:
-        return self.type == BRepFace.SurfaceType.Sphere
+        return self.type == OCCBrepFace.SurfaceType.Sphere
 
     @property
     def is_torus(self) -> bool:
-        return self.type == BRepFace.SurfaceType.Torus
+        return self.type == OCCBrepFace.SurfaceType.Torus
 
     @property
     def is_cone(self) -> bool:
-        return self.type == BRepFace.SurfaceType.Cone
+        return self.type == OCCBrepFace.SurfaceType.Cone
 
     @property
     def is_bspline(self) -> bool:
-        return self.type == BRepFace.SurfaceType.BSplineSurface
+        return self.type == OCCBrepFace.SurfaceType.BSplineSurface
 
     @property
-    def vertices(self) -> List[BRepVertex]:
+    def vertices(self) -> List[OCCBrepVertex]:
         vertices = []
         explorer = TopExp_Explorer(self.occ_face, TopAbs_VERTEX)
         while explorer.More():
             vertex = explorer.Current()
-            vertices.append(BRepVertex(vertex))
+            vertices.append(OCCBrepVertex(vertex))  # type: ignore
             explorer.Next()
         return vertices
 
     @property
-    def edges(self) -> List[BRepEdge]:
+    def edges(self) -> List[OCCBrepEdge]:
         edges = []
         explorer = TopExp_Explorer(self.occ_face, TopAbs_EDGE)
         while explorer.More():
             edge = explorer.Current()
-            edges.append(BRepEdge(edge))
+            edges.append(OCCBrepEdge(edge))  # type: ignore
             explorer.Next()
         return edges
 
     @property
-    def loops(self) -> List[BRepLoop]:
+    def loops(self) -> List[OCCBrepLoop]:
         loops = []
         explorer = TopExp_Explorer(self.occ_face, TopAbs_WIRE)
         while explorer.More():
             wire = explorer.Current()
-            loops.append(BRepLoop(wire))
+            loops.append(OCCBrepLoop(wire))  # type: ignore
             explorer.Next()
         return loops
 
@@ -232,7 +234,7 @@ class BRepFace(Data):
     # ==============================================================================
 
     @classmethod
-    def from_polygon(cls, points: Polygon) -> "BRepFace":
+    def from_polygon(cls, points: Polygon) -> "OCCBrepFace":
         """
         Construct a BRep face from a polygon.
 
@@ -242,7 +244,7 @@ class BRepFace(Data):
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         polygon = BRepBuilderAPI_MakePolygon()
@@ -256,11 +258,11 @@ class BRepFace(Data):
     def from_plane(
         cls,
         plane: Plane,
-        udomain: Tuple[float, float] = None,
-        vdomain: Tuple[float, float] = None,
-        loop: BRepLoop = None,
+        udomain: Optional[Tuple[float, float]] = None,
+        vdomain: Optional[Tuple[float, float]] = None,
+        loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
-    ) -> "BRepFace":
+    ) -> "OCCBrepFace":
         """
         Construct a face from a plane.
 
@@ -272,31 +274,34 @@ class BRepFace(Data):
             U parameter minimum and maximum.
         vdomain : Tuple[float, float], optional
             V parameter minimum and maximum.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
-        plane = compas_plane_to_occ_plane(plane)
+        occ_plane: gp_Pln = compas_plane_to_occ_plane(plane)
         if udomain and vdomain:
             umin, umax = udomain
             vmin, vmax = vdomain
-            builder = BRepBuilderAPI_MakeFace(plane, umin, umax, vmin, vmax)
+            builder = BRepBuilderAPI_MakeFace(occ_plane, umin, umax, vmin, vmax)
         elif loop:
-            builder = BRepBuilderAPI_MakeFace(plane, loop.occ_wire, inside)
+            builder = BRepBuilderAPI_MakeFace(occ_plane, loop.occ_wire, inside)
         else:
-            builder = BRepBuilderAPI_MakeFace(plane)
+            builder = BRepBuilderAPI_MakeFace(occ_plane)
         return cls(builder.Face())
 
     @classmethod
     def from_cylinder(
-        cls, cylinder: Cylinder, loop: BRepLoop = None, inside: bool = True
-    ) -> "BRepFace":
+        cls,
+        cylinder: Cylinder,
+        loop: Optional[OCCBrepLoop] = None,
+        inside: bool = True,
+    ) -> "OCCBrepFace":
         """
         Construct a face from a cylinder.
 
@@ -304,19 +309,21 @@ class BRepFace(Data):
         ----------
         cylinder : :class:`compas.geometry.Cylinder`
             The cylinder.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         if loop:
             builder = BRepBuilderAPI_MakeFace(
-                compas_cylinder_to_occ_cylinder(cylinder), loop.occ_wire, inside
+                compas_cylinder_to_occ_cylinder(cylinder),
+                loop.occ_wire,
+                inside,
             )
         else:
             builder = BRepBuilderAPI_MakeFace(compas_cylinder_to_occ_cylinder(cylinder))
@@ -324,8 +331,11 @@ class BRepFace(Data):
 
     @classmethod
     def from_cone(
-        cls, cone: Cone, loop: BRepLoop = None, inside: bool = True
-    ) -> "BRepFace":
+        cls,
+        cone: Cone,
+        loop: Optional[OCCBrepLoop] = None,
+        inside: bool = True,
+    ) -> "OCCBrepFace":
         """
         Construct a face from a cone.
 
@@ -333,19 +343,21 @@ class BRepFace(Data):
         ----------
         cone : :class:`compas.geometry.Cone`
             The cone.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         if loop:
             builder = BRepBuilderAPI_MakeFace(
-                compas_cone_to_occ_cone(cone), loop.occ_wire, inside
+                compas_cone_to_occ_cone(cone),
+                loop.occ_wire,
+                inside,
             )
         else:
             builder = BRepBuilderAPI_MakeFace(compas_cone_to_occ_cone(cone))
@@ -353,8 +365,11 @@ class BRepFace(Data):
 
     @classmethod
     def from_sphere(
-        cls, sphere: Sphere, loop: BRepLoop = None, inside: bool = True
-    ) -> "BRepFace":
+        cls,
+        sphere: Sphere,
+        loop: Optional[OCCBrepLoop] = None,
+        inside: bool = True,
+    ) -> "OCCBrepFace":
         """
         Construct a face from a sphere.
 
@@ -362,14 +377,14 @@ class BRepFace(Data):
         ----------
         sphere : :class:`compas.geometry.Sphere`
             The sphere.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         if loop:
@@ -382,8 +397,11 @@ class BRepFace(Data):
 
     @classmethod
     def from_torus(
-        cls, torus: Torus, loop: BRepLoop = None, inside: bool = True
-    ) -> "BRepFace":
+        cls,
+        torus: Torus,
+        loop: Optional[OCCBrepLoop] = None,
+        inside: bool = True,
+    ) -> "OCCBrepFace":
         """
         Construct a face from a torus.
 
@@ -391,14 +409,14 @@ class BRepFace(Data):
         ----------
         torus : :class:`compas.geometry.Torus`
             The torus.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         if loop:
@@ -413,12 +431,12 @@ class BRepFace(Data):
     def from_surface(
         cls,
         surface: OCCSurface,
-        udomain: Tuple[float, float] = None,
-        vdomain: Tuple[float, float] = None,
+        udomain: Optional[Tuple[float, float]] = None,
+        vdomain: Optional[Tuple[float, float]] = None,
         precision: float = 1e-6,
-        loop: BRepLoop = None,
+        loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
-    ) -> "BRepFace":
+    ) -> "OCCBrepFace":
         """
         Construct a face from a surface.
 
@@ -428,14 +446,14 @@ class BRepFace(Data):
             The torus.
         precision : float, optional
             Precision for face construction.
-        loop : :class:`compas_occ.brep.BRepLoop`, optional
+        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`BRepFace`
+        :class:`OCCBrepFace`
 
         """
         if udomain and vdomain:
@@ -532,13 +550,13 @@ class BRepFace(Data):
         fixer.Perform()
         self.occ_face = fixer.Face()
 
-    def add_loop(self, loop: BRepLoop, reverse: bool = False) -> None:
+    def add_loop(self, loop: OCCBrepLoop, reverse: bool = False) -> None:
         """
         Add an inner loop to the face.
 
         Parameters
         ----------
-        loop : :class:`compas_occ.brep.BRepLoop`
+        loop : :class:`compas_occ.brep.OCCBrepLoop`
             The additional loop.
 
         Returns
@@ -555,13 +573,13 @@ class BRepFace(Data):
             raise Exception(builder.Error())
         self.occ_face = builder.Face()
 
-    def add_loops(self, loops: List[BRepLoop], reverse: bool = False) -> None:
+    def add_loops(self, loops: List[OCCBrepLoop], reverse: bool = False) -> None:
         """
         Add an inner loop to the face.
 
         Parameters
         ----------
-        loops : list[:class:`compas_occ.brep.BRepLoop`]
+        loops : list[:class:`compas_occ.brep.OCCBrepLoop`]
             The additional loops.
 
         Returns
