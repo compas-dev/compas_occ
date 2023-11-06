@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.utilities import pairwise
 from compas.geometry import Point
 from compas_occ.geometry import OCCNurbsCurve

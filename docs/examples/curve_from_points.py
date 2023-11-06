@@ -1,12 +1,14 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_occ.geometry import OCCNurbsCurve
+from compas.geometry import NurbsCurve
 from compas_view2.app import App
 
 
 points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 
-curve = OCCNurbsCurve.from_points(points)
+curve = NurbsCurve.from_points(points)
 
 # ==============================================================================
 # Visualisation
@@ -14,7 +16,8 @@ curve = OCCNurbsCurve.from_points(points)
 
 view = App()
 
-view.add(Polyline(curve.locus()), linewidth=3)
+view.add(curve.to_polyline(), linewidth=3)
+
 view.add(
     Polyline(curve.points),
     show_points=True,

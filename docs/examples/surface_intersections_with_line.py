@@ -1,3 +1,5 @@
+# type: ignore
+
 from math import radians
 from compas.geometry import Point, Vector, Line, Polyline
 from compas.geometry import Rotation
@@ -71,6 +73,6 @@ for x in intersections:
         Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1)
     )
 
-view.add(surface.to_mesh(), show_lines=False)
+view.add(surface)
 
 view.run()

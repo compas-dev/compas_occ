@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App

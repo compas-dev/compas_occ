@@ -1,8 +1,9 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
-
 
 points = [
     [
@@ -67,7 +68,7 @@ weights = [
 surface = OCCNurbsSurface.from_parameters(
     points=points,
     weights=weights,
-    u_knots=[
+    knots_u=[
         1.0,
         1 + 1 / 9,
         1 + 2 / 9,
@@ -79,11 +80,11 @@ surface = OCCNurbsSurface.from_parameters(
         1 + 8 / 9,
         2.0,
     ],
-    v_knots=[0.0, 1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9, 1.0],
-    u_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    v_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    u_degree=3,
-    v_degree=3,
+    knots_v=[0.0, 1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9, 1.0],
+    mults_u=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    mults_v=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    degree_u=3,
+    degree_v=3,
 )
 
 # ==============================================================================
@@ -112,6 +113,6 @@ for col in zip(*surface.points):
         linecolor=(0.3, 0.3, 0.3),
     )
 
-view.add(surface)
+view.add(surface.to_mesh())
 
 view.run()

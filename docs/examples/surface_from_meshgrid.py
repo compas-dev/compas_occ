@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.utilities import meshgrid, linspace

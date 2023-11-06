@@ -1,6 +1,9 @@
-from compas.geometry import Point, Vector, Plane, Circle
-from compas_occ.brep import BRepEdge, BRepLoop, BRepFace, BRep
-from compas_occ.geometry import OCCNurbsCurve, OCCNurbsSurface
+# type: ignore
+
+from compas.geometry import Point, Vector, Frame, Circle
+from compas_occ.brep import OCCBrepEdge, OCCBrepLoop, OCCBrepFace
+from compas.brep import Brep
+from compas.geometry import NurbsCurve, NurbsSurface
 from compas_view2.app import App
 
 points = [
@@ -10,27 +13,35 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-surface = OCCNurbsSurface.from_points(points=points)
+surface = NurbsSurface.from_points(points=points)
 
-circle = Circle(Plane(Point(1.5, 1.5, 1.5), Vector(0, 0, 1)), 0.5)
-curve = OCCNurbsCurve.from_circle(circle).projected(surface).embedded(surface)
+circle = Circle(
+    0.5,
+    frame=Frame(
+        Point(1.5, 1.5, 1.5),
+        Vector(1, 0, 0),
+        Vector(0, 1, 0),
+    ),
+)
 
-edge = BRepEdge.from_curve(curve, surface)
-loop = BRepLoop.from_edges([edge])
+# projected is still 3D
+# embedded is 2D
+# and the 2D curve should keep track of the embedding surface
+curve = NurbsCurve.from_circle(circle)
 
-face = BRepFace.from_surface(surface)
+edge = OCCBrepEdge.from_curve(curve=curve, surface=surface)
+loop = OCCBrepLoop.from_edges([edge])
+
+# perhaps this should be:
+# face = OCCBrepFace()
+# face.set_surface(surface)
+# face.add_boundary(loop) => if the loop edges are not embedded in the surface, they should be
+# face.add_hole(loop) => if the loop edges ...
+face = OCCBrepFace.from_surface(surface)
 face.add_loop(loop)
 
-brep = BRep.from_faces([face])
-mesh = brep.to_tesselation()
+brep = Brep.from_brepfaces([face])
 
 viewer = App()
-viewer.add(mesh, show_lines=False)
-for edge in brep.edges:
-    if edge.is_line:
-        viewer.add(edge.to_line(), linewidth=2)
-    elif edge.is_circle:
-        viewer.add(edge.curve.to_polyline(), linewidth=2)
-    elif edge.is_bspline:
-        viewer.add(edge.curve.to_polyline(), linewidth=2)
+viewer.add(brep, linewidth=2)
 viewer.show()

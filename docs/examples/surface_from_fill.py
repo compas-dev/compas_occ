@@ -1,9 +1,8 @@
+# type: ignore
+
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
-
-
 from compas.geometry import Point
-from compas.geometry import Polyline
 
 from compas_view2.app import App
 
@@ -26,7 +25,11 @@ nurbscurve5 = NurbsCurve.from_interpolation(points5)
 nurbscurve6 = NurbsCurve.from_interpolation(points6)
 
 nurbssurface_4curves = NurbsSurface.from_fill(
-    nurbscurve3, nurbscurve4, nurbscurve5, nurbscurve6, style="curved"
+    nurbscurve3,
+    nurbscurve4,
+    nurbscurve5,
+    nurbscurve6,
+    style="curved",
 )
 
 
@@ -36,15 +39,15 @@ nurbssurface_4curves = NurbsSurface.from_fill(
 
 view = App()
 
-view.add(Polyline(nurbscurve1.locus()), linewidth=3, linecolor=(1, 0, 0))
-view.add(Polyline(nurbscurve2.locus()), linewidth=3, linecolor=(0, 1, 0))
+view.add(nurbscurve1.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
+view.add(nurbscurve2.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
 
-view.add(Polyline(nurbscurve3.locus()), linewidth=3, linecolor=(1, 0, 0))
-view.add(Polyline(nurbscurve4.locus()), linewidth=3, linecolor=(0, 1, 0))
-view.add(Polyline(nurbscurve5.locus()), linewidth=3, linecolor=(1, 0, 1))
-view.add(Polyline(nurbscurve6.locus()), linewidth=3, linecolor=(0, 0, 1))
+view.add(nurbscurve3.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
+view.add(nurbscurve4.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
+view.add(nurbscurve5.to_polyline(), linewidth=3, linecolor=(1, 0, 1))
+view.add(nurbscurve6.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
 
-view.add(nurbssurface_2curves.to_mesh(nu=10))
-view.add(nurbssurface_4curves.to_mesh(nu=10))
+view.add(nurbssurface_2curves)
+view.add(nurbssurface_4curves)
 
 view.run()

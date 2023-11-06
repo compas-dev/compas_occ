@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsCurve
@@ -20,7 +22,7 @@ curve = OCCNurbsCurve.from_parameters(
 
 view = App()
 
-view.add(Polyline(curve.locus()), linewidth=3)
+view.add(curve.to_polyline(), linewidth=3)
 view.add(
     Polyline(curve.points),
     show_points=True,

@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Vector
 from compas_occ.geometry import OCCNurbsCurve
@@ -15,5 +17,5 @@ viewer.view.camera.position = [-7, -10, 6]
 viewer.view.camera.target = [2, 0, 5]
 
 viewer.add(curve.to_polyline(), linewidth=5, linecolor=(1, 0, 0))
-viewer.add(surface.to_mesh())
+viewer.add(surface)
 viewer.show()

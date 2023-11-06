@@ -1,5 +1,6 @@
+# type: ignore
+
 from compas.geometry import Point
-from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
@@ -18,12 +19,12 @@ surface = OCCNurbsSurface.from_points(points=points)
 # ==============================================================================
 
 u_curves = []
-for u in surface.u_space(5):
-    u_curves.append(surface.u_isocurve(u))
+for u in surface.space_u(5):
+    u_curves.append(surface.isocurve_u(u))
 
 v_curves = []
-for v in surface.v_space(10):
-    v_curves.append(surface.v_isocurve(v))
+for v in surface.space_v(10):
+    v_curves.append(surface.isocurve_v(v))
 
 # ==============================================================================
 # Visualisation
@@ -32,9 +33,9 @@ for v in surface.v_space(10):
 view = App()
 
 for curve in u_curves:
-    view.add(Polyline(curve.locus()), linecolor=(1, 0, 0), linewidth=2)
+    view.add(curve.to_polyline(), linecolor=(1, 0, 0), linewidth=2)
 
 for curve in v_curves:
-    view.add(Polyline(curve.locus()), linecolor=(0, 1, 0), linewidth=2)
+    view.add(curve.to_polyline(), linecolor=(0, 1, 0), linewidth=2)
 
 view.run()

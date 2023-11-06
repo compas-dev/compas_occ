@@ -1,12 +1,17 @@
+# type: ignore
+
 import compas
 from compas.geometry import Vector, Translation, Scale
-from compas.geometry import Polyline
 from compas.datastructures import Mesh
-from compas_occ.brep import BRep
+from compas.brep import Brep
 from compas_view2.app import App
 
 
-mesh = Mesh.from_obj(compas.get("tubemesh.obj"))
+mesh: Mesh = Mesh.from_obj(compas.get("tubemesh.obj"))
+
+# move the mesh closer to the origin
+# place it on the XY plane
+# and scale it down
 
 centroid = mesh.centroid()
 zmin = min(mesh.vertices_attribute("z"))
@@ -19,22 +24,13 @@ S = Scale.from_factors([0.3, 0.3, 0.3])
 
 mesh.transform(S * T)
 
-brep = BRep.from_mesh(mesh)
-brep.check()
+# convert to a brep
 
-lines = []
-curves = []
+brep = Brep.from_mesh(mesh)
 
-for edge in brep.edges:
-    if edge.is_line:
-        lines.append(edge.to_line())
-    elif edge.is_bspline:
-        curves.append(Polyline(edge.curve.locus()))
+# visualize
 
 viewer = App(viewmode="ghosted")
-viewer.add(brep, show_lines=False)
-
-for curve in curves:
-    viewer.add(curve, linewidth=2)
+viewer.add(brep, linewidth=2)
 
 viewer.run()

@@ -1,6 +1,8 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline, Bezier
-from compas_occ.geometry import OCCNurbsCurve
+from compas.geometry import NurbsCurve
 from compas_view2.app import App
 
 
@@ -9,7 +11,7 @@ bezier = Bezier(points)
 
 points = [Point(3, 0, 0), Point(4, 3, 0), Point(5, 0, 0)]
 
-curve1 = OCCNurbsCurve.from_parameters(
+curve1 = NurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0],
@@ -17,7 +19,7 @@ curve1 = OCCNurbsCurve.from_parameters(
     degree=2,
 )
 
-curve2 = OCCNurbsCurve.from_parameters(
+curve2 = NurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 2.0, 1.0],
     knots=[0.0, 1.0],
@@ -25,7 +27,7 @@ curve2 = OCCNurbsCurve.from_parameters(
     degree=2,
 )
 
-curve3 = OCCNurbsCurve.from_parameters(
+curve3 = NurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 1.0, 1.0],
     knots=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0],
@@ -47,7 +49,7 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(Polyline(bezier.locus()), linewidth=5, linecolor=(0, 0, 0))
+view.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
 
 view.add(
     Polyline(curve1.points),
@@ -57,8 +59,8 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(Polyline(curve1.locus()), linewidth=5, linecolor=(0, 0, 0))
-view.add(Polyline(curve2.locus()), linewidth=5, linecolor=(0, 1, 1))
-view.add(Polyline(curve3.locus()), linewidth=5, linecolor=(0, 0, 1))
+view.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+view.add(curve2.to_polyline(), linewidth=5, linecolor=(0, 1, 1))
+view.add(curve3.to_polyline(), linewidth=5, linecolor=(0, 0, 1))
 
 view.run()

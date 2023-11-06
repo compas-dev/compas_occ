@@ -1,5 +1,6 @@
+# type: ignore
+
 from compas.geometry import Point
-from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
@@ -18,8 +19,8 @@ curve1.join(curve2)
 
 view = App()
 
-view.add(Polyline(curve1.locus()), linewidth=3, linecolor=(1, 0, 0))
-view.add(Polyline(curve2.locus()), linewidth=3, linecolor=(0, 1, 0))
-view.add(Polyline(joined.locus()), linewidth=3, linecolor=(0, 0, 1))
+view.add(curve1.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
+view.add(curve2.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
+view.add(joined.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
 
 view.run()

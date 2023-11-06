@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.geometry import Polyline, Bezier
 from compas_occ.geometry import OCCNurbsCurve
@@ -71,7 +73,7 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(Polyline(bezier.locus()), linewidth=5, linecolor=(0, 0, 0))
+view.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
 
 view.add(
     Polyline(curve1.points),
@@ -81,11 +83,11 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(Polyline(curve1.locus()), linewidth=5, linecolor=(0, 0, 0))
-view.add(Polyline(curve2.locus()), linewidth=3, linecolor=(0, 0, 1))
-view.add(Polyline(curve3.locus()), linewidth=3, linecolor=(0.2, 0.2, 1))
-view.add(Polyline(curve4.locus()), linewidth=3, linecolor=(0.4, 0.4, 1))
-view.add(Polyline(curve5.locus()), linewidth=3, linecolor=(0.6, 0.6, 1))
-view.add(Polyline(curve6.locus()), linewidth=3, linecolor=(0.8, 0.8, 1))
+view.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+view.add(curve2.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
+view.add(curve3.to_polyline(), linewidth=3, linecolor=(0.2, 0.2, 1))
+view.add(curve4.to_polyline(), linewidth=3, linecolor=(0.4, 0.4, 1))
+view.add(curve5.to_polyline(), linewidth=3, linecolor=(0.6, 0.6, 1))
+view.add(curve6.to_polyline(), linewidth=3, linecolor=(0.8, 0.8, 1))
 
 view.run()

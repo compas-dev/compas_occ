@@ -1,5 +1,6 @@
-from compas.geometry import Vector, Point, Plane
-from compas.geometry import Line, Polyline
+# type: ignore
+
+from compas.geometry import Line
 from compas.geometry import Ellipse
 from compas.utilities import pairwise
 from compas_occ.geometry import OCCNurbsCurve
@@ -7,7 +8,7 @@ from compas_view2.app import App
 from compas_view2.objects import Collection
 
 
-ellipse = Ellipse(Plane(Point(0, 0, 0), Vector(0, 0, 1)), 2.0, 1.0)
+ellipse = Ellipse(2.0, 1.0)
 curve = OCCNurbsCurve.from_ellipse(ellipse)
 
 # ==============================================================================
@@ -16,7 +17,7 @@ curve = OCCNurbsCurve.from_ellipse(ellipse)
 
 view = App()
 
-view.add(Polyline(curve.locus()), linewidth=3)
+view.add(curve.to_polyline(), linewidth=3)
 view.add(Collection(curve.points), pointsize=20, pointcolor=(1, 0, 0))
 
 for a, b in pairwise(curve.points):

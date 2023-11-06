@@ -1,11 +1,12 @@
-from compas.geometry import Vector, Point, Plane
+# type: ignore
+
 from compas.geometry import Polyline
 from compas.geometry import Circle
 from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
 
-circle = Circle(Plane(Point(0, 0, 0), Vector(0, 0, 1)), 1.0)
+circle = Circle(1.0)
 curve = OCCNurbsCurve.from_circle(circle)
 
 # ==============================================================================
@@ -14,7 +15,7 @@ curve = OCCNurbsCurve.from_circle(circle)
 
 view = App()
 
-view.add(Polyline(curve.locus()), linewidth=3)
+view.add(curve.to_polyline(), linewidth=3)
 view.add(
     Polyline(curve.points),
     show_points=True,

@@ -1,29 +1,20 @@
-from compas.geometry import Point, Vector, Plane
+# type: ignore
+
+from compas.geometry import Frame
 from compas.geometry import Box, Cylinder
-from compas.geometry import Brep
 from compas_view2.app import App
-from compas_view2.objects import Collection
 
 R = 1.4
-P = Point(0, 0, 0)
-X = Vector(1, 0, 0)
-Y = Vector(0, 1, 0)
-Z = Vector(0, 0, 1)
-YZ = Plane(P, X)
-ZX = Plane(P, Y)
-XY = Plane(P, Z)
+YZ = Frame.worldYZ()
+ZX = Frame.worldZX()
+XY = Frame.worldXY()
 
-box = Box.from_width_height_depth(2 * R, 2 * R, 2 * R)
-cx = Cylinder((YZ, 0.7 * R), 4 * R)
-cy = Cylinder((ZX, 0.7 * R), 4 * R)
-cz = Cylinder((XY, 0.7 * R), 4 * R)
+box = Box(2 * R).to_brep()
+cx = Cylinder(0.7 * R, 4 * R, frame=YZ).to_brep()
+cy = Cylinder(0.7 * R, 4 * R, frame=ZX).to_brep()
+cz = Cylinder(0.7 * R, 4 * R, frame=XY).to_brep()
 
-A = Brep.from_box(box)
-B1 = Brep.from_cylinder(cx)
-B2 = Brep.from_cylinder(cy)
-B3 = Brep.from_cylinder(cz)
-
-C = A - (B1 + B2 + B3)
+result = box - (cx + cy + cz)
 
 # ==============================================================================
 # Visualisation
@@ -34,6 +25,6 @@ viewer.view.camera.rz = -30
 viewer.view.camera.rx = -75
 viewer.view.camera.distance = 7
 
-viewer.add(C)
+viewer.add(result, linewidth=2)
 
 viewer.run()

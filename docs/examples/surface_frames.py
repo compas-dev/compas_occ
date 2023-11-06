@@ -1,3 +1,5 @@
+# type: ignore
+
 from compas.geometry import Point
 from compas.utilities import meshgrid, flatten
 from compas_occ.geometry import OCCNurbsSurface
@@ -26,9 +28,9 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 view = App()
 
-view.add(surface.to_mesh(), show_lines=False)
+view.add(surface, show_lines=False)
 
 for frame in frames:
-    view.add(frame, pointsize=0.25)
+    view.add(frame, size=0.3, pointsize=0.25)
 
 view.run()

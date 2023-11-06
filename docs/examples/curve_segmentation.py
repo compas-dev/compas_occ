@@ -1,5 +1,6 @@
+# type: ignore
+
 from compas.geometry import Point
-from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
@@ -25,9 +26,8 @@ print(segment.domain)
 
 view = App()
 
-view.add(Polyline(curveA.locus()), linewidth=4, linecolor=(1, 0, 0))
-
-view.add(Polyline(curveB.locus()), linewidth=1, linecolor=(0, 0, 0))
-view.add(Polyline(segment.locus()), linewidth=4, linecolor=(0, 1, 0))
+view.add(curveA.to_polyline(), linewidth=4, linecolor=(1, 0, 0))
+view.add(curveB.to_polyline(), linewidth=1, linecolor=(0, 0, 0))
+view.add(segment.to_polyline(), linewidth=4, linecolor=(0, 1, 0))
 
 view.run()

@@ -1,3 +1,5 @@
+# type: ignore
+
 from math import radians
 from compas.geometry import Point, Translation, Rotation
 from compas.geometry import Polyline
