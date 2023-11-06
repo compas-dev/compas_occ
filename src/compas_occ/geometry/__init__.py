@@ -1,25 +1,4 @@
-"""
-********************************************************************************
-compas_occ.geometry
-********************************************************************************
-
-.. currentmodule:: compas_occ.geometry
-
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    OCCCurve
-    OCCNurbsCurve
-    OCCSurface
-    OCCExtrusionSurface
-    OCCRevolutionSurface
-    OCCNurbsSurface
-
-"""
+from .curves import OCCCurve2d  # noqa: F401
 from .curves import OCCCurve  # noqa: F401
 from .curves import OCCNurbsCurve  # noqa: F401
 
