@@ -15,7 +15,7 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.Core.GeomFill import geomfill_Surface
+from OCC.Core.GeomFill import geomfill
 from OCC.Core.BRepFill import BRepFill_Filling
 from OCC.Core.GeomAbs import GeomAbs_C0
 from OCC.Extend.TopologyUtils import TopologyExplorer
@@ -26,12 +26,12 @@ Quad = Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 
 NGon = List[Union[Annotated[List[float], 3], compas.geometry.Point]]
 
 
-def triangle_to_face(points: Triangle) -> TopoDS_Face:
+def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
     """Convert a triangle to a BRep face.
 
     Parameters
     ----------
-    points : [point, point, point]
+    triangle : [point, point, point]
         Three points defining a triangle.
 
     Returns
@@ -40,26 +40,38 @@ def triangle_to_face(points: Triangle) -> TopoDS_Face:
 
     Raises
     ------
-    AssertionError
+    ValueError
         If the number of points is not 3.
 
+    See Also
+    --------
+    :func:`quad_to_face`
+    :func:`ngon_to_face`
+
+    Examples
+    --------
+    >>> triangle = [[0, 0, 0], [1, 0, 0], [0, 1, 0]]
+    >>> triangle_to_face(triangle)
+    <class 'TopoDS_Face'>
+
     """
-    assert len(points) == 3, "The number of input points should be three."
+    if len(triangle) != 3:
+        raise ValueError("The number of input points should be three.")
 
     polygon = BRepBuilderAPI_MakePolygon()
-    for point in points:
+    for point in triangle:
         polygon.Add(gp_Pnt(*point))
     polygon.Close()
     wire = polygon.Wire()
     return BRepBuilderAPI_MakeFace(wire).Face()
 
 
-def quad_to_face(points: Quad) -> TopoDS_Face:
+def quad_to_face(quad: Quad) -> TopoDS_Face:
     """Convert a quad to a BRep face with an underlying ruled surface.
 
     Parameters
     ----------
-    points : [point, point, point, point]
+    quad : [point, point, point, point]
         Four points defining a quad.
 
     Returns
@@ -68,37 +80,54 @@ def quad_to_face(points: Quad) -> TopoDS_Face:
 
     Raises
     ------
-    AssertionError
+    ValueError
         If the number of points is not 4.
 
-    """
-    assert len(points) == 4, "The number of input points should be four."
+    See Also
+    --------
+    :func:`triangle_to_face`
+    :func:`ngon_to_face`
 
-    points = [Point(*point) for point in points]
+    Examples
+    --------
+    >>> quad = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
+    >>> quad_to_face(quad)
+    <class 'TopoDS_Face'>
+
+    """
+    if len(quad) != 4:
+        raise ValueError("The number of input points should be four.")
+
+    points = [Point(*point) for point in quad]
     curve1 = GeomAPI_PointsToBSpline(
         array1_from_points1([points[0], points[1]])
     ).Curve()
     curve2 = GeomAPI_PointsToBSpline(
         array1_from_points1([points[3], points[2]])
     ).Curve()
-    srf = geomfill_Surface(curve1, curve2)
+    srf = geomfill.Surface(curve1, curve2)
     return BRepBuilderAPI_MakeFace(srf, 1e-6).Face()
 
 
-def ngon_to_face(points: NGon) -> TopoDS_Face:
+def ngon_to_face(ngon: NGon) -> TopoDS_Face:
     """Convert a Ngon to a BRep face with an underlying best-fit surface.
 
     Parameters
     ----------
-    points : sequence[point]
+    ngon : sequence[point]
         Points defining a polygon.
 
     Returns
     -------
     TopoDS_Face
 
+    See Also
+    --------
+    :func:`triangle_to_face`
+    :func:`quad_to_face`
+
     """
-    points = [gp_Pnt(*point) for point in points]
+    points = [gp_Pnt(*point) for point in ngon]
     poly = BRepBuilderAPI_MakePolygon()
     for point in points:
         poly.Add(point)
@@ -126,11 +155,17 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     Raises
     ------
-    AssertionError
+    ValueError
         If the mesh is not a triangle mesh.
 
+    See Also
+    --------
+    :func:`compas_quadmesh_to_occ_shell`
+    :func:`compas_mesh_to_occ_shell`
+
     """
-    assert mesh.is_trimesh(), "The input mesh is not a triangle mesh."
+    if not mesh.is_trimesh():
+        raise ValueError("The input mesh is not a triangle mesh.")
 
     shell = TopoDS_Shell()
     builder = BRep_Builder()
@@ -138,7 +173,7 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, triangle_to_face(points))
+        builder.Add(shell, triangle_to_face(points))  # type: ignore
 
     return shell
 
@@ -157,11 +192,17 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     Raises
     ------
-    AssertionError
+    ValueError
         If the input mesh is not a quad mesh.
 
+    See Also
+    --------
+    :func:`compas_trimesh_to_occ_shell`
+    :func:`compas_mesh_to_occ_shell`
+
     """
-    assert mesh.is_quadmesh(), "The input mesh is not a quad mesh."
+    if not mesh.is_quadmesh():
+        raise ValueError("The input mesh is not a quad mesh.")
 
     shell = TopoDS_Shell()
     builder = BRep_Builder()
@@ -169,7 +210,7 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, quad_to_face(points))
+        builder.Add(shell, quad_to_face(points))  # type: ignore
 
     return shell
 
@@ -186,9 +227,12 @@ def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
     -------
     TopoDS_Shell
 
-    """
-    # https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_geometry_geomplate.py
+    See Also
+    --------
+    :func:`compas_trimesh_to_occ_shell`
+    :func:`compas_quadmesh_to_occ_shell`
 
+    """
     shell = TopoDS_Shell()
     builder = BRep_Builder()
     builder.MakeShell(shell)
@@ -197,10 +241,10 @@ def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
         points = mesh.face_coordinates(face)
 
         if len(points) == 3:
-            builder.Add(shell, triangle_to_face(points))
+            builder.Add(shell, triangle_to_face(points))  # type: ignore
         elif len(points) == 4:
-            builder.Add(shell, quad_to_face(points))
+            builder.Add(shell, quad_to_face(points))  # type: ignore
         else:
-            builder.Add(shell, ngon_to_face(points))
+            builder.Add(shell, ngon_to_face(points))  # type: ignore
 
     return shell
