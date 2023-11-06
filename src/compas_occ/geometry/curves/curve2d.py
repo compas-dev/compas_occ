@@ -1,0 +1,301 @@
+from typing import Tuple
+
+from compas.geometry import Point
+from compas.geometry import Vector
+from compas.geometry import Curve
+from compas.geometry import Polyline
+from compas.geometry import Frame
+
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge2d
+from OCC.Core.Geom2d import Geom2d_Curve
+from OCC.Core.gp import gp_Pnt2d
+from OCC.Core.gp import gp_Vec2d
+from OCC.Core.TopoDS import topods_Edge
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Edge
+
+from compas_occ.conversions import compas_point_from_occ_point2d
+from compas_occ.conversions import compas_vector_from_occ_vector2d
+
+
+class OCCCurve2d(Curve):
+    """Class representing a general 2D curve object ussually generated through an embedding in a surface.
+
+    Parameters
+    ----------
+    name : str, optional
+        The name of the curve.
+
+    Attributes
+    ----------
+    dimension : int, read-only
+        The dimension of the curve is always 2.
+    domain : tuple[float, float], read-only
+        The domain of the parameter space of the curve.
+    end : :class:`~compas.geometry.Point`, read-only
+        The end point of the curve.
+    is_closed : bool, read-only
+        Flag indicating that the curve is closed.
+    is_periodic : bool, read-only
+        Flag indicating that the curve is periodic.
+    start : :class:`~compas.geometry.Point`, read-only
+        The start point of the curve.
+
+    """
+
+    def __init__(self, occ_curve: Geom2d_Curve, name=None):
+        super().__init__(name=name)
+        self._dimension = 2
+        self._occ_curve = Geom2d_Curve()
+        self.occ_curve = occ_curve
+
+    def __eq__(self, other: "OCCCurve2d") -> bool:
+        raise NotImplementedError
+
+    # ==============================================================================
+    # Data
+    # ==============================================================================
+
+    # ==============================================================================
+    # OCC Properties
+    # ==============================================================================
+
+    @property
+    def occ_curve(self) -> Geom2d_Curve:
+        return self._occ_curve
+
+    @occ_curve.setter
+    def occ_curve(self, curve: Geom2d_Curve):
+        self._occ_curve = curve
+
+    @property
+    def occ_shape(self) -> TopoDS_Shape:
+        return BRepBuilderAPI_MakeEdge2d(self.occ_curve).Shape()
+
+    @property
+    def occ_edge(self) -> TopoDS_Edge:
+        return topods_Edge(self.occ_shape)
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
+
+    @property
+    def dimension(self) -> int:
+        return self._dimension
+
+    @property
+    def domain(self) -> Tuple[float, float]:
+        return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
+
+    @property
+    def start(self) -> Point:
+        return self.point_at(self.domain[0])
+
+    @property
+    def end(self) -> Point:
+        return self.point_at(self.domain[1])
+
+    @property
+    def is_closed(self) -> bool:
+        return self.occ_curve.IsClosed()
+
+    @property
+    def is_periodic(self) -> bool:
+        return self.occ_curve.IsPeriodic()
+
+    # ==============================================================================
+    # Constructors
+    # ==============================================================================
+
+    @classmethod
+    def from_occ(cls, occ_curve: Geom2d_Curve) -> "OCCCurve2d":
+        """Construct a NURBS curve from an existing OCC BSplineCurve.
+
+        Parameters
+        ----------
+        occ_curve : Geom2d_Curve
+
+        Returns
+        -------
+        :class:`OCCCurve2d`
+
+        """
+        return cls(occ_curve)
+
+    # ==============================================================================
+    # Conversions
+    # ==============================================================================
+
+    def to_step(self, filepath: str, schema: str = "AP203") -> None:
+        """Write the curve geometry to a STP file.
+
+        Parameters
+        ----------
+        filepath : str
+        schema : str, optional
+
+        Returns
+        -------
+        None
+
+        """
+        from OCC.Core.Interface import Interface_Static_SetCVal
+        from OCC.Core.IFSelect import IFSelect_RetDone
+        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.STEPControl import STEPControl_AsIs
+
+        step_writer = STEPControl_Writer()
+        Interface_Static_SetCVal("write.step.schema", schema)
+        step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
+        status = step_writer.Write(filepath)
+        if status != IFSelect_RetDone:
+            raise AssertionError("Operation failed.")
+
+    def to_polyline(self, n: int = 100) -> Polyline:
+        """Convert the curve to a polyline.
+
+        Parameters
+        ----------
+        n : int, optional
+            The number of polyline points.
+
+        Returns
+        -------
+        :class:`compas.geometry.Polyline`
+
+        """
+        return Polyline(self.to_points(n=n))
+
+    # ==============================================================================
+    # Methods
+    # ==============================================================================
+
+    def copy(self) -> "OCCCurve2d":
+        """Make an independent copy of the current curve.
+
+        Returns
+        -------
+        :class:`OCCCurve2d`
+
+        """
+        cls = type(self)
+        occ_curve = self.occ_curve.Copy()
+        return cls(occ_curve)  # type: ignore (Copy returns Geom2d_Geometry)
+
+    def point_at(self, t: float) -> Point:
+        """Compute the point at a curve parameter.
+
+        Parameters
+        ----------
+        t : float
+            The curve parameter.
+
+        Returns
+        -------
+        :class:`~compas.geometry.Point`
+
+        Raises
+        ------
+        ValueError
+            If the parameter is not in the curve domain.
+
+        """
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        if t < start or t > end:
+            raise ValueError(
+                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(
+                    t, self.domain
+                )
+            )
+
+        point = self.occ_curve.Value(t)
+        return compas_point_from_occ_point2d(point)
+
+    def tangent_at(self, t: float) -> Vector:
+        """Compute the tangent vector at a curve parameter.
+
+        Parameters
+        ----------
+        t : float
+            The curve parameter.
+
+        Returns
+        -------
+        :class:`~compas.geometry.Vector`
+
+        Raises
+        ------
+        ValueError
+            If the parameter is not in the curve domain.
+
+        """
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        if t < start or t > end:
+            raise ValueError("The parameter is not in the domain of the curve.")
+
+        point = gp_Pnt2d()
+        uvec = gp_Vec2d()
+        self.occ_curve.D1(t, point, uvec)
+        return compas_vector_from_occ_vector2d(uvec)
+
+    def curvature_at(self, t: float) -> Vector:
+        """Compute the curvature vector at a curve parameter.
+
+        Parameters
+        ----------
+        t : float
+            The curve parameter.
+
+        Returns
+        -------
+        :class:`~compas.geometry.Vector`
+
+        Raises
+        ------
+        ValueError
+            If the parameter is not in the curve domain.
+
+        """
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        if t < start or t > end:
+            raise ValueError("The parameter is not in the domain of the curve.")
+
+        point = gp_Pnt2d()
+        uvec = gp_Vec2d()
+        vvec = gp_Vec2d()
+        self.occ_curve.D2(t, point, uvec, vvec)
+        return compas_vector_from_occ_vector2d(vvec)
+
+    def frame_at(self, t: float) -> Frame:
+        """Compute the local frame at a curve parameter.
+
+        Parameters
+        ----------
+        t : float
+            The curve parameter.
+
+        Returns
+        -------
+        :class:`~compas.geometry.Frame`
+
+        Raises
+        ------
+        ValueError
+            If the parameter is not in the curve domain.
+
+        """
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        if t < start or t > end:
+            raise ValueError("The parameter is not in the domain of the curve.")
+
+        point = gp_Pnt2d()
+        uvec = gp_Vec2d()
+        vvec = gp_Vec2d()
+        self.occ_curve.D2(t, point, uvec, vvec)
+
+        return Frame(
+            compas_point_from_occ_point2d(point),
+            compas_vector_from_occ_vector2d(uvec),
+            compas_vector_from_occ_vector2d(vvec),
+        )

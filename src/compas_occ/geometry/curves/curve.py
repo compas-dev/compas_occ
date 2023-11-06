@@ -9,38 +9,31 @@ from compas.geometry import Polyline
 from compas.geometry import Transformation
 from compas.geometry import distance_point_point
 
-
-from OCC.Core.gp import gp_Trsf
-from OCC.Core.gp import gp_Pnt
-from OCC.Core.gp import gp_Vec
-
-from OCC.Core.Geom import Geom_OffsetCurve
-from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.BndLib import BndLib_Add3dCurve_Add
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
+from OCC.Core.Geom import Geom_Curve
+from OCC.Core.Geom import Geom_OffsetCurve
+from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
-from OCC.Core.TopoDS import topods_Edge
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
-from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
-from OCC.Core.STEPControl import STEPControl_Writer
-from OCC.Core.STEPControl import STEPControl_AsIs
 from OCC.Core.GeomProjLib import geomprojlib_Project
 from OCC.Core.GeomProjLib import geomprojlib_Curve2d
-
-from OCC.Core.Geom import Geom_Curve
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Vec
+from OCC.Core.TopoDS import topods_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Edge
 
 from compas_occ.conversions import compas_point_from_occ_point
-from compas_occ.conversions import compas_point_from_occ_point2d
 from compas_occ.conversions import compas_vector_from_occ_vector
-from compas_occ.conversions import compas_vector_from_occ_vector2d
 from compas_occ.conversions import compas_vector_to_occ_direction
 from compas_occ.conversions import compas_point_to_occ_point
+from compas_occ.conversions import compas_transformation_to_trsf
+
+from .curve2d import OCCCurve2d
 
 
 class OCCCurve(Curve):
@@ -57,29 +50,27 @@ class OCCCurve(Curve):
         The dimension of the curve.
     domain : tuple[float, float], read-only
         The domain of the parameter space of the curve.
-    start : :class:`~compas.geometry.Point`, read-only
-        The start point of the curve.
     end : :class:`~compas.geometry.Point`, read-only
         The end point of the curve.
     is_closed : bool, read-only
         Flag indicating that the curve is closed.
     is_periodic : bool, read-only
         Flag indicating that the curve is periodic.
-
-    Other Attributes
-    ----------------
-    occ_curve : ``Geom_Curve``
-        The underlying OCC curve.
+    start : :class:`~compas.geometry.Point`, read-only
+        The start point of the curve.
 
     """
 
-    def __init__(self, name=None):
+    _occ_curve: Geom_Curve
+
+    def __init__(self, occ_curve: Geom_Curve, name=None):
+        print("compas_occ.geometry.curve.__init__")
         super().__init__(name=name)
         self._dimension = 3
-        self._occ_curve = None
+        self.occ_curve = occ_curve
 
     def __eq__(self, other: "OCCCurve") -> bool:
-        return self.occ_curve.IsEqual(other.occ_curve)
+        raise NotImplementedError
 
     # ==============================================================================
     # Data
@@ -115,30 +106,23 @@ class OCCCurve(Curve):
 
     @property
     def domain(self) -> Tuple[float, float]:
-        if self.occ_curve:
-            return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
+        return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
 
     @property
     def start(self) -> Point:
-        if self.occ_curve:
-            pnt = self.occ_curve.StartPoint()
-            return compas_point_from_occ_point(pnt)
+        return self.point_at(self.domain[0])
 
     @property
     def end(self) -> Point:
-        if self.occ_curve:
-            pnt = self.occ_curve.EndPoint()
-            return compas_point_from_occ_point(pnt)
+        return self.point_at(self.domain[1])
 
     @property
     def is_closed(self) -> bool:
-        if self.occ_curve:
-            return self.occ_curve.IsClosed()
+        return self.occ_curve.IsClosed()
 
     @property
     def is_periodic(self) -> bool:
-        if self.occ_curve:
-            return self.occ_curve.IsPeriodic()
+        return self.occ_curve.IsPeriodic()
 
     # ==============================================================================
     # Constructors
@@ -157,8 +141,7 @@ class OCCCurve(Curve):
         :class:`OCCCurve`
 
         """
-        curve = cls()
-        curve.occ_curve = occ_curve
+        curve = cls(occ_curve)
         return curve
 
     # ==============================================================================
@@ -178,6 +161,11 @@ class OCCCurve(Curve):
         None
 
         """
+        from OCC.Core.Interface import Interface_Static_SetCVal
+        from OCC.Core.IFSelect import IFSelect_RetDone
+        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.STEPControl import STEPControl_AsIs
+
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
@@ -198,7 +186,7 @@ class OCCCurve(Curve):
         :class:`compas.geometry.Polyline`
 
         """
-        return Polyline(self.locus(resolution=n))
+        return Polyline(self.to_points(n=n))
 
     # ==============================================================================
     # Methods
@@ -213,10 +201,8 @@ class OCCCurve(Curve):
 
         """
         cls = type(self)
-        curve = cls()
-        curve.occ_curve = self.occ_curve.Copy()
-        curve._dimension = self._dimension
-        return curve
+        occ_curve = self.occ_curve.Copy()
+        return cls(occ_curve)  # type: ignore (Copy returns Geom_Geometry)
 
     def transform(self, T: Transformation) -> None:
         """Transform this curve.
@@ -230,9 +216,7 @@ class OCCCurve(Curve):
         None
 
         """
-        occ_T = gp_Trsf()
-        occ_T.SetValues(*T.list[:12])
-        self.occ_curve.Transform(occ_T)
+        self.occ_curve.Transform(compas_transformation_to_trsf(T))
 
     def reverse(self) -> None:
         """Reverse the parametrisation of the curve.
@@ -262,16 +246,15 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError(
                 "The parameter is not in the domain of the curve. t = {}, domain: {}".format(
                     t, self.domain
                 )
             )
+
         point = self.occ_curve.Value(t)
-        if self.dimension == 2:
-            return compas_point_from_occ_point2d(point)
         return compas_point_from_occ_point(point)
 
     def tangent_at(self, t: float) -> Vector:
@@ -292,14 +275,14 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
+
         point = gp_Pnt()
         uvec = gp_Vec()
         self.occ_curve.D1(t, point, uvec)
-        if self.dimension == 2:
-            return compas_vector_from_occ_vector2d(uvec)
+
         return compas_vector_from_occ_vector(uvec)
 
     def curvature_at(self, t: float) -> Vector:
@@ -320,15 +303,15 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
+
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
-        if self.dimension == 2:
-            return compas_vector_from_occ_vector2d(vvec)
+
         return compas_vector_from_occ_vector(vvec)
 
     def frame_at(self, t: float) -> Frame:
@@ -349,19 +332,15 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain
+        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
+
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
         self.occ_curve.D2(t, point, uvec, vvec)
-        if self.dimension == 2:
-            return Frame(
-                compas_point_from_occ_point2d(point),
-                compas_vector_from_occ_vector2d(uvec),
-                compas_vector_from_occ_vector2d(vvec),
-            )
+
         return Frame(
             compas_point_from_occ_point(point),
             compas_vector_from_occ_vector(uvec),
@@ -396,10 +375,6 @@ class OCCCurve(Curve):
             GeomAdaptor_Curve(self.occ_curve), distance, t, precision
         )
         return a.Parameter()
-
-    # ==============================================================================
-    # Methods continued
-    # ==============================================================================
 
     def aabb(self, precision: float = 0.0) -> Box:
         """Compute the axis aligned bounding box of the curve.
@@ -440,7 +415,7 @@ class OCCCurve(Curve):
         self,
         point: Point,
         return_parameter: bool = False,
-    ) -> Union[Point, Tuple[Point, float]]:
+    ) -> Union[Point, Tuple[Point, float], None]:
         """
         Compute the closest point on the curve to a given point.
         If an orthogonal projection is not possible, the start or end point is returned, whichever is closer.
@@ -462,31 +437,34 @@ class OCCCurve(Curve):
         projector = GeomAPI_ProjectPointOnCurve(
             compas_point_to_occ_point(point), self.occ_curve
         )
+
         try:
             point = compas_point_from_occ_point(projector.NearestPoint())
-            if return_parameter:
-                parameter = projector.LowerDistanceParameter()
+            if not return_parameter:
+                return point
+
+            parameter = projector.LowerDistanceParameter()
+            return point, parameter
+
         except RuntimeError as e:
-            if e.args[0].startswith(
-                "StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint"
-            ):
-                start = self.start
-                end = self.end
-                if distance_point_point(point, start) <= distance_point_point(
-                    point, end
-                ):
-                    point = start
-                    if return_parameter:
-                        parameter = self.occ_curve.FirstParameter()
-                else:
-                    point = end
-                    if return_parameter:
-                        parameter = self.occ_curve.LastParameter()
-            else:
+            message = "StdFail_NotDoneGeomAPI_ProjectPointOnCurve::NearestPoint"
+
+            if not e.args[0].startswith(message):
                 raise
-        if not return_parameter:
-            return point
-        return point, parameter
+
+            start = self.start
+            end = self.end
+            d_start = distance_point_point(point, start)
+            d_end = distance_point_point(point, end)
+
+            if d_start <= d_end:
+                if not return_parameter:
+                    return start
+                return start, self.occ_curve.FirstParameter()
+
+            if not return_parameter:
+                return end
+            return end, self.occ_curve.LastParameter()
 
     def closest_parameters_curve(
         self,
@@ -649,26 +627,25 @@ class OCCCurve(Curve):
         curve = OCCCurve.from_occ(result)
         return curve
 
-    def embedded(self, surface) -> "OCCCurve":
-        """Return a copy of the curve embedded in the parameter space of the surface.
+    def embedded(self, surface) -> OCCCurve2d:
+        """Return a new curve embedded in the parameter space of the surface.
 
         Parameters
         ----------
         surface : :class:`compas_occ.geometry.OCCSurface`
-            The projection surface.
+            The embedding surface.
 
         Returns
         -------
-        :class:`OCCCurve`
+        :class:`OCCCurve2d`
 
         """
         result = geomprojlib_Curve2d(self.occ_curve, surface.occ_surface)
-        curve = OCCCurve.from_occ(result)
-        curve._dimension = 2
+        curve = OCCCurve2d.from_occ(result)
         return curve
 
     def offset(self, distance: float, direction: Vector) -> "OCCCurve":
-        """Offset the curve over the specified distance in the given direction.
+        """Return a new curve that is the offset of this curve over the specified distance in the given direction.
 
         Parameters
         ----------
@@ -683,10 +660,12 @@ class OCCCurve(Curve):
 
         Returns
         -------
-        None
+        :class:`OCCCurve`
 
         """
         occ_curve = Geom_OffsetCurve(
-            self.occ_curve, distance, compas_vector_to_occ_direction(direction)
+            self.occ_curve,
+            distance,
+            compas_vector_to_occ_direction(direction),
         )
-        self.occ_curve = occ_curve
+        return OCCCurve.from_occ(occ_curve)
