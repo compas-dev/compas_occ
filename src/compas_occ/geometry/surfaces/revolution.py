@@ -1,7 +1,7 @@
 from compas.geometry import Point
 from compas.geometry import Vector
 
-from compas_occ.conversions.primitives import compas_axis_to_occ_axis
+from compas_occ.conversions.geometry import compas_axis_to_occ_axis
 from compas_occ.geometry.curves.curve import OCCCurve
 from compas_occ.geometry.surfaces.surface import OCCSurface
 
@@ -37,8 +37,8 @@ class OCCRevolutionSurface(OCCSurface):
 
     """
 
-    def __init__(self, curve, point=None, vector=None, name=None):
-        super().__init__(name=name)
+    def __init__(self, curve, point=None, vector=None, **kwargs):
+        super().__init__(**kwargs)
         self._curve = None
         self._point = None
         self._vector = None
@@ -90,5 +90,5 @@ class OCCRevolutionSurface(OCCSurface):
 
         """
         axis = compas_axis_to_occ_axis((self.point, self.vector))
-        surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)
+        surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)  # type: ignore
         self.occ_surface = surface

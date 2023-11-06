@@ -1,9 +1,12 @@
-from copy import deepcopy
 from typing import Dict, Literal
 from typing import Iterable
 from typing import List
 from typing import Tuple
 from typing import Union
+from typing import Optional
+
+import warnings
+from copy import deepcopy
 
 from compas.geometry import Point
 from compas.geometry import Translation
@@ -36,7 +39,7 @@ from .surface import OCCSurface
 
 class ControlPoints:
     def __init__(self, surface: "OCCNurbsSurface") -> None:
-        self.occ_surface = surface
+        self.occ_surface = surface.occ_surface
 
     @property
     def points(self) -> List[List[Point]]:
@@ -44,9 +47,9 @@ class ControlPoints:
 
     def __getitem__(self, index: Union[int, Tuple[int, int]]) -> Point:
         try:
-            u, v = index
+            u, v = index  # type: ignore
         except TypeError:
-            return self.points[index]
+            return self.points[index]  # type: ignore
         else:
             pnt = self.occ_surface.Pole(u + 1, v + 1)
             return compas_point_from_occ_point(pnt)
@@ -76,19 +79,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         The control points of the surface.
     weights : list[list[float]], read-only
         The weights of the control points of the surface.
-    u_knots : list[float], read-only
+    knots_u : list[float], read-only
         The knots of the surface in the U direction, without multiplicities.
-    v_knots : list[float], read-only
+    knots_v : list[float], read-only
         The knots of the surface in the V direction, without multiplicities.
-    u_mults : list[int], read-only
+    mults_u : list[int], read-only
         The multiplicities of the knots of the surface in the U direction.
-    v_mults : list[int], read-only
+    mults_v : list[int], read-only
         The multiplicities of the knots of the surface in the V direction.
-
-    Other Attributes
-    ----------------
-    occ_surface : ``Geom_BSplineSurface``
-        The underlying OCC surface.
 
     Examples
     --------
@@ -136,19 +134,24 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         surface = OCCNurbsSurface.from_parameters(
             points=points,
             weights=weights,
-            u_knots=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],
-            v_knots=[0.0, 1/9, 2/9, 3/9, 4/9, 5/9, 6/9, 7/9, 8/9, 1.0],
-            u_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            v_mults=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            u_degree=3,
-            v_degree=3,
+            knots_u=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],
+            knots_v=[0.0, 1/9, 2/9, 3/9, 4/9, 5/9, 6/9, 7/9, 8/9, 1.0],
+            mults_u=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            mults_v=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            degree_u=3,
+            degree_v=3,
         )
 
     """
 
-    def __init__(self, name: str = None) -> None:
-        super().__init__(name=name)
+    _occ_surface: Geom_BSplineSurface
+
+    def __init__(
+        self, occ_surface: Geom_BSplineSurface, name: Optional[str] = None
+    ) -> None:
+        super().__init__(occ_surface, name=name)
         self._points = None
+        self.occ_surface = occ_surface
 
     def __eq__(self, other: "OCCNurbsSurface") -> bool:
         for a, b in zip(flatten(self.points), flatten(other.points)):
@@ -157,15 +160,15 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         for a, b in zip(flatten(self.weights), flatten(other.weights)):
             if a != b:
                 return False
-        for a, b in zip(self.u_knots, self.v_knots):
+        for a, b in zip(self.knots_u, self.knots_v):
             if a != b:
                 return False
-        for a, b in zip(self.u_mults, self.v_mults):
+        for a, b in zip(self.mults_u, self.mults_v):
             if a != b:
                 return False
-        if self.u_degree != self.v_degree:
+        if self.degree_u != self.degree_v:
             return False
-        if self.is_u_periodic != self.is_v_periodic:
+        if self.is_periodic_u != self.is_periodic_v:
             return False
         return True
 
@@ -177,42 +180,17 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     def data(self) -> Dict:
         """dict : Represenation of the surface as a Python dict."""
         return {
-            "points": [[point.data for point in row] for row in self.points],
+            "points": [[point.data for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
             "weights": self.weights,
-            "u_knots": self.u_knots,
-            "v_knots": self.v_knots,
-            "u_mults": self.u_mults,
-            "v_mults": self.v_mults,
-            "u_degree": self.u_degree,
-            "v_degree": self.v_degree,
-            "is_u_periodic": self.is_u_periodic,
-            "is_v_periodic": self.is_v_periodic,
+            "knots_u": self.knots_u,
+            "knots_v": self.knots_v,
+            "mults_u": self.mults_u,
+            "mults_v": self.mults_v,
+            "degree_u": self.degree_u,
+            "degree_v": self.degree_v,
+            "is_periodic_u": self.is_periodic_u,
+            "is_periodic_v": self.is_periodic_v,
         }
-
-    @data.setter
-    def data(self, data: Dict) -> None:
-        points = [[Point.from_data(point) for point in row] for row in data["points"]]
-        weights = data["weights"]
-        u_knots = data["u_knots"]
-        v_knots = data["v_knots"]
-        u_mults = data["u_mults"]
-        v_mults = data["v_mults"]
-        u_degree = data["u_degree"]
-        v_degree = data["v_degree"]
-        is_u_periodic = data["is_u_periodic"]
-        is_v_periodic = data["is_v_periodic"]
-        self.occ_surface = Geom_BSplineSurface(
-            array2_from_points2(points),
-            array1_from_floats1(weights),
-            array1_from_floats1(u_knots),
-            array1_from_floats1(v_knots),
-            array1_from_integers1(u_mults),
-            array1_from_integers1(v_mults),
-            u_degree,
-            v_degree,
-            is_u_periodic,
-            is_v_periodic,
-        )
 
     @classmethod
     def from_data(cls, data: Dict) -> "OCCNurbsSurface":
@@ -231,25 +209,25 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         """
         points = [[Point.from_data(point) for point in row] for row in data["points"]]
         weights = data["weights"]
-        u_knots = data["u_knots"]
-        v_knots = data["v_knots"]
-        u_mults = data["u_mults"]
-        v_mults = data["v_mults"]
-        u_degree = data["u_degree"]
-        v_degree = data["v_degree"]
-        is_u_periodic = data["is_u_periodic"]
-        is_v_periodic = data["is_v_periodic"]
+        knots_u = data["knots_u"]
+        knots_v = data["knots_v"]
+        mults_u = data["mults_u"]
+        mults_v = data["mults_v"]
+        degree_u = data["degree_u"]
+        degree_v = data["degree_v"]
+        is_periodic_u = data["is_periodic_u"]
+        is_periodic_v = data["is_periodic_v"]
         return OCCNurbsSurface.from_parameters(
             points,
             weights,
-            u_knots,
-            v_knots,
-            u_mults,
-            v_mults,
-            u_degree,
-            v_degree,
-            is_u_periodic,
-            is_v_periodic,
+            knots_u,
+            knots_v,
+            mults_u,
+            mults_v,
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
         )
 
     # ==============================================================================
@@ -261,14 +239,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         cls,
         points: List[List[Point]],
         weights: List[List[float]],
-        u_knots: List[float],
-        v_knots: List[float],
-        u_mults: List[int],
-        v_mults: List[int],
-        u_degree: int,
-        v_degree: int,
-        is_u_periodic: bool = False,
-        is_v_periodic: bool = False,
+        knots_u: List[float],
+        knots_v: List[float],
+        mults_u: List[int],
+        mults_v: List[int],
+        degree_u: int,
+        degree_v: int,
+        is_periodic_u: bool = False,
+        is_periodic_v: bool = False,
     ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from explicit parameters.
 
@@ -278,21 +256,21 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             The control points of the surface.
         weights : list[list[float]]
             The weights of the control points.
-        u_knots : list[float]
+        knots_u : list[float]
             The knots in the U direction, without multiplicities.
-        v_knots : list[float]
+        knots_v : list[float]
             The knots in the V direction, without multiplicities.
-        u_mults : list[int]
+        mults_u : list[int]
             The multiplicities of the knots in the U direction.
-        v_mults : list[int]
+        mults_v : list[int]
             The multiplicities of the knots in the V direction.
         u_dergee : int
             Degree in the U direction.
-        v_degree : int
+        degree_v : int
             Degree in the V direction.
-        is_u_periodic : bool, optional
+        is_periodic_u : bool, optional
             Flag indicating that the surface is periodic in the U direction.
-        is_v_periodic : bool, optional
+        is_periodic_v : bool, optional
             Flag indicating that the surface is periodic in the V direction.
 
         Returns
@@ -300,27 +278,26 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         :class:`OCCNurbsSurface`
 
         """
-        surface = cls()
-        surface.occ_surface = Geom_BSplineSurface(
+        occ_surface = Geom_BSplineSurface(
             array2_from_points2(points),
             array2_from_floats2(weights),
-            array1_from_floats1(u_knots),
-            array1_from_floats1(v_knots),
-            array1_from_integers1(u_mults),
-            array1_from_integers1(v_mults),
-            u_degree,
-            v_degree,
-            is_u_periodic,
-            is_v_periodic,
+            array1_from_floats1(knots_u),
+            array1_from_floats1(knots_v),
+            array1_from_integers1(mults_u),
+            array1_from_integers1(mults_v),
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
         )
-        return surface
+        return cls(occ_surface)
 
     @classmethod
     def from_points(
         cls,
         points: List[List[Point]],
-        u_degree: int = 3,
-        v_degree: int = 3,
+        degree_u: int = 3,
+        degree_v: int = 3,
     ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from control points.
 
@@ -328,8 +305,8 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         ----------
         points : list[list[:class:`~compas.geometry.Point`]]
             The control points.
-        u_degree : int, optional
-        v_degree : int, optional
+        degree_u : int, optional
+        degree_v : int, optional
 
         Returns
         -------
@@ -339,35 +316,35 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         u = len(points[0])
         v = len(points)
         weights = [[1.0 for _ in range(u)] for _ in range(v)]
-        u_degree = u_degree if u > u_degree else u - 1
-        v_degree = v_degree if v > v_degree else v - 1
-        u_order = u_degree + 1
-        v_order = v_degree + 1
+        degree_u = degree_u if u > degree_u else u - 1
+        degree_v = degree_v if v > degree_v else v - 1
+        u_order = degree_u + 1
+        v_order = degree_v + 1
         x = u - u_order
-        u_knots = [float(i) for i in range(2 + x)]
-        u_mults = [u_order]
+        knots_u = [float(i) for i in range(2 + x)]
+        mults_u = [u_order]
         for _ in range(x):
-            u_mults.append(1)
-        u_mults.append(u_order)
+            mults_u.append(1)
+        mults_u.append(u_order)
         x = v - v_order
-        v_knots = [float(i) for i in range(2 + x)]
-        v_mults = [v_order]
+        knots_v = [float(i) for i in range(2 + x)]
+        mults_v = [v_order]
         for _ in range(x):
-            v_mults.append(1)
-        v_mults.append(v_order)
-        is_u_periodic = False
-        is_v_periodic = False
+            mults_v.append(1)
+        mults_v.append(v_order)
+        is_periodic_u = False
+        is_periodic_v = False
         return cls.from_parameters(
             points,
             weights,
-            u_knots,
-            v_knots,
-            u_mults,
-            v_mults,
-            u_degree,
-            v_degree,
-            is_u_periodic,
-            is_v_periodic,
+            knots_u,
+            knots_v,
+            mults_u,
+            mults_v,
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
         )
 
     @classmethod
@@ -390,8 +367,8 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         cls,
         curve1: OCCNurbsCurve,
         curve2: OCCNurbsCurve,
-        curve3: OCCNurbsCurve = None,
-        curve4: OCCNurbsCurve = None,
+        curve3: Optional[OCCNurbsCurve] = None,
+        curve4: Optional[OCCNurbsCurve] = None,
         style: Literal["stretch", "coons", "curved"] = "stretch",
     ) -> "OCCNurbsSurface":
         """Construct a NURBS surface from the infill between two, three or four contiguous NURBS curves.
@@ -420,31 +397,42 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         """
 
         if style == "stretch":
-            style = GeomFill_StretchStyle
+            occ_style = GeomFill_StretchStyle
         elif style == "coons":
-            style = GeomFill_CoonsStyle
+            occ_style = GeomFill_CoonsStyle
         elif style == "curved":
-            style = GeomFill_CurvedStyle
+            occ_style = GeomFill_CurvedStyle
         else:
-            ValueError("Scheme is not supported")
+            warnings.warn(
+                'This fill style is not supported: {}. We will use GeomFill_StretchStyle ("stretch") instead.'.format(
+                    style
+                )
+            )
+            occ_style = GeomFill_StretchStyle
 
-        surface = cls()
         if curve3 and curve4:
             occ_fill = GeomFill_BSplineCurves(
                 curve1.occ_curve,
                 curve2.occ_curve,
                 curve3.occ_curve,
                 curve4.occ_curve,
-                style,
+                occ_style,
             )
         elif curve3:
             occ_fill = GeomFill_BSplineCurves(
-                curve1.occ_curve, curve2.occ_curve, curve3.occ_curve, style
+                curve1.occ_curve,
+                curve2.occ_curve,
+                curve3.occ_curve,
+                occ_style,
             )
         else:
-            occ_fill = GeomFill_BSplineCurves(curve1.occ_curve, curve2.occ_curve, style)
-        surface.occ_surface = occ_fill.Surface()
-        return surface
+            occ_fill = GeomFill_BSplineCurves(
+                curve1.occ_curve,
+                curve2.occ_curve,
+                occ_style,
+            )
+        occ_surface = occ_fill.Surface()
+        return cls(occ_surface)
 
     @classmethod
     def from_extrusion(cls, curve: Curve, vector: Vector) -> "OCCNurbsSurface":
@@ -466,11 +454,11 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         """
         other = curve.transformed(Translation.from_vector(vector))
-        return cls.from_fill(curve, other)
+        return cls.from_fill(curve, other)  # type: ignore (not sure how to solve this)
 
     @classmethod
     def from_interpolation(
-        cls, points: List[Point], precision: float = 1e-3
+        cls, points: List[List[Point]], precision: float = 1e-3
     ) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
@@ -486,11 +474,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         :class:`OCCNurbsSurface`
 
         """
-        points = array2_from_points2(points)
-        surface = GeomAPI_PointsToBSplineSurface(
-            points, 3, 8, GeomAbs_C2, precision
+        occ_surface = GeomAPI_PointsToBSplineSurface(
+            array2_from_points2(points),
+            3,
+            8,
+            GeomAbs_C2,
+            precision,
         ).Surface()
-        return cls(surface)
+        return cls(occ_surface)
 
     # ==============================================================================
     # Conversions
@@ -500,39 +491,57 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # OCC
     # ==============================================================================
 
+    @property
+    def occ_surface(self) -> Geom_BSplineSurface:
+        return self._occ_surface
+
+    @occ_surface.setter
+    def occ_surface(self, surface: Geom_BSplineSurface) -> None:
+        self._occ_surface = surface
+
     # ==============================================================================
     # Properties
     # ==============================================================================
 
     @property
-    def points(self) -> List[List[Point]]:
+    def points(self) -> ControlPoints:
         if not self._points:
-            self._points = ControlPoints(self.occ_surface)
+            self._points = ControlPoints(self)
         return self._points
 
     @property
     def weights(self) -> List[List[float]]:
         weights = self.occ_surface.Weights()
         if not weights:
-            weights = [[1.0] * len(self.points[0]) for _ in range(len(self.points))]
+            rows = len(self.points)
+            cols = len(self.points[0])
+            weights = [[1.0] * cols for _ in range(rows)]
         else:
             weights = floats2_from_array2(weights)
-        return weights
+        return weights  # type: ignore (not sure what this is about)
 
     @property
-    def u_knots(self) -> List[float]:
+    def degree_u(self) -> int:
+        return self.occ_surface.UDegree()
+
+    @property
+    def degree_v(self) -> int:
+        return self.occ_surface.VDegree()
+
+    @property
+    def knots_u(self) -> List[float]:
         return list(self.occ_surface.UKnots())
 
     @property
-    def v_knots(self) -> List[float]:
+    def knots_v(self) -> List[float]:
         return list(self.occ_surface.VKnots())
 
     @property
-    def u_mults(self) -> List[int]:
+    def mults_u(self) -> List[int]:
         return list(self.occ_surface.UMultiplicities())
 
     @property
-    def v_mults(self) -> List[int]:
+    def mults_v(self) -> List[int]:
         return list(self.occ_surface.VMultiplicities())
 
     # ==============================================================================
