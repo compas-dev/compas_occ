@@ -1,43 +1,46 @@
-from .arrays import array1_from_integers1  # noqa: F401
-from .arrays import array1_from_floats1  # noqa: F401
-from .arrays import array2_from_floats2  # noqa: F401
-from .arrays import array1_from_points1  # noqa: F401
-from .arrays import harray1_from_points1  # noqa: F401
-from .arrays import array2_from_points2  # noqa: F401
-from .arrays import points1_from_array1  # noqa: F401
-from .arrays import points2_from_array2  # noqa: F401
-from .arrays import floats2_from_array2  # noqa: F401
+from .arrays import array1_from_integers1
+from .arrays import array1_from_floats1
+from .arrays import array2_from_floats2
+from .arrays import array1_from_points1
+from .arrays import harray1_from_points1
+from .arrays import array2_from_points2
+from .arrays import points1_from_array1
+from .arrays import points2_from_array2
+from .arrays import floats2_from_array2
 
-from .geometry import compas_point_to_occ_point  # noqa: F401
-from .geometry import compas_vector_to_occ_vector  # noqa: F401
-from .geometry import compas_vector_to_occ_direction  # noqa: F401
-from .geometry import compas_line_to_occ_line  # noqa: F401
-from .geometry import compas_plane_to_occ_plane  # noqa: F401
-from .geometry import compas_plane_to_occ_ax2  # noqa: F401
-from .geometry import compas_plane_to_occ_ax3  # noqa: F401
-from .geometry import compas_frame_to_occ_ax2  # noqa: F401
-from .geometry import compas_frame_to_occ_ax3  # noqa: F401
-from .geometry import compas_circle_to_occ_circle  # noqa: F401
-from .geometry import compas_sphere_to_occ_sphere  # noqa: F401
-from .geometry import compas_cylinder_to_occ_cylinder  # noqa: F401
-from .geometry import compas_cone_to_occ_cone  # noqa: F401
-from .geometry import compas_torus_to_occ_torus  # noqa: F401
+from .geometry import compas_axis_to_occ_axis
+from .geometry import compas_circle_to_occ_circle
+from .geometry import compas_cone_to_occ_cone
+from .geometry import compas_cylinder_to_occ_cylinder
+from .geometry import compas_frame_to_occ_ax2
+from .geometry import compas_frame_to_occ_ax3
+from .geometry import compas_line_to_occ_line
+from .geometry import compas_plane_to_occ_plane
+from .geometry import compas_plane_to_occ_ax2
+from .geometry import compas_plane_to_occ_ax3
+from .geometry import compas_point_to_occ_point
+from .geometry import compas_sphere_to_occ_sphere
+from .geometry import compas_torus_to_occ_torus
+from .geometry import compas_vector_to_occ_vector
+from .geometry import compas_vector_to_occ_direction
 
-from .geometry import compas_point_from_occ_point  # noqa: F401
-from .geometry import compas_point_from_occ_point2d  # noqa: F401
-from .geometry import compas_vector_from_occ_axis  # noqa: F401
-from .geometry import compas_vector_from_occ_direction  # noqa: F401
-from .geometry import compas_vector_from_occ_vector  # noqa: F401
-from .geometry import compas_vector_from_occ_vector2d  # noqa: F401
-from .geometry import compas_line_from_occ_line  # noqa: F401
-from .geometry import compas_plane_from_occ_plane  # noqa: F401
-from .geometry import compas_circle_from_occ_circle  # noqa: F401
-from .geometry import compas_ellipse_from_occ_ellipse  # noqa: F401
-from .geometry import compas_frame_from_occ_ax2  # noqa: F401
-from .geometry import compas_frame_from_occ_ax3  # noqa: F401
-from .geometry import compas_cylinder_from_occ_cylinder  # noqa: F401
+from .geometry import compas_axis_from_occ_axis
+from .geometry import compas_circle_from_occ_circle
+from .geometry import compas_cylinder_from_occ_cylinder
+from .geometry import compas_ellipse_from_occ_ellipse
+from .geometry import compas_frame_from_occ_ax2
+from .geometry import compas_frame_from_occ_ax3
+from .geometry import compas_frame_from_occ_location
+from .geometry import compas_line_from_occ_line
+from .geometry import compas_plane_from_occ_plane
+from .geometry import compas_point_from_occ_point
+from .geometry import compas_point_from_occ_point2d
+from .geometry import compas_vector_from_occ_axis
+from .geometry import compas_vector_from_occ_direction
+from .geometry import compas_vector_from_occ_vector
+from .geometry import compas_vector_from_occ_vector2d
 
-from .transformations import compas_transformation_to_trsf  # noqa: F401
+from .transformations import compas_transformation_to_trsf
 
 from .meshes import compas_mesh_to_occ_shell
 from .meshes import compas_quadmesh_to_occ_shell
@@ -59,8 +62,12 @@ __all__ = [
     "compas_cone_to_occ_cone",
     "compas_cylinder_from_occ_cylinder",
     "compas_cylinder_to_occ_cylinder",
-    "compas_frame_from_location",
+    "compas_ellipse_from_occ_ellipse",
+    "compas_frame_from_occ_ax2",
     "compas_frame_from_occ_ax3",
+    "compas_frame_from_occ_location",
+    "compas_frame_to_occ_ax2",
+    "compas_frame_to_occ_ax3",
     "compas_line_from_occ_line",
     "compas_line_to_occ_line",
     "compas_plane_from_occ_plane",
@@ -76,6 +83,7 @@ __all__ = [
     "compas_vector_to_occ_direction",
     "compas_vector_to_occ_vector",
     "compas_vector_from_occ_axis",
+    "compas_vector_from_occ_direction",
     "compas_vector_from_occ_vector",
     "compas_vector_from_occ_vector2d",
     "compas_mesh_to_occ_shell",

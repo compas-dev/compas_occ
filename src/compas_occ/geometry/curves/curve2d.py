@@ -43,10 +43,11 @@ class OCCCurve2d(Curve):
 
     """
 
+    _occ_curve: Geom2d_Curve
+
     def __init__(self, occ_curve: Geom2d_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 2
-        self._occ_curve = Geom2d_Curve()
         self.occ_curve = occ_curve
 
     def __eq__(self, other: "OCCCurve2d") -> bool:

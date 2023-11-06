@@ -123,6 +123,10 @@ class OCCBrepEdge(BrepEdge):
     # ==============================================================================
 
     @property
+    def occ_shape(self) -> TopoDS_Edge:
+        return self._occ_edge  # type: ignore
+
+    @property
     def occ_edge(self) -> TopoDS_Edge:
         return self._occ_edge  # type: ignore
 
@@ -146,15 +150,15 @@ class OCCBrepEdge(BrepEdge):
     @property
     def curve(self) -> OCCCurve:
         if not self._curve:
-            self._curve = OCCCurve()
-            self._curve.occ_curve = self.occ_adaptor.Curve()  # type: ignore
+            occ_curve = self.occ_adaptor.Curve()
+            self._curve = OCCCurve(occ_curve)  # type: ignore
         return self._curve
 
     @property
     def nurbscurve(self) -> OCCNurbsCurve:
         if not self._nurbscurve:
-            self._nurbscurve = OCCNurbsCurve()
-            self._nurbscurve.occ_curve = self.occ_adaptor.BSpline()  # type: ignore
+            occ_curve = self.occ_adaptor.BSpline()
+            self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
         return self._nurbscurve  # type: ignore (don't understand why this is necessary)
 
     # ==============================================================================

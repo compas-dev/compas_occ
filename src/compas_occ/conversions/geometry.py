@@ -13,6 +13,7 @@ from compas.geometry import Sphere
 from compas.geometry import Cylinder
 from compas.geometry import Cone
 from compas.geometry import Torus
+from compas.geometry import Transformation
 
 from OCC.Core.gp import gp_Ax1
 from OCC.Core.gp import gp_Ax2
@@ -30,6 +31,7 @@ from OCC.Core.gp import gp_Sphere
 from OCC.Core.gp import gp_Cylinder
 from OCC.Core.gp import gp_Cone
 from OCC.Core.gp import gp_Torus
+from OCC.Core.TopLoc import TopLoc_Location
 
 
 # =============================================================================
@@ -930,6 +932,38 @@ def compas_frame_from_occ_ax3(
         compas_vector_from_occ_direction(position.XDirection()),
         compas_vector_from_occ_direction(position.YDirection()),
     )
+
+
+def compas_frame_from_occ_location(location: TopLoc_Location) -> Frame:
+    """Construct a COMPAS frame from an OCC location.
+
+    Parameters
+    ----------
+    location : ``TopLoc_Location``
+        The OCC location.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Frame`
+
+    Examples
+    --------
+    >>> from OCC.Core.TopLoc import TopLoc_Location
+    >>> from compas_occ.conversions import compas_frame_from_occ_location
+    >>> location = TopLoc_Location()
+    >>> compas_frame_from_occ_location(location)
+    Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+
+    """
+    t = location.Transformation()
+
+    # transformation.Value is a 1-based 3x4 matrix
+    rows, columns = 3, 4
+    matrix = [
+        [t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)
+    ]
+    matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
+    return Frame.from_transformation(Transformation(matrix))
 
 
 def compas_circle_from_occ_circle(

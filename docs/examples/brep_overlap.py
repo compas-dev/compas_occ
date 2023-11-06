@@ -2,7 +2,6 @@
 
 from compas.geometry import Translation
 from compas.geometry import Box
-from compas.geometry import Brep
 from compas.colors import Color
 from compas.brep import Brep
 from compas_view2.app import App
