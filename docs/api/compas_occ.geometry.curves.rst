@@ -1,8 +1,8 @@
 ********************************************************************************
-compas_occ.brep
+Curves
 ********************************************************************************
 
-.. currentmodule:: compas_occ.brep
+.. currentmodule:: compas_occ.geometry
 
 Classes
 =======
@@ -11,8 +11,6 @@ Classes
     :toctree: generated/
     :nosignatures:
 
-    OCCBrep
-    OCCBrepVertex
-    OCCBrepEdge
-    OCCBrepLoop
-    OCCBrepFace
+    OCCCurve
+    OCCCurve2d
+    OCCNurbsCurve

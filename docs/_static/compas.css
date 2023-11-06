@@ -1,0 +1,16 @@
+.bd-main {
+    flex-basis: 80%;
+}
+
+.bd-article-container h1 {
+    color: #0092d2;
+}
+
+#rtd-footer-container {
+    height: 0px;
+    display: none;
+}
+
+.navbar-brand .logo__image {
+    height: 48px !important;
+}
