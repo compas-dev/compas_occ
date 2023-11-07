@@ -20,11 +20,6 @@ class OCCBrepVertex(BrepVertex):
     point : :class:`~compas.geometry.Point`, read-only
         The geometric point underlying the topological vertex.
 
-    Other Attributes
-    ----------------
-    occ_vertex : ``TopoDS_Vertex``
-        The underlying OCC vertex.
-
     """
 
     def __init__(self, occ_vertex: TopoDS_Vertex):

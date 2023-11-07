@@ -51,8 +51,10 @@ class OCCBrepEdge(BrepEdge):
 
     Attributes
     ----------
-    type : :class:`BrepEdge.CurveType`, read-only
-        The type of the geometric curve underlying the topological edge.
+    curve : :class:`~compas_occ.geometry.OCCCurve`
+        Curve geometry from the edge adaptor.
+    first_vertex : :class:`~compas_occ.brep.BrepVertex`, read-only
+        The first vertex with forward orientation.
     is_line : bool, read-only
         True if the underlying curve is a line.
     is_circle : bool, read-only
@@ -69,23 +71,16 @@ class OCCBrepEdge(BrepEdge):
         True if the underlying curve is a bspline curve.
     is_other : bool, read-only
         True if the underlying curve is an other type of curve.
-    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
-        The topological vertices of the edge.
-    first_vertex : :class:`~compas_occ.brep.BrepVertex`, read-only
-        The first vertex with forward orientation.
     last_vertex : :class:`~compas_occ.brep.BrepVertex`, read-only
         The first vertex with reversed orientation.
-    curve : :class:`~compas_occ.geometry.OCCCurve`
-        Curve geometry from the edge adaptor.
-
-    Other Attributes
-    ----------------
-    occ_edge : ``TopoDS_Edge``
-        The underlying OCC topological edge data structure.
-    occ_adaptor : ``BRepAdaptor_Curve``
-        Edge adaptor for extracting curve geometry.
+    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
+        The topological vertices of the edge.
+    type : :class:`BrepEdge.CurveType`, read-only
+        The type of the geometric curve underlying the topological edge.
 
     """
+
+    _occ_edge: TopoDS_Edge
 
     class CurveType(Enum):
         Line = 0
@@ -102,7 +97,6 @@ class OCCBrepEdge(BrepEdge):
         super().__init__()
         self._curve = None
         self._nurbscurve = None
-        self._occ_edge = None
         self._occ_adaptor = None
         self.occ_edge = occ_edge
 
@@ -124,11 +118,11 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def occ_shape(self) -> TopoDS_Edge:
-        return self._occ_edge  # type: ignore
+        return self._occ_edge
 
     @property
     def occ_edge(self) -> TopoDS_Edge:
-        return self._occ_edge  # type: ignore
+        return self._occ_edge
 
     @occ_edge.setter
     def occ_edge(self, edge: TopoDS_Edge) -> None:
@@ -239,13 +233,41 @@ class OCCBrepEdge(BrepEdge):
 
     @classmethod
     def from_vertex_vertex(cls, a: OCCBrepVertex, b: OCCBrepVertex) -> "OCCBrepEdge":
-        """Construct an edge from two vertices."""
+        """Construct an edge from two vertices.
+
+        Parameters
+        ----------
+        a : :class:`~compas_occ.brep.BrepVertex`
+            The first vertex.
+        b : :class:`~compas_occ.brep.BrepVertex`
+            The second vertex.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         builder = BRepBuilderAPI_MakeEdge(a.occ_vertex, b.occ_vertex)
         return cls(builder.Edge())
 
     @classmethod
     def from_point_point(cls, a: Point, b: Point) -> "OCCBrepEdge":
-        """Construct an edge from two points."""
+        """Construct an edge from two points.
+
+        Parameters
+        ----------
+        a : :class:`compas.geometry.Point`
+            The first point.
+        b : :class:`compas.geometry.Point`
+            The second point.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         builder = BRepBuilderAPI_MakeEdge(
             compas_point_to_occ_point(a), compas_point_to_occ_point(b)
         )
@@ -259,7 +281,25 @@ class OCCBrepEdge(BrepEdge):
         points: Optional[Tuple[Point, Point]] = None,
         vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
-        """Construct an edge from a line."""
+        """Construct an edge from a line.
+
+        Parameters
+        ----------
+        line : :class:`compas.geometry.Line`
+            The line.
+        params : tuple of float, optional
+            The parameters of the line.
+        points : tuple of :class:`compas.geometry.Point`, optional
+            The start and end points of the line.
+        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+            The start and end vertices of the line.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         if params:
             builder = BRepBuilderAPI_MakeEdge(compas_line_to_occ_line(line), *params)
         elif points:
@@ -286,7 +326,25 @@ class OCCBrepEdge(BrepEdge):
         points: Optional[Tuple[Point, Point]] = None,
         vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
-        """Construct an edge from a circle."""
+        """Construct an edge from a circle.
+
+        Parameters
+        ----------
+        circle : :class:`compas.geometry.Circle`
+            The circle.
+        params : tuple of float, optional
+            The parameters of the circle.
+        points : tuple of :class:`compas.geometry.Point`, optional
+            The start and end points of the circle.
+        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+            The start and end vertices of the circle.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         if params:
             builder = BRepBuilderAPI_MakeEdge(
                 compas_circle_to_occ_circle(circle), *params
@@ -309,6 +367,19 @@ class OCCBrepEdge(BrepEdge):
 
     @classmethod
     def from_ellipse(cls, ellipse: Ellipse) -> "OCCBrepEdge":
+        """Construct an edge from an ellipse.
+
+        Parameters
+        ----------
+        ellipse : :class:`compas.geometry.Ellipse`
+            The ellipse.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         raise NotImplementedError
 
     @classmethod
@@ -321,8 +392,29 @@ class OCCBrepEdge(BrepEdge):
         points: Optional[Tuple[Point, Point]] = None,
         vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
-        """Construct an edge from a curve."""
+        """Construct an edge from a curve.
 
+        Parameters
+        ----------
+        curve : :class:`~compas_occ.geometry.OCCCurve`, optional
+            The curve.
+        curve2d : :class:`~compas_occ.geometry.OCCCurve2d`, optional
+            The 2D curve.
+        surface : :class:`~compas_occ.geometry.OCCSurface`, optional
+            The surface.
+        params : tuple of float, optional
+            The parameters of the curve.
+        points : tuple of :class:`compas.geometry.Point`, optional
+            The start and end points of the curve.
+        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+            The start and end vertices of the curve.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
         if curve and curve2d:
             raise ValueError("Providing both a 2D and a 3D curve is not possible.")
 

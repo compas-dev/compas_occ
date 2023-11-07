@@ -68,14 +68,9 @@ class OCCBrepFace(BrepFace):
     surface : ``GeomAdaptor_Surface``
         Surface geometry from the adaptor.
 
-    Other Attributes
-    ----------------
-    occ_face : ``TopoDS_Face``
-        The OCC BRep face.
-    occ_adaptor : ``BRepAdaptor_Surface``
-        Adaptor for extracting surface geometry from the BRep face.
-
     """
+
+    _occ_face: TopoDS_Face
 
     class SurfaceType(Enum):
         Plane = 0
@@ -95,7 +90,6 @@ class OCCBrepFace(BrepFace):
         self.precision = 1e-6
         self._surface = None
         self._nurbssurface = None
-        self._occ_face = None
         self._occ_adaptor = None
         self.occ_face = occ_face
 
@@ -107,8 +101,8 @@ class OCCBrepFace(BrepFace):
     def data(self):
         raise NotImplementedError
 
-    @data.setter
-    def data(self, data):
+    @classmethod
+    def from_data(cls, data):
         raise NotImplementedError
 
     # ==============================================================================
@@ -121,7 +115,7 @@ class OCCBrepFace(BrepFace):
 
     @property
     def occ_face(self) -> TopoDS_Face:
-        return self._occ_face  # type: ignore
+        return self._occ_face
 
     @occ_face.setter
     def occ_face(self, face: TopoDS_Face) -> None:
@@ -258,8 +252,8 @@ class OCCBrepFace(BrepFace):
     def from_plane(
         cls,
         plane: Plane,
-        udomain: Optional[Tuple[float, float]] = None,
-        vdomain: Optional[Tuple[float, float]] = None,
+        domain_u: Optional[Tuple[float, float]] = None,
+        domain_v: Optional[Tuple[float, float]] = None,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
     ) -> "OCCBrepFace":
@@ -270,9 +264,9 @@ class OCCBrepFace(BrepFace):
         ----------
         plane : :class:`compas.geometry.Plane`
             The plane.
-        udomain : Tuple[float, float], optional
+        domain_u : Tuple[float, float], optional
             U parameter minimum and maximum.
-        vdomain : Tuple[float, float], optional
+        domain_v : Tuple[float, float], optional
             V parameter minimum and maximum.
         loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
@@ -285,10 +279,10 @@ class OCCBrepFace(BrepFace):
 
         """
         occ_plane: gp_Pln = compas_plane_to_occ_plane(plane)
-        if udomain and vdomain:
-            umin, umax = udomain
-            vmin, vmax = vdomain
-            builder = BRepBuilderAPI_MakeFace(occ_plane, umin, umax, vmin, vmax)
+        if domain_u and domain_v:
+            min_u, max_u = domain_u
+            min_v, max_v = domain_v
+            builder = BRepBuilderAPI_MakeFace(occ_plane, min_u, max_u, min_v, max_v)
         elif loop:
             builder = BRepBuilderAPI_MakeFace(occ_plane, loop.occ_wire, inside)
         else:
@@ -431,8 +425,8 @@ class OCCBrepFace(BrepFace):
     def from_surface(
         cls,
         surface: OCCSurface,
-        udomain: Optional[Tuple[float, float]] = None,
-        vdomain: Optional[Tuple[float, float]] = None,
+        domain_u: Optional[Tuple[float, float]] = None,
+        domain_v: Optional[Tuple[float, float]] = None,
         precision: float = 1e-6,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
@@ -444,6 +438,10 @@ class OCCBrepFace(BrepFace):
         ----------
         surface : :class:`compas_occ.geometry.OCCSurface`
             The torus.
+        domain_u : Tuple[float, float], optional
+            U parameter minimum and maximum.
+        domain_v : Tuple[float, float], optional
+            V parameter minimum and maximum.
         precision : float, optional
             Precision for face construction.
         loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
@@ -456,11 +454,11 @@ class OCCBrepFace(BrepFace):
         :class:`OCCBrepFace`
 
         """
-        if udomain and vdomain:
-            umin, umax = udomain
-            vmin, vmax = vdomain
+        if domain_u and domain_v:
+            min_u, max_u = domain_u
+            min_v, max_v = domain_v
             builder = BRepBuilderAPI_MakeFace(
-                surface.occ_surface, umin, umax, vmin, vmax, precision
+                surface.occ_surface, min_u, max_u, min_v, max_v, precision
             )
         elif loop:
             builder = BRepBuilderAPI_MakeFace(
@@ -497,12 +495,12 @@ class OCCBrepFace(BrepFace):
     def try_get_nurbssurface(
         self,
         precision=1e-3,
-        u_continuity=None,
-        v_continuity=None,
-        u_maxdegree=5,
-        v_maxdegree=5,
-        u_maxsegments=1,
-        v_maxsegments=1,
+        continuity_u=None,
+        continuity_v=None,
+        maxdegree_u=5,
+        maxdegree_v=5,
+        maxsegments_u=1,
+        maxsegments_v=1,
     ) -> OCCNurbsSurface:
         """
         Try to convert the underlying geometry to a Nurbs surface.
@@ -517,10 +515,10 @@ class OCCBrepFace(BrepFace):
                 precision,
                 GeomAbs_Shape.GeomAbs_C1,
                 GeomAbs_Shape.GeomAbs_C1,
-                u_maxdegree,
-                v_maxdegree,
-                u_maxsegments,
-                v_maxsegments,
+                maxdegree_u,
+                maxdegree_v,
+                maxsegments_u,
+                maxsegments_v,
             )
             occ_surface = convert.Surface()
         nurbs.occ_surface = occ_surface
@@ -566,7 +564,7 @@ class OCCBrepFace(BrepFace):
         """
         builder = BRepBuilderAPI_MakeFace(self.occ_face)
         if reverse:
-            builder.Add(loop.occ_wire.Reversed())
+            builder.Add(loop.occ_wire.Reversed())  # type: ignore
         else:
             builder.Add(loop.occ_wire)
         if not builder.IsDone():
@@ -590,7 +588,7 @@ class OCCBrepFace(BrepFace):
         builder = BRepBuilderAPI_MakeFace(self.occ_face)
         for loop in loops:
             if reverse:
-                builder.Add(loop.occ_wire.Reversed())
+                builder.Add(loop.occ_wire.Reversed())  # type: ignore
             else:
                 builder.Add(loop.occ_wire)
         if not builder.IsDone():

@@ -1,7 +1,6 @@
 from typing import List
 
 from OCC.Core.TopoDS import TopoDS_Wire
-from OCC.Core.TopoDS import topods
 from OCC.Core.BRepTools import BRepTools_WireExplorer
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeWire
 from OCC.Core.BRepAlgo import brepalgo_IsValid
@@ -50,16 +49,12 @@ class OCCBrepLoop(BrepLoop):
     edges : list[:class:`~compas_occ.brep.BrepEdge`], read-only
         List of BRep edges.
 
-    Other Attributes
-    ----------------
-    occ_wire : ``TopoDS_Wire``
-        The OCC BRep wire.
-
     """
+
+    _occ_wire: TopoDS_Wire
 
     def __init__(self, occ_wire: TopoDS_Wire):
         super().__init__()
-        self._occ_wire = None
         self.occ_wire = occ_wire
 
     # ==============================================================================
@@ -91,11 +86,12 @@ class OCCBrepLoop(BrepLoop):
 
     @property
     def occ_wire(self) -> TopoDS_Wire:
-        return self._occ_wire  # type: ignore
+        return self._occ_wire
 
     @occ_wire.setter
     def occ_wire(self, loop: TopoDS_Wire) -> None:
-        self._occ_wire = topods.Wire(loop)
+        # self._occ_wire = topods.Wire(loop)
+        self._occ_wire = loop
 
     # ==============================================================================
     # Properties
