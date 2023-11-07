@@ -13,6 +13,7 @@ isort
 jinja2 >= 3.0
 m2r2
 nbsphinx
+numpydoc
 pydocstyle
 pytest <7.1
 pyflakes >=1.4.0
@@ -24,8 +25,6 @@ sphinx-inline-tabs
 sphinx-togglebutton
 sphinx-remove-toctrees
 sphinx-copybutton
-sphinxcontrib-bibtex
-sphinxcontrib-youtube
 twine
 wheel
 -e .

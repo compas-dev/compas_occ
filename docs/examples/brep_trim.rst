@@ -1,11 +1,11 @@
 ********************************************************************************
-Split a Brep With a Plane
+Trim a Brep With a Plane
 ********************************************************************************
 
-.. figure:: /_images/example_brep_split.png
+.. figure:: /_images/example_brep_trim.png
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: brep_split.py
+.. literalinclude:: brep_trim.py
     :language: python

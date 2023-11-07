@@ -16,5 +16,9 @@ plane.transform(R)
 slice = box.slice(plane)
 
 viewer = App()
+viewer.view.camera.position = [2, -4, 1]
+viewer.view.camera.look_at([0, 0, 0])
+
+viewer.add(box, opacity=0.5)
 viewer.add(slice, linewidth=2)
 viewer.show()

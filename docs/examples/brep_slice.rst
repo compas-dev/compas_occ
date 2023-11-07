@@ -1,11 +1,11 @@
 ********************************************************************************
-Split a Brep With a Plane
+Splice a Brep With a Plane
 ********************************************************************************
 
-.. figure:: /_images/example_brep_split.png
+.. figure:: /_images/example_brep_slice.png
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: brep_split.py
+.. literalinclude:: brep_slice.py
     :language: python

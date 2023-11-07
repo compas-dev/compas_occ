@@ -1315,6 +1315,23 @@ class OCCBrep(Brep):
         if occ_shape:
             self.native_brep = occ_shape
 
+    def trimmed(self, plane: compas.geometry.Plane) -> "OCCBrep":
+        """Construct a copy of a Brep trimmed with a plane.
+
+        Parameters
+        ----------
+        plane : :class:`~compas.geometry.Plane`
+            The slicing plane.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        brep = self.copy()
+        brep.trim(plane)
+        return brep
+
     def split(self, other: "OCCBrep") -> List["OCCBrep"]:
         """Split a BRep using another BRep as splitter.
 
