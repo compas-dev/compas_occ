@@ -9,14 +9,12 @@ from compas.plugins import plugin
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_curve(cls, *args, **kwargs):
-    print("compas_occ.geometry.nurbs.new_curve")
     # why is this not just OCCCurve()
     return super(Curve, cls).__new__(cls)
 
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_nurbscurve(cls, *args, **kwargs):
-    print("compas_occ.geometry.nurbs.new_nurbscurve")
     # why is this not just OCCNurbsCurve()
     return super(NurbsCurve, cls).__new__(cls)
 
@@ -28,7 +26,6 @@ def new_nurbscurve_from_parameters(cls, *args, **kwargs):
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_nurbscurve_from_points(cls, *args, **kwargs):
-    print("compas_occ.geometry.nurbs.new_nurbscurve_from_points")
     return OCCNurbsCurve.from_points(*args, **kwargs)
 
 

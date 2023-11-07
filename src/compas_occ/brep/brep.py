@@ -98,40 +98,6 @@ class OCCBrep(Brep):
     volume : float, read-only
         The volume of the regions contained by the Brep.
 
-    Examples
-    --------
-    Constructors
-
-    >>> brep = Brep.from_corners([0, 0, 0], [1, 0, 0], [1, 1, 1], [1, 1, 0])
-
-    >>> from compas.geometry import Box
-    >>> box = Box.from_width_height_depth(1, 1, 1)
-    >>> vertices, faces = box.to_vertices_and_faces()
-    >>> polygons = [[vertices[index] for index in face] for face in faces]
-    >>> brep = Brep.from_polygons(polygons)
-
-    >>> from compas.geometry import Box
-    >>> box = Box.from_width_height_depth(1, 1, 1)
-    >>> brep = Brep.from_box(box)
-
-    >>> from compas.geometry import Box, Sphere
-    >>> box = Box.from_width_height_depth(1, 1, 1)
-    >>> sphere = Sphere([1, 1, 1], 0.5)
-    >>> A = Brep.from_box(box)
-    >>> B = Brep.from_sphere(sphere)
-    >>> brep = Brep.from_boolean_union(A, B)
-
-    Booleans
-
-    >>> from compas.geometry import Box, Sphere
-    >>> box = Box.from_width_height_depth(1, 1, 1)
-    >>> sphere = Sphere([1, 1, 1], 0.5)
-    >>> A = Brep.from_box(box)
-    >>> B = Brep.from_sphere(sphere)
-    >>> C = A + B
-    >>> D = A - B
-    >>> E = A & B
-
     """
 
     _occ_shape: TopoDS_Shape

@@ -102,7 +102,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     _occ_curve: Geom_BSplineCurve
 
     def __init__(self, occ_curve: Geom_BSplineCurve, name: Optional[str] = None):
-        print("compas_occ.geometry.nurbs.__init__")
         super(OCCNurbsCurve, self).__init__(occ_curve, name=name)
         self.occ_curve = occ_curve
 
@@ -306,8 +305,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         :class:`OCCNurbsCurve`
 
         """
-        print("compas_occ.geometry.nurbs.from_points")
-
         p = len(points)
         weights = [1.0] * p
         degree = degree if p > degree else p - 1

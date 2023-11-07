@@ -12,6 +12,7 @@ from .geometry import compas_axis_to_occ_axis
 from .geometry import compas_circle_to_occ_circle
 from .geometry import compas_cone_to_occ_cone
 from .geometry import compas_cylinder_to_occ_cylinder
+from .geometry import compas_ellipse_to_occ_ellipse
 from .geometry import compas_frame_to_occ_ax2
 from .geometry import compas_frame_to_occ_ax3
 from .geometry import compas_line_to_occ_line
@@ -63,6 +64,7 @@ __all__ = [
     "compas_cylinder_from_occ_cylinder",
     "compas_cylinder_to_occ_cylinder",
     "compas_ellipse_from_occ_ellipse",
+    "compas_ellipse_to_occ_ellipse",
     "compas_frame_from_occ_ax2",
     "compas_frame_from_occ_ax3",
     "compas_frame_from_occ_location",

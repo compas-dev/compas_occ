@@ -64,7 +64,6 @@ class OCCCurve(Curve):
     _occ_curve: Geom_Curve
 
     def __init__(self, occ_curve: Geom_Curve, name=None):
-        print("compas_occ.geometry.curve.__init__")
         super().__init__(name=name)
         self._dimension = 3
         self.occ_curve = occ_curve

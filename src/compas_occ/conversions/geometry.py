@@ -141,7 +141,7 @@ def compas_axis_to_occ_axis(axis: Tuple[Point, Vector]) -> gp_Ax1:
     >>> from compas_occ.conversions import compas_axis_to_occ_axis
     >>> point = Point(0, 0, 0)
     >>> vector = Vector(1, 0, 0)
-    >>> axis = compas_axis_to_occ_axis((point, vector))
+    >>> compas_axis_to_occ_axis((point, vector))
     <class 'gp_Ax1'>
 
     """
@@ -571,7 +571,7 @@ def compas_point_from_occ_point(
     >>> from compas_occ.conversions import compas_point_from_occ_point
     >>> point = gp_Pnt(0, 0, 0)
     >>> compas_point_from_occ_point(point)
-    Point(0.000, 0.000, 0.000)
+    Point(0.0, 0.0, z=0.0)
 
     """
     cls = cls or Point
@@ -605,7 +605,7 @@ def compas_point_from_occ_point2d(
     >>> from compas_occ.conversions import compas_point_from_occ_point2d
     >>> point = gp_Pnt2d(0, 0)
     >>> compas_point_from_occ_point2d(point)
-    Point(0.000, 0.000, 0.000)
+    Point(0.0, 0.0, z=0.0)
 
     """
     cls = cls or Point
@@ -641,7 +641,7 @@ def compas_vector_from_occ_vector(
     >>> from compas_occ.conversions import compas_vector_from_occ_vector
     >>> vector = gp_Vec(1, 0, 0)
     >>> compas_vector_from_occ_vector(vector)
-    Vector(1.000, 0.000, 0.000)
+    Vector(x=1.0, y=0.0, z=0.0)
 
     """
     cls = cls or Vector
@@ -677,7 +677,7 @@ def compas_vector_from_occ_vector2d(
     >>> from compas_occ.conversions import compas_vector_from_occ_vector2d
     >>> vector = gp_Vec2d(1, 0)
     >>> compas_vector_from_occ_vector2d(vector)
-    Vector(1.000, 0.000, 0.000)
+    Vector(x=1.0, y=0.0, z=0.0)
 
     """
     cls = cls or Vector
@@ -713,7 +713,7 @@ def compas_vector_from_occ_direction(
     >>> from compas_occ.conversions import compas_vector_from_occ_direction
     >>> vector = gp_Dir(1, 0, 0)
     >>> compas_vector_from_occ_direction(vector)
-    Vector(1.000, 0.000, 0.000)
+    Vector(x=1.0, y=0.0, z=0.0)
 
     """
     cls = cls or Vector
@@ -749,7 +749,7 @@ def compas_vector_from_occ_axis(
     >>> from compas_occ.conversions import compas_vector_from_occ_axis
     >>> axis = gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0))
     >>> compas_vector_from_occ_axis(axis)
-    Vector(1.000, 0.000, 0.000)
+    Vector(x=1.0, y=0.0, z=0.0)
 
     """
     return compas_vector_from_occ_direction(axis.Direction(), cls=cls)
@@ -777,7 +777,7 @@ def compas_axis_from_occ_axis(axis: gp_Ax1) -> Tuple[Point, Vector]:
     >>> from compas_occ.conversions import compas_axis_from_occ_axis
     >>> axis = gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0))
     >>> compas_axis_from_occ_axis(axis)
-    (Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000))
+    (Point(0.0, 0.0, z=0.0), Vector(x=1.0, y=0.0, z=0.0))
 
     """
     point = compas_point_from_occ_point(axis.Location())
@@ -812,7 +812,7 @@ def compas_line_from_occ_line(
     >>> from compas_occ.conversions import compas_line_from_occ_line
     >>> line = gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0))
     >>> compas_line_from_occ_line(line)
-    Line(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000))
+    Line(Point(0.0, 0.0, z=0.0), Point(1.0, 0.0, z=0.0))
 
     """
     cls = cls or Line
@@ -848,7 +848,7 @@ def compas_plane_from_occ_plane(
     >>> from compas_occ.conversions import compas_plane_from_occ_plane
     >>> plane = gp_Pln(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1))
     >>> compas_plane_from_occ_plane(plane)
-    Plane(Point(0.000, 0.000, 0.000), Vector(0.000, 0.000, 1.000))
+    Plane(point=Point(0.0, 0.0, z=0.0), normal=Vector(x=0.0, y=0.0, z=1.0))
 
     """
     cls = cls or Plane
@@ -885,7 +885,7 @@ def compas_frame_from_occ_ax2(
     >>> from compas_occ.conversions import compas_frame_from_occ_ax2
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> compas_frame_from_occ_ax2(ax2)
-    Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     cls = cls or Frame
@@ -923,7 +923,7 @@ def compas_frame_from_occ_ax3(
     >>> from compas_occ.conversions import compas_frame_from_occ_ax3
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> compas_frame_from_occ_ax3(ax3)
-    Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     cls = cls or Frame
@@ -952,7 +952,7 @@ def compas_frame_from_occ_location(location: TopLoc_Location) -> Frame:
     >>> from compas_occ.conversions import compas_frame_from_occ_location
     >>> location = TopLoc_Location()
     >>> compas_frame_from_occ_location(location)
-    Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     t = location.Transformation()
@@ -994,7 +994,7 @@ def compas_circle_from_occ_circle(
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> circ = gp_Circ(ax2, 1)
     >>> compas_circle_from_occ_circle(circ)
-    Circle(1.000, frame=Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Circle(radius=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Circle
@@ -1033,7 +1033,7 @@ def compas_ellipse_from_occ_ellipse(
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> elips = gp_Elips(ax2, 1, 0.5)
     >>> compas_ellipse_from_occ_ellipse(elips)
-    Ellipse(1.000, 0.500, frame=Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Ellipse(major=1.0, minor=0.5, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Ellipse
@@ -1071,9 +1071,9 @@ def compas_cylinder_from_occ_cylinder(
     >>> from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Ax3, gp_Cylinder
     >>> from compas_occ.conversions import compas_cylinder_from_occ_cylinder
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
-    >>> cylinder = gp_Cylinder(ax3, 1, 1)
+    >>> cylinder = gp_Cylinder(ax3, 1)
     >>> compas_cylinder_from_occ_cylinder(cylinder)
-    Cylinder(1.000, 1.000, frame=Frame(Point(0.000, 0.000, 0.000), Vector(1.000, 0.000, 0.000), Vector(0.000, 1.000, 0.000))
+    Cylinder(radius=1.0, height=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Cylinder

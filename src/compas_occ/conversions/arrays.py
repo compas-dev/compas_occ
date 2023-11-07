@@ -35,7 +35,7 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
 
     >>> points1 = [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0)]
     >>> array1 = array1_from_points1(points1)
-    >>> array1
+    >>> array1  # doctest: +ELLIPSIS
     <OCC.Core.TColgp.TColgp_Array1OfPnt; ... >
 
     >>> for item in array1:
@@ -82,7 +82,7 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
 
     >>> points1 = [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0)]
     >>> harray1 = harray1_from_points1(points1)
-    >>> harray1
+    >>> harray1  # doctest: +ELLIPSIS
     <OCC.Core.TColgp.TColgp_HArray1OfPnt; ... >
 
     >>> for item in harray1:
@@ -137,9 +137,9 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
     >>> for point in points1:
     ...     print(point)
     ...
-    Point(0.000, 0.000, 0.000)
-    Point(1.000, 0.000, 0.000)
-    Point(2.000, 0.000, 0.000)
+    Point(0.0, 0.0, z=0.0)
+    Point(1.0, 0.0, z=0.0)
+    Point(2.0, 0.0, z=0.0)
 
     """
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
@@ -172,11 +172,11 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     ...     [Point(0, 1, 0), Point(1, 1, 0), Point(2, 1, 0)],
     ... ]
     >>> array2 = array2_from_points2(points2)
-    >>> array2
+    >>> array2  # doctest: +ELLIPSIS
     <OCC.Core.TColgp.TColgp_Array2OfPnt; ... >
 
-    >>> rows = range(array2.LowerRow(), array2.UpperRow() + 1))
-    >>> cols = range(array2.LowerCol(), array2.UpperCol() + 1))
+    >>> rows = range(array2.LowerRow(), array2.UpperRow() + 1)
+    >>> cols = range(array2.LowerCol(), array2.UpperCol() + 1)
     >>> for i, j in product(rows, cols):
     ...     value = array2.Value(i, j)
     ...     x = value.X()
@@ -185,10 +185,10 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     ...     print(x, y, z)
     ...
     0.0 0.0 0.0
-    1.0 0.0 0.0
-    2.0 0.0 0.0
     0.0 1.0 0.0
+    1.0 0.0 0.0
     1.0 1.0 0.0
+    2.0 0.0 0.0
     2.0 1.0 0.0
 
     """
@@ -236,12 +236,12 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     >>> for i, j in product(range(len(points2)), range(len(points2[0]))):
     ...     print(points2[i][j])
     ...
-    Point(0.000, 0.000, 0.000)
-    Point(1.000, 0.000, 0.000)
-    Point(2.000, 0.000, 0.000)
-    Point(0.000, 1.000, 0.000)
-    Point(1.000, 1.000, 0.000)
-    Point(2.000, 1.000, 0.000)
+    Point(0.0, 0.0, z=0.0)
+    Point(0.0, 1.0, z=0.0)
+    Point(1.0, 0.0, z=0.0)
+    Point(1.0, 1.0, z=0.0)
+    Point(2.0, 0.0, z=0.0)
+    Point(2.0, 1.0, z=0.0)
 
     """
     points = [[None for j in range(array.NbRows())] for i in range(array.NbColumns())]
@@ -272,7 +272,7 @@ def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
     >>> from compas_occ.conversions import array1_from_integers1
     >>> integers1 = [0, 1, 2]
     >>> array1 = array1_from_integers1(integers1)
-    >>> array1
+    >>> array1  # doctest: +ELLIPSIS
     <OCC.Core.TColStd.TColStd_Array1OfInteger; ... >
 
     """
@@ -303,7 +303,7 @@ def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
     >>> from compas_occ.conversions import array1_from_floats1
     >>> floats1 = [0.0, 1.0, 2.0]
     >>> array1 = array1_from_floats1(floats1)
-    >>> array1
+    >>> array1  # doctest: +ELLIPSIS
     <OCC.Core.TColStd.TColStd_Array1OfReal; ... >
 
     """
@@ -337,7 +337,7 @@ def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
     ...     [2.0, 0.0, 0.0],
     ... ]
     >>> array2 = array2_from_floats2(floats2)
-    >>> array2
+    >>> array2  # doctest: +ELLIPSIS
     <OCC.Core.TColStd.TColStd_Array2OfReal; ... >
 
     """
@@ -381,7 +381,7 @@ def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
 
     >>> floats2 = floats2_from_array2(array2)
     >>> floats2
-    [[0.0, 1.0, 2.0], [0.0, 1.0, 2.0]]
+    [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0)]
 
     """
     numbers = []
