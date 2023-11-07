@@ -253,14 +253,22 @@ html_title = "COMPAS OCC"
 html_favicon = "_static/compas.ico"
 
 html_theme_options = {
+    "use_download_button": False,
+    "use_repository_button": True,
     "logo": {
         "text": "COMPAS OCC",
         "image_light": "_static/compas_icon.png",
         "image_dark": "_static/compas_icon_white.png",
-    }
+    },
 }
 
-html_sidebars = {}
+html_sidebars = {
+    "**": [
+        "navbar-logo.html",
+        "sbt-sidebar-nav.html",
+        "compas-sidebar-footer.html",
+    ]
+}
 
 html_context = {
     "github_url": "https://github.com",
