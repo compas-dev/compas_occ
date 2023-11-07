@@ -248,11 +248,17 @@ replace(html5.HTML5Translator)
 # -- Options for HTML output ----------------------------------------------
 
 html_theme = "sphinx_book_theme"
-html_logo = "_static/images/compas_icon.png"  # relative to parent of conf.py
+html_logo = "_static/compas_icon.png"
 html_title = "COMPAS OCC"
-html_favicon = "_static/images/compas.ico"
+html_favicon = "_static/compas.ico"
 
-html_theme_options = {}
+html_theme_options = {
+    "logo": {
+        "text": "COMPAS OCC",
+        "image_light": "_static/compas_icon.png",
+        "image_dark": "_static/compas_icon_white.png",
+    }
+}
 
 html_sidebars = {}
 
