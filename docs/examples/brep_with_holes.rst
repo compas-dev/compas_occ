@@ -1,11 +1,11 @@
 ********************************************************************************
-BrepFace with Holes
+Brep with Holes
 ********************************************************************************
 
-.. figure:: /_images/example_brepface_with_holes.png
+.. figure:: /_images/example_brep_with_holes.png
     :figclass: figure
     :class: figure-img img-fluid
 
 
-.. literalinclude:: brepface_with_holes.py
+.. literalinclude:: brep_with_holes.py
     :language: python

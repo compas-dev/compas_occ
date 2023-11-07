@@ -38,7 +38,7 @@ if latest_version == "Unreleased":
     version = "latest"
 else:
     release = latest_version
-    version = ".".join(release.split(".")[0:2])
+    version = ".".join(release.split(".")[0:2])  # type: ignore
 
 master_doc = "index"
 source_suffix = {
@@ -176,7 +176,7 @@ def linkcode_resolve(domain, info):
         return None
 
     package = info["module"].split(".")[0]
-    if not package.startswith("compas"):
+    if not package.startswith("compas_occ"):
         return None
 
     module = importlib.import_module(info["module"])
