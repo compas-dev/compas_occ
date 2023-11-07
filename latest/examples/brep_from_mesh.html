@@ -61,7 +61,7 @@
     <link rel="shortcut icon" href="../_static/compas.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Splice a Brep With a Plane" href="brep_slice.html" />
+    <link rel="next" title="Find the Overlap Between Two Breps" href="brep_overlap.html" />
     <link rel="prev" title="Brep Shape From Booleans" href="brep_from_booleans.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -150,8 +150,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../examples.html">Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="brep_explorer.html">Explore Brep Topology</a></li>
 <li class="toctree-l2"><a class="reference internal" href="brep_from_booleans.html">Brep Shape From Booleans</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Brep From Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="brep_overlap.html">Find the Overlap Between Two Breps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="brep_slice.html">Splice a Brep With a Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="brep_split.html">Split a Brep With a Plane</a></li>
 <li class="toctree-l2"><a class="reference internal" href="brep_trim.html">Trim a Brep With a Plane</a></li>
@@ -563,6 +565,9 @@ document.write(`
 <span class="c1"># visualize</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="n">viewmode</span><span class="o">=</span><span class="s2">&quot;ghosted&quot;</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">look_at</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
 <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">brep</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
@@ -592,11 +597,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="brep_slice.html"
+       href="brep_overlap.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Splice a Brep With a Plane</p>
+        <p class="prev-next-title">Find the Overlap Between Two Breps</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
