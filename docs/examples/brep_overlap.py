@@ -16,6 +16,8 @@ B = Brep.from_box(box)
 FA, FB = A.overlap(B)
 
 viewer = App()
+viewer.view.camera.position = [3, -3, 1]
+viewer.view.camera.look_at([-1, 2, 0])
 
 viewer.add(A, opacity=0.5, linewidth=3)
 viewer.add(B, opacity=0.5, linewidth=3)

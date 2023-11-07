@@ -31,6 +31,9 @@ brep = Brep.from_mesh(mesh)
 # visualize
 
 viewer = App(viewmode="ghosted")
+viewer.view.camera.position = [-9, -5, 1]
+viewer.view.camera.look_at([3, 0, 1])
+
 viewer.add(brep, linewidth=2)
 
 viewer.run()

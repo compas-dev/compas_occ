@@ -11,17 +11,12 @@ A = Brep.from_box(box)
 vertex = A.vertices[0]
 
 vertices = A.vertex_neighbors(vertex)
-print(len(vertices))
-
 edges = A.vertex_edges(vertex)
-print(len(edges))
-
 faces = A.vertex_faces(vertex)
-print(len(faces))
 
 viewer = App()
-
-viewer.add(A, linewidth=2, linecolor=Color(0.2, 0.2, 0.2))
+viewer.view.camera.position = [2, -4, 1]
+viewer.view.camera.look_at([0, 0, 0])
 
 viewer.add(vertex.point, pointcolor=Color.red(), pointsize=20)
 
@@ -31,9 +26,10 @@ for vertex in vertices:
 for edge in edges:
     viewer.add(edge.to_line(), linewidth=5, linecolor=Color(0.2, 0.2, 0.2))
 
-# for face in faces:
-#     brep = Brep.from_brepfaces()
-#     brep.occ_shape = face.occ_face
-#     viewer.add(brep.to_viewmesh()[0], show_lines=False, opacity=0.5)
+for face in faces:
+    brep = Brep.from_brepfaces([face])
+    viewer.add(brep, opacity=0.5)
+
+viewer.add(A, linewidth=2, linecolor=Color(0.2, 0.2, 0.2), show_faces=False)
 
 viewer.show()
