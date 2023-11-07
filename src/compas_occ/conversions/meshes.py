@@ -5,6 +5,7 @@ from typing_extensions import Annotated
 import compas.geometry
 from compas.geometry import Point
 from compas.datastructures import Mesh
+from compas.geometry import Polygon
 
 from .arrays import array1_from_points1
 
@@ -21,9 +22,13 @@ from OCC.Core.GeomAbs import GeomAbs_C0
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
 
-Triangle = Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 3]
-Quad = Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 4]
-NGon = List[Union[Annotated[List[float], 3], compas.geometry.Point]]
+Triangle = Union[
+    Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 3]
+]
+Quad = Union[
+    Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 4]
+]
+NGon = Union[Polygon, List[Union[Annotated[List[float], 3], compas.geometry.Point]]]
 
 
 def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
