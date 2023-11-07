@@ -1,343 +1,648 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>OCCCurve.point_at &#8212; COMPAS OCC</title>
   
-  <title>compas_occ - OCCCurve.point_at</title>
   
-
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-  <meta name="author" content="compas-dev" />
-  <meta name="description" content="" />
-
-  <link rel="shortcut icon" href="../../_static/images/compas.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/mono-blue.min.css">
-  <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css" />
-  <link rel="stylesheet" type="text/css" href="../../_static/css/compas-reference.css" />
-
   
-  <link rel="next" title="OCCCurve.projected" href="compas_occ.geometry.OCCCurve.projected.html" />
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
   
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link rel="prev" title="OCCCurve.parameter_at_distance" href="compas_occ.geometry.OCCCurve.parameter_at_distance.html" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/compas.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-</head>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/tabs.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.geometry.OCCCurve.point_at';</script>
+    <link rel="shortcut icon" href="../../_static/compas.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="OCCCurve.projected" href="compas_occ.geometry.OCCCurve.projected.html" />
+    <link rel="prev" title="OCCCurve.parameter_at_distance" href="compas_occ.geometry.OCCCurve.parameter_at_distance.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body data-spy="scroll" data-target="#compas-toc">
-  <!-- header -->
-  <header id="header" class="compas-header d-flex align-items-center">
-    <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
-      <!-- brand -->
-      <a class="navbar-brand" href="https://compas.dev/compas_occ/">
-        <img src="../../_static/images/compas_icon_white.png" alt="COMPAS OCC" width="48px" height="48px" />
-      </a>
-      <!-- brand -->
-      <!-- primary -->
-      <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://compas.dev/compas_occ/">COMPAS OCC</a></li>
-      </ul>
-      <!-- primary -->
-      <ul class="navbar-nav d-none d-md-flex ml-md-auto">
-        <!-- version -->
-        
-        <meta id="doc_versions" data-url="https://compas.dev/compas_occ/doc_versions.txt" data-docs="https://compas.dev/compas_occ/">
-        <li class="nav-item nav-versions dropdown">
-          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.7.1
-          </a>
-          <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
-        </li>
-        
-        <!-- version -->
-        <!-- social -->
-        <li class="nav-item">
-          <a class="nav-link" href="https://github.com/compas-dev/compas_occ" target="_blank">
-            <span class="fab fa-github fa-1x"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="http://forum.compas-framework.org" target="_blank">
-            <span class="fab fa-discourse fa-1x"></span>
-          </a>
-        </li>
-        <!-- social -->
-      </ul>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
     </nav>
-  </header>
-  <!-- header -->
-  <!-- main -->
-  <div class="container-fluid">
-    <div class="row">
-      <!-- main -->
-      <main class="col-12 col-md-9 col-xl-7 px-4 px-md-5 pt-2 pb-5 compas-content" role="main">
-        
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-3 bg-white px-0">
-            <li class="breadcrumb-item"><a href="../../index.html">COMPAS OCC</a></li>
-            
-            <li class="breadcrumb-item"><a href="../../api.html">API Reference</a></li>
-            
-            <li class="breadcrumb-item"><a href="../compas_occ.html">compas_occ</a></li>
-            
-            <li class="breadcrumb-item"><a href="../compas_occ.geometry.html">compas_occ.geometry</a></li>
-            
-            <li class="breadcrumb-item"><a href="compas_occ.geometry.OCCCurve.html">OCCCurve</a></li>
-            
-            <!-- <li class="breadcrumb-item active" aria-current="page">OCCCurve.point_at</li> -->
-          </ol>
-        </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/compas_icon.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/compas_icon.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brep_from_booleans.html">Brep Shape From Booleans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brep_from_mesh.html">Brep From Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brep_slice.html">Splice a Brep With a Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brep_split.html">Split a Brep With a Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brep_trim.html">Trim a Brep With a Plane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brepface_with_hole.html">BrepFace with Hole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/brepface_with_holes.html">BrepFace with Holes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_closest_point.html">Curve Closest Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_comparison1.html">Curve Comparison 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_divide.html">Curve Divide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_from_circle.html">Curve From Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_from_interpolation.html">Curve From Interpolation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_from_line.html">Curve From Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_from_parameters.html">Curve From Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_from_points.html">Curve From Control Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_joining.html">Curve Joining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/curve_segmentation.html">Curve Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_fill.html">Surface From Fill</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_parameters.html">Surface From Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_from_points.html">Surface From Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_isocurves.html">Surface Isocurves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_of_revolution.html">Surface of Revolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_random.html">Surface With Random Control Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.brep.html">compas_occ.brep</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="compas_occ.brep.OCCBrep.html">OCCBrep</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.check.html">OCCBrep.check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.contours.html">OCCBrep.contours</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.copy.html">OCCBrep.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.cull_unused_edges.html">OCCBrep.cull_unused_edges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.cull_unused_faces.html">OCCBrep.cull_unused_faces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.cull_unused_loops.html">OCCBrep.cull_unused_loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.cull_unused_vertices.html">OCCBrep.cull_unused_vertices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.edge_faces.html">OCCBrep.edge_faces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.fix.html">OCCBrep.fix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_boolean_difference.html">OCCBrep.from_boolean_difference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_boolean_intersection.html">OCCBrep.from_boolean_intersection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_boolean_union.html">OCCBrep.from_boolean_union</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_box.html">OCCBrep.from_box</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_brepfaces.html">OCCBrep.from_brepfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_breps.html">OCCBrep.from_breps</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_cone.html">OCCBrep.from_cone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_curves.html">OCCBrep.from_curves</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_cylinder.html">OCCBrep.from_cylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_data.html">OCCBrep.from_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_extrusion.html">OCCBrep.from_extrusion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_mesh.html">OCCBrep.from_mesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_native.html">OCCBrep.from_native</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_planes.html">OCCBrep.from_planes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_polygons.html">OCCBrep.from_polygons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_shape.html">OCCBrep.from_shape</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_sphere.html">OCCBrep.from_sphere</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_step.html">OCCBrep.from_step</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_sweep.html">OCCBrep.from_sweep</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_torus.html">OCCBrep.from_torus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.heal.html">OCCBrep.heal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.make_solid.html">OCCBrep.make_solid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.overlap.html">OCCBrep.overlap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.sew.html">OCCBrep.sew</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.slice.html">OCCBrep.slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.split.html">OCCBrep.split</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_meshes.html">OCCBrep.to_meshes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_polygons.html">OCCBrep.to_polygons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_step.html">OCCBrep.to_step</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_tesselation.html">OCCBrep.to_tesselation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_viewmesh.html">OCCBrep.to_viewmesh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.transform.html">OCCBrep.transform</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.transformed.html">OCCBrep.transformed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.trim.html">OCCBrep.trim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.trimmed.html">OCCBrep.trimmed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.vertex_edges.html">OCCBrep.vertex_edges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.vertex_faces.html">OCCBrep.vertex_faces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.vertex_neighbors.html">OCCBrep.vertex_neighbors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.ToString.html">OCCBrep.ToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.from_step_file.html">OCCBrep.from_step_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.sha256.html">OCCBrep.sha256</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_data.html">OCCBrep.to_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.to_json.html">OCCBrep.to_json</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrep.validate_data.html">OCCBrep.validate_data</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.html">OCCBrepVertex</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.from_data.html">OCCBrepVertex.from_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.from_point.html">OCCBrepVertex.from_point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.ToString.html">OCCBrepVertex.ToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.copy.html">OCCBrepVertex.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.sha256.html">OCCBrepVertex.sha256</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.to_data.html">OCCBrepVertex.to_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.validate_data.html">OCCBrepVertex.validate_data</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.html">OCCBrepEdge</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_circle.html">OCCBrepEdge.from_circle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_curve.html">OCCBrepEdge.from_curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_data.html">OCCBrepEdge.from_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_ellipse.html">OCCBrepEdge.from_ellipse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_line.html">OCCBrepEdge.from_line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_point_point.html">OCCBrepEdge.from_point_point</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_vertex_vertex.html">OCCBrepEdge.from_vertex_vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_bezier.html">OCCBrepEdge.to_bezier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_bspline.html">OCCBrepEdge.to_bspline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_circle.html">OCCBrepEdge.to_circle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_curve.html">OCCBrepEdge.to_curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_ellipse.html">OCCBrepEdge.to_ellipse</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_hyperbola.html">OCCBrepEdge.to_hyperbola</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_line.html">OCCBrepEdge.to_line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_parabola.html">OCCBrepEdge.to_parabola</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.ToString.html">OCCBrepEdge.ToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.copy.html">OCCBrepEdge.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_points.html">OCCBrepEdge.from_points</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.from_vertices.html">OCCBrepEdge.from_vertices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.sha256.html">OCCBrepEdge.sha256</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.to_data.html">OCCBrepEdge.to_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.validate_data.html">OCCBrepEdge.validate_data</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.html">OCCBrepLoop</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.fix.html">OCCBrepLoop.fix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.from_data.html">OCCBrepLoop.from_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.from_edges.html">OCCBrepLoop.from_edges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.from_polygon.html">OCCBrepLoop.from_polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.from_polyline.html">OCCBrepLoop.from_polyline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.ToString.html">OCCBrepLoop.ToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.copy.html">OCCBrepLoop.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.sha256.html">OCCBrepLoop.sha256</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.to_data.html">OCCBrepLoop.to_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.validate_data.html">OCCBrepLoop.validate_data</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.html">OCCBrepFace</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.add_loop.html">OCCBrepFace.add_loop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.add_loops.html">OCCBrepFace.add_loops</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.fix.html">OCCBrepFace.fix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_cone.html">OCCBrepFace.from_cone</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_cylinder.html">OCCBrepFace.from_cylinder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_data.html">OCCBrepFace.from_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_plane.html">OCCBrepFace.from_plane</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_polygon.html">OCCBrepFace.from_polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_sphere.html">OCCBrepFace.from_sphere</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_surface.html">OCCBrepFace.from_surface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.from_torus.html">OCCBrepFace.from_torus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.is_valid.html">OCCBrepFace.is_valid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.to_polygon.html">OCCBrepFace.to_polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.try_get_nurbssurface.html">OCCBrepFace.try_get_nurbssurface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.ToString.html">OCCBrepFace.ToString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.copy.html">OCCBrepFace.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.sha256.html">OCCBrepFace.sha256</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.to_data.html">OCCBrepFace.to_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.validate_data.html">OCCBrepFace.validate_data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_floats1.html">array1_from_floats1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_integers1.html">array1_from_integers1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_points1.html">array1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_floats2.html">array2_from_floats2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_points2.html">array2_from_points2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.floats2_from_array2.html">floats2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.harray1_from_points1.html">harray1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points1_from_array1.html">points1_from_array1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points2_from_array2.html">points2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_circle_from_occ_circle.html">compas_circle_from_occ_circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_circle_to_occ_circle.html">compas_circle_to_occ_circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_cone_to_occ_cone.html">compas_cone_to_occ_cone</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_cylinder_from_occ_cylinder.html">compas_cylinder_from_occ_cylinder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_cylinder_to_occ_cylinder.html">compas_cylinder_to_occ_cylinder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_frame_from_occ_ax2.html">compas_frame_from_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_frame_from_occ_ax3.html">compas_frame_from_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_line_from_occ_line.html">compas_line_from_occ_line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_line_to_occ_line.html">compas_line_to_occ_line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_plane_from_occ_plane.html">compas_plane_from_occ_plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_point_from_occ_point.html">compas_point_from_occ_point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_point_from_occ_point2d.html">compas_point_from_occ_point2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_plane_to_occ_plane.html">compas_plane_to_occ_plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_point_to_occ_point.html">compas_point_to_occ_point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_plane_to_occ_ax2.html">compas_plane_to_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_plane_to_occ_ax3.html">compas_plane_to_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_sphere_to_occ_sphere.html">compas_sphere_to_occ_sphere</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_torus_to_occ_torus.html">compas_torus_to_occ_torus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_vector_from_occ_axis.html">compas_vector_from_occ_axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_vector_from_occ_vector.html">compas_vector_from_occ_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_vector_from_occ_vector2d.html">compas_vector_from_occ_vector2d</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_vector_to_occ_vector.html">compas_vector_to_occ_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_vector_to_occ_direction.html">compas_vector_to_occ_direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_transformation_to_trsf.html">compas_transformation_to_trsf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_mesh_to_occ_shell.html">compas_mesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_quadmesh_to_occ_shell.html">compas_quadmesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_trimesh_to_occ_shell.html">compas_trimesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ngon_to_face.html">ngon_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.quad_to_face.html">quad_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.triangle_to_face.html">triangle_to_face</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="../compas_occ.geometry.curves.html">Curves</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4 current active"><a class="reference internal" href="compas_occ.geometry.OCCCurve.html">OCCCurve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCCurve2d.html">OCCCurve2d</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.html">OCCNurbsCurve</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../compas_occ.geometry.surfaces.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCSurface.html">OCCSurface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCExtrusionSurface.html">OCCExtrusionSurface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCRevolutionSurface.html">OCCRevolutionSurface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.html">OCCNurbsSurface</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
         
-        <section class="detail" id="occcurve-point-at">
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>OCCCurve.point_at</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="detail" id="occcurve-point-at">
 <h1>OCCCurve.point_at</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.geometry.OCCCurve.point_at">
-<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">point_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">OCCCurve.</span></span><span class="sig-name descname"><span class="pre">point_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://compas.dev/compas/latest/reference/generated/compas.geometry.Point.html" title="(in COMPAS vlatest)"><span class="pre">compas.geometry.point.Point</span></a></span></span></dt>
 <dd><p>Compute the point at a curve parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>t</strong> (<em>float</em>) – The curve parameter.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t</strong><span class="classifier">float</span></dt><dd><p>The curve parameter.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Point.html#compas.geometry.Point" title="(in COMPAS v1.17)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></p>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference external" href="https://compas.dev/compas/latest/reference/generated/compas.geometry.Point.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code></a></dt><dd></dd>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.11)"><strong>ValueError</strong></a> – If the parameter is not in the curve domain.</p>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If the parameter is not in the curve domain.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="compas_occ.geometry.OCCCurve.parameter_at_distance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">OCCCurve.parameter_at_distance</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="compas_occ.geometry.OCCCurve.projected.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">OCCCurve.projected</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tom Van Mele
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright COMPAS Association.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Nov 07, 2023.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
         
+
       </main>
-      <!-- content -->
-      <!-- sidebar -->
-      <div class="col-12 col-md-3 compas-sidebar" role="navigation">
-        <form id="search" class="d-flex align-items-center compas-searchbox" action="../../search.html" method="get">
-          <input class="form-control" type="text" name="q" placeholder="Search docs" />
-          <input type="hidden" name="check_keywords" value="yes" />
-          <input type="hidden" name="area" value="default" />
-          <button class="navbar-toggler d-md-none" type="button" data-toggle="collapse" data-target="#compas-navigation" aria-controls="compas-navigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </form>
-        
-        
-        <div id="compas-navigation" class="collapse compas-navigation">
-          <ul class="nav flex-column collapse show active">
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../index.html">Introduction</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brep_from_booleans.html">BRep Shape From Booleans</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brep_from_mesh.html">BRep From Mesh</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brepface_with_hole.html">BRepFace with Hole</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/brepface_with_holes.html">BRepFace with Holes</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_closest_point.html">Curve Closest Point</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_comparison1.html">Curve Comparison 1</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_comparison2.html">Curve Comparison 2</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_divide.html">Curve Divide</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_circle.html">Curve From Circle</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_interpolation.html">Curve From Interpolation</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_line.html">Curve From Line</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_parameters.html">Curve From Parameters</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_from_points.html">Curve From Control Points</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_joining.html">Curve Joining</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/curve_segmentation.html">Curve Segmentation</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_frames.html">Surface Frames</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_fill.html">Surface From Fill</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_parameters.html">Surface From Parameters</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_from_points.html">Surface From Points</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_isocurves.html">Surface Isocurves</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_of_revolution.html">Surface of Revolution</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_random.html">Surface With Random Control Points</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_spacepoints.html">Surface Points Over UV Space</a></li>
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="../../examples/surface_viewobject.html">Surface Visualisation With View Object</a></li>
-</ul>
-</li>
-<li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../../api.html">API Reference</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l2 nav-item active"><a class="nav-link reference internal" href="../compas_occ.html">compas_occ</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_occ.brep.html">compas_occ.brep</a></li>
-<li class="toctree-l3 nav-item"><a class="nav-link reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a></li>
-<li class="toctree-l3 nav-item active"><a class="nav-link reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../../license.html">License</a></li>
-</ul>
-
-        </div>
-        
-      </div>
-      <!-- sidebar -->
-      <!-- toc -->
-      <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
-        
-        <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">OCCCurve.point_at</a></li>
-</ul>
-
-      </div>
-      <!-- toc -->
     </div>
   </div>
-  <!-- main -->
-  <!-- footer -->
-  <footer class="compas-footer">
-    <nav class="nav p-2">
-      
-      <a href="compas_occ.geometry.OCCCurve.parameter_at_distance.html" title="OCCCurve.parameter_at_distance" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
-        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
-        <div class="nav-title flex-grow-1 align-self-center">
-          <div class="nav-direction small font-weight-light">Previous</div>
-          OCCCurve.parameter_at_distance
-        </div>
-      </a>
-      
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-      
-      <a href="compas_occ.geometry.OCCCurve.projected.html" title="OCCCurve.projected" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
-        <div class="nav-title footer-link flex-grow-1 align-self-center">
-          <div class="nav-direction small font-weight-light">Next</div>
-          OCCCurve.projected
-        </div>
-        <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
-      </a>
-      
-    </nav>
+  <footer class="bd-footer">
   </footer>
-  <!-- footer -->
-  <!-- below -->
-  <div class="below py-5" style="background-color: #222;">
-    <div class="container">
-      <div class="row flex-column">
-        <div class="col-12 col-md-6 mx-md-auto text-center">
-          <h4 class="pb-3 below-text">COMPAS</h4>
-          <p class="below-text">
-            A computational framework for collaboration and research
-            in Architecture, Engineering, Fabrication, and Construction.
-          </p>
-          <nav class="nav justify-content-center pb-3">
-            <a class="nav-link mx-2 px-0 below-link" href="http://github.com/compas-dev" target="_blank">
-              <span class="fab fa-github fa-1x"></span>
-            </a>
-            <a class="nav-link mx-2 px-0 below-link" href="http://forum.compas-framework.org" target="_blank">
-              <span class="fab fa-discourse fa-1x"></span>
-            </a>
-            <a class="nav-link mx-2 px-0 below-link" href="https://pypi.org/project/COMPAS/" target="_blank">
-              <span class="fab fa-python fa-1x"></span>
-            </a>
-          </nav>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center">
-          <p class="p-0 m-0 below-text">Copyright &copy; 2017-2021 compas-dev</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- below -->
-  <!-- scripts -->
-  <script id="documentation_options" data-url_root="" src="../../_static/documentation_options.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.0.0/anchor.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
-
-  <script src="../../_static/underscore.js"></script>
-  <script src="../../_static/doctools.js"></script>
-  <script src="../../_static/searchtools.js"></script>
-  <script src="../../_static/language_data.js"></script>
-
-  <script>
-    $(document).ready(function () {
-      $(".language-default code").addClass("python");
-      $(".language-python code").addClass("python");
-      $(".language-bash code").addClass("bash");
-      $(".language-cpp code").addClass("cpp");
-      $(".language-json code").addClass("json");
-      $(".language-none code").addClass("plaintext");
-
-      hljs.initHighlighting();
-      anchors.add();
-
-      new ClipboardJS(".btn.copy", {
-        target: function(trigger) {
-          return trigger.nextElementSibling;
-        }
-      });
-
-      $("#compas-navigation li.active > ul").each(function() {
-        var ul = $(this);
-        if (! ul.hasClass("show")) {
-          ul.addClass("show");
-        }
-      });
-
-      $("#compas-navigation li.toctree-l1").has("ul").each(function() {
-        var li = $(this);
-        li.addClass("has-children");
-        if (li.hasClass("active")) {
-          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-up"></i></span>');
-        }
-        else {
-          li.prepend('<span class="menu-toggle"><i class="fas fa-chevron-down"></i></span>');
-        }
-      });
-
-      $(".menu-toggle").click(function() {
-        var toggle = $(this);
-        toggle.siblings("ul").toggleClass("show");
-      });
-
-    });
-
-
-    var url = $("#doc_versions").data("url");
-    var docs_site = $("#doc_versions").data("docs");
-
-    if (url) {
-      $.get(url, res => {
-        var lines = res.match(/[^\r\n]+/g);
-        lines.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-        lines.reverse();
-        lines.forEach(version => {
-          $("#doc_version_list").append("<a class=\"dropdown-item\" href=\"" + docs_site + version + "\">" + version + "</a>");
-        });
-
-        var selected_version = $('.nav-versions .dropdown-item').filter(function (i, ver) {
-          return window.location.href.startsWith(ver.href);
-        });
-        selected_version.addClass('active');
-        $("#bd-versions").text(selected_version.text());
-
-      })
-    }
-  </script>
-  <!-- scripts -->
-  
-  
-</body>
-
+  </body>
 </html>
