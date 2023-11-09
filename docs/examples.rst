@@ -3,8 +3,19 @@ Examples
 ********************************************************************************
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :titlesonly:
-   :glob:
 
-   examples/*
+   examples/curves/index
+
+.. toctree::
+   :maxdepth: 2
+   :titlesonly:
+
+   examples/surfaces/index
+
+.. toctree::
+   :maxdepth: 2
+   :titlesonly:
+
+   examples/breps/index

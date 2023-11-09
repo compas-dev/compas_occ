@@ -5,6 +5,22 @@ Tutorial
 This tutorial gives a brief overview of the functionality of :mod:`compas_occ` and recommended best practices.
 
 
+Working with Curves
+===================
+
+
+Working with Surfaces
+=====================
+
+
+Working with Breps
+==================
+
+
+Visualisation
+=============
+
+
 Using the plugin system
 =======================
 
@@ -42,20 +58,3 @@ The following snippets accomplish the same thing, but the first uses :mod:`compa
 
 The advatage of using the plugin system is that it allows COMPAS to automatically switch to different backends depending on the current environment without chaging the script.
 For example, when working in Rhino, the first script will throw an error, whereas the second script will work as expected by switching to RhinoCommon as a backend.
-
-
-Working with Curves
-===================
-
-
-Working with Surfaces
-=====================
-
-
-Working with Breps
-==================
-
-
-Visualisation
-=============
-

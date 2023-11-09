@@ -253,7 +253,6 @@ html_title = "COMPAS OCC"
 html_favicon = "_static/compas.ico"
 
 html_theme_options = {
-    "use_download_button": False,
     "use_repository_button": True,
     "logo": {
         "text": "COMPAS OCC",
