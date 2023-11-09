@@ -9,13 +9,11 @@ from compas.plugins import plugin
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_curve(cls, *args, **kwargs):
-    # why is this not just OCCCurve()
     return super(Curve, cls).__new__(cls)
 
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_nurbscurve(cls, *args, **kwargs):
-    # why is this not just OCCNurbsCurve()
     return super(NurbsCurve, cls).__new__(cls)
 
 

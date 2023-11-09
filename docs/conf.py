@@ -247,7 +247,7 @@ replace(html5.HTML5Translator)
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = "sphinx_book_theme"
+html_theme = "pydata_sphinx_theme"
 html_logo = "_static/compas_icon.png"
 html_title = "COMPAS OCC"
 html_favicon = "_static/compas.ico"
@@ -260,11 +260,52 @@ html_theme_options = {
         "image_light": "_static/compas_icon.png",
         "image_dark": "_static/compas_icon_white.png",
     },
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/compas-dev/compas_occ/gh-pages/versions.json",
+        "version_match": version,
+    },
+    "check_switcher": False,
+    "navigation_depth": 3,
+    "show_nav_level": 1,
+    "show_toc_level": 2,
+    "pygment_light_style": "default",
+    "pygment_dark_style": "monokai",
 }
+
+html_theme_options["icon_links"] = [
+    {
+        "name": "GitHub",
+        "url": "https://github.com/compas-dev/compas_occ",
+        "icon": "fa-brands fa-github",
+        "type": "fontawesome",
+    },
+    {
+        "name": "Discourse",
+        "url": "http://forum.compas-framework.org/",
+        "icon": "fa-brands fa-discourse",
+        "type": "fontawesome",
+    },
+    {
+        "name": "PyPI",
+        "url": "https://pypi.org/project/compas-gmsh/",
+        "icon": "fa-brands fa-python",
+        "type": "fontawesome",
+    },
+]
+
+html_theme_options["navbar_start"] = [
+    "navbar-logo",
+]
+
+html_theme_options["navbar_end"] = [
+    "version-switcher",
+    "theme-switcher",
+    "navbar-icon-links",
+]
+
 
 html_sidebars = {
     "**": [
-        "navbar-logo.html",
         "sbt-sidebar-nav.html",
         "compas-sidebar-footer.html",
     ]
@@ -273,9 +314,10 @@ html_sidebars = {
 html_context = {
     "github_url": "https://github.com",
     "github_user": "compas-dev",
-    "github_repo": "compas",
+    "github_repo": "compas_occ",
     "github_version": "main",
     "doc_path": "docs",
+    "default_theme": "light",
 }
 
 html_static_path = ["_static"]
