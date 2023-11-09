@@ -1430,7 +1430,9 @@ class OCCBrep(Brep):
         else:
             raise BrepFilletError("Fillet operation could not be completed.")
 
-    def filleted(self, radius: float, exclude: Optional[list[OCCBrepEdge]] = None) -> "OCCBrep":
+    def filleted(
+        self, radius: float, exclude: Optional[list[OCCBrepEdge]] = None
+    ) -> "OCCBrep":
         """Construct a copy of a Brep with filleted edges.
 
         Parameters
