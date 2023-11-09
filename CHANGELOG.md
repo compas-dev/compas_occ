@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Renamed `BRep.occ_shape` to `native_brep` for compatibility with `RhinoBrep`.
 * Fixed the error when calling `BRep.frame`.
 * Fixed `AttributeError` when calling `BRep.loops`.
+* Updated `compas-actions.build` workflow to v3.
 
 ### Changed
 
