@@ -7,7 +7,6 @@ from enum import Enum
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.TopoDS import TopoDS_Edge
-from OCC.Core.TopoDS import topods
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopExp import topexp_FirstVertex
 from OCC.Core.TopExp import topexp_LastVertex
@@ -16,9 +15,6 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.BRepAlgo import brepalgo_IsValid
 from OCC.Core.BRepGProp import brepgprop_LinearProperties
 from OCC.Core.GProp import GProp_GProps
-
-# from OCC.Core.GeomConvert import GeomConvert_ApproxCurve
-# from OCC.Core.GeomAbs import GeomAbs_Shape
 
 from compas.geometry import Point
 from compas.geometry import Line
@@ -31,7 +27,6 @@ from compas_occ.brep import OCCBrepVertex
 from compas_occ.conversions import compas_line_to_occ_line
 from compas_occ.conversions import compas_point_to_occ_point
 from compas_occ.conversions import compas_circle_to_occ_circle
-
 from compas_occ.conversions import compas_circle_from_occ_circle
 from compas_occ.conversions import compas_ellipse_from_occ_ellipse
 
@@ -100,6 +95,49 @@ class OCCBrepEdge(BrepEdge):
         self._occ_adaptor = None
         self.occ_edge = occ_edge
 
+    def __eq__(self, other: "OCCBrepEdge"):
+        return self.is_equal(other)
+
+    def is_same(self, other: "OCCBrepEdge"):
+        """Check if this edge is the same as another edge.
+
+        Two edges are the same if they have the same location.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepEdge`
+            The other edge.
+
+        Returns
+        -------
+        bool
+            ``True`` if the edges are the same, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepEdge):
+            return False
+        return self.occ_edge.IsSame(other.occ_edge)
+
+    def is_equal(self, other: "OCCBrepEdge"):
+        """Check if this edge is equal to another edge.
+
+        Two edges are equal if they have the same location and orientation.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepEdge`
+            The other edge.
+
+        Returns
+        -------
+        bool
+            ``True`` if the edges are equal, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepEdge):
+            return False
+        return self.occ_edge.IsEqual(other.occ_edge)
+
     # ==============================================================================
     # Data
     # ==============================================================================
@@ -129,7 +167,8 @@ class OCCBrepEdge(BrepEdge):
         self._occ_adaptor = None
         self._curve = None
         self._nurbscurve = None
-        self._occ_edge = topods.Edge(edge)
+        self._occ_edge = edge
+        # self._occ_edge = topods.Edge(edge)
 
     @property
     def occ_adaptor(self) -> BRepAdaptor_Curve:
@@ -503,8 +542,8 @@ class OCCBrepEdge(BrepEdge):
             If the underlying geometry is not a line.
 
         """
-        if not self.is_line:
-            raise ValueError(f"The underlying geometry is not a line: {self.type}")
+        # if not self.is_line:
+        #     raise ValueError(f"The underlying geometry is not a line: {self.type}")
 
         a = self.first_vertex.point
         b = self.last_vertex.point

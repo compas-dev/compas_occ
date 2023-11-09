@@ -27,6 +27,49 @@ class OCCBrepVertex(BrepVertex):
         self._occ_vertex = None
         self.occ_vertex = occ_vertex
 
+    def __eq__(self, other: "OCCBrepVertex"):
+        return self.is_equal(other)
+
+    def is_same(self, other: "OCCBrepVertex"):
+        """Check if this vertex is the same as another vertex.
+
+        Two vertices are the same if they have the same location.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepVertex`
+            The other vertex.
+
+        Returns
+        -------
+        bool
+            ``True`` if the vertices are the same, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepVertex):
+            return False
+        return self.occ_vertex.IsSame(other.occ_vertex)
+
+    def is_equal(self, other: "OCCBrepVertex"):
+        """Check if this vertex is equal to another vertex.
+
+        Two vertices are equal if they have the same location and orientation.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepVertex`
+            The other vertex.
+
+        Returns
+        -------
+        bool
+            ``True`` if the vertices are equal, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepVertex):
+            return False
+        return self.occ_vertex.IsEqual(other.occ_vertex)
+
     # ==============================================================================
     # Data
     # ==============================================================================

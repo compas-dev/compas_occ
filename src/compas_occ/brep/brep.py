@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 
 import compas.geometry
 import compas.datastructures
@@ -27,6 +27,7 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_Copy
 from OCC.Core.BRepCheck import BRepCheck_Shell
 from OCC.Core.BRepCheck import BRepCheck_Status
 from OCC.Core.BRepExtrema import BRepExtrema_ShapeProximity
+from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
 from OCC.Core.BRepGProp import brepgprop_VolumeProperties
 from OCC.Core.BRepGProp import brepgprop_SurfaceProperties
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
@@ -71,10 +72,12 @@ from compas_occ.conversions import compas_frame_to_occ_ax2
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
 
-from compas_occ.brep import OCCBrepVertex
-from compas_occ.brep import OCCBrepEdge
-from compas_occ.brep import OCCBrepLoop
-from compas_occ.brep import OCCBrepFace
+from .errors import BrepFilletError
+
+from .brepvertex import OCCBrepVertex
+from .brepedge import OCCBrepEdge
+from .breploop import OCCBrepLoop
+from .brepface import OCCBrepFace
 
 
 class OCCBrep(Brep):
@@ -144,8 +147,8 @@ class OCCBrep(Brep):
         :class:`~compas_occ.brep.OCCBrep`
 
         """
-        builder = BRepBuilderAPI_Copy(self.native_brep)
-        builder.Perform(self.native_brep)
+        builder = BRepBuilderAPI_Copy(self.occ_shape)
+        builder.Perform(self.occ_shape)
         return OCCBrep.from_native(builder.Shape())
 
     # ==============================================================================
@@ -160,12 +163,8 @@ class OCCBrep(Brep):
     def occ_shape(self) -> TopoDS_Shape:
         return self._occ_shape
 
-    @property
-    def native_brep(self) -> TopoDS_Shape:
-        return self._occ_shape
-
-    @native_brep.setter
-    def native_brep(self, shape: TopoDS_Shape) -> None:
+    @occ_shape.setter
+    def occ_shape(self, shape: TopoDS_Shape) -> None:
         self._occ_shape = shape
         self._vertices = None
         self._edges = None
@@ -175,8 +174,16 @@ class OCCBrep(Brep):
         self._solids = None
 
     @property
+    def native_brep(self) -> TopoDS_Shape:
+        return self.occ_shape
+
+    @native_brep.setter
+    def native_brep(self, shape: TopoDS_Shape) -> None:
+        self.occ_shape = shape
+
+    @property
     def orientation(self) -> TopAbs_Orientation:
-        return TopAbs_Orientation(self.native_brep.Orientation())
+        return TopAbs_Orientation(self.occ_shape.Orientation())
 
     # ==============================================================================
     # Properties
@@ -184,7 +191,7 @@ class OCCBrep(Brep):
 
     @property
     def type(self) -> TopAbs_ShapeEnum:
-        return self.native_brep.ShapeType()
+        return self.occ_shape.ShapeType()
 
     @property
     def is_shell(self):
@@ -204,19 +211,19 @@ class OCCBrep(Brep):
 
     @property
     def is_orientable(self) -> bool:
-        return self.native_brep.Orientable()
+        return self.occ_shape.Orientable()
 
     @property
     def is_closed(self) -> bool:
-        return self.native_brep.Closed()
+        return self.occ_shape.Closed()
 
     @property
     def is_infinite(self) -> bool:
-        return self.native_brep.Infinite()
+        return self.occ_shape.Infinite()
 
     @property
     def is_convex(self) -> bool:
-        return self.native_brep.Convex()
+        return self.occ_shape.Convex()
 
     @property
     def is_manifold(self) -> bool:
@@ -259,7 +266,7 @@ class OCCBrep(Brep):
     def vertices(self) -> List[OCCBrepVertex]:
         if self._vertices is None:
             vertices = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_VERTEX)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_VERTEX)
             while explorer.More():
                 vertex = explorer.Current()
                 vertices.append(OCCBrepVertex(vertex))  # type: ignore
@@ -271,7 +278,7 @@ class OCCBrep(Brep):
     def edges(self) -> List[OCCBrepEdge]:
         if self._edges is None:
             edges = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_EDGE)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_EDGE)
             while explorer.More():
                 edge = explorer.Current()
                 edges.append(OCCBrepEdge(edge))  # type: ignore
@@ -283,7 +290,7 @@ class OCCBrep(Brep):
     def loops(self) -> List[OCCBrepLoop]:
         if self._loops is None:
             loops = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_WIRE)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_WIRE)
             while explorer.More():
                 wire = explorer.Current()
                 loops.append(OCCBrepLoop(wire))  # type: ignore
@@ -295,7 +302,7 @@ class OCCBrep(Brep):
     def faces(self) -> List[OCCBrepFace]:
         if self._faces is None:
             faces = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_FACE)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_FACE)
             while explorer.More():
                 face = explorer.Current()
                 faces.append(OCCBrepFace(face))  # type: ignore
@@ -307,11 +314,10 @@ class OCCBrep(Brep):
     def shells(self) -> List["OCCBrep"]:
         if self._shells is None:
             shells = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_SHELL)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_SHELL)
             while explorer.More():
                 shell = explorer.Current()
-                brep = Brep()
-                brep.native_brep = shell
+                brep = Brep.from_native(shell)
                 shells.append(brep)
                 explorer.Next()
             self._shells = shells
@@ -321,11 +327,10 @@ class OCCBrep(Brep):
     def solids(self) -> List["OCCBrep"]:
         if self._solids is None:
             solids = []
-            explorer = TopExp_Explorer(self.native_brep, TopAbs_SOLID)
+            explorer = TopExp_Explorer(self.occ_shape, TopAbs_SOLID)
             while explorer.More():
                 solid = explorer.Current()
-                brep = Brep()
-                brep.native_brep = solid
+                brep = Brep.from_native(solid)
                 solids.append(brep)
                 explorer.Next()
             self._solids = solids
@@ -337,25 +342,25 @@ class OCCBrep(Brep):
 
     @property
     def frame(self) -> Frame:
-        location = self.native_brep.Location()
+        location = self.occ_shape.Location()
         return compas_frame_from_occ_location(location)
 
     @property
     def area(self) -> float:
         props = GProp_GProps()
-        brepgprop_SurfaceProperties(self.native_brep, props)
+        brepgprop_SurfaceProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def volume(self) -> float:
         props = GProp_GProps()
-        brepgprop_VolumeProperties(self.native_brep, props)
+        brepgprop_VolumeProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def centroid(self) -> Point:
         props = GProp_GProps()
-        brepgprop_VolumeProperties(self.native_brep, props)
+        brepgprop_VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
         return compas_point_from_occ_point(pnt)
 
@@ -788,7 +793,7 @@ class OCCBrep(Brep):
 
     #     """
     #     with open(filepath, "w") as f:
-    #         self.native_brep.DumpJson(f)
+    #         self.occ_shape.DumpJson(f)
 
     def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
         """
@@ -834,7 +839,7 @@ class OCCBrep(Brep):
 
         """
         mesh = Mesh()
-        BRepMesh_IncrementalMesh(self.native_brep, linear_deflection)
+        BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection)
         bt = BRep_Tool()
         for face in self.faces:
             location = TopLoc_Location()
@@ -928,7 +933,7 @@ class OCCBrep(Brep):
         """
         map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndUniqueAncestors(
-            self.native_brep, TopAbs_VERTEX, TopAbs_EDGE, map
+            self.occ_shape, TopAbs_VERTEX, TopAbs_EDGE, map
         )
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools_ListIteratorOfListOfShape(results)
@@ -958,13 +963,13 @@ class OCCBrep(Brep):
         """
         map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndUniqueAncestors(
-            self.native_brep, TopAbs_VERTEX, TopAbs_EDGE, map
+            self.occ_shape, TopAbs_VERTEX, TopAbs_EDGE, map
         )
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools_ListIteratorOfListOfShape(results)
         edges = []
         while iterator.More():
-            edge = topods.Edge(iterator.Value())
+            edge = iterator.Value()
             edges.append(OCCBrepEdge(edge))
             iterator.Next()
         return edges
@@ -984,13 +989,13 @@ class OCCBrep(Brep):
         """
         map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndUniqueAncestors(
-            self.native_brep, TopAbs_VERTEX, TopAbs_FACE, map
+            self.occ_shape, TopAbs_VERTEX, TopAbs_FACE, map
         )
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools_ListIteratorOfListOfShape(results)
         faces = []
         while iterator.More():
-            face = topods.Face(iterator.Value())
+            face = iterator.Value()
             faces.append(OCCBrepFace(face))
             iterator.Next()
         return faces
@@ -1010,16 +1015,44 @@ class OCCBrep(Brep):
         """
         map = TopTools_IndexedDataMapOfShapeListOfShape()
         topexp_MapShapesAndUniqueAncestors(
-            self.native_brep, TopAbs_EDGE, TopAbs_FACE, map
+            self.occ_shape, TopAbs_EDGE, TopAbs_FACE, map
         )
         results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools_ListIteratorOfListOfShape(results)
         faces = []
         while iterator.More():
-            face = topods.Face(iterator.Value())
+            face = iterator.Value()
             faces.append(OCCBrepFace(face))
             iterator.Next()
         return faces
+
+    def edge_loops(self, edge: OCCBrepEdge) -> List[OCCBrepLoop]:
+        """Identify the parent loops of an edge.
+
+        Parameters
+        ----------
+        edge : :class:`OCCBrepEdge`
+            The edge.
+
+        Returns
+        -------
+        List[:class:`OCCBrepLoop`]
+            The loops.
+
+        """
+
+        map = TopTools_IndexedDataMapOfShapeListOfShape()
+        topexp_MapShapesAndUniqueAncestors(
+            self.occ_shape, TopAbs_EDGE, TopAbs_WIRE, map
+        )
+        results = map.FindFromKey(edge.occ_edge)
+        iterator = TopTools_ListIteratorOfListOfShape(results)
+        loops = []
+        while iterator.More():
+            wire = iterator.Value()
+            loops.append(OCCBrepLoop(wire))
+            iterator.Next()
+        return loops
 
     # ==============================================================================
     # Other Methods
@@ -1050,7 +1083,7 @@ class OCCBrep(Brep):
 
         """
         if self.type == TopAbs_ShapeEnum.TopAbs_SHELL:
-            self.native_brep = BRepBuilderAPI_MakeSolid(self.native_brep).Shape()  # type: ignore
+            self.occ_shape = BRepBuilderAPI_MakeSolid(self.occ_shape).Shape()  # type: ignore
 
     def check(self):
         """
@@ -1062,7 +1095,7 @@ class OCCBrep(Brep):
 
         """
         if self.type == TopAbs_ShapeEnum.TopAbs_SHELL:
-            check = BRepCheck_Shell(self.native_brep)  # type: ignore
+            check = BRepCheck_Shell(self.occ_shape)  # type: ignore
             print(BRepCheck_Status(check.Closed()))
             print(BRepCheck_Status(check.Orientation()))
 
@@ -1077,9 +1110,9 @@ class OCCBrep(Brep):
         """
         if len(self.faces) > 1:
             sewer = BRepBuilderAPI_Sewing()
-            sewer.Load(self.native_brep)
+            sewer.Load(self.occ_shape)
             sewer.Perform()
-            self.native_brep = sewer.SewedShape()
+            self.occ_shape = sewer.SewedShape()
 
     def fix(self):
         """
@@ -1091,9 +1124,9 @@ class OCCBrep(Brep):
 
         """
         if self.type == TopAbs_ShapeEnum.TopAbs_SHELL:
-            fixer = ShapeFix_Shell(self.native_brep)  # type: ignore
+            fixer = ShapeFix_Shell(self.occ_shape)  # type: ignore
             fixer.Perform()
-            self.native_brep = fixer.Shell()
+            self.occ_shape = fixer.Shell()
 
     def heal(self):
         """
@@ -1166,8 +1199,8 @@ class OCCBrep(Brep):
 
         """
         trsf = compas_transformation_to_trsf(matrix)
-        builder = BRepBuilderAPI_Transform(self.native_brep, trsf, True)
-        shape = builder.ModifiedShape(self.native_brep)
+        builder = BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
+        shape = builder.ModifiedShape(self.occ_shape)
         self._occ_shape = shape
 
     def transformed(self, matrix: compas.geometry.Transformation) -> "OCCBrep":
@@ -1231,12 +1264,12 @@ class OCCBrep(Brep):
         Tuple[List[:class:`OCCBrepFace`], List[:class:`OCCBrepFace`]]
 
         """
-        mesher1 = BRepMesh_IncrementalMesh(self.native_brep, deflection)
+        mesher1 = BRepMesh_IncrementalMesh(self.occ_shape, deflection)
         mesher2 = BRepMesh_IncrementalMesh(other.native_brep, deflection)
         mesher1.Perform()
         mesher2.Perform()
         proximity = BRepExtrema_ShapeProximity(
-            self.native_brep,
+            self.occ_shape,
             other.native_brep,
             tolerance,
         )
@@ -1313,7 +1346,7 @@ class OCCBrep(Brep):
                 occ_shape = test
                 break
         if occ_shape:
-            self.native_brep = occ_shape
+            self.occ_shape = occ_shape
 
     def trimmed(self, plane: compas.geometry.Plane) -> "OCCBrep":
         """Construct a copy of a Brep trimmed with a plane.
@@ -1359,3 +1392,59 @@ class OCCBrep(Brep):
         else:
             results.append(shape)
         return [OCCBrep.from_shape(result) for result in results]
+
+    def fillet(
+        self,
+        radius: float,
+        exclude: Optional[list[OCCBrepEdge]] = None,
+    ) -> None:
+        """Fillet the edges of a BRep.
+
+        Parameters
+        ----------
+        radius : float
+            The radius of the fillet.
+        exclude : list[:class:`OCCBrepEdge`], optional
+            A list of edges to exclude from the fillet operation.
+
+        Raises
+        ------
+        BrepFilletError
+            If the fillet operation could not be completed.
+
+        Returns
+        -------
+        None
+            the Brep is modified in-place.
+
+        """
+        fillet = BRepFilletAPI_MakeFillet(self.occ_shape)
+        for edge in self.edges:
+            if exclude:
+                if any(e.is_same(edge) for e in exclude):
+                    continue
+            fillet.Add(radius, edge.occ_edge)
+        fillet.Build()
+        if fillet.IsDone():
+            self.occ_shape = fillet.Shape()
+        else:
+            raise BrepFilletError("Fillet operation could not be completed.")
+
+    def filleted(self, radius: float, exclude: Optional[list[OCCBrepEdge]] = None) -> "OCCBrep":
+        """Construct a copy of a Brep with filleted edges.
+
+        Parameters
+        ----------
+        radius : float
+            The radius of the fillet.
+        exclude : list[:class:`OCCBrepEdge`], optional
+            A list of edges to exclude from the fillet operation.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        brep = self.copy()
+        brep.fillet(radius, exclude=exclude)
+        return brep

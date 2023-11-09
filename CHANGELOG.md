@@ -9,22 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* Added `BRep.trim` and `BRep.trimmed`.
-* Added `BRep.sliced` as an operation on a copy of `BRep.slice`.
-* Added `compas_occ.geometry.OCCCurve.parameter_at_distance`.
+* Added `OCCBrep.trim` and `OCCBrep.trimmed`.
+* Added `OCCBrep.slice`.
+* Added `OCCBrep.split`.
+* Added `OCCBrep.fillet` and `OCCBrep.filleted`.
+* Added `OCCCurve.parameter_at_distance`.
 * Added `compas_occ.conversions.compas_frame_from_location`.
+* Added `OCCBrep.native_brep` as alias for `OCCBrep.occ_shape`.
+* Added `is_equal` and `is_same` for `OCCBrepVertex`, `OCCBrepEdge`, `OCCBrepLoop`, `OCCBrepFace`.
+* Added correct type info to `OCCBrepVertex.occ_vertex`.
+* Added correct type info to `OCCBrepEdge.occ_edge`.
+* Added correct type info to `OCCBrepLoop.occ_wire`.
+* Added correct type info to `OCCBrepFace.occ_face`.
 
 ### Changed
 
-* Changed `compas_occ.brep.BRep` to be a pluggin for `compas.geometry.Brep`.
-* Renamed `BRep.occ_shape` to `native_brep` for compatibility with `RhinoBrep`.
-* Fixed the error when calling `BRep.frame`.
-* Fixed `AttributeError` when calling `BRep.loops`.
+* Changed `OCCBrep` to be a pluggin for `compas.geometry.Brep`.
+* Fixed the error when calling `OCCBrep.frame`.
+* Fixed `AttributeError` when calling `OCCBrep.loops`.
 * Updated `compas-actions.build` workflow to v3.
-
-### Changed
-
-- Updated github workflow to latest version.
+* Updated github workflow to latest version.
 
 ### Removed
 

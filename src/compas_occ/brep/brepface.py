@@ -4,7 +4,6 @@ from typing import Optional
 from enum import Enum
 
 from OCC.Core.TopoDS import TopoDS_Face
-from OCC.Core.TopoDS import topods
 from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_EDGE
@@ -93,6 +92,49 @@ class OCCBrepFace(BrepFace):
         self._occ_adaptor = None
         self.occ_face = occ_face
 
+    def __eq__(self, other: "OCCBrepFace"):
+        return self.is_equal(other)
+
+    def is_same(self, other: "OCCBrepFace"):
+        """Check if this face is the same as another face.
+
+        Two faces are the same if they have the same location.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepFace`
+            The other face.
+
+        Returns
+        -------
+        bool
+            ``True`` if the faces are the same, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepFace):
+            return False
+        return self.occ_face.IsSame(other.occ_face)
+
+    def is_equal(self, other: "OCCBrepFace"):
+        """Check if this face is equal to another face.
+
+        Two faces are equal if they have the same location and orientation.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepFace`
+            The other face.
+
+        Returns
+        -------
+        bool
+            ``True`` if the faces are equal, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepFace):
+            return False
+        return self.occ_face.IsEqual(other.occ_face)
+
     # ==============================================================================
     # Data
     # ==============================================================================
@@ -122,7 +164,7 @@ class OCCBrepFace(BrepFace):
         self._occ_adaptor = None
         self._surface = None
         self._nurbssurface = None
-        self._occ_face = topods.Face(face)
+        self._occ_face = face
 
     @property
     def occ_adaptor(self) -> BRepAdaptor_Surface:

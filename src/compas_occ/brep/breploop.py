@@ -57,6 +57,49 @@ class OCCBrepLoop(BrepLoop):
         super().__init__()
         self.occ_wire = occ_wire
 
+    def __eq__(self, other: "OCCBrepLoop"):
+        return self.is_equal(other)
+
+    def is_same(self, other: "OCCBrepLoop"):
+        """Check if this loop is the same as another loop.
+
+        Two loops are the same if they have the same location.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepLoop`
+            The other loop.
+
+        Returns
+        -------
+        bool
+            ``True`` if the loops are the same, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepLoop):
+            return False
+        return self.occ_wire.IsSame(other.occ_wire)
+
+    def is_equal(self, other: "OCCBrepLoop"):
+        """Check if this loop is equal to another loop.
+
+        Two loops are equal if they have the same location and orientation.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrepLoop`
+            The other loop.
+
+        Returns
+        -------
+        bool
+            ``True`` if the loops are equal, ``False`` otherwise.
+
+        """
+        if not isinstance(other, OCCBrepLoop):
+            return False
+        return self.occ_wire.IsEqual(other.occ_wire)
+
     # ==============================================================================
     # Data
     # ==============================================================================
