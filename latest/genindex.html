@@ -479,6 +479,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/brep_explorer.html">Explore Brep Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/brep_fillet.html">Add a Fillet to the Edges of a Brep</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/brep_from_booleans.html">Brep Shape From Booleans</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/brep_from_mesh.html">Brep From Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/brep_overlap.html">Find the Overlap Between Two Breps</a></li>
@@ -876,10 +877,12 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.edge_faces.html#compas_occ.brep.OCCBrep.edge_faces">edge_faces() (compas_occ.brep.OCCBrep method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.elevate_degree.html#compas_occ.geometry.OCCNurbsCurve.elevate_degree">elevate_degree() (compas_occ.geometry.OCCNurbsCurve method)</a>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.edge_loops.html#compas_occ.brep.OCCBrep.edge_loops">edge_loops() (compas_occ.brep.OCCBrep method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.elevate_degree.html#compas_occ.geometry.OCCNurbsCurve.elevate_degree">elevate_degree() (compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.embedded.html#compas_occ.geometry.OCCCurve.embedded">embedded() (compas_occ.geometry.OCCCurve method)</a>
 
       <ul>
@@ -900,6 +903,10 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.fair.html#compas_occ.geometry.OCCNurbsCurve.fair">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.fillet.html#compas_occ.brep.OCCBrep.fillet">fillet() (compas_occ.brep.OCCBrep method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.filleted.html#compas_occ.brep.OCCBrep.filleted">filleted() (compas_occ.brep.OCCBrep method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.fix.html#compas_occ.brep.OCCBrep.fix">fix() (compas_occ.brep.OCCBrep method)</a>
 
       <ul>
@@ -1216,8 +1223,28 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.intersections_with_plane.html#compas_occ.geometry.OCCSurface.intersections_with_plane">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.is_equal.html#compas_occ.brep.OCCBrepEdge.is_equal">is_equal() (compas_occ.brep.OCCBrepEdge method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.is_equal.html#compas_occ.brep.OCCBrepFace.is_equal">(compas_occ.brep.OCCBrepFace method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.is_equal.html#compas_occ.brep.OCCBrepLoop.is_equal">(compas_occ.brep.OCCBrepLoop method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepVertex.is_equal.html#compas_occ.brep.OCCBrepVertex.is_equal">(compas_occ.brep.OCCBrepVertex method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.is_same.html#compas_occ.brep.OCCBrepEdge.is_same">is_same() (compas_occ.brep.OCCBrepEdge method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.is_same.html#compas_occ.brep.OCCBrepFace.is_same">(compas_occ.brep.OCCBrepFace method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.is_same.html#compas_occ.brep.OCCBrepLoop.is_same">(compas_occ.brep.OCCBrepLoop method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepVertex.is_same.html#compas_occ.brep.OCCBrepVertex.is_same">(compas_occ.brep.OCCBrepVertex method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.is_valid.html#compas_occ.brep.OCCBrepFace.is_valid">is_valid() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.isocurve_u.html#compas_occ.geometry.OCCExtrusionSurface.isocurve_u">isocurve_u() (compas_occ.geometry.OCCExtrusionSurface method)</a>
