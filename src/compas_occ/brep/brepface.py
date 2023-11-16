@@ -12,8 +12,7 @@ from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepAlgo import brepalgo_IsValid
-from OCC.Core.BRepGProp import brepgprop_VolumeProperties
-from OCC.Core.BRepGProp import brepgprop_SurfaceProperties
+from OCC.Core.BRepGProp import brepgprop
 from OCC.Core.ShapeFix import ShapeFix_Face
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.GeomConvert import GeomConvert_ApproxSurface
@@ -255,13 +254,13 @@ class OCCBrepFace(BrepFace):
     @property
     def area(self) -> float:
         props = GProp_GProps()
-        brepgprop_SurfaceProperties(self.occ_shape, props)
+        brepgprop.SurfaceProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def centroid(self) -> compas.geometry.Point:
         props = GProp_GProps()
-        brepgprop_VolumeProperties(self.occ_shape, props)
+        brepgprop.VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
         return compas_point_from_occ_point(pnt)
 

@@ -128,12 +128,15 @@ class OCCBrepLoop(BrepLoop):
     # ==============================================================================
 
     @property
+    def occ_shape(self) -> TopoDS_Wire:
+        return self.occ_wire
+
+    @property
     def occ_wire(self) -> TopoDS_Wire:
         return self._occ_wire
 
     @occ_wire.setter
     def occ_wire(self, loop: TopoDS_Wire) -> None:
-        # self._occ_wire = topods.Wire(loop)
         self._occ_wire = loop
 
     # ==============================================================================

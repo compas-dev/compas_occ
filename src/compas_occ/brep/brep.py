@@ -28,8 +28,7 @@ from OCC.Core.BRepCheck import BRepCheck_Shell
 from OCC.Core.BRepCheck import BRepCheck_Status
 from OCC.Core.BRepExtrema import BRepExtrema_ShapeProximity
 from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
-from OCC.Core.BRepGProp import brepgprop_VolumeProperties
-from OCC.Core.BRepGProp import brepgprop_SurfaceProperties
+from OCC.Core.BRepGProp import brepgprop
 from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
@@ -58,7 +57,6 @@ from OCC.Core.TopoDS import topods
 from OCC.Core.TopoDS import TopoDS_Compound
 from OCC.Core.TopTools import TopTools_IndexedDataMapOfShapeListOfShape
 from OCC.Core.TopTools import TopTools_ListIteratorOfListOfShape  # type: ignore
-from OCC.Extend.DataExchange import read_step_file
 
 from compas_occ.conversions import triangle_to_face
 from compas_occ.conversions import quad_to_face
@@ -348,21 +346,151 @@ class OCCBrep(Brep):
     @property
     def area(self) -> float:
         props = GProp_GProps()
-        brepgprop_SurfaceProperties(self.occ_shape, props)
+        brepgprop.SurfaceProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def volume(self) -> float:
         props = GProp_GProps()
-        brepgprop_VolumeProperties(self.occ_shape, props)
+        brepgprop.VolumeProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def centroid(self) -> Point:
         props = GProp_GProps()
-        brepgprop_VolumeProperties(self.occ_shape, props)
+        brepgprop.VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
         return compas_point_from_occ_point(pnt)
+
+    # ==============================================================================
+    # Read/Write
+    # ==============================================================================
+
+    @classmethod
+    def from_step(cls, filename: str) -> "OCCBrep":
+        """
+        Conctruct a BRep from the data contained in a STEP file.
+
+        Parameters
+        ----------
+        filename : str
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.OCCBrep`
+
+        """
+        from OCC.Extend.DataExchange import read_step_file
+
+        shape = read_step_file(filename)
+        return cls.from_native(shape)  # type: ignore
+
+    @classmethod
+    def from_iges(cls, filename: str) -> "OCCBrep":
+        """
+        Conctruct a BRep from the data contained in a IGES file.
+
+        Parameters
+        ----------
+        filename : str
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.OCCBrep`
+
+        """
+        from OCC.Extend.DataExchange import read_iges_file
+
+        shape = read_iges_file(filename)
+        return cls.from_native(shape)  # type: ignore
+
+    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
+        """
+        Write the BRep shape to a STEP file.
+
+        Parameters
+        ----------
+        filepath : str
+            Location of the file.
+        schema : str, optional
+            STEP file format schema.
+        unit : str, optional
+            Base units for the geometry in the file.
+
+        Returns
+        -------
+        None
+
+        """
+        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.IFSelect import IFSelect_RetDone
+        from OCC.Core.Interface import Interface_Static
+
+        step_writer = STEPControl_Writer()
+        Interface_Static.SetCVal("write.step.unit", unit)
+        step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
+        status = step_writer.Write(filepath)
+        assert status == IFSelect_RetDone, status
+
+    def to_stl(
+        self,
+        filepath: str,
+        linear_deflection: float = 1e-3,
+        angular_deflection: float = 0.5,
+    ) -> bool:
+        """
+        Write the BRep shape to a STL file.
+
+        Parameters
+        ----------
+        filepath : str
+            Location of the file.
+        linear_deflection : float, optional
+            Allowable deviation between curved geometry and mesh discretisation.
+        angular_deflection : float, optional
+            Maximum angle between two adjacent facets.
+
+        Returns
+        -------
+        None
+
+        """
+        from OCC.Core.StlAPI import StlAPI_Writer
+
+        BRepMesh_IncrementalMesh(
+            self.occ_shape,
+            linear_deflection,
+            theAngDeflection=angular_deflection,
+        )
+
+        stl_writer = StlAPI_Writer()
+        stl_writer.SetASCIIMode(True)
+
+        return stl_writer.Write(self.occ_shape, filepath)
+
+    def to_iges(self, filepath: str) -> bool:
+        """
+        Write the BRep shape to a IGES file.
+
+        Parameters
+        ----------
+        filepath : str
+            Location of the file.
+
+        Returns
+        -------
+        None
+
+        """
+        from OCC.Core.IGESControl import IGESControl_Writer
+
+        iges_writer = IGESControl_Writer()
+        if not iges_writer.AddShape(self.occ_shape):
+            raise Exception("Failed to add shape to IGES writer.")
+
+        iges_writer.ComputeModel()
+        return iges_writer.Write(filepath)
 
     # ==============================================================================
     # Constructors
@@ -403,23 +531,6 @@ class OCCBrep(Brep):
 
         """
         return cls.from_shape(shape)
-
-    @classmethod
-    def from_step(cls, filename: str) -> "OCCBrep":
-        """
-        Conctruct a BRep from the data contained in a STEP file.
-
-        Parameters
-        ----------
-        filename : str
-
-        Returns
-        -------
-        :class:`~compas_occ.brep.OCCBrep`
-
-        """
-        shape = read_step_file(filename)
-        return cls.from_native(shape)  # type: ignore
 
     @classmethod
     def from_polygons(cls, polygons: List[compas.geometry.Polygon]) -> "OCCBrep":
@@ -778,53 +889,7 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    # def to_json(self, filepath: str):
-    #     """
-    #     Export the BRep to a JSON file.
-
-    #     Parameters
-    #     ----------
-    #     filepath : str
-    #         Location of the file.
-
-    #     Returns
-    #     -------
-    #     None
-
-    #     """
-    #     with open(filepath, "w") as f:
-    #         self.occ_shape.DumpJson(f)
-
-    def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
-        """
-        Write the BRep shape to a STEP file.
-
-        Parameters
-        ----------
-        filepath : str
-            Location of the file.
-        schema : str, optional
-            STEP file format schema.
-        unit : str, optional
-            Base units for the geometry in the file.
-
-        Returns
-        -------
-        None
-
-        """
-        from OCC.Core.STEPControl import STEPControl_Writer
-        from OCC.Core.STEPControl import STEPControl_AsIs
-        from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.Interface import Interface_Static
-
-        step_writer = STEPControl_Writer()
-        Interface_Static.SetCVal("write.step.unit", unit)
-        step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
-        status = step_writer.Write(filepath)
-        assert status == IFSelect_RetDone, status
-
-    def to_tesselation(self, linear_deflection: float = 1e-3) -> Mesh:
+    def to_tesselation(self, linear_deflection: float = 1) -> Mesh:
         """
         Create a tesselation of the shape for visualisation.
 
@@ -897,7 +962,7 @@ class OCCBrep(Brep):
             polygons.append(Polygon(points))
         return polygons
 
-    def to_viewmesh(self, linear_deflection=0.001):
+    def to_viewmesh(self, linear_deflection=1):
         """
         Convert the BRep to a view mesh."""
         lines = []

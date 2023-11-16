@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added correct type info to `OCCBrepEdge.occ_edge`.
 * Added correct type info to `OCCBrepLoop.occ_wire`.
 * Added correct type info to `OCCBrepFace.occ_face`.
+* Added `OCCBrepLoop.occ_shape`.
+* Added `OCCBrep.from_iges`.
+* Added `OCCBrep.to_stl`.
+* Added `OCCBrep.to_iges`.
+* Added `OCCBrepVertex.is_same` and `OCCBrepVertex.is_equal`.
+* Added `OCCBrepEdge.is_same` and `OCCBrepEdge.is_equal`.
+* Added `OCCBrepLoop.is_same` and `OCCBrepLoop.is_equal`.
+* Added `OCCBrepFace.is_same` and `OCCBrepFace.is_equal`.
 
 ### Changed
 
