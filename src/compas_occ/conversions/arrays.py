@@ -26,7 +26,7 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
     --------
     :func:`harray1_from_points1`
     :func:`points1_from_array1`
-    :func:`compas_occ.conversions.compas_point_from_occ_point`
+    :func:`compas_occ.conversions.point_to_compas`
 
     Examples
     --------
@@ -73,7 +73,7 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
     See Also
     --------
     :func:`array1_from_points1`
-    :func:`compas_occ.conversions.compas_point_to_occ_point`
+    :func:`compas_occ.conversions.point_to_occ`
 
     Examples
     --------
@@ -120,7 +120,7 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
     See Also
     --------
     :func:`array1_from_points1`
-    :func:`compas_occ.conversions.compas_point_from_occ_point`
+    :func:`compas_occ.conversions.point_to_compas`
 
     Examples
     --------
@@ -159,7 +159,7 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     See Also
     --------
     :func:`points2_from_array2`
-    :func:`compas_occ.conversions.compas_point_to_occ_point`
+    :func:`compas_occ.conversions.point_to_occ`
 
     Examples
     --------
@@ -216,7 +216,7 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     See Also
     --------
     :func:`array2_from_points2`
-    :func:`compas_occ.conversions.compas_point_from_occ_point`
+    :func:`compas_occ.conversions.point_to_compas`
 
     Examples
     --------

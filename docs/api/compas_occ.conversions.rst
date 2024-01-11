@@ -29,29 +29,29 @@ Geometry
     :toctree: generated/
     :nosignatures:
 
-    compas_circle_from_occ_circle
-    compas_circle_to_occ_circle
-    compas_cone_to_occ_cone
-    compas_cylinder_from_occ_cylinder
-    compas_cylinder_to_occ_cylinder
-    compas_frame_from_occ_ax2
-    compas_frame_from_occ_ax3
-    compas_line_from_occ_line
-    compas_line_to_occ_line
-    compas_plane_from_occ_plane
-    compas_point_from_occ_point
-    compas_point_from_occ_point2d
-    compas_plane_to_occ_plane
-    compas_point_to_occ_point
-    compas_plane_to_occ_ax2
-    compas_plane_to_occ_ax3
-    compas_sphere_to_occ_sphere
-    compas_torus_to_occ_torus
-    compas_vector_from_occ_axis
-    compas_vector_from_occ_vector
-    compas_vector_from_occ_vector2d
-    compas_vector_to_occ_vector
-    compas_vector_to_occ_direction
+    circle_to_compas
+    circle_to_occ
+    cone_to_occ
+    cylinder_to_compas
+    cylinder_to_occ
+    ax2_to_compas
+    ax3_to_compas
+    line_to_compas
+    line_to_occ
+    plane_to_compas
+    point_to_compas
+    point2d_to_compas
+    plane_to_occ
+    point_to_occ
+    plane_to_occ_ax2
+    plane_to_occ_ax3
+    sphere_to_occ
+    torus_to_occ
+    axis_to_compas_vector
+    vector_to_compas
+    vector2d_to_compas
+    vector_to_occ
+    direction_to_occ
 
 
 Transformations

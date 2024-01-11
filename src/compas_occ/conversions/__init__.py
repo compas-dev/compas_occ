@@ -8,38 +8,43 @@ from .arrays import points1_from_array1
 from .arrays import points2_from_array2
 from .arrays import floats2_from_array2
 
-from .geometry import compas_axis_to_occ_axis
-from .geometry import compas_circle_to_occ_circle
-from .geometry import compas_cone_to_occ_cone
-from .geometry import compas_cylinder_to_occ_cylinder
-from .geometry import compas_ellipse_to_occ_ellipse
-from .geometry import compas_frame_to_occ_ax2
-from .geometry import compas_frame_to_occ_ax3
-from .geometry import compas_line_to_occ_line
-from .geometry import compas_plane_to_occ_plane
-from .geometry import compas_plane_to_occ_ax2
-from .geometry import compas_plane_to_occ_ax3
-from .geometry import compas_point_to_occ_point
-from .geometry import compas_sphere_to_occ_sphere
-from .geometry import compas_torus_to_occ_torus
-from .geometry import compas_vector_to_occ_vector
-from .geometry import compas_vector_to_occ_direction
+from .geometry import axis_to_occ
+from .geometry import circle_to_occ
+from .geometry import cone_to_occ
+from .geometry import cylinder_to_occ
+from .geometry import ellipse_to_occ
+from .geometry import frame_to_occ_ax2
+from .geometry import frame_to_occ_ax3
+from .geometry import line_to_occ
+from .geometry import plane_to_occ
+from .geometry import plane_to_occ_ax2
+from .geometry import plane_to_occ_ax3
+from .geometry import point_to_occ
+from .geometry import sphere_to_occ
+from .geometry import torus_to_occ
+from .geometry import vector_to_occ
+from .geometry import direction_to_occ
 
-from .geometry import compas_axis_from_occ_axis
-from .geometry import compas_circle_from_occ_circle
-from .geometry import compas_cylinder_from_occ_cylinder
-from .geometry import compas_ellipse_from_occ_ellipse
-from .geometry import compas_frame_from_occ_ax2
-from .geometry import compas_frame_from_occ_ax3
-from .geometry import compas_frame_from_occ_location
-from .geometry import compas_line_from_occ_line
-from .geometry import compas_plane_from_occ_plane
-from .geometry import compas_point_from_occ_point
-from .geometry import compas_point_from_occ_point2d
-from .geometry import compas_vector_from_occ_axis
-from .geometry import compas_vector_from_occ_direction
-from .geometry import compas_vector_from_occ_vector
-from .geometry import compas_vector_from_occ_vector2d
+from .geometry import axis_to_compas
+from .geometry import circle_to_compas
+from .geometry import cylinder_to_compas
+from .geometry import ellipse_to_compas
+from .geometry import hyperbola_to_compas
+from .geometry import parabola_to_compas
+from .geometry import bezier_to_compas
+from .geometry import bspline_to_compas
+from .geometry import ax2_to_compas
+from .geometry import ax3_to_compas
+from .geometry import location_to_compas
+from .geometry import line_to_compas
+from .geometry import plane_to_compas
+from .geometry import point_to_compas
+from .geometry import point2d_to_compas
+from .geometry import axis_to_compas_vector
+from .geometry import direction_to_compas
+from .geometry import vector_to_compas
+from .geometry import vector2d_to_compas
+from .geometry import sphere_to_compas
 
 from .transformations import compas_transformation_to_trsf
 
@@ -56,38 +61,42 @@ __all__ = [
     "array1_from_points1",
     "array2_from_floats2",
     "array2_from_points2",
-    "compas_axis_from_occ_axis",
-    "compas_axis_to_occ_axis",
-    "compas_circle_from_occ_circle",
-    "compas_circle_to_occ_circle",
-    "compas_cone_to_occ_cone",
-    "compas_cylinder_from_occ_cylinder",
-    "compas_cylinder_to_occ_cylinder",
-    "compas_ellipse_from_occ_ellipse",
-    "compas_ellipse_to_occ_ellipse",
-    "compas_frame_from_occ_ax2",
-    "compas_frame_from_occ_ax3",
-    "compas_frame_from_occ_location",
-    "compas_frame_to_occ_ax2",
-    "compas_frame_to_occ_ax3",
-    "compas_line_from_occ_line",
-    "compas_line_to_occ_line",
-    "compas_plane_from_occ_plane",
-    "compas_plane_to_occ_ax2",
-    "compas_plane_to_occ_ax3",
-    "compas_plane_to_occ_plane",
-    "compas_point_from_occ_point",
-    "compas_point_from_occ_point2d",
-    "compas_point_to_occ_point",
-    "compas_sphere_to_occ_sphere",
-    "compas_torus_to_occ_torus",
+    "axis_to_compas",
+    "axis_to_compas_vector",
+    "ax2_to_compas",
+    "ax3_to_compas",
+    "bezier_to_compas",
+    "bspline_to_compas",
+    "circle_to_compas",
+    "cylinder_to_compas",
+    "direction_to_compas",
+    "ellipse_to_compas",
+    "line_to_compas",
+    "location_to_compas",
+    "hyperbola_to_compas",
+    "parabola_to_compas",
+    "plane_to_compas",
+    "point_to_compas",
+    "point2d_to_compas",
+    "vector_to_compas",
+    "vector2d_to_compas",
+    "axis_to_occ",
+    "circle_to_occ",
+    "cone_to_occ",
+    "cylinder_to_occ",
+    "direction_to_occ",
+    "ellipse_to_occ",
+    "frame_to_occ_ax2",
+    "frame_to_occ_ax3",
+    "line_to_occ",
+    "plane_to_occ_ax2",
+    "plane_to_occ_ax3",
+    "plane_to_occ",
+    "point_to_occ",
+    "sphere_to_occ",
+    "torus_to_occ",
+    "vector_to_occ",
     "compas_transformation_to_trsf",
-    "compas_vector_to_occ_direction",
-    "compas_vector_to_occ_vector",
-    "compas_vector_from_occ_axis",
-    "compas_vector_from_occ_direction",
-    "compas_vector_from_occ_vector",
-    "compas_vector_from_occ_vector2d",
     "compas_mesh_to_occ_shell",
     "compas_quadmesh_to_occ_shell",
     "compas_trimesh_to_occ_shell",
