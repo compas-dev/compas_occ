@@ -9,7 +9,7 @@ from OCC.Core.ShapeFix import ShapeFix_Wire
 from compas.utilities import pairwise
 from compas.geometry import Polyline
 from compas.geometry import Polygon
-from compas.brep import BrepLoop
+from compas.geometry import BrepLoop
 
 from compas_occ.brep import OCCBrepVertex
 from compas_occ.brep import OCCBrepEdge
@@ -106,22 +106,40 @@ class OCCBrepLoop(BrepLoop):
 
     @property
     def data(self):
-        edges = []
-        for edge in self.edges:
-            edges.append(edge.data)
-        return edges
-
-    # @data.setter
-    # def data(self, data):
-    #     edges = []
-    #     for edgedata in data:
-    #         edges.append(BrepEdge.from_data(edgedata))
-    #     loop = BrepLoop.from_edges(edges)
-    #     self.occ_wire = loop.occ_wire
+        # return {
+        #     "type": str(self._loop.LoopType),
+        #     "trims": [t.data for t in self._trims],
+        # }
+        return self
 
     @classmethod
-    def from_data(cls, data):
-        raise NotImplementedError
+    def from_data(cls, data, builder):
+        """Construct an object of this type from the provided data.
+
+        Parameters
+        ----------
+        data : dict
+            The data dictionary.
+        builder : :class:`compas_rhino.geometry.BrepFaceBuilder`
+            The object reconstructing the current BrepFace.
+
+        Returns
+        -------
+        :class:`compas.data.Data`
+            An instance of this object type if the data contained in the dict has the correct schema.
+
+        """
+        instance = cls()
+        instance._type = (
+            Rhino.Geometry.BrepLoopType.Outer
+            if data["type"] == "Outer"
+            else Rhino.Geometry.BrepLoopType.Inner
+        )
+        loop_builder = builder.add_loop(instance._type)
+        for trim_data in data["trims"]:
+            RhinoBrepTrim.from_data(trim_data, loop_builder)
+        instance.native_loop = loop_builder.result
+        return instance
 
     # ==============================================================================
     # OCC Properties

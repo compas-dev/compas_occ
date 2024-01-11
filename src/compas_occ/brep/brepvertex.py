@@ -3,8 +3,8 @@ from OCC.Core.BRep import BRep_Tool
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
 
 from compas.geometry import Point
-from compas.brep import BrepVertex
-from compas_occ.conversions.geometry import compas_point_to_occ_point
+from compas.geometry import BrepVertex
+from compas_occ.conversions.geometry import point_to_occ
 
 
 class OCCBrepVertex(BrepVertex):
@@ -107,7 +107,7 @@ class OCCBrepVertex(BrepVertex):
 
     @point.setter
     def point(self, point: Point) -> None:
-        builder = BRepBuilderAPI_MakeVertex(compas_point_to_occ_point(point))
+        builder = BRepBuilderAPI_MakeVertex(point_to_occ(point))
         self._occ_vertex = builder.Vertex()
 
     # ==============================================================================
@@ -128,5 +128,5 @@ class OCCBrepVertex(BrepVertex):
         :class:`BrepVertex`
 
         """
-        builder = BRepBuilderAPI_MakeVertex(compas_point_to_occ_point(point))
+        builder = BRepBuilderAPI_MakeVertex(point_to_occ(point))
         return cls(builder.Vertex())

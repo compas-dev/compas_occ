@@ -2,8 +2,6 @@ from typing import List
 from typing import Tuple
 from typing import Optional
 
-from enum import Enum
-
 from OCC.Core.TopAbs import TopAbs_VERTEX
 from OCC.Core.TopAbs import TopAbs_Orientation
 from OCC.Core.TopoDS import TopoDS_Edge
@@ -20,20 +18,43 @@ from compas.geometry import Point
 from compas.geometry import Line
 from compas.geometry import Circle
 from compas.geometry import Ellipse
-from compas.brep import BrepEdge
+from compas.geometry import Hyperbola
+from compas.geometry import Parabola
+from compas.geometry import Bezier
+from compas.geometry import NurbsCurve
+from compas.geometry import BrepEdge
+
+# from compas.geometry import CurveType
 
 from compas_occ.brep import OCCBrepVertex
 
-from compas_occ.conversions import compas_line_to_occ_line
-from compas_occ.conversions import compas_point_to_occ_point
-from compas_occ.conversions import compas_circle_to_occ_circle
-from compas_occ.conversions import compas_circle_from_occ_circle
-from compas_occ.conversions import compas_ellipse_from_occ_ellipse
+from compas_occ.conversions import line_to_occ
+from compas_occ.conversions import point_to_occ
+from compas_occ.conversions import circle_to_occ
+from compas_occ.conversions import circle_to_compas
+from compas_occ.conversions import ellipse_to_compas
+from compas_occ.conversions import hyperbola_to_compas
+from compas_occ.conversions import parabola_to_compas
+from compas_occ.conversions import bezier_to_compas
+from compas_occ.conversions import bspline_to_compas
 
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCCurve2d
-from compas_occ.geometry import OCCNurbsCurve
+
+# from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCSurface
+
+
+class CurveType:
+    LINE = 0
+    CIRCLE = 1
+    ELLIPSE = 2
+    HYPERBOLA = 3
+    PARABOLA = 4
+    BEZIER = 5
+    BSPLINE = 6
+    OTHER = 7
+    CURVE2D = 8
 
 
 class OCCBrepEdge(BrepEdge):
@@ -77,23 +98,13 @@ class OCCBrepEdge(BrepEdge):
 
     _occ_edge: TopoDS_Edge
 
-    class CurveType(Enum):
-        Line = 0
-        Circle = 1
-        Ellipse = 2
-        Hyperbola = 3
-        Parabola = 4
-        Bezier = 5
-        BSpline = 6
-        Other = 7
-        Curve2D = 8
-
     def __init__(self, occ_edge: TopoDS_Edge):
         super().__init__()
-        self._curve = None
-        self._nurbscurve = None
+        # self._curve = None
+        # self._nurbscurve = None
         self._occ_adaptor = None
         self.occ_edge = occ_edge
+        self.is_2d = False
 
     def __eq__(self, other: "OCCBrepEdge"):
         return self.is_equal(other)
@@ -144,11 +155,61 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def data(self):
-        raise NotImplementedError
+        if self.is_line:
+            curve = self.to_line()
+        elif self.is_circle:
+            curve = self.to_circle()
+        elif self.is_ellipse:
+            curve = self.to_ellipse()
+        elif self.is_hyperbola:
+            curve = self.to_hyperbola()
+        elif self.is_parabola:
+            curve = self.to_parabola()
+        # elif self.is_bezier:
+        #     curve = self.to_bezier()
+        # elif self.is_bspline:
+        #     curve = self.to_bspline()
+        # elif self.is_other:
+        #     curve = self.to_curve()
+        return {
+            "curve_type": self.type,
+            "curve": curve.data,  # type: ignore
+            "frame": curve.frame.data,  # type: ignore
+            "start_vertex": self.first_vertex.data,
+            "end_vertex": self.last_vertex.data,
+            "domain": curve.domain,  # type: ignore
+        }
 
     @classmethod
-    def from_data(cls, data):
-        raise NotImplementedError
+    def from_data(cls, data, builder):
+        """Construct an object of this type from the provided data.
+
+        Parameters
+        ----------
+        data : dict
+            The data dictionary.
+        builder : :class:`compas_rhino.geometry.BrepBuilder`
+            The object reconstructing the current Brep.
+
+        Returns
+        -------
+        :class:`compas.data.Data`
+            An instance of this object type if the data contained in the dict has the correct schema.
+
+        """
+        # instance = cls()
+        # edge_curve = cls._create_curve_from_data(
+        #     data["curve_type"],
+        #     data["curve"],
+        #     data["frame"],
+        #     data["domain"],
+        # )
+        # instance.native_edge = builder.add_edge(
+        #     edge_curve,
+        #     data["start_vertex"],
+        #     data["end_vertex"],
+        # )
+        # return instance
 
     # ==============================================================================
     # OCC Properties
@@ -166,9 +227,8 @@ class OCCBrepEdge(BrepEdge):
     def occ_edge(self, edge: TopoDS_Edge) -> None:
         self._occ_adaptor = None
         self._curve = None
-        self._nurbscurve = None
+        self._nurbscurve = None  # remove this if possible
         self._occ_edge = edge
-        # self._occ_edge = topods.Edge(edge)
 
     @property
     def occ_adaptor(self) -> BRepAdaptor_Curve:
@@ -180,19 +240,39 @@ class OCCBrepEdge(BrepEdge):
     def orientation(self) -> TopAbs_Orientation:
         return self.occ_edge.Orientation()
 
-    @property
-    def curve(self) -> OCCCurve:
-        if not self._curve:
-            occ_curve = self.occ_adaptor.Curve()
-            self._curve = OCCCurve(occ_curve)  # type: ignore
-        return self._curve
+    # @property
+    # def curve(self) -> OCCCurve:
+    #     if not self._curve:
+    #         occ_curve = self.occ_adaptor.Curve()
+    #         self._curve = OCCCurve(occ_curve)  # type: ignore
+    #     return self._curve
+
+    # # remove this if possible
+    # @property
+    # def nurbscurve(self) -> OCCNurbsCurve:
+    #     if not self._nurbscurve:
+    #         occ_curve = self.occ_adaptor.BSpline()
+    #         self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
+    #     return self._nurbscurve  # type: ignore (don't understand why this is necessary)
 
     @property
-    def nurbscurve(self) -> OCCNurbsCurve:
-        if not self._nurbscurve:
-            occ_curve = self.occ_adaptor.BSpline()
-            self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
-        return self._nurbscurve  # type: ignore (don't understand why this is necessary)
+    def curve(self):
+        if self.is_line:
+            return self.to_line()
+        if self.is_circle:
+            return self.to_circle()
+        if self.is_ellipse:
+            return self.to_ellipse()
+        if self.is_hyperbola:
+            return self.to_hyperbola()
+        if self.is_parabola:
+            return self.to_parabola()
+        if self.is_bezier:
+            return self.to_bezier()
+        if self.is_bspline:
+            return self.to_bspline()
+        print(self.type)
+        raise NotImplementedError
 
     # ==============================================================================
     # Properties
@@ -200,43 +280,43 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def type(self) -> int:
-        return OCCBrepEdge.CurveType(self.occ_adaptor.GetType())  # type: ignore
+        return self.occ_adaptor.GetType()
 
     @property
     def is_curve2d(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Curve2D
+        return self.type == CurveType.CURVE2D
 
     @property
     def is_line(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Line
+        return self.type == CurveType.LINE
 
     @property
     def is_circle(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Circle
+        return self.type == CurveType.CIRCLE
 
     @property
     def is_ellipse(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Ellipse
+        return self.type == CurveType.ELLIPSE
 
     @property
     def is_hyperbola(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Hyperbola
+        return self.type == CurveType.HYPERBOLA
 
     @property
     def is_parabola(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Parabola
+        return self.type == CurveType.PARABOLA
 
     @property
     def is_bezier(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Bezier
+        return self.type == CurveType.BEZIER
 
     @property
     def is_bspline(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.BSpline
+        return self.type == CurveType.BSPLINE
 
     @property
     def is_other(self) -> bool:
-        return self.type == OCCBrepEdge.CurveType.Other
+        return self.type == CurveType.OTHER
 
     @property
     def is_valid(self) -> bool:
@@ -265,6 +345,10 @@ class OCCBrepEdge(BrepEdge):
         props = GProp_GProps()
         brepgprop_LinearProperties(self.occ_edge, props)
         return props.Mass()
+
+    @property
+    def domain(self) -> Tuple[float, float]:
+        return self.occ_adaptor.FirstParameter(), self.occ_adaptor.LastParameter()
 
     # ==============================================================================
     # Constructors
@@ -307,9 +391,7 @@ class OCCBrepEdge(BrepEdge):
             The constructed edge.
 
         """
-        builder = BRepBuilderAPI_MakeEdge(
-            compas_point_to_occ_point(a), compas_point_to_occ_point(b)
-        )
+        builder = BRepBuilderAPI_MakeEdge(point_to_occ(a), point_to_occ(b))
         return cls(builder.Edge())
 
     @classmethod
@@ -340,21 +422,21 @@ class OCCBrepEdge(BrepEdge):
 
         """
         if params:
-            builder = BRepBuilderAPI_MakeEdge(compas_line_to_occ_line(line), *params)
+            builder = BRepBuilderAPI_MakeEdge(line_to_occ(line), *params)
         elif points:
             builder = BRepBuilderAPI_MakeEdge(
-                compas_line_to_occ_line(line),
-                compas_point_to_occ_point(points[0]),
-                compas_point_to_occ_point(points[1]),
+                line_to_occ(line),
+                point_to_occ(points[0]),
+                point_to_occ(points[1]),
             )
         elif vertices:
             builder = BRepBuilderAPI_MakeEdge(
-                compas_line_to_occ_line(line),
+                line_to_occ(line),
                 vertices[0].occ_vertex,
                 vertices[1].occ_vertex,
             )
         else:
-            builder = BRepBuilderAPI_MakeEdge(compas_line_to_occ_line(line))
+            builder = BRepBuilderAPI_MakeEdge(line_to_occ(line))
         return cls(builder.Edge())
 
     @classmethod
@@ -385,23 +467,21 @@ class OCCBrepEdge(BrepEdge):
 
         """
         if params:
-            builder = BRepBuilderAPI_MakeEdge(
-                compas_circle_to_occ_circle(circle), *params
-            )
+            builder = BRepBuilderAPI_MakeEdge(circle_to_occ(circle), *params)
         elif points:
             builder = BRepBuilderAPI_MakeEdge(
-                compas_circle_to_occ_circle(circle),
-                compas_point_to_occ_point(points[0]),
-                compas_point_to_occ_point(points[1]),
+                circle_to_occ(circle),
+                point_to_occ(points[0]),
+                point_to_occ(points[1]),
             )
         elif vertices:
             builder = BRepBuilderAPI_MakeEdge(
-                compas_circle_to_occ_circle(circle),
+                circle_to_occ(circle),
                 vertices[0].occ_vertex,
                 vertices[1].occ_vertex,
             )
         else:
-            builder = BRepBuilderAPI_MakeEdge(compas_circle_to_occ_circle(circle))
+            builder = BRepBuilderAPI_MakeEdge(circle_to_occ(circle))
         return cls(builder.Edge())
 
     @classmethod
@@ -468,8 +548,8 @@ class OCCBrepEdge(BrepEdge):
                 raise ValueError("No curve was provided.")
 
             if points:
-                p1 = compas_point_to_occ_point(points[0])
-                p2 = compas_point_to_occ_point(points[1])
+                p1 = point_to_occ(points[0])
+                p2 = point_to_occ(points[1])
                 if params:
                     builder = BRepBuilderAPI_MakeEdge(
                         curve2d.occ_curve, surface.occ_surface, p1, p2, *params
@@ -503,8 +583,8 @@ class OCCBrepEdge(BrepEdge):
                 raise ValueError("No curve was provided.")
 
             if points:
-                p1 = compas_point_to_occ_point(points[0])
-                p2 = compas_point_to_occ_point(points[1])
+                p1 = point_to_occ(points[0])
+                p2 = point_to_occ(points[1])
                 if params:
                     builder = BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2, *params)
                 else:
@@ -568,7 +648,7 @@ class OCCBrepEdge(BrepEdge):
 
         curve = self.occ_adaptor.Curve()
         circle = curve.Circle()
-        return compas_circle_from_occ_circle(circle)
+        return circle_to_compas(circle)
 
     def to_ellipse(self) -> Ellipse:
         """Convert the edge geometry to an ellipse.
@@ -589,9 +669,9 @@ class OCCBrepEdge(BrepEdge):
 
         curve = self.occ_adaptor.Curve()
         ellipse = curve.Ellipse()
-        return compas_ellipse_from_occ_ellipse(ellipse)
+        return ellipse_to_compas(ellipse)
 
-    def to_hyperbola(self) -> None:
+    def to_hyperbola(self) -> Hyperbola:
         """Convert the edge geometry to a hyperbola.
 
         Returns
@@ -606,9 +686,12 @@ class OCCBrepEdge(BrepEdge):
         """
         if not self.is_hyperbola:
             raise ValueError(f"The underlying geometry is not a hyperbola: {self.type}")
-        raise NotImplementedError
 
-    def to_parabola(self) -> None:
+        curve = self.occ_adaptor.Curve()
+        hyperbola = curve.Hyperbola()
+        return hyperbola_to_compas(hyperbola)
+
+    def to_parabola(self) -> Parabola:
         """Convert the edge geometry to a parabola.
 
         Returns
@@ -623,9 +706,12 @@ class OCCBrepEdge(BrepEdge):
         """
         if not self.is_parabola:
             raise ValueError(f"The underlying geometry is not a parabola: {self.type}")
-        raise NotImplementedError
 
-    def to_bezier(self) -> None:
+        curve = self.occ_adaptor.Curve()
+        parabola = curve.Parabola()
+        return parabola_to_compas(parabola)
+
+    def to_bezier(self) -> Bezier:
         """Convert the edge geometry to a bezier curve.
 
         Returns
@@ -640,9 +726,12 @@ class OCCBrepEdge(BrepEdge):
         """
         if not self.is_bezier:
             raise ValueError(f"The underlying geometry is not a bezier: {self.type}")
-        raise NotImplementedError
 
-    def to_bspline(self) -> None:
+        curve = self.occ_adaptor.Curve()
+        bezier = curve.Bezier()
+        return bezier_to_compas(bezier)
+
+    def to_bspline(self) -> NurbsCurve:
         """Convert the edge geometry to a bspline.
 
         Returns
@@ -657,17 +746,21 @@ class OCCBrepEdge(BrepEdge):
         """
         if not self.is_bspline:
             raise ValueError(f"The underlying geometry is not a bspline: {self.type}")
-        raise NotImplementedError
 
-    def to_curve(self) -> OCCCurve:
-        """Convert the edge geometry to a NURBS curve.
+        curve = self.occ_adaptor.Curve()
+        bspline = curve.BSpline()
+        return bspline_to_compas(bspline)
 
-        Returns
-        -------
-        :class:`~compas_occ.geometry.OCCCurve`
+    # # remove this if possible
+    # def to_curve(self) -> OCCCurve:
+    #     """Convert the edge geometry to a NURBS curve.
 
-        """
-        return self.curve
+    #     Returns
+    #     -------
+    #     :class:`~compas_occ.geometry.OCCCurve`
+
+    #     """
+    #     return self.curve
 
     # ==============================================================================
     # Methods
