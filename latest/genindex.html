@@ -29,25 +29,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/compas.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/tabs.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
+    <script src="_static/tabs.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -59,7 +56,6 @@
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_occ/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
-    <link rel="shortcut icon" href="_static/compas.ico"/>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -127,7 +123,7 @@
       
     
     
-    <img src="_static/compas_icon.png" class="logo__image only-light" alt="Logo image"/>
+    <img src="_static/compas_icon_white.png" class="logo__image only-light" alt="Logo image"/>
     <script>document.write(`<img src="_static/compas_icon_white.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
@@ -138,7 +134,7 @@
   </div>
   
   
-  <div class="col-lg-9 navbar-header-items">
+  <div class=" navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
@@ -288,7 +284,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/compas-gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+          <a href="https://pypi.org/project/compas_occ/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
             <label class="sr-only">PyPI</label></a>
         </li>
 </ul></div>
@@ -461,7 +457,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/compas-gmsh/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
+          <a href="https://pypi.org/project/compas_occ/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-python"></i></span>
             <label class="sr-only">PyPI</label></a>
         </li>
 </ul></div>
@@ -478,110 +474,15 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="examples/curves/index.html">Curves</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_closest_point.html">Curve Closest Point</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_comparison1.html">Curve Comparison 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_comparison2.html">Curve Comparison 2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_divide.html">Curve Divide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_circle.html">Curve From Circle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_interpolation.html">Curve From Interpolation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_line.html">Curve From Line</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_parameters.html">Curve From Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_points.html">Curve From Control Points</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_joining.html">Curve Joining</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_segmentation.html">Curve Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/curves/index.html">Curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/surfaces/index.html">Surfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/breps/index.html">Breps</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="examples/surfaces/index.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_frames.html">Surface Frames</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_fill.html">Surface From Fill</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_parameters.html">Surface From Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_points.html">Surface From Points</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_isocurves.html">Surface Isocurves</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_of_revolution.html">Surface of Revolution</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_random.html">Surface With Random Control Points</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_spacepoints.html">Surface Points Over UV Space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_viewobject.html">Surface Visualisation With View Object</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="examples/breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_explorer.html">Explore Brep Topology</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_fillet.html">Add a Fillet to the Edges of a Brep</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_from_booleans.html">Brep Shape From Booleans</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_from_mesh.html">Brep From Mesh</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_overlap.html">Find the Overlap Between Two Breps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_slice.html">Slice a Brep With a Plane</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_split.html">Split a Brep With a Plane</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_trim.html">Trim a Brep With a Plane</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_with_hole.html">Brep with Hole</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/breps/brep_with_holes.html">Brep with Holes</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/compas_occ.brep.html">compas_occ.brep</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.brep.OCCBrep.html">OCCBrep</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.brep.OCCBrepVertex.html">OCCBrepVertex</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.brep.OCCBrepEdge.html">OCCBrepEdge</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.brep.OCCBrepLoop.html">OCCBrepLoop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.brep.OCCBrepFace.html">OCCBrepFace</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/compas_occ.conversions.html">compas_occ.conversions</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.array1_from_floats1.html">array1_from_floats1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.array1_from_integers1.html">array1_from_integers1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.array1_from_points1.html">array1_from_points1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.array2_from_floats2.html">array2_from_floats2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.array2_from_points2.html">array2_from_points2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.floats2_from_array2.html">floats2_from_array2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.harray1_from_points1.html">harray1_from_points1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.points1_from_array1.html">points1_from_array1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.points2_from_array2.html">points2_from_array2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_circle_from_occ_circle.html">compas_circle_from_occ_circle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_circle_to_occ_circle.html">compas_circle_to_occ_circle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_cone_to_occ_cone.html">compas_cone_to_occ_cone</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_cylinder_from_occ_cylinder.html">compas_cylinder_from_occ_cylinder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_cylinder_to_occ_cylinder.html">compas_cylinder_to_occ_cylinder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_frame_from_occ_ax2.html">compas_frame_from_occ_ax2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_frame_from_occ_ax3.html">compas_frame_from_occ_ax3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_line_from_occ_line.html">compas_line_from_occ_line</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_line_to_occ_line.html">compas_line_to_occ_line</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_plane_from_occ_plane.html">compas_plane_from_occ_plane</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_point_from_occ_point.html">compas_point_from_occ_point</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_point_from_occ_point2d.html">compas_point_from_occ_point2d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_plane_to_occ_plane.html">compas_plane_to_occ_plane</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_point_to_occ_point.html">compas_point_to_occ_point</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_plane_to_occ_ax2.html">compas_plane_to_occ_ax2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_plane_to_occ_ax3.html">compas_plane_to_occ_ax3</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_sphere_to_occ_sphere.html">compas_sphere_to_occ_sphere</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_torus_to_occ_torus.html">compas_torus_to_occ_torus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_vector_from_occ_axis.html">compas_vector_from_occ_axis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_vector_from_occ_vector.html">compas_vector_from_occ_vector</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_vector_from_occ_vector2d.html">compas_vector_from_occ_vector2d</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_vector_to_occ_vector.html">compas_vector_to_occ_vector</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_vector_to_occ_direction.html">compas_vector_to_occ_direction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_transformation_to_trsf.html">compas_transformation_to_trsf</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_mesh_to_occ_shell.html">compas_mesh_to_occ_shell</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_quadmesh_to_occ_shell.html">compas_quadmesh_to_occ_shell</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.compas_trimesh_to_occ_shell.html">compas_trimesh_to_occ_shell</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.ngon_to_face.html">ngon_to_face</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.quad_to_face.html">quad_to_face</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/generated/compas_occ.conversions.triangle_to_face.html">triangle_to_face</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="api/compas_occ.geometry.html">compas_occ.geometry</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_occ.geometry.curves.html">Curves</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/compas_occ.geometry.surfaces.html">Surfaces</a></li>
-</ul>
-</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_occ.brep.html">compas_occ.brep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_occ.conversions.html">compas_occ.conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_occ.geometry.html">compas_occ.geometry</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -624,7 +525,8 @@ document.write(`
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
@@ -643,10 +545,41 @@ document.write(`
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
- | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.__init__.html#compas_occ.brep.OCCBrep.__init__">__init__() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.__init__.html#compas_occ.brep.OCCBrepEdge.__init__">(compas_occ.brep.OCCBrepEdge method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.__init__.html#compas_occ.brep.OCCBrepFace.__init__">(compas_occ.brep.OCCBrepFace method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.__init__.html#compas_occ.brep.OCCBrepLoop.__init__">(compas_occ.brep.OCCBrepLoop method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepVertex.__init__.html#compas_occ.brep.OCCBrepVertex.__init__">(compas_occ.brep.OCCBrepVertex method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.__init__.html#compas_occ.geometry.OCCCurve.__init__">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.__init__.html#compas_occ.geometry.OCCCurve2d.__init__">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.__init__.html#compas_occ.geometry.OCCExtrusionSurface.__init__">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.__init__.html#compas_occ.geometry.OCCNurbsCurve.__init__">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.__init__.html#compas_occ.geometry.OCCNurbsSurface.__init__">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.__init__.html#compas_occ.geometry.OCCRevolutionSurface.__init__">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.__init__.html#compas_occ.geometry.OCCSurface.__init__">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -666,12 +599,14 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.aabb.html#compas_occ.geometry.OCCSurface.aabb">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.add_loop.html#compas_occ.brep.OCCBrepFace.add_loop">add_loop() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.add_loops.html#compas_occ.brep.OCCBrepFace.add_loops">add_loops() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.adjacent_faces.html#compas_occ.brep.OCCBrepFace.adjacent_faces">adjacent_faces() (compas_occ.brep.OCCBrepFace method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.conversions.array1_from_floats1.html#compas_occ.conversions.array1_from_floats1">array1_from_floats1() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.conversions.array1_from_integers1.html#compas_occ.conversions.array1_from_integers1">array1_from_integers1() (in module compas_occ.conversions)</a>
@@ -682,12 +617,26 @@ document.write(`
 </li>
       <li><a href="api/generated/compas_occ.conversions.array2_from_points2.html#compas_occ.conversions.array2_from_points2">array2_from_points2() (in module compas_occ.conversions)</a>
 </li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.as_brep.html#compas_occ.brep.OCCBrepFace.as_brep">as_brep() (compas_occ.brep.OCCBrepFace method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.ax2_to_compas.html#compas_occ.conversions.ax2_to_compas">ax2_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.ax3_to_compas.html#compas_occ.conversions.ax3_to_compas">ax3_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.axis_to_compas.html#compas_occ.conversions.axis_to_compas">axis_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.axis_to_compas_vector.html#compas_occ.conversions.axis_to_compas_vector">axis_to_compas_vector() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.axis_to_occ.html#compas_occ.conversions.axis_to_occ">axis_to_occ() (in module compas_occ.conversions)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.bezier_to_compas.html#compas_occ.conversions.bezier_to_compas">bezier_to_compas() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.boundary.html#compas_occ.geometry.OCCExtrusionSurface.boundary">boundary() (compas_occ.geometry.OCCExtrusionSurface method)</a>
 
       <ul>
@@ -699,12 +648,20 @@ document.write(`
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.bspline_to_compas.html#compas_occ.conversions.bspline_to_compas">bspline_to_compas() (in module compas_occ.conversions)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.check.html#compas_occ.brep.OCCBrep.check">check() (compas_occ.brep.OCCBrep method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.circle_to_compas.html#compas_occ.conversions.circle_to_compas">circle_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.circle_to_occ.html#compas_occ.conversions.circle_to_occ">circle_to_occ() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.closest_parameters_curve.html#compas_occ.geometry.OCCCurve.closest_parameters_curve">closest_parameters_curve() (compas_occ.geometry.OCCCurve method)</a>
 
@@ -734,61 +691,13 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.closest_points_curve.html#compas_occ.geometry.OCCNurbsCurve.closest_points_curve">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.conversions.compas_circle_from_occ_circle.html#compas_occ.conversions.compas_circle_from_occ_circle">compas_circle_from_occ_circle() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_circle_to_occ_circle.html#compas_occ.conversions.compas_circle_to_occ_circle">compas_circle_to_occ_circle() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_cone_to_occ_cone.html#compas_occ.conversions.compas_cone_to_occ_cone">compas_cone_to_occ_cone() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_cylinder_from_occ_cylinder.html#compas_occ.conversions.compas_cylinder_from_occ_cylinder">compas_cylinder_from_occ_cylinder() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_cylinder_to_occ_cylinder.html#compas_occ.conversions.compas_cylinder_to_occ_cylinder">compas_cylinder_to_occ_cylinder() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_frame_from_occ_ax2.html#compas_occ.conversions.compas_frame_from_occ_ax2">compas_frame_from_occ_ax2() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_frame_from_occ_ax3.html#compas_occ.conversions.compas_frame_from_occ_ax3">compas_frame_from_occ_ax3() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_line_from_occ_line.html#compas_occ.conversions.compas_line_from_occ_line">compas_line_from_occ_line() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_line_to_occ_line.html#compas_occ.conversions.compas_line_to_occ_line">compas_line_to_occ_line() (in module compas_occ.conversions)</a>
-</li>
       <li><a href="api/generated/compas_occ.conversions.compas_mesh_to_occ_shell.html#compas_occ.conversions.compas_mesh_to_occ_shell">compas_mesh_to_occ_shell() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_plane_from_occ_plane.html#compas_occ.conversions.compas_plane_from_occ_plane">compas_plane_from_occ_plane() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_plane_to_occ_ax2.html#compas_occ.conversions.compas_plane_to_occ_ax2">compas_plane_to_occ_ax2() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_plane_to_occ_ax3.html#compas_occ.conversions.compas_plane_to_occ_ax3">compas_plane_to_occ_ax3() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_plane_to_occ_plane.html#compas_occ.conversions.compas_plane_to_occ_plane">compas_plane_to_occ_plane() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_point_from_occ_point.html#compas_occ.conversions.compas_point_from_occ_point">compas_point_from_occ_point() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_point_from_occ_point2d.html#compas_occ.conversions.compas_point_from_occ_point2d">compas_point_from_occ_point2d() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_point_to_occ_point.html#compas_occ.conversions.compas_point_to_occ_point">compas_point_to_occ_point() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.conversions.compas_quadmesh_to_occ_shell.html#compas_occ.conversions.compas_quadmesh_to_occ_shell">compas_quadmesh_to_occ_shell() (in module compas_occ.conversions)</a>
 </li>
-      <li><a href="api/generated/compas_occ.conversions.compas_sphere_to_occ_sphere.html#compas_occ.conversions.compas_sphere_to_occ_sphere">compas_sphere_to_occ_sphere() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_torus_to_occ_torus.html#compas_occ.conversions.compas_torus_to_occ_torus">compas_torus_to_occ_torus() (in module compas_occ.conversions)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.conversions.compas_transformation_to_trsf.html#compas_occ.conversions.compas_transformation_to_trsf">compas_transformation_to_trsf() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.conversions.compas_trimesh_to_occ_shell.html#compas_occ.conversions.compas_trimesh_to_occ_shell">compas_trimesh_to_occ_shell() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_vector_from_occ_axis.html#compas_occ.conversions.compas_vector_from_occ_axis">compas_vector_from_occ_axis() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_vector_from_occ_vector.html#compas_occ.conversions.compas_vector_from_occ_vector">compas_vector_from_occ_vector() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_vector_from_occ_vector2d.html#compas_occ.conversions.compas_vector_from_occ_vector2d">compas_vector_from_occ_vector2d() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_vector_to_occ_direction.html#compas_occ.conversions.compas_vector_to_occ_direction">compas_vector_to_occ_direction() (in module compas_occ.conversions)</a>
-</li>
-      <li><a href="api/generated/compas_occ.conversions.compas_vector_to_occ_vector.html#compas_occ.conversions.compas_vector_to_occ_vector">compas_vector_to_occ_vector() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.compute.html#compas_occ.geometry.OCCExtrusionSurface.compute">compute() (compas_occ.geometry.OCCExtrusionSurface method)</a>
 
@@ -796,6 +705,10 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.compute.html#compas_occ.geometry.OCCRevolutionSurface.compute">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.conversions.cone_to_occ.html#compas_occ.conversions.cone_to_occ">cone_to_occ() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.contains.html#compas_occ.brep.OCCBrep.contains">contains() (compas_occ.brep.OCCBrep method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.contours.html#compas_occ.brep.OCCBrep.contours">contours() (compas_occ.brep.OCCBrep method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.copy.html#compas_occ.brep.OCCBrep.copy">copy() (compas_occ.brep.OCCBrep method)</a>
@@ -824,6 +737,8 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.copy.html#compas_occ.geometry.OCCSurface.copy">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.cull_unused_edges.html#compas_occ.brep.OCCBrep.cull_unused_edges">cull_unused_edges() (compas_occ.brep.OCCBrep method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.cull_unused_faces.html#compas_occ.brep.OCCBrep.cull_unused_faces">cull_unused_faces() (compas_occ.brep.OCCBrep method)</a>
@@ -848,12 +763,20 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.curvature_at.html#compas_occ.geometry.OCCSurface.curvature_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.conversions.cylinder_to_compas.html#compas_occ.conversions.cylinder_to_compas">cylinder_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.cylinder_to_occ.html#compas_occ.conversions.cylinder_to_occ">cylinder_to_occ() (in module compas_occ.conversions)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.direction_to_compas.html#compas_occ.conversions.direction_to_compas">direction_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.direction_to_occ.html#compas_occ.conversions.direction_to_occ">direction_to_occ() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.divide.html#compas_occ.geometry.OCCCurve.divide">divide() (compas_occ.geometry.OCCCurve method)</a>
 
       <ul>
@@ -886,11 +809,17 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.edge_faces.html#compas_occ.brep.OCCBrep.edge_faces">edge_faces() (compas_occ.brep.OCCBrep method)</a>
 </li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.edge_loop.html#compas_occ.brep.OCCBrep.edge_loop">edge_loop() (compas_occ.brep.OCCBrep method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.edge_loops.html#compas_occ.brep.OCCBrep.edge_loops">edge_loops() (compas_occ.brep.OCCBrep method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.elevate_degree.html#compas_occ.geometry.OCCNurbsCurve.elevate_degree">elevate_degree() (compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.elevate_degree.html#compas_occ.geometry.OCCNurbsCurve.elevate_degree">elevate_degree() (compas_occ.geometry.OCCNurbsCurve method)</a>
+      <li><a href="api/generated/compas_occ.conversions.ellipse_to_compas.html#compas_occ.conversions.ellipse_to_compas">ellipse_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.ellipse_to_occ.html#compas_occ.conversions.ellipse_to_occ">ellipse_to_occ() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.embedded.html#compas_occ.geometry.OCCCurve.embedded">embedded() (compas_occ.geometry.OCCCurve method)</a>
 
@@ -942,6 +871,10 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.frame_at.html#compas_occ.geometry.OCCSurface.frame_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.conversions.frame_to_occ_ax2.html#compas_occ.conversions.frame_to_occ_ax2">frame_to_occ_ax2() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.frame_to_occ_ax3.html#compas_occ.conversions.frame_to_occ_ax3">frame_to_occ_ax3() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_arc.html#compas_occ.geometry.OCCNurbsCurve.from_arc">from_arc() (compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_boolean_difference.html#compas_occ.brep.OCCBrep.from_boolean_difference">from_boolean_difference() (compas_occ.brep.OCCBrep class method)</a>
@@ -1038,6 +971,32 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_interpolation.html#compas_occ.geometry.OCCNurbsSurface.from_interpolation">(compas_occ.geometry.OCCNurbsSurface class method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.from_json.html#compas_occ.brep.OCCBrep.from_json">from_json() (compas_occ.brep.OCCBrep class method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.from_json.html#compas_occ.brep.OCCBrepEdge.from_json">(compas_occ.brep.OCCBrepEdge class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_json.html#compas_occ.brep.OCCBrepFace.from_json">(compas_occ.brep.OCCBrepFace class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.from_json.html#compas_occ.brep.OCCBrepLoop.from_json">(compas_occ.brep.OCCBrepLoop class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepVertex.from_json.html#compas_occ.brep.OCCBrepVertex.from_json">(compas_occ.brep.OCCBrepVertex class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.from_json.html#compas_occ.geometry.OCCCurve.from_json">(compas_occ.geometry.OCCCurve class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_json.html#compas_occ.geometry.OCCCurve2d.from_json">(compas_occ.geometry.OCCCurve2d class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_json.html#compas_occ.geometry.OCCExtrusionSurface.from_json">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_json.html#compas_occ.geometry.OCCNurbsCurve.from_json">(compas_occ.geometry.OCCNurbsCurve class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_json.html#compas_occ.geometry.OCCNurbsSurface.from_json">(compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_json.html#compas_occ.geometry.OCCRevolutionSurface.from_json">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_json.html#compas_occ.geometry.OCCSurface.from_json">(compas_occ.geometry.OCCSurface class method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.from_line.html#compas_occ.brep.OCCBrepEdge.from_line">from_line() (compas_occ.brep.OCCBrepEdge class method)</a>
@@ -1046,12 +1005,18 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_line.html#compas_occ.geometry.OCCNurbsCurve.from_line">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.from_loft.html#compas_occ.brep.OCCBrep.from_loft">from_loft() (compas_occ.brep.OCCBrep class method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_mesh.html#compas_occ.brep.OCCBrep.from_mesh">from_mesh() (compas_occ.brep.OCCBrep class method)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_meshgrid.html#compas_occ.geometry.OCCNurbsSurface.from_meshgrid">from_meshgrid() (compas_occ.geometry.OCCNurbsSurface class method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_native.html#compas_occ.brep.OCCBrep.from_native">from_native() (compas_occ.brep.OCCBrep class method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_native.html#compas_occ.geometry.OCCNurbsCurve.from_native">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.from_obj.html#compas_occ.geometry.OCCCurve.from_obj">from_obj() (compas_occ.geometry.OCCCurve class method)</a>
 
       <ul>
@@ -1090,6 +1055,8 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_parameters.html#compas_occ.geometry.OCCNurbsSurface.from_parameters">(compas_occ.geometry.OCCNurbsSurface class method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.from_pipe.html#compas_occ.brep.OCCBrep.from_pipe">from_pipe() (compas_occ.brep.OCCBrep class method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_plane.html#compas_occ.brep.OCCBrepFace.from_plane">from_plane() (compas_occ.brep.OCCBrepFace class method)</a>
 
       <ul>
@@ -1152,10 +1119,12 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_step.html#compas_occ.geometry.OCCSurface.from_step">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.brep.OCCBrep.from_step_file.html#compas_occ.brep.OCCBrep.from_step_file">from_step_file() (compas_occ.brep.OCCBrep class method)</a>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.from_surface.html#compas_occ.brep.OCCBrep.from_surface">from_surface() (compas_occ.brep.OCCBrep class method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_surface.html#compas_occ.brep.OCCBrepFace.from_surface">(compas_occ.brep.OCCBrepFace class method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_surface.html#compas_occ.brep.OCCBrepFace.from_surface">from_surface() (compas_occ.brep.OCCBrepFace class method)</a>
-</li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_sweep.html#compas_occ.brep.OCCBrep.from_sweep">from_sweep() (compas_occ.brep.OCCBrep class method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_torus.html#compas_occ.brep.OCCBrep.from_torus">from_torus() (compas_occ.brep.OCCBrep class method)</a>
@@ -1195,6 +1164,8 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.heal.html#compas_occ.brep.OCCBrep.heal">heal() (compas_occ.brep.OCCBrep method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.hyperbola_to_compas.html#compas_occ.conversions.hyperbola_to_compas">hyperbola_to_compas() (in module compas_occ.conversions)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1305,6 +1276,14 @@ document.write(`
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.line_to_compas.html#compas_occ.conversions.line_to_compas">line_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.line_to_occ.html#compas_occ.conversions.line_to_occ">line_to_occ() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.location_to_compas.html#compas_occ.conversions.location_to_compas">location_to_compas() (in module compas_occ.conversions)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
@@ -1404,12 +1383,24 @@ document.write(`
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.parabola_to_compas.html#compas_occ.conversions.parabola_to_compas">parabola_to_compas() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.parameter_at_distance.html#compas_occ.geometry.OCCCurve.parameter_at_distance">parameter_at_distance() (compas_occ.geometry.OCCCurve method)</a>
 
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.parameter_at_distance.html#compas_occ.geometry.OCCNurbsCurve.parameter_at_distance">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.conversions.plane_to_compas.html#compas_occ.conversions.plane_to_compas">plane_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.plane_to_occ.html#compas_occ.conversions.plane_to_occ">plane_to_occ() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.plane_to_occ_ax2.html#compas_occ.conversions.plane_to_occ_ax2">plane_to_occ_ax2() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.plane_to_occ_ax3.html#compas_occ.conversions.plane_to_occ_ax3">plane_to_occ_ax3() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.point2d_to_compas.html#compas_occ.conversions.point2d_to_compas">point2d_to_compas() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.point_at.html#compas_occ.geometry.OCCCurve.point_at">point_at() (compas_occ.geometry.OCCCurve method)</a>
 
       <ul>
@@ -1428,6 +1419,10 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.point_to_compas.html#compas_occ.conversions.point_to_compas">point_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.point_to_occ.html#compas_occ.conversions.point_to_occ">point_to_occ() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.pointgrid.html#compas_occ.geometry.OCCExtrusionSurface.pointgrid">pointgrid() (compas_occ.geometry.OCCExtrusionSurface method)</a>
 
       <ul>
@@ -1476,8 +1471,6 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.reverse.html#compas_occ.geometry.OCCNurbsCurve.reverse">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.reversed.html#compas_occ.geometry.OCCCurve.reversed">reversed() (compas_occ.geometry.OCCCurve method)</a>
 
       <ul>
@@ -1486,12 +1479,86 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.reversed.html#compas_occ.geometry.OCCNurbsCurve.reversed">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.rotate.html#compas_occ.brep.OCCBrep.rotate">rotate() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.rotate.html#compas_occ.geometry.OCCCurve.rotate">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.rotate.html#compas_occ.geometry.OCCCurve2d.rotate">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.rotate.html#compas_occ.geometry.OCCExtrusionSurface.rotate">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.rotate.html#compas_occ.geometry.OCCNurbsCurve.rotate">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.rotate.html#compas_occ.geometry.OCCRevolutionSurface.rotate">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.rotate.html#compas_occ.geometry.OCCSurface.rotate">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.rotated.html#compas_occ.brep.OCCBrep.rotated">rotated() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.rotated.html#compas_occ.geometry.OCCCurve.rotated">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.rotated.html#compas_occ.geometry.OCCCurve2d.rotated">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.rotated.html#compas_occ.geometry.OCCExtrusionSurface.rotated">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.rotated.html#compas_occ.geometry.OCCNurbsCurve.rotated">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.rotated.html#compas_occ.geometry.OCCRevolutionSurface.rotated">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.rotated.html#compas_occ.geometry.OCCSurface.rotated">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.scale.html#compas_occ.brep.OCCBrep.scale">scale() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.scale.html#compas_occ.geometry.OCCCurve.scale">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.scale.html#compas_occ.geometry.OCCCurve2d.scale">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.scale.html#compas_occ.geometry.OCCExtrusionSurface.scale">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.scale.html#compas_occ.geometry.OCCNurbsCurve.scale">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.scale.html#compas_occ.geometry.OCCRevolutionSurface.scale">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.scale.html#compas_occ.geometry.OCCSurface.scale">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.scaled.html#compas_occ.brep.OCCBrep.scaled">scaled() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.scaled.html#compas_occ.geometry.OCCCurve.scaled">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.scaled.html#compas_occ.geometry.OCCCurve2d.scaled">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.scaled.html#compas_occ.geometry.OCCExtrusionSurface.scaled">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.scaled.html#compas_occ.geometry.OCCNurbsCurve.scaled">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.scaled.html#compas_occ.geometry.OCCRevolutionSurface.scaled">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.scaled.html#compas_occ.geometry.OCCSurface.scaled">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.segment.html#compas_occ.geometry.OCCNurbsCurve.segment">segment() (compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.segmented.html#compas_occ.geometry.OCCNurbsCurve.segmented">segmented() (compas_occ.geometry.OCCNurbsCurve method)</a>
@@ -1536,6 +1603,30 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.smooth.html#compas_occ.geometry.OCCNurbsCurve.smooth">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.space_u.html#compas_occ.geometry.OCCExtrusionSurface.space_u">space_u() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.space_u.html#compas_occ.geometry.OCCRevolutionSurface.space_u">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.space_u.html#compas_occ.geometry.OCCSurface.space_u">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.space_v.html#compas_occ.geometry.OCCExtrusionSurface.space_v">space_v() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.space_v.html#compas_occ.geometry.OCCRevolutionSurface.space_v">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.space_v.html#compas_occ.geometry.OCCSurface.space_v">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_occ.conversions.sphere_to_compas.html#compas_occ.conversions.sphere_to_compas">sphere_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.sphere_to_occ.html#compas_occ.conversions.sphere_to_occ">sphere_to_occ() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.split.html#compas_occ.brep.OCCBrep.split">split() (compas_occ.brep.OCCBrep method)</a>
 
       <ul>
@@ -1576,7 +1667,11 @@ document.write(`
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_circle.html#compas_occ.brep.OCCBrepEdge.to_circle">to_circle() (compas_occ.brep.OCCBrepEdge method)</a>
 </li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_cone.html#compas_occ.brep.OCCBrepFace.to_cone">to_cone() (compas_occ.brep.OCCBrepFace method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_curve.html#compas_occ.brep.OCCBrepEdge.to_curve">to_curve() (compas_occ.brep.OCCBrepEdge method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_cylinder.html#compas_occ.brep.OCCBrepFace.to_cylinder">to_cylinder() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_data.html#compas_occ.brep.OCCBrep.to_data">to_data() (compas_occ.brep.OCCBrep method)</a>
 
@@ -1611,7 +1706,31 @@ document.write(`
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_iges.html#compas_occ.brep.OCCBrep.to_iges">to_iges() (compas_occ.brep.OCCBrep method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_json.html#compas_occ.brep.OCCBrep.to_json">to_json() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_json.html#compas_occ.brep.OCCBrepEdge.to_json">(compas_occ.brep.OCCBrepEdge method)</a>
 </li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_json.html#compas_occ.brep.OCCBrepFace.to_json">(compas_occ.brep.OCCBrepFace method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.to_json.html#compas_occ.brep.OCCBrepLoop.to_json">(compas_occ.brep.OCCBrepLoop method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.brep.OCCBrepVertex.to_json.html#compas_occ.brep.OCCBrepVertex.to_json">(compas_occ.brep.OCCBrepVertex method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.to_json.html#compas_occ.geometry.OCCCurve.to_json">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.to_json.html#compas_occ.geometry.OCCCurve2d.to_json">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_json.html#compas_occ.geometry.OCCExtrusionSurface.to_json">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.to_json.html#compas_occ.geometry.OCCNurbsCurve.to_json">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_json.html#compas_occ.geometry.OCCRevolutionSurface.to_json">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_json.html#compas_occ.geometry.OCCSurface.to_json">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_line.html#compas_occ.brep.OCCBrepEdge.to_line">to_line() (compas_occ.brep.OCCBrepEdge method)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_mesh.html#compas_occ.geometry.OCCExtrusionSurface.to_mesh">to_mesh() (compas_occ.geometry.OCCExtrusionSurface method)</a>
@@ -1635,6 +1754,8 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_parabola.html#compas_occ.brep.OCCBrepEdge.to_parabola">to_parabola() (compas_occ.brep.OCCBrepEdge method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_plane.html#compas_occ.brep.OCCBrepFace.to_plane">to_plane() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.to_points.html#compas_occ.geometry.OCCCurve.to_points">to_points() (compas_occ.geometry.OCCCurve method)</a>
 
@@ -1684,6 +1805,8 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_quads.html#compas_occ.geometry.OCCSurface.to_quads">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_sphere.html#compas_occ.brep.OCCBrepFace.to_sphere">to_sphere() (compas_occ.brep.OCCBrepFace method)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_step.html#compas_occ.brep.OCCBrep.to_step">to_step() (compas_occ.brep.OCCBrep method)</a>
 
       <ul>
@@ -1718,6 +1841,8 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_tesselation.html#compas_occ.geometry.OCCSurface.to_tesselation">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_torus.html#compas_occ.brep.OCCBrepFace.to_torus">to_torus() (compas_occ.brep.OCCBrepFace method)</a>
+</li>
       <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_triangles.html#compas_occ.geometry.OCCExtrusionSurface.to_triangles">to_triangles() (compas_occ.geometry.OCCExtrusionSurface method)</a>
 
       <ul>
@@ -1739,6 +1864,8 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_viewmesh.html#compas_occ.brep.OCCBrep.to_viewmesh">to_viewmesh() (compas_occ.brep.OCCBrep method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.torus_to_occ.html#compas_occ.conversions.torus_to_occ">torus_to_occ() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.ToString.html#compas_occ.brep.OCCBrep.ToString">ToString() (compas_occ.brep.OCCBrep method)</a>
 
@@ -1802,6 +1929,42 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.transformed.html#compas_occ.geometry.OCCSurface.transformed">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.translate.html#compas_occ.brep.OCCBrep.translate">translate() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.translate.html#compas_occ.geometry.OCCCurve.translate">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.translate.html#compas_occ.geometry.OCCCurve2d.translate">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.translate.html#compas_occ.geometry.OCCExtrusionSurface.translate">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.translate.html#compas_occ.geometry.OCCNurbsCurve.translate">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.translate.html#compas_occ.geometry.OCCNurbsSurface.translate">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.translate.html#compas_occ.geometry.OCCRevolutionSurface.translate">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.translate.html#compas_occ.geometry.OCCSurface.translate">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/compas_occ.brep.OCCBrep.translated.html#compas_occ.brep.OCCBrep.translated">translated() (compas_occ.brep.OCCBrep method)</a>
+
+      <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.translated.html#compas_occ.geometry.OCCCurve.translated">(compas_occ.geometry.OCCCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.translated.html#compas_occ.geometry.OCCCurve2d.translated">(compas_occ.geometry.OCCCurve2d method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.translated.html#compas_occ.geometry.OCCExtrusionSurface.translated">(compas_occ.geometry.OCCExtrusionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.translated.html#compas_occ.geometry.OCCNurbsCurve.translated">(compas_occ.geometry.OCCNurbsCurve method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.translated.html#compas_occ.geometry.OCCNurbsSurface.translated">(compas_occ.geometry.OCCNurbsSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.translated.html#compas_occ.geometry.OCCRevolutionSurface.translated">(compas_occ.geometry.OCCRevolutionSurface method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.translated.html#compas_occ.geometry.OCCSurface.translated">(compas_occ.geometry.OCCSurface method)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/compas_occ.conversions.triangle_to_face.html#compas_occ.conversions.triangle_to_face">triangle_to_face() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.trim.html#compas_occ.brep.OCCBrep.trim">trim() (compas_occ.brep.OCCBrep method)</a>
@@ -1821,57 +1984,9 @@ document.write(`
   </ul></td>
 </tr></table>
 
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.u_isocurve.html#compas_occ.geometry.OCCExtrusionSurface.u_isocurve">u_isocurve() (compas_occ.geometry.OCCExtrusionSurface method)</a>
-
-      <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.u_isocurve.html#compas_occ.geometry.OCCNurbsSurface.u_isocurve">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.u_isocurve.html#compas_occ.geometry.OCCRevolutionSurface.u_isocurve">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCSurface.u_isocurve.html#compas_occ.geometry.OCCSurface.u_isocurve">(compas_occ.geometry.OCCSurface method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.u_space.html#compas_occ.geometry.OCCExtrusionSurface.u_space">u_space() (compas_occ.geometry.OCCExtrusionSurface method)</a>
-
-      <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.u_space.html#compas_occ.geometry.OCCNurbsSurface.u_space">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.u_space.html#compas_occ.geometry.OCCRevolutionSurface.u_space">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCSurface.u_space.html#compas_occ.geometry.OCCSurface.u_space">(compas_occ.geometry.OCCSurface method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.v_isocurve.html#compas_occ.geometry.OCCExtrusionSurface.v_isocurve">v_isocurve() (compas_occ.geometry.OCCExtrusionSurface method)</a>
-
-      <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.v_isocurve.html#compas_occ.geometry.OCCNurbsSurface.v_isocurve">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.v_isocurve.html#compas_occ.geometry.OCCRevolutionSurface.v_isocurve">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCSurface.v_isocurve.html#compas_occ.geometry.OCCSurface.v_isocurve">(compas_occ.geometry.OCCSurface method)</a>
-</li>
-      </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.v_space.html#compas_occ.geometry.OCCExtrusionSurface.v_space">v_space() (compas_occ.geometry.OCCExtrusionSurface method)</a>
-
-      <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.v_space.html#compas_occ.geometry.OCCNurbsSurface.v_space">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.v_space.html#compas_occ.geometry.OCCRevolutionSurface.v_space">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCSurface.v_space.html#compas_occ.geometry.OCCSurface.v_space">(compas_occ.geometry.OCCSurface method)</a>
-</li>
-      </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.validate_data.html#compas_occ.brep.OCCBrep.validate_data">validate_data() (compas_occ.brep.OCCBrep class method)</a>
 
       <ul>
@@ -1900,6 +2015,12 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.conversions.vector2d_to_compas.html#compas_occ.conversions.vector2d_to_compas">vector2d_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.vector_to_compas.html#compas_occ.conversions.vector_to_compas">vector_to_compas() (in module compas_occ.conversions)</a>
+</li>
+      <li><a href="api/generated/compas_occ.conversions.vector_to_occ.html#compas_occ.conversions.vector_to_occ">vector_to_occ() (in module compas_occ.conversions)</a>
+</li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.vertex_edges.html#compas_occ.brep.OCCBrep.vertex_edges">vertex_edges() (compas_occ.brep.OCCBrep method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.vertex_faces.html#compas_occ.brep.OCCBrep.vertex_faces">vertex_faces() (compas_occ.brep.OCCBrep method)</a>
@@ -1917,14 +2038,6 @@ document.write(`
               
                 <footer class="bd-footer-article">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
-<div class="prev-next-area">
-</div></div>
-  
-</div>
-
                 </footer>
               
             </div>
@@ -1961,7 +2074,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     <br/>
   </p>
 </div>
