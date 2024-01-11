@@ -14,8 +14,8 @@ from OCC.Core.TopoDS import topods_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Edge
 
-from compas_occ.conversions import compas_point_from_occ_point2d
-from compas_occ.conversions import compas_vector_from_occ_vector2d
+from compas_occ.conversions import point2d_to_compas
+from compas_occ.conversions import vector2d_to_compas
 
 
 class OCCCurve2d(Curve):
@@ -211,7 +211,7 @@ class OCCCurve2d(Curve):
             )
 
         point = self.occ_curve.Value(t)
-        return compas_point_from_occ_point2d(point)
+        return point2d_to_compas(point)
 
     def tangent_at(self, t: float) -> Vector:
         """Compute the tangent vector at a curve parameter.
@@ -238,7 +238,7 @@ class OCCCurve2d(Curve):
         point = gp_Pnt2d()
         uvec = gp_Vec2d()
         self.occ_curve.D1(t, point, uvec)
-        return compas_vector_from_occ_vector2d(uvec)
+        return vector2d_to_compas(uvec)
 
     def curvature_at(self, t: float) -> Vector:
         """Compute the curvature vector at a curve parameter.
@@ -266,7 +266,7 @@ class OCCCurve2d(Curve):
         uvec = gp_Vec2d()
         vvec = gp_Vec2d()
         self.occ_curve.D2(t, point, uvec, vvec)
-        return compas_vector_from_occ_vector2d(vvec)
+        return vector2d_to_compas(vvec)
 
     def frame_at(self, t: float) -> Frame:
         """Compute the local frame at a curve parameter.
@@ -296,7 +296,7 @@ class OCCCurve2d(Curve):
         self.occ_curve.D2(t, point, uvec, vvec)
 
         return Frame(
-            compas_point_from_occ_point2d(point),
-            compas_vector_from_occ_vector2d(uvec),
-            compas_vector_from_occ_vector2d(vvec),
+            point2d_to_compas(point),
+            vector2d_to_compas(uvec),
+            vector2d_to_compas(vvec),
         )

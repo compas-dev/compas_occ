@@ -15,8 +15,8 @@ from compas.geometry import Curve
 from compas.geometry import Vector
 from compas.utilities import flatten
 
-from compas_occ.conversions import compas_point_from_occ_point
-from compas_occ.conversions import compas_point_to_occ_point
+from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import array2_from_points2
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array2_from_floats2
@@ -52,11 +52,11 @@ class ControlPoints:
             return self.points[index]  # type: ignore
         else:
             pnt = self.occ_surface.Pole(u + 1, v + 1)
-            return compas_point_from_occ_point(pnt)
+            return point_to_compas(pnt)
 
     def __setitem__(self, index: Tuple[int, int], point: Point) -> None:
         u, v = index
-        self.occ_surface.SetPole(u + 1, v + 1, compas_point_to_occ_point(point))
+        self.occ_surface.SetPole(u + 1, v + 1, point_to_occ(point))
 
     def __len__(self) -> int:
         return self.occ_surface.NbVPoles()

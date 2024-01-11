@@ -33,13 +33,13 @@ from OCC.Core.TopoDS import TopoDS_Shape
 
 from compas_occ.geometry import OCCCurve
 
-from compas_occ.conversions import compas_point_from_occ_point
-from compas_occ.conversions import compas_point_to_occ_point
-from compas_occ.conversions import compas_vector_from_occ_vector
-from compas_occ.conversions import compas_vector_from_occ_direction
-from compas_occ.conversions import compas_frame_from_occ_ax3
-from compas_occ.conversions import compas_line_to_occ_line
-from compas_occ.conversions import compas_plane_to_occ_plane
+from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import point_to_occ
+from compas_occ.conversions import vector_to_compas
+from compas_occ.conversions import direction_to_compas
+from compas_occ.conversions import ax3_to_compas
+from compas_occ.conversions import line_to_occ
+from compas_occ.conversions import plane_to_occ
 
 
 class OCCSurface(Surface):
@@ -139,7 +139,7 @@ class OCCSurface(Surface):
         :class:`OCCSurface`
 
         """
-        occ_plane = compas_plane_to_occ_plane(plane)
+        occ_plane = plane_to_occ(plane)
         srf = Geom_Plane(occ_plane)
         return cls.from_occ(srf)
 
@@ -321,7 +321,7 @@ class OCCSurface(Surface):
 
         """
         point = self.occ_surface.Value(u, v)
-        return compas_point_from_occ_point(point)
+        return point_to_compas(point)
 
     def curvature_at(self, u: float, v: float) -> Vector:
         """Compute the curvature at a point on the surface.
@@ -338,7 +338,7 @@ class OCCSurface(Surface):
         """
         props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
         normal = props.Normal()
-        return compas_vector_from_occ_direction(normal)
+        return direction_to_compas(normal)
 
     def gaussian_curvature_at(self, u: float, v: float) -> float:
         """Compute the Gaussian curvature at a point on the surface.
@@ -390,9 +390,9 @@ class OCCSurface(Surface):
         vvec = gp_Vec()
         self.occ_surface.D1(u, v, point, uvec, vvec)
         return Frame(
-            compas_point_from_occ_point(point),
-            compas_vector_from_occ_vector(uvec),
-            compas_vector_from_occ_vector(vvec),
+            point_to_compas(point),
+            vector_to_compas(uvec),
+            vector_to_compas(vvec),
         )
 
     def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box:
@@ -416,8 +416,8 @@ class OCCSurface(Surface):
         add(GeomAdaptor_Surface(self.occ_surface), precision, box)
         return Box.from_diagonal(
             (
-                compas_point_from_occ_point(box.CornerMin()),
-                compas_point_from_occ_point(box.CornerMax()),
+                point_to_compas(box.CornerMin()),
+                point_to_compas(box.CornerMax()),
             )
         )
 
@@ -443,10 +443,10 @@ class OCCSurface(Surface):
 
         """
         projector = GeomAPI_ProjectPointOnSurf(
-            compas_point_to_occ_point(point),
+            point_to_occ(point),
             self.occ_surface,
         )
-        point = compas_point_from_occ_point(projector.NearestPoint())
+        point = point_to_compas(projector.NearestPoint())
         if not return_parameters:
             return point
         return point, projector.LowerDistanceParameters()
@@ -469,7 +469,7 @@ class OCCSurface(Surface):
             box.XHSize(),
             box.YHSize(),
             box.ZHSize(),
-            frame=compas_frame_from_occ_ax3(box.Position()),
+            frame=ax3_to_compas(box.Position()),
         )
 
     def intersections_with_line(self, line: Line) -> List[Point]:
@@ -484,13 +484,11 @@ class OCCSurface(Surface):
         list[:class:`~compas.geometry.Point`]
 
         """
-        intersection = GeomAPI_IntCS(
-            Geom_Line(compas_line_to_occ_line(line)), self.occ_surface
-        )
+        intersection = GeomAPI_IntCS(Geom_Line(line_to_occ(line)), self.occ_surface)
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)
-            point = compas_point_from_occ_point(pnt)
+            point = point_to_compas(pnt)
             points.append(point)
         return points
 
@@ -510,6 +508,6 @@ class OCCSurface(Surface):
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)
-            point = compas_point_from_occ_point(pnt)
+            point = point_to_compas(pnt)
             points.append(point)
         return points

@@ -1,6 +1,6 @@
 from compas.geometry import Vector
 
-from compas_occ.conversions.geometry import compas_vector_to_occ_direction
+from compas_occ.conversions.geometry import direction_to_occ
 from compas_occ.geometry.curves.curve import OCCCurve
 from compas_occ.geometry.surfaces.surface import OCCSurface
 
@@ -72,6 +72,6 @@ class OCCExtrusionSurface(OCCSurface):
         None
 
         """
-        direction = compas_vector_to_occ_direction(self.vector)
+        direction = direction_to_occ(self.vector)
         surface = Geom_SurfaceOfLinearExtrusion(self.curve.occ_curve, direction)  # type: ignore
         self.occ_surface = surface

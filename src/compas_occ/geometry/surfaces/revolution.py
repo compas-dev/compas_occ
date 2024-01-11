@@ -1,7 +1,7 @@
 from compas.geometry import Point
 from compas.geometry import Vector
 
-from compas_occ.conversions.geometry import compas_axis_to_occ_axis
+from compas_occ.conversions.geometry import axis_to_occ
 from compas_occ.geometry.curves.curve import OCCCurve
 from compas_occ.geometry.surfaces.surface import OCCSurface
 
@@ -89,6 +89,6 @@ class OCCRevolutionSurface(OCCSurface):
         None
 
         """
-        axis = compas_axis_to_occ_axis((self.point, self.vector))
+        axis = axis_to_occ((self.point, self.vector))
         surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)  # type: ignore
         self.occ_surface = surface
