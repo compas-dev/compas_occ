@@ -2,7 +2,7 @@
 
 from compas.geometry import Box
 from compas.colors import Color
-from compas.brep import Brep
+from compas.geometry import Brep
 from compas_view2.app import App
 
 box = Box.from_width_height_depth(1, 1, 1)

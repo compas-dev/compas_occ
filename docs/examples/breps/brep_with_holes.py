@@ -2,7 +2,7 @@
 
 from compas.geometry import Frame, Plane, Circle
 from compas_occ.brep import OCCBrepEdge, OCCBrepLoop, OCCBrepFace
-from compas.brep import Brep
+from compas.geometry import Brep
 from compas_view2.app import App
 
 circle1 = Circle(1.0, frame=Frame([2, 2, 0]))

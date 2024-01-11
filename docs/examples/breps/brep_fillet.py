@@ -2,7 +2,7 @@
 
 import os
 from compas_view2.app import App
-from compas.brep import Brep
+from compas.geometry import Brep
 
 brep = Brep.from_step(os.path.join(os.path.dirname(__file__), "FCA.stp"))
 letters = list(brep.solids)

@@ -2,7 +2,7 @@
 
 from compas.geometry import Point, Vector, Frame, Circle
 from compas_occ.brep import OCCBrepEdge, OCCBrepLoop, OCCBrepFace
-from compas.brep import Brep
+from compas.geometry import Brep
 from compas.geometry import NurbsCurve, NurbsSurface
 from compas_view2.app import App
 

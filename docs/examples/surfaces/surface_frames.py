@@ -1,7 +1,7 @@
 # type: ignore
 
 from compas.geometry import Point
-from compas.utilities import meshgrid, flatten
+from compas.utilities import meshgrid, flatten, linspace
 from compas_occ.geometry import OCCNurbsSurface
 from compas_view2.app import App
 
@@ -19,7 +19,7 @@ surface = OCCNurbsSurface.from_points(points=points)
 # Frames
 # ==============================================================================
 
-U, V = meshgrid(surface.u_space(), surface.v_space(), "ij")
+U, V = meshgrid(linspace(*surface.domain_u), linspace(*surface.domain_v), "ij")
 frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 # ==============================================================================
