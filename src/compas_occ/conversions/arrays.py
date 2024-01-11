@@ -137,9 +137,9 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
     >>> for point in points1:
     ...     print(point)
     ...
-    Point(0.0, 0.0, z=0.0)
-    Point(1.0, 0.0, z=0.0)
-    Point(2.0, 0.0, z=0.0)
+    Point(x=0.0, y=0.0, z=0.0)
+    Point(x=1.0, y=0.0, z=0.0)
+    Point(x=2.0, y=0.0, z=0.0)
 
     """
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
@@ -236,12 +236,12 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     >>> for i, j in product(range(len(points2)), range(len(points2[0]))):
     ...     print(points2[i][j])
     ...
-    Point(0.0, 0.0, z=0.0)
-    Point(0.0, 1.0, z=0.0)
-    Point(1.0, 0.0, z=0.0)
-    Point(1.0, 1.0, z=0.0)
-    Point(2.0, 0.0, z=0.0)
-    Point(2.0, 1.0, z=0.0)
+    Point(x=0.0, y=0.0, z=0.0)
+    Point(x=0.0, y=1.0, z=0.0)
+    Point(x=1.0, y=0.0, z=0.0)
+    Point(x=1.0, y=1.0, z=0.0)
+    Point(x=2.0, y=0.0, z=0.0)
+    Point(x=2.0, y=1.0, z=0.0)
 
     """
     points = [[None for j in range(array.NbRows())] for i in range(array.NbColumns())]

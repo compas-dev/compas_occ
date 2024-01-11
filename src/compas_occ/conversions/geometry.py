@@ -581,7 +581,7 @@ def point_to_compas(
     >>> from compas_occ.conversions import point_to_compas
     >>> point = gp_Pnt(0, 0, 0)
     >>> point_to_compas(point)
-    Point(0.0, 0.0, z=0.0)
+    Point(x=0.0, y=0.0, z=0.0)
 
     """
     cls = cls or Point
@@ -615,7 +615,7 @@ def point2d_to_compas(
     >>> from compas_occ.conversions import point2d_to_compas
     >>> point = gp_Pnt2d(0, 0)
     >>> point2d_to_compas(point)
-    Point(0.0, 0.0, z=0.0)
+    Point(x=0.0, y=0.0, z=0.0)
 
     """
     cls = cls or Point
@@ -787,7 +787,7 @@ def axis_to_compas(axis: gp_Ax1) -> Tuple[Point, Vector]:
     >>> from compas_occ.conversions import axis_to_compas
     >>> axis = gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0))
     >>> axis_to_compas(axis)
-    (Point(0.0, 0.0, z=0.0), Vector(x=1.0, y=0.0, z=0.0))
+    (Point(x=0.0, y=0.0, z=0.0), Vector(x=1.0, y=0.0, z=0.0))
 
     """
     point = point_to_compas(axis.Location())
@@ -822,7 +822,7 @@ def line_to_compas(
     >>> from compas_occ.conversions import line_to_compas
     >>> line = gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0))
     >>> line_to_compas(line)
-    Line(Point(0.0, 0.0, z=0.0), Point(1.0, 0.0, z=0.0))
+    Line(Point(x=0.0, y=0.0, z=0.0), Point(x=1.0, y=0.0, z=0.0))
 
     """
     cls = cls or Line
@@ -858,7 +858,7 @@ def plane_to_compas(
     >>> from compas_occ.conversions import plane_to_compas
     >>> plane = gp_Pln(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1))
     >>> plane_to_compas(plane)
-    Plane(point=Point(0.0, 0.0, z=0.0), normal=Vector(x=0.0, y=0.0, z=1.0))
+    Plane(point=Point(x=0.0, y=0.0, z=0.0), normal=Vector(x=0.0, y=0.0, z=1.0))
 
     """
     cls = cls or Plane
@@ -895,7 +895,7 @@ def ax2_to_compas(
     >>> from compas_occ.conversions import ax2_to_compas
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> ax2_to_compas(ax2)
-    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
+    Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     cls = cls or Frame
@@ -933,7 +933,7 @@ def ax3_to_compas(
     >>> from compas_occ.conversions import ax3_to_compas
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> ax3_to_compas(ax3)
-    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
+    Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     cls = cls or Frame
@@ -962,7 +962,7 @@ def location_to_compas(location: TopLoc_Location) -> Frame:
     >>> from compas_occ.conversions import location_to_compas
     >>> location = TopLoc_Location()
     >>> location_to_compas(location)
-    Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
+    Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
     """
     t = location.Transformation()
@@ -1004,7 +1004,7 @@ def circle_to_compas(
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> circ = gp_Circ(ax2, 1)
     >>> circle_to_compas(circ)
-    Circle(radius=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    Circle(radius=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Circle
@@ -1043,7 +1043,7 @@ def ellipse_to_compas(
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> elips = gp_Elips(ax2, 1, 0.5)
     >>> ellipse_to_compas(elips)
-    Ellipse(major=1.0, minor=0.5, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    Ellipse(major=1.0, minor=0.5, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Ellipse
@@ -1074,7 +1074,7 @@ def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> hypr = gp_Hypr(ax2, 1, 0.5)
     >>> hyperbola_to_compas(hypr)
-    Hyperbola(major=1.0, minor=0.5, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    Hyperbola(major=1.0, minor=0.5, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
 
     """
     point = point_to_compas(hypr.Location())
@@ -1104,7 +1104,7 @@ def parabola_to_compas(parab: gp_Parab) -> Parabola:
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> parab = gp_Parab(ax2, 1)
     >>> parabola_to_compas(parab)
-    Parabola(length=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    Parabola(focal=2.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
 
     """
     point = point_to_compas(parab.Location())
@@ -1140,7 +1140,7 @@ def bezier_to_compas(bezier: Geom_BezierCurve) -> Bezier:
     >>> array.SetValue(4, gp_Pnt(0, 1, 0))
     >>> bezier = Geom_BezierCurve(array)
     >>> bezier_to_compas(bezier)
-    Bezier(points=[Point(0.0, 0.0, z=0.0), Point(1.0, 0.0, z=0.0), Point(1.0, 1.0, z=0.0), Point(0.0, 1.0, z=0.0)])
+    Bezier(points=[Point(x=0.0, y=0.0, z=0.0), Point(x=1.0, y=0.0, z=0.0), Point(x=1.0, y=1.0, z=0.0), Point(x=0.0, y=1.0, z=0.0)])
 
     """
     points = [point_to_compas(bezier.Pole(i)) for i in range(1, bezier.NbPoles() + 1)]
@@ -1191,7 +1191,7 @@ def cylinder_to_compas(
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> cylinder = gp_Cylinder(ax3, 1)
     >>> cylinder_to_compas(cylinder)
-    Cylinder(radius=1.0, height=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    Cylinder(radius=1.0, height=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Cylinder
@@ -1229,7 +1229,7 @@ def sphere_to_compas(
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> sphere = gp_Sphere(ax3, 1)
     >>> sphere_to_compas(sphere)
-    Sphere(radius=1.0, frame=Frame(point=Point(0.0, 0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    Sphere(radius=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
 
     """
     cls = cls or Sphere
