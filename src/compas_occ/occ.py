@@ -7,7 +7,7 @@ from OCC.Core.TopoDS import TopoDS_Iterator
 
 from compas.geometry import Point
 
-from .conversions import compas_point_from_occ_point
+from .conversions import point_to_compas
 
 
 # =============================================================================
@@ -78,4 +78,4 @@ def compute_shape_centreofmass(occ_shape: TopoDS_Shape) -> Point:
     props = GProp_GProps()
     brepgprop_VolumeProperties(occ_shape, props)
     pnt = props.CentreOfMass()
-    return compas_point_from_occ_point(pnt)
+    return point_to_compas(pnt)
