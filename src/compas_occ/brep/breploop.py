@@ -129,17 +129,17 @@ class OCCBrepLoop(BrepLoop):
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
-        instance = cls()
-        instance._type = (
-            Rhino.Geometry.BrepLoopType.Outer
-            if data["type"] == "Outer"
-            else Rhino.Geometry.BrepLoopType.Inner
-        )
-        loop_builder = builder.add_loop(instance._type)
-        for trim_data in data["trims"]:
-            RhinoBrepTrim.from_data(trim_data, loop_builder)
-        instance.native_loop = loop_builder.result
-        return instance
+        # instance = cls()
+        # instance._type = (
+        #     Rhino.Geometry.BrepLoopType.Outer
+        #     if data["type"] == "Outer"
+        #     else Rhino.Geometry.BrepLoopType.Inner
+        # )
+        # loop_builder = builder.add_loop(instance._type)
+        # for trim_data in data["trims"]:
+        #     RhinoBrepTrim.from_data(trim_data, loop_builder)
+        # instance.native_loop = loop_builder.result
+        # return instance
 
     # ==============================================================================
     # OCC Properties

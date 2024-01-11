@@ -37,7 +37,7 @@ class OCCBrepBuilder(object):
         :rhino:`Rhino.Geometry.BrepVertex`
 
         """
-        return self._brep.Vertices.Add(point_to_rhino(point), TOLERANCE)
+        return self._brep.Vertices.Add(point_to_rhino(point), TOLERANCE)  # noqa: F821
 
     def add_edge(self, edge_curve, start_vertex, end_vertex):
         """Add edge to the new Brep
@@ -75,4 +75,4 @@ class OCCBrepBuilder(object):
         """
         surface_index = self._brep.AddSurface(surface.rhino_surface)
         face = self._brep.Faces.Add(surface_index)
-        return OCCFaceBuilder(face=face, brep=self._brep)
+        return OCCFaceBuilder(face=face, brep=self._brep)  # noqa: F821

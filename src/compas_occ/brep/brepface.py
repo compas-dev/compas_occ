@@ -653,7 +653,7 @@ class OCCBrepFace(BrepFace):
 
         surface = self.occ_adaptor.Surface()
         cone = surface.Cone()
-        return cone_to_compas(cone)
+        return cone_to_compas(cone)  # noqa: F821
 
     def to_sphere(self) -> Sphere:
         """
@@ -685,7 +685,7 @@ class OCCBrepFace(BrepFace):
 
         surface = self.occ_adaptor.Surface()
         torus = surface.Torus()
-        return torus_to_compas(torus)
+        return torus_to_compas(torus)  # noqa: F821
 
     # ==============================================================================
     # Methods

@@ -78,6 +78,7 @@ __all__ = [
     "plane_to_compas",
     "point_to_compas",
     "point2d_to_compas",
+    "sphere_to_compas",
     "vector_to_compas",
     "vector2d_to_compas",
     "axis_to_occ",
