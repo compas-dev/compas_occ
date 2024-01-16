@@ -1,7 +1,6 @@
 # type: ignore
 
-from compas.geometry import Point
-from compas.geometry import Polyline, Bezier
+from compas.geometry import Point, Polyline, Bezier
 from compas_occ.geometry import OCCNurbsCurve
 from compas_view2.app import App
 
@@ -60,7 +59,7 @@ curve6 = OCCNurbsCurve.from_parameters(
 )
 
 # ==============================================================================
-# Visualisation
+# Visualization
 # ==============================================================================
 
 view = App()

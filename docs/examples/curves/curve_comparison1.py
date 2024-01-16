@@ -1,7 +1,6 @@
 # type: ignore
 
-from compas.geometry import Point
-from compas.geometry import Polyline, Bezier
+from compas.geometry import Point, Polyline, Bezier
 from compas.geometry import NurbsCurve
 from compas_view2.app import App
 
@@ -36,7 +35,7 @@ curve3 = NurbsCurve.from_parameters(
 )
 
 # ==============================================================================
-# Visualisation
+# Visualization
 # ==============================================================================
 
 view = App()

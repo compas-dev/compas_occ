@@ -13,8 +13,11 @@ curve1 = NurbsCurve.from_points(points1)
 # this doesn't make much sense from an API pov
 # should be like with intersections
 parameters, distance = curve0.closest_parameters_curve(curve1, return_distance=True)
-
 points = curve0.closest_points_curve(curve1, return_distance=False)
+
+# =============================================================================
+# Visualization
+# =============================================================================
 
 view = App()
 

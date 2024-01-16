@@ -2,13 +2,13 @@
 
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_occ.geometry import OCCNurbsCurve
+from compas.geometry import NurbsCurve
 from compas_view2.app import App
 
 
 points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 
-curve = OCCNurbsCurve.from_parameters(
+curve = NurbsCurve.from_parameters(
     points=points,
     weights=[1.0, 1.0, 1.0, 1.0],
     knots=[0.0, 1.0],
