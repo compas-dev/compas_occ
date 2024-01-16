@@ -77,7 +77,7 @@ intersphinx_mapping = {
 
 # linkcode
 
-linkcode_resolve = sphinx_compas2_theme.get_linkcode_resolve(organization, package)
+# linkcode_resolve = sphinx_compas2_theme.get_linkcode_resolve(organization, package)
 
 # extlinks
 
