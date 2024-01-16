@@ -1,5 +1,4 @@
 # type: ignore
-
 from compas.geometry import Frame
 from compas.geometry import Box, Cylinder
 from compas_view2.app import App
@@ -26,5 +25,4 @@ viewer.view.camera.rx = -75
 viewer.view.camera.distance = 7
 
 viewer.add(result, linewidth=2)
-
 viewer.run()

@@ -1,18 +1,19 @@
 # type: ignore
-
 from compas.geometry import Box
 from compas.colors import Color
 from compas.geometry import Brep
 from compas_view2.app import App
 
-box = Box.from_width_height_depth(1, 1, 1)
-A = Brep.from_box(box)
+box = Box(1).to_brep()
 
-vertex = A.vertices[0]
+vertex = box.vertices[0]
+vertices = box.vertex_neighbors(vertex)
+edges = box.vertex_edges(vertex)
+faces = box.vertex_faces(vertex)
 
-vertices = A.vertex_neighbors(vertex)
-edges = A.vertex_edges(vertex)
-faces = A.vertex_faces(vertex)
+# =============================================================================
+# Visualization
+# =============================================================================
 
 viewer = App()
 viewer.view.camera.position = [2, -4, 1]
@@ -30,6 +31,5 @@ for face in faces:
     brep = Brep.from_brepfaces([face])
     viewer.add(brep, opacity=0.5)
 
-viewer.add(A, linewidth=2, linecolor=Color(0.2, 0.2, 0.2), show_faces=False)
-
+viewer.add(box, linewidth=2, linecolor=Color(0.2, 0.2, 0.2), show_faces=False)
 viewer.show()

@@ -1,16 +1,25 @@
 # type: ignore
-
-import os
+from pathlib import Path
 from compas_view2.app import App
 from compas.geometry import Brep
 
-brep = Brep.from_step(os.path.join(os.path.dirname(__file__), "FCA.stp"))
+# Load the brep from a STEP file
+# and extract the individual letters.
+
+filepath = Path(__file__).parent / "FCA.stp"
+brep = Brep.from_step(filepath)
 letters = list(brep.solids)
+
+# Make sure the letters are valid solids.
 
 for letter in letters:
     letter.heal()
     letter.make_solid()
 
+# For each letter, exclude the edges that are too short and the edges connected to it,
+# and fillet the rest.
+
+for letter in letters:
     exclude = []
     for loop in letter.loops:
         do_fillet = True
@@ -27,6 +36,10 @@ for letter in letters:
                     exclude.append(edge)
 
     letter.fillet(0.1, exclude=exclude)
+
+# =============================================================================
+# Visualization
+# =============================================================================
 
 viewer = App()
 viewer.view.camera.position = [5, -1, 10]

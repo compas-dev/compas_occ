@@ -1,7 +1,10 @@
 # type: ignore
-
 from compas.geometry import Point, Vector, Frame, Circle
-from compas_occ.brep import OCCBrepEdge, OCCBrepLoop, OCCBrepFace
+from compas_occ.brep import (
+    OCCBrepEdge,
+    OCCBrepLoop,
+    OCCBrepFace,
+)  # this should be included in the compas API
 from compas.geometry import Brep
 from compas.geometry import NurbsCurve, NurbsSurface
 from compas_view2.app import App
@@ -41,6 +44,10 @@ face = OCCBrepFace.from_surface(surface)
 face.add_loop(loop)
 
 brep = Brep.from_brepfaces([face])
+
+# =============================================================================
+# Visualization
+# =============================================================================
 
 viewer = App()
 viewer.add(brep, linewidth=2)

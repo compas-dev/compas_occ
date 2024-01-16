@@ -1,5 +1,4 @@
 # type: ignore
-
 from math import radians
 from compas.geometry import Box
 from compas.geometry import Plane
@@ -13,6 +12,10 @@ plane = Plane.worldXY()
 plane.transform(R)
 
 trimmed = box.trimmed(plane)
+
+# =============================================================================
+# Visualization
+# =============================================================================
 
 viewer = App()
 viewer.view.camera.position = [2, -4, 1]

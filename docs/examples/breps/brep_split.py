@@ -1,8 +1,7 @@
 # type: ignore
-
 from math import radians
 from compas.geometry import Box, Plane, Rotation
-from compas.geometry import is_point_infront_plane
+from compas.geometry import is_point_infrontof_plane
 from compas.colors import Color
 from compas_occ.brep import OCCBrep as Brep
 from compas_view2.app import App
@@ -15,14 +14,20 @@ plane.transform(R)
 
 result = box.split(Brep.from_planes([plane]))
 
+# =============================================================================
+# Visualization
+# =============================================================================
+
 viewer = App()
 viewer.view.camera.position = [2, -4, 1]
 viewer.view.camera.look_at([0, 0, 0])
 
-viewer.add(plane, linewidth=2, opacity=0.3)
+viewer.add(
+    plane, linewidth=2, opacity=0.3
+)  # there is a debug print statement in the viewer that needs to be removed
 
 for brep in result:
-    if is_point_infront_plane(brep.centroid, plane):
+    if is_point_infrontof_plane(brep.centroid, plane):
         viewer.add(
             brep,
             facecolor=Color.red().lightened(50),
