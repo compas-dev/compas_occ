@@ -54,6 +54,11 @@ def from_extrusion(*args, **kwargs):
 
 
 @plugin(category="factories", requires=["compas_occ"])
+def from_iges(*args, **kwargs):
+    return OCCBrep.from_iges(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["compas_occ"])
 def from_mesh(*args, **kwargs):
     return OCCBrep.from_mesh(*args, **kwargs)
 
