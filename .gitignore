@@ -122,3 +122,5 @@ conda.recipe/
 __*.stp
 
 scripts/__floor
+
+docs/examples/breps/booleans.iges
