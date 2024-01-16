@@ -1,7 +1,4 @@
-from __future__ import print_function
-
 import os
-
 
 __author__ = ["tom van mele"]
 __copyright__ = "Block Research Group - ETH Zurich"
