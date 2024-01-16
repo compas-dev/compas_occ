@@ -9,9 +9,9 @@ Curve Segmentation
 .. literalinclude:: curve_segmentation.py
     :language: python
 
-.. code-block:: text
+.. .. code-block:: text
 
-    (0.2, 0.5)
+..     (0.2, 0.5)
     
-    (0.0, 1.0)
-    (0.2, 0.5)
+..     (0.0, 1.0)
+..     (0.2, 0.5)

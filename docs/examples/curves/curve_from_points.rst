@@ -9,20 +9,20 @@ Curve From Control Points
 .. literalinclude:: curve_from_points.py
     :language: python
 
-.. code-block:: python
+.. .. code-block:: python
 
-    print(curve)
+..     print(curve)
 
-.. code-block:: text
+.. .. code-block:: text
 
-    BSplineCurve
-    ------------
-    Poles: [Point(0.000, 0.000, 0.000), Point(3.000, 6.000, 0.000), Point(6.000, -3.000, 3.000), Point(10.000, 0.000, 0.000)]
-    Knots: [0.0, 1.0]
-    Mults: [4, 4]
-    Degree: 3
-    Order: 4
-    Domain: (0.0, 1.0)
-    Closed: False
-    Periodic: False
-    Rational: False
+..     BSplineCurve
+..     ------------
+..     Poles: [Point(0.000, 0.000, 0.000), Point(3.000, 6.000, 0.000), Point(6.000, -3.000, 3.000), Point(10.000, 0.000, 0.000)]
+..     Knots: [0.0, 1.0]
+..     Mults: [4, 4]
+..     Degree: 3
+..     Order: 4
+..     Domain: (0.0, 1.0)
+..     Closed: False
+..     Periodic: False
+..     Rational: False

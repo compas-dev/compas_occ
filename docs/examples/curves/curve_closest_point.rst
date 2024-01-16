@@ -9,6 +9,6 @@ Curve Closest Point
 .. literalinclude:: curve_closest_point.py
     :language: python
 
-.. code-block:: text
+.. .. code-block:: text
 
-    True
+..     True
