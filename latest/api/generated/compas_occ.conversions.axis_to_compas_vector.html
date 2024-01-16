@@ -178,7 +178,7 @@
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../../api.html">
                         API Reference
                       </a>
@@ -366,7 +366,7 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../../api.html">
                         API Reference
                       </a>
@@ -481,15 +481,123 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/curves/index.html">Curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/surfaces/index.html">Surfaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/breps/index.html">Breps</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/curves/index.html">Curves</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_closest_point.html">Curve Closest Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_comparison1.html">Curve Comparison 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_divide.html">Curve Divide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_circle.html">Curve From Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_interpolation.html">Curve From Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_line.html">Curve From Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_parameters.html">Curve From Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_points.html">Curve From Control Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_joining.html">Curve Joining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_segmentation.html">Curve Segmentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../compas_occ.brep.html">compas_occ.brep</a></li>
-<li class="toctree-l2 current active"><a class="reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/surfaces/index.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_fill.html">Surface From Fill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_parameters.html">Surface From Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_points.html">Surface From Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_isocurves.html">Surface Isocurves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_of_revolution.html">Surface of Revolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_random.html">Surface With Random Control Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_spacepoints.html">Surface Points Over UV Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_viewobject.html">Surface Visualisation With View Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_explorer.html">Explore Brep Topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_fillet.html">Add a Fillet to the Edges of a Brep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_from_booleans.html">Brep Shape From Booleans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_from_mesh.html">Brep From Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_overlap.html">Find the Overlap Between Two Breps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_slice.html">Slice a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_split.html">Split a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_trim.html">Trim a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_with_hole.html">Brep with Hole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_with_holes.html">Brep with Holes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.brep.html">compas_occ.brep</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrep.html">OCCBrep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.html">OCCBrepVertex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.html">OCCBrepEdge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.html">OCCBrepLoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.html">OCCBrepFace</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_floats1.html">array1_from_floats1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_integers1.html">array1_from_integers1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_points1.html">array1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_floats2.html">array2_from_floats2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_points2.html">array2_from_points2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ax2_to_compas.html">ax2_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ax3_to_compas.html">ax3_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.axis_to_compas.html">axis_to_compas</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">axis_to_compas_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.axis_to_occ.html">axis_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.bezier_to_compas.html">bezier_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.bspline_to_compas.html">bspline_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.circle_to_compas.html">circle_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.circle_to_occ.html">circle_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_mesh_to_occ_shell.html">compas_mesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_quadmesh_to_occ_shell.html">compas_quadmesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_transformation_to_trsf.html">compas_transformation_to_trsf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_trimesh_to_occ_shell.html">compas_trimesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cone_to_occ.html">cone_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cylinder_to_compas.html">cylinder_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cylinder_to_occ.html">cylinder_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.direction_to_compas.html">direction_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.direction_to_occ.html">direction_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ellipse_to_compas.html">ellipse_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ellipse_to_occ.html">ellipse_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.floats2_from_array2.html">floats2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.frame_to_occ_ax2.html">frame_to_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.frame_to_occ_ax3.html">frame_to_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.harray1_from_points1.html">harray1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.hyperbola_to_compas.html">hyperbola_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.line_to_compas.html">line_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.line_to_occ.html">line_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.location_to_compas.html">location_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ngon_to_face.html">ngon_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.parabola_to_compas.html">parabola_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_compas.html">plane_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ.html">plane_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ_ax2.html">plane_to_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ_ax3.html">plane_to_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point2d_to_compas.html">point2d_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point_to_compas.html">point_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point_to_occ.html">point_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points1_from_array1.html">points1_from_array1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points2_from_array2.html">points2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.quad_to_face.html">quad_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.sphere_to_compas.html">sphere_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.sphere_to_occ.html">sphere_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.torus_to_occ.html">torus_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.triangle_to_face.html">triangle_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector2d_to_compas.html">vector2d_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector_to_compas.html">vector_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector_to_occ.html">vector_to_occ</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../compas_occ.geometry.curves.html">Curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../compas_occ.geometry.surfaces.html">Surfaces</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>

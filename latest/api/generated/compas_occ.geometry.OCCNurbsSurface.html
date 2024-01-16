@@ -178,7 +178,7 @@
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../../api.html">
                         API Reference
                       </a>
@@ -366,7 +366,7 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item">
+                    <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../../api.html">
                         API Reference
                       </a>
@@ -481,15 +481,123 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/curves/index.html">Curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/surfaces/index.html">Surfaces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/breps/index.html">Breps</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/curves/index.html">Curves</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_closest_parameters_curve.html">Curve Closest Parameters Curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_closest_point.html">Curve Closest Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_comparison1.html">Curve Comparison 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_comparison2.html">Curve Comparison 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_divide.html">Curve Divide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_circle.html">Curve From Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_interpolation.html">Curve From Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_line.html">Curve From Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_parameters.html">Curve From Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_points.html">Curve From Control Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_joining.html">Curve Joining</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_segmentation.html">Curve Segmentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../compas_occ.brep.html">compas_occ.brep</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a></li>
-<li class="toctree-l2 current active"><a class="reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/surfaces/index.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_frames.html">Surface Frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_fill.html">Surface From Fill</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_parameters.html">Surface From Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_points.html">Surface From Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_intersections_with_line.html">Surface Intersections With Line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_isocurves.html">Surface Isocurves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_jsondata.html">Surface JSON Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_of_revolution.html">Surface of Revolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_random.html">Surface With Random Control Points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_spacepoints.html">Surface Points Over UV Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_viewobject.html">Surface Visualisation With View Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_explorer.html">Explore Brep Topology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_fillet.html">Add a Fillet to the Edges of a Brep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_from_booleans.html">Brep Shape From Booleans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_from_mesh.html">Brep From Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_overlap.html">Find the Overlap Between Two Breps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_slice.html">Slice a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_split.html">Split a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_trim.html">Trim a Brep With a Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_with_hole.html">Brep with Hole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/breps/brep_with_holes.html">Brep with Holes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.brep.html">compas_occ.brep</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrep.html">OCCBrep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepVertex.html">OCCBrepVertex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.html">OCCBrepEdge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepLoop.html">OCCBrepLoop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.brep.OCCBrepFace.html">OCCBrepFace</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../compas_occ.conversions.html">compas_occ.conversions</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_floats1.html">array1_from_floats1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_integers1.html">array1_from_integers1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array1_from_points1.html">array1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_floats2.html">array2_from_floats2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.array2_from_points2.html">array2_from_points2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ax2_to_compas.html">ax2_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ax3_to_compas.html">ax3_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.axis_to_compas.html">axis_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.axis_to_compas_vector.html">axis_to_compas_vector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.axis_to_occ.html">axis_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.bezier_to_compas.html">bezier_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.bspline_to_compas.html">bspline_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.circle_to_compas.html">circle_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.circle_to_occ.html">circle_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_mesh_to_occ_shell.html">compas_mesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_quadmesh_to_occ_shell.html">compas_quadmesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_transformation_to_trsf.html">compas_transformation_to_trsf</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.compas_trimesh_to_occ_shell.html">compas_trimesh_to_occ_shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cone_to_occ.html">cone_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cylinder_to_compas.html">cylinder_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.cylinder_to_occ.html">cylinder_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.direction_to_compas.html">direction_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.direction_to_occ.html">direction_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ellipse_to_compas.html">ellipse_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ellipse_to_occ.html">ellipse_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.floats2_from_array2.html">floats2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.frame_to_occ_ax2.html">frame_to_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.frame_to_occ_ax3.html">frame_to_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.harray1_from_points1.html">harray1_from_points1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.hyperbola_to_compas.html">hyperbola_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.line_to_compas.html">line_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.line_to_occ.html">line_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.location_to_compas.html">location_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.ngon_to_face.html">ngon_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.parabola_to_compas.html">parabola_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_compas.html">plane_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ.html">plane_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ_ax2.html">plane_to_occ_ax2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.plane_to_occ_ax3.html">plane_to_occ_ax3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point2d_to_compas.html">point2d_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point_to_compas.html">point_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.point_to_occ.html">point_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points1_from_array1.html">points1_from_array1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.points2_from_array2.html">points2_from_array2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.quad_to_face.html">quad_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.sphere_to_compas.html">sphere_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.sphere_to_occ.html">sphere_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.torus_to_occ.html">torus_to_occ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.triangle_to_face.html">triangle_to_face</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector2d_to_compas.html">vector2d_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector_to_compas.html">vector_to_compas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compas_occ.conversions.vector_to_occ.html">vector_to_occ</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../compas_occ.geometry.html">compas_occ.geometry</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../compas_occ.geometry.curves.html">Curves</a></li>
+<li class="toctree-l3 current active"><a class="reference internal" href="../compas_occ.geometry.surfaces.html">Surfaces</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
@@ -706,80 +814,86 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_json.html#compas_occ.geometry.OCCNurbsSurface.from_json" title="compas_occ.geometry.OCCNurbsSurface.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
 <td><p>Construct an object of this type from a JSON file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_meshgrid.html#compas_occ.geometry.OCCNurbsSurface.from_meshgrid" title="compas_occ.geometry.OCCNurbsSurface.from_meshgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_meshgrid</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.from_jsonstring" title="compas_occ.geometry.OCCNurbsSurface.from_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_jsonstring</span></code></a></p></td>
+<td><p>Construct an object of this type from a JSON string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_meshgrid.html#compas_occ.geometry.OCCNurbsSurface.from_meshgrid" title="compas_occ.geometry.OCCNurbsSurface.from_meshgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_meshgrid</span></code></a></p></td>
 <td><p>Construct a NURBS surface from a mesh grid.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_obj.html#compas_occ.geometry.OCCNurbsSurface.from_obj" title="compas_occ.geometry.OCCNurbsSurface.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_obj</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_obj.html#compas_occ.geometry.OCCNurbsSurface.from_obj" title="compas_occ.geometry.OCCNurbsSurface.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_obj</span></code></a></p></td>
 <td><p>Load a surface from an OBJ file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_occ.html#compas_occ.geometry.OCCNurbsSurface.from_occ" title="compas_occ.geometry.OCCNurbsSurface.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_occ.html#compas_occ.geometry.OCCNurbsSurface.from_occ" title="compas_occ.geometry.OCCNurbsSurface.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
 <td><p>Construct a NUBRS surface from an existing OCC BSplineSurface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_plane.html#compas_occ.geometry.OCCNurbsSurface.from_plane" title="compas_occ.geometry.OCCNurbsSurface.from_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_plane</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_plane.html#compas_occ.geometry.OCCNurbsSurface.from_plane" title="compas_occ.geometry.OCCNurbsSurface.from_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_plane</span></code></a></p></td>
 <td><p>Construct a surface from a plane.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_curvature_at</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_curvature_at</span></code></a></p></td>
 <td><p>Compute the Gaussian curvature at a point on the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_curve</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_curve</span></code></a></p></td>
 <td><p>Compute the intersections with a curve.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_line</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_line</span></code></a></p></td>
 <td><p>Compute the intersections with a line.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_plane</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_plane</span></code></a></p></td>
 <td><p>Compute the intersections with a plane.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u" title="compas_occ.geometry.OCCNurbsSurface.isocurve_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_u</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u" title="compas_occ.geometry.OCCNurbsSurface.isocurve_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_u</span></code></a></p></td>
 <td><p>Compute the isoparametric curve at parameter u.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v" title="compas_occ.geometry.OCCNurbsSurface.isocurve_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_v</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v" title="compas_occ.geometry.OCCNurbsSurface.isocurve_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_v</span></code></a></p></td>
 <td><p>Compute the isoparametric curve at parameter v.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_curvature_at</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_curvature_at</span></code></a></p></td>
 <td><p>Compute the mean curvature at a point on the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.normal_at.html#compas_occ.geometry.OCCNurbsSurface.normal_at" title="compas_occ.geometry.OCCNurbsSurface.normal_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_at</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.normal_at.html#compas_occ.geometry.OCCNurbsSurface.normal_at" title="compas_occ.geometry.OCCNurbsSurface.normal_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_at</span></code></a></p></td>
 <td><p>Compute a normal at a point on the surface.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb" title="compas_occ.geometry.OCCNurbsSurface.obb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obb</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb" title="compas_occ.geometry.OCCNurbsSurface.obb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obb</span></code></a></p></td>
 <td><p>Compute the oriented bounding box of the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.point_at.html#compas_occ.geometry.OCCNurbsSurface.point_at" title="compas_occ.geometry.OCCNurbsSurface.point_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_at</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.point_at.html#compas_occ.geometry.OCCNurbsSurface.point_at" title="compas_occ.geometry.OCCNurbsSurface.point_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_at</span></code></a></p></td>
 <td><p>Compute a point on the surface.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid" title="compas_occ.geometry.OCCNurbsSurface.pointgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointgrid</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid" title="compas_occ.geometry.OCCNurbsSurface.pointgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointgrid</span></code></a></p></td>
 <td><p>Compute point locations corresponding to evenly spaced parameters over the surface domain.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate" title="compas_occ.geometry.OCCNurbsSurface.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate" title="compas_occ.geometry.OCCNurbsSurface.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a></p></td>
 <td><p>Rotate the geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated" title="compas_occ.geometry.OCCNurbsSurface.rotated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotated</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated" title="compas_occ.geometry.OCCNurbsSurface.rotated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotated</span></code></a></p></td>
 <td><p>Returns a rotated copy of this geometry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale" title="compas_occ.geometry.OCCNurbsSurface.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale" title="compas_occ.geometry.OCCNurbsSurface.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
 <td><p>Scale the geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled" title="compas_occ.geometry.OCCNurbsSurface.scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaled</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled" title="compas_occ.geometry.OCCNurbsSurface.scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaled</span></code></a></p></td>
 <td><p>Returns a scaled copy of this geometry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.sha256.html#compas_occ.geometry.OCCNurbsSurface.sha256" title="compas_occ.geometry.OCCNurbsSurface.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.sha256.html#compas_occ.geometry.OCCNurbsSurface.sha256" title="compas_occ.geometry.OCCNurbsSurface.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
 <td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u" title="compas_occ.geometry.OCCNurbsSurface.space_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_u</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u" title="compas_occ.geometry.OCCNurbsSurface.space_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_u</span></code></a></p></td>
 <td><p>Compute evenly spaced parameters over the surface domain in the U direction.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v" title="compas_occ.geometry.OCCNurbsSurface.space_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_v</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v" title="compas_occ.geometry.OCCNurbsSurface.space_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_v</span></code></a></p></td>
 <td><p>Compute evenly spaced parameters over the surface domain in the V direction.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep" title="compas_occ.geometry.OCCNurbsSurface.to_brep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_brep</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep" title="compas_occ.geometry.OCCNurbsSurface.to_brep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_brep</span></code></a></p></td>
 <td><p>Convert the surface to a BREP representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_data.html#compas_occ.geometry.OCCNurbsSurface.to_data" title="compas_occ.geometry.OCCNurbsSurface.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_data.html#compas_occ.geometry.OCCNurbsSurface.to_data" title="compas_occ.geometry.OCCNurbsSurface.to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_data</span></code></a></p></td>
 <td><p>Convert an object to its native data representation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json" title="compas_occ.geometry.OCCNurbsSurface.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json" title="compas_occ.geometry.OCCNurbsSurface.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
 <td><p>Convert an object to its native data representation and save it to a JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.to_jsonstring" title="compas_occ.geometry.OCCNurbsSurface.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<td><p>Convert an object to its native data representation and save it to a JSON string.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_mesh.html#compas_occ.geometry.OCCNurbsSurface.to_mesh" title="compas_occ.geometry.OCCNurbsSurface.to_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_mesh</span></code></a></p></td>
 <td><p>Convert the surface to a mesh.</p></td>
