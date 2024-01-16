@@ -131,7 +131,7 @@ html_theme_options = {
         "image_dark": "_static/compas_icon_white.png",
         "text": project,
     },
-    "navigation_depth": 2,
+    "navigation_depth": 3,
 }
 
 
