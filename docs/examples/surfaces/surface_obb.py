@@ -3,7 +3,7 @@
 from math import radians
 from compas.geometry import Point, Translation, Rotation
 from compas.geometry import Polyline
-from compas_occ.geometry import OCCNurbsSurface
+from compas.geometry import NurbsSurface
 from compas_view2.app import App
 
 
@@ -14,7 +14,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0), Point(4, 3, 0)],
 ]
 
-surface = OCCNurbsSurface.from_points(points=points)
+surface = NurbsSurface.from_points(points=points)
 
 T = Translation.from_vector([0, -1.5, 0])
 R = Rotation.from_axis_and_angle([0, 0, 1], radians(45))
@@ -46,7 +46,6 @@ for row in surface.points:
 for col in zip(*surface.points):
     view.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
 
-view.add(surface.to_mesh())
+view.add(surface)
 view.add(box, show_faces=False)
-
 view.run()

@@ -2,13 +2,19 @@
 
 from compas.geometry import Vector
 from compas.geometry import Circle
-from compas_occ.geometry import OCCNurbsCurve
-from compas_occ.geometry import OCCNurbsSurface
+from compas.geometry import NurbsCurve
+from compas_occ.geometry import (
+    OCCNurbsSurface as NurbsSurface,
+)  # this should be added to the pluggable API
 from compas_view2.app import App
 
-curve = OCCNurbsCurve.from_circle(Circle(2.0))
+curve = NurbsCurve.from_circle(Circle(2.0))
 
-surface = OCCNurbsSurface.from_extrusion(curve, Vector(0, 0, 5))
+surface = NurbsSurface.from_extrusion(curve, Vector(0, 0, 5))
+
+# =============================================================================
+# Visualisation
+# =============================================================================
 
 viewer = App()
 viewer.view.camera.position = [-5, -10, 4]

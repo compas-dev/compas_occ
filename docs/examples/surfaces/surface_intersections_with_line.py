@@ -5,7 +5,7 @@ from compas.geometry import Point, Vector, Line, Polyline
 from compas.geometry import Rotation
 from compas.geometry import centroid_points_xy
 from compas.utilities import flatten
-from compas_occ.geometry import OCCNurbsSurface
+from compas.geometry import NurbsSurface
 
 from compas_view2.app import App
 from compas_view2.objects import Collection
@@ -17,7 +17,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-surface = OCCNurbsSurface.from_points(points=points)
+surface = NurbsSurface.from_points(points=points)
 
 # ==============================================================================
 # Intersections
@@ -66,7 +66,7 @@ for col in zip(*surface.points):
         linecolor=(0.3, 0.3, 0.3),
     )
 
-view.add(Collection(intersections), pointsize=30, pointcolor=(0, 0, 1))
+view.add(Collection(intersections), pointsize=20, pointcolor=(0, 0, 1))
 
 for x in intersections:
     view.add(
@@ -74,5 +74,4 @@ for x in intersections:
     )
 
 view.add(surface)
-
 view.run()

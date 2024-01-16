@@ -2,8 +2,9 @@
 
 from compas.geometry import Point
 from compas.utilities import meshgrid, flatten, linspace
-from compas_occ.geometry import OCCNurbsSurface
+from compas.geometry import NurbsSurface
 from compas_view2.app import App
+from compas_view2.objects import Collection
 
 
 points = [
@@ -13,7 +14,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-surface = OCCNurbsSurface.from_points(points=points)
+surface = NurbsSurface.from_points(points=points)
 
 # ==============================================================================
 # Frames
@@ -29,8 +30,6 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 view = App()
 
 view.add(surface, show_lines=False)
-
-for frame in frames:
-    view.add(frame, size=0.3, pointsize=0.25)
+view.add(Collection(frames, [{"size": 0.1} for frame in frames]), pointsize=0.25)
 
 view.run()

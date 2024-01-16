@@ -2,7 +2,7 @@
 
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas_occ.geometry import OCCNurbsSurface
+from compas.geometry import NurbsSurface
 from compas_view2.app import App
 
 points = [
@@ -12,7 +12,7 @@ points = [
     [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
 ]
 
-surface = OCCNurbsSurface.from_points(points=points)
+surface = NurbsSurface.from_points(points=points)
 
 # ==============================================================================
 # Visualisation
@@ -40,6 +40,5 @@ for col in zip(*surface.points):
         linecolor=(0.3, 0.3, 0.3),
     )
 
-view.add(surface.to_mesh(nu=100))
-
+view.add(surface)
 view.run()
