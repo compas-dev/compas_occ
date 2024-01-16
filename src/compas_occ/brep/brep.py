@@ -398,7 +398,7 @@ class OCCBrep(Brep):
         """
         from OCC.Extend.DataExchange import read_step_file
 
-        shape = read_step_file(filename)
+        shape = read_step_file(str(filename))
         return cls.from_native(shape)  # type: ignore
 
     @classmethod
@@ -417,7 +417,7 @@ class OCCBrep(Brep):
         """
         from OCC.Extend.DataExchange import read_iges_file
 
-        shape = read_iges_file(filename)
+        shape = read_iges_file(str(filename))
         return cls.from_native(shape)  # type: ignore
 
     def to_step(self, filepath: str, schema: str = "AP203", unit: str = "MM") -> None:
@@ -446,7 +446,7 @@ class OCCBrep(Brep):
         step_writer = STEPControl_Writer()
         Interface_Static.SetCVal("write.step.unit", unit)
         step_writer.Transfer(self.occ_shape, STEPControl_AsIs)
-        status = step_writer.Write(filepath)
+        status = step_writer.Write(str(filepath))
         assert status == IFSelect_RetDone, status
 
     def to_stl(
@@ -483,7 +483,7 @@ class OCCBrep(Brep):
         stl_writer = StlAPI_Writer()
         stl_writer.SetASCIIMode(True)
 
-        return stl_writer.Write(self.occ_shape, filepath)
+        return stl_writer.Write(self.occ_shape, str(filepath))
 
     def to_iges(self, filepath: str) -> bool:
         """
@@ -506,7 +506,7 @@ class OCCBrep(Brep):
             raise Exception("Failed to add shape to IGES writer.")
 
         iges_writer.ComputeModel()
-        return iges_writer.Write(filepath)
+        return iges_writer.Write(str(filepath))
 
     # ==============================================================================
     # Constructors
@@ -1464,7 +1464,7 @@ class OCCBrep(Brep):
         """
         from compas_occ.occ import split_shapes
         from compas_occ.occ import compute_shape_centreofmass
-        from compas.geometry import is_point_infront_plane
+        from compas.geometry import is_point_infrontof_plane
 
         if isinstance(plane, Frame):
             plane = Plane.from_frame(plane)
@@ -1476,7 +1476,7 @@ class OCCBrep(Brep):
         occ_shape = None
         for test in results:
             point = compute_shape_centreofmass(test)
-            if is_point_infront_plane(point, plane):
+            if is_point_infrontof_plane(point, plane):
                 occ_shape = test
                 break
         if occ_shape:
