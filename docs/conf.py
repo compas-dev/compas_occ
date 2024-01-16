@@ -31,7 +31,6 @@ else:
 # -- Extension configuration ------------------------------------------------
 
 extensions = sphinx_compas2_theme.default_extensions
-extensions.remove("sphinx.ext.linkcode")
 
 # numpydoc options
 
@@ -68,11 +67,6 @@ autosummary_mock_imports = sphinx_compas2_theme.default_mock_imports
 # graph options
 
 # plot options
-
-plot_include_source = False
-plot_html_show_source_link = False
-plot_html_show_formats = False
-plot_formats = ["png"]
 
 # intersphinx options
 
