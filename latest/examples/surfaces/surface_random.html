@@ -60,7 +60,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Surface Points Over UV Space" href="surface_spacepoints.html" />
-    <link rel="prev" title="Surface of Revolution" href="surface_of_revolution.html" />
+    <link rel="prev" title="Surface JSON Data" href="surface_jsondata.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -504,10 +504,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Surface With Random Control Points</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_spacepoints.html">Surface Points Over UV Space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -673,13 +671,13 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsSurface</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsSurface</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
 <span class="n">U</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">V</span> <span class="o">=</span> <span class="mi">20</span>
 
-<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_meshgrid</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="n">V</span><span class="p">)</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">NurbsSurface</span><span class="o">.</span><span class="n">from_meshgrid</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="n">U</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="n">V</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Update</span>

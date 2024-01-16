@@ -59,7 +59,7 @@
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Surface Visualisation With View Object" href="surface_viewobject.html" />
+    <link rel="next" title="Breps" href="../breps/index.html" />
     <link rel="prev" title="Surface With Random Control Points" href="surface_random.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -504,10 +504,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Surface Points Over UV Space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -669,9 +667,12 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../../_images/example_surface_spacepoints.png" class="figure-img img-fluid" src="../../_images/example_surface_spacepoints.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># type: ignore</span>
+
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsSurface</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsSurface</span>
+<span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">flatten</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 <span class="kn">from</span> <span class="nn">compas_view2.objects</span> <span class="kn">import</span> <span class="n">Collection</span>
 
@@ -683,13 +684,14 @@ document.write(`
     <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
 <span class="p">]</span>
 
-<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">NurbsSurface</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Points over UV space</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">spacepoints</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">xyz</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">U</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">surface</span><span class="o">.</span><span class="n">domain_u</span><span class="p">),</span> <span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">surface</span><span class="o">.</span><span class="n">domain_v</span><span class="p">),</span> <span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+<span class="n">spacepoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">surface</span><span class="o">.</span><span class="n">point_at</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">U</span><span class="p">),</span> <span class="n">flatten</span><span class="p">(</span><span class="n">V</span><span class="p">))]</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Visualisation</span>
@@ -717,10 +719,8 @@ document.write(`
         <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
     <span class="p">)</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(),</span> <span class="n">show_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
+<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="n">spacepoints</span><span class="p">))</span>
-
 <span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>

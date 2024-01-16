@@ -504,10 +504,8 @@ document.write(`
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Surface Intersections With Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_spacepoints.html">Surface Points Over UV Space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -676,7 +674,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Rotation</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">centroid_points_xy</span>
 <span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">flatten</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsSurface</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsSurface</span>
 
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 <span class="kn">from</span> <span class="nn">compas_view2.objects</span> <span class="kn">import</span> <span class="n">Collection</span>
@@ -688,7 +686,7 @@ document.write(`
     <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
 <span class="p">]</span>
 
-<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">NurbsSurface</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">)</span>
 
 <span class="c1"># ==============================================================================</span>
 <span class="c1"># Intersections</span>
@@ -737,7 +735,7 @@ document.write(`
         <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
     <span class="p">)</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="n">intersections</span><span class="p">),</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Collection</span><span class="p">(</span><span class="n">intersections</span><span class="p">),</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">pointcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">intersections</span><span class="p">:</span>
     <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -745,7 +743,6 @@ document.write(`
     <span class="p">)</span>
 
 <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
-
 <span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>

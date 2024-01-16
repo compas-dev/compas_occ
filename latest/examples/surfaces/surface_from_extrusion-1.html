@@ -504,10 +504,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="surface_intersections_with_line.html">Surface Intersections With Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_isocurves.html">Surface Isocurves</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_jsondata.html">Surface JSON Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_of_revolution.html">Surface of Revolution</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_random.html">Surface With Random Control Points</a></li>
 <li class="toctree-l3"><a class="reference internal" href="surface_spacepoints.html">Surface Points Over UV Space</a></li>
-<li class="toctree-l3"><a class="reference internal" href="surface_viewobject.html">Surface Visualisation With View Object</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../breps/index.html">Breps</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -673,13 +671,19 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Vector</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Circle</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsCurve</span>
-<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsSurface</span>
+<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsCurve</span>
+<span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">OCCNurbsSurface</span> <span class="k">as</span> <span class="n">NurbsSurface</span><span class="p">,</span>
+<span class="p">)</span>  <span class="c1"># this should be added to the pluggable API</span>
 <span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
 
-<span class="n">curve</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_circle</span><span class="p">(</span><span class="n">Circle</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
+<span class="n">curve</span> <span class="o">=</span> <span class="n">NurbsCurve</span><span class="o">.</span><span class="n">from_circle</span><span class="p">(</span><span class="n">Circle</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
 
-<span class="n">surface</span> <span class="o">=</span> <span class="n">OCCNurbsSurface</span><span class="o">.</span><span class="n">from_extrusion</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">surface</span> <span class="o">=</span> <span class="n">NurbsSurface</span><span class="o">.</span><span class="n">from_extrusion</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># =============================================================================</span>
+<span class="c1"># Visualisation</span>
+<span class="c1"># =============================================================================</span>
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
