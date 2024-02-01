@@ -907,7 +907,7 @@ class OCCBrep(Brep):
 
     def to_tesselation(
         self, linear_deflection: float = 1
-    ) -> tuple[Mesh, list[Polyline]]:
+    ) -> tuple[Mesh, List[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
@@ -1487,7 +1487,7 @@ class OCCBrep(Brep):
     def fillet(
         self,
         radius: float,
-        exclude: Optional[list[OCCBrepEdge]] = None,
+        exclude: Optional[List[OCCBrepEdge]] = None,
     ) -> None:
         """Fillet the edges of a BRep.
 
@@ -1522,7 +1522,7 @@ class OCCBrep(Brep):
             raise BrepFilletError("Fillet operation could not be completed.")
 
     def filleted(
-        self, radius: float, exclude: Optional[list[OCCBrepEdge]] = None
+        self, radius: float, exclude: Optional[List[OCCBrepEdge]] = None
     ) -> "OCCBrep":
         """Construct a copy of a Brep with filleted edges.
 
