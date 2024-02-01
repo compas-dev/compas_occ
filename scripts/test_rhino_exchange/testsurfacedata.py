@@ -12,7 +12,7 @@ surface: OCCNurbsSurface = compas.json_load(filepath)  # type: ignore
 assert isinstance(surface, OCCNurbsSurface)
 assert isinstance(surface, NurbsSurface)
 
-for u, col in enumerate(surface.points):
+for u, col in enumerate(surface.points):  # type: ignore
     for v, point in enumerate(col):
         assert point == surface.points[u][v]
         assert TOL.is_close(point[0], u * 18 / 3)
@@ -23,7 +23,7 @@ after: NurbsSurface = NurbsSurface.from_jsonstring(surface.to_jsonstring())  # t
 assert isinstance(after, OCCNurbsSurface)
 assert isinstance(after, NurbsSurface)
 
-for u, col in enumerate(surface.points):
+for u, col in enumerate(surface.points):  # type: ignore
     for v, point in enumerate(col):
         assert point == after.points[u][v]
 

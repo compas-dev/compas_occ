@@ -82,19 +82,6 @@ class OCCBrep(Brep):
 
     _occ_shape: TopoDS.TopoDS_Shape
 
-    def __init__(self) -> None:
-        super().__init__()
-        self._vertices = None
-        self._edges = None
-        self._loops = None
-        self._faces = None
-        self._shells = None
-        self._solids = None
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
     @property
     def __data__(self):
         return {
@@ -118,6 +105,15 @@ class OCCBrep(Brep):
 
         """
         raise NotImplementedError
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._vertices = None
+        self._edges = None
+        self._loops = None
+        self._faces = None
+        self._shells = None
+        self._solids = None
 
     def copy(self, *args, **kwargs):
         """Deep-copy this BRep using the native OCC copying mechanism.
@@ -706,7 +702,7 @@ class OCCBrep(Brep):
         return brep
 
     @classmethod
-    def from_planes(cls, planes: list[Plane]) -> "OCCBrep":
+    def from_planes(cls, planes: List[Plane]) -> "OCCBrep":
         """
         Make a BRep from a list of planes.
 

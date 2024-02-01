@@ -89,10 +89,35 @@ class OCCBrepEdge(BrepEdge):
 
     _occ_edge: TopoDS.TopoDS_Edge
 
+    @property
+    def __data__(self):
+        if self.is_line:
+            curve = self.to_line()
+        elif self.is_circle:
+            curve = self.to_circle()
+        elif self.is_ellipse:
+            curve = self.to_ellipse()
+        elif self.is_hyperbola:
+            curve = self.to_hyperbola()
+        elif self.is_parabola:
+            curve = self.to_parabola()
+        else:
+            raise NotImplementedError
+        return {
+            "curve_type": self.type,
+            "curve": curve.__data__,  # type: ignore
+            "frame": curve.frame.__data__,  # type: ignore
+            "start_vertex": self.first_vertex.__data__,
+            "end_vertex": self.last_vertex.__data__,
+            "domain": curve.domain,  # type: ignore
+        }
+
+    @classmethod
+    def __from_data__(cls, data):
+        raise NotImplementedError
+
     def __init__(self, occ_edge: TopoDS.TopoDS_Edge):
         super().__init__()
-        # self._curve = None
-        # self._nurbscurve = None
         self._occ_adaptor = None
         self.occ_edge = occ_edge
         self.is_2d = False
@@ -139,52 +164,6 @@ class OCCBrepEdge(BrepEdge):
         if not isinstance(other, OCCBrepEdge):
             return False
         return self.occ_edge.IsEqual(other.occ_edge)
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
-    @property
-    def __data__(self):
-        if self.is_line:
-            curve = self.to_line()
-        elif self.is_circle:
-            curve = self.to_circle()
-        elif self.is_ellipse:
-            curve = self.to_ellipse()
-        elif self.is_hyperbola:
-            curve = self.to_hyperbola()
-        elif self.is_parabola:
-            curve = self.to_parabola()
-        else:
-            raise NotImplementedError
-        return {
-            "curve_type": self.type,
-            "curve": curve.__data__,  # type: ignore
-            "frame": curve.frame.__data__,  # type: ignore
-            "start_vertex": self.first_vertex.__data__,
-            "end_vertex": self.last_vertex.__data__,
-            "domain": curve.domain,  # type: ignore
-        }
-
-    @classmethod
-    def __from_data__(cls, data, builder):
-        """Construct an object of this type from the provided data.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-        builder : :class:`compas_rhino.geometry.BrepBuilder`
-            The object reconstructing the current Brep.
-
-        Returns
-        -------
-        :class:`compas.data.Data`
-            An instance of this object type if the data contained in the dict has the correct schema.
-
-        """
-        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties

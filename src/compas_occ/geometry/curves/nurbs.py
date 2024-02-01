@@ -101,14 +101,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
     _occ_curve: Geom_BSplineCurve
 
-    def __init__(self, occ_curve: Geom_BSplineCurve, name: Optional[str] = None):
-        super(OCCNurbsCurve, self).__init__(occ_curve, name=name)
-        self.occ_curve = occ_curve
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
     @property
     def __data__(self) -> Dict:
         return {
@@ -136,6 +128,10 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             degree,
             is_periodic,
         )
+
+    def __init__(self, occ_curve: Geom_BSplineCurve, name: Optional[str] = None):
+        super(OCCNurbsCurve, self).__init__(occ_curve, name=name)
+        self.occ_curve = occ_curve
 
     # ==============================================================================
     # OCC Properties

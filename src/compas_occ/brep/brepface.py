@@ -68,6 +68,37 @@ class OCCBrepFace(BrepFace):
 
     _occ_face: TopoDS.TopoDS_Face
 
+    @property
+    def __data__(self):
+        return {
+            "type": self.type,
+            "surface": self.surface.__data__,
+            "domain_u": self.domain_u,
+            "domain_v": self.domain_v,
+            "frame": Frame.worldXY().__data__,
+            "loops": [self.outerloop.__data__]
+            + [loop.__data__ for loop in self.innerloops],
+        }
+
+    @classmethod
+    def __from_data__(cls, data, builder):
+        """Construct an object of this type from the provided data.
+
+        Parameters
+        ----------
+        data : dict
+            The data dictionary.
+        builder : :class:`compas_rhino.geometry.BrepBuilder`
+            The object reconstructing the current Brep.
+
+        Returns
+        -------
+        :class:`compas.data.Data`
+            An instance of this object type if the data contained in the dict has the correct schema.
+
+        """
+        raise NotImplementedError
+
     def __init__(self, occ_face: TopoDS.TopoDS_Face):
         super().__init__()
         self.precision = 1e-6
@@ -118,41 +149,6 @@ class OCCBrepFace(BrepFace):
         if not isinstance(other, OCCBrepFace):
             return False
         return self.occ_face.IsEqual(other.occ_face)
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
-    @property
-    def __data__(self):
-        return {
-            "type": self.type,
-            "surface": self.surface.__data__,
-            "domain_u": self.domain_u,
-            "domain_v": self.domain_v,
-            "frame": Frame.worldXY().__data__,
-            "loops": [self.outerloop.__data__]
-            + [loop.__data__ for loop in self.innerloops],
-        }
-
-    @classmethod
-    def __from_data__(cls, data, builder):
-        """Construct an object of this type from the provided data.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-        builder : :class:`compas_rhino.geometry.BrepBuilder`
-            The object reconstructing the current Brep.
-
-        Returns
-        -------
-        :class:`compas.data.Data`
-            An instance of this object type if the data contained in the dict has the correct schema.
-
-        """
-        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties

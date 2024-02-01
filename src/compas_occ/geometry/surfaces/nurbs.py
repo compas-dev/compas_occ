@@ -146,6 +146,48 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
     _occ_surface: Geom_BSplineSurface
 
+    @property
+    def __data__(self) -> Dict:
+        return {
+            "points": [[point.__data__ for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
+            "weights": self.weights,
+            "knots_u": self.knots_u,
+            "knots_v": self.knots_v,
+            "mults_u": self.mults_u,
+            "mults_v": self.mults_v,
+            "degree_u": self.degree_u,
+            "degree_v": self.degree_v,
+            "is_periodic_u": self.is_periodic_u,
+            "is_periodic_v": self.is_periodic_v,
+        }
+
+    @classmethod
+    def __from_data__(cls, data: Dict) -> "OCCNurbsSurface":
+        points = [
+            [Point.__from_data__(point) for point in row] for row in data["points"]
+        ]
+        weights = data["weights"]
+        knots_u = data["knots_u"]
+        knots_v = data["knots_v"]
+        mults_u = data["mults_u"]
+        mults_v = data["mults_v"]
+        degree_u = data["degree_u"]
+        degree_v = data["degree_v"]
+        is_periodic_u = data["is_periodic_u"]
+        is_periodic_v = data["is_periodic_v"]
+        return OCCNurbsSurface.from_parameters(
+            points,
+            weights,
+            knots_u,
+            knots_v,
+            mults_u,
+            mults_v,
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
+        )
+
     def __init__(
         self, occ_surface: Geom_BSplineSurface, name: Optional[str] = None
     ) -> None:
@@ -171,66 +213,6 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         if self.is_periodic_u != self.is_periodic_v:
             return False
         return True
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
-    @property
-    def __data__(self) -> Dict:
-        """dict : Represenation of the surface as a Python dict."""
-        return {
-            "points": [[point.__data__ for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
-            "weights": self.weights,
-            "knots_u": self.knots_u,
-            "knots_v": self.knots_v,
-            "mults_u": self.mults_u,
-            "mults_v": self.mults_v,
-            "degree_u": self.degree_u,
-            "degree_v": self.degree_v,
-            "is_periodic_u": self.is_periodic_u,
-            "is_periodic_v": self.is_periodic_v,
-        }
-
-    @classmethod
-    def __from_data__(cls, data: Dict) -> "OCCNurbsSurface":
-        """Construct a BSpline surface from its data representation.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-
-        Returns
-        -------
-        :class:`OCCNurbsSurface`
-            The constructed surface.
-
-        """
-        points = [
-            [Point.__from_data__(point) for point in row] for row in data["points"]
-        ]
-        weights = data["weights"]
-        knots_u = data["knots_u"]
-        knots_v = data["knots_v"]
-        mults_u = data["mults_u"]
-        mults_v = data["mults_v"]
-        degree_u = data["degree_u"]
-        degree_v = data["degree_v"]
-        is_periodic_u = data["is_periodic_u"]
-        is_periodic_v = data["is_periodic_v"]
-        return OCCNurbsSurface.from_parameters(
-            points,
-            weights,
-            knots_u,
-            knots_v,
-            mults_u,
-            mults_v,
-            degree_u,
-            degree_v,
-            is_periodic_u,
-            is_periodic_v,
-        )
 
     # ==============================================================================
     # Constructors

@@ -53,6 +53,33 @@ class OCCBrepLoop(BrepLoop):
 
     _occ_wire: TopoDS.TopoDS_Wire
 
+    @property
+    def __data__(self):
+        # return {
+        #     "type": str(self._loop.LoopType),
+        #     "trims": [t.data for t in self._trims],
+        # }
+        raise NotImplementedError
+
+    @classmethod
+    def __from_data__(cls, data, builder):
+        """Construct an object of this type from the provided data.
+
+        Parameters
+        ----------
+        data : dict
+            The data dictionary.
+        builder : :class:`compas_rhino.geometry.BrepFaceBuilder`
+            The object reconstructing the current BrepFace.
+
+        Returns
+        -------
+        :class:`compas.data.Data`
+            An instance of this object type if the data contained in the dict has the correct schema.
+
+        """
+        raise NotImplementedError
+
     def __init__(self, occ_wire: TopoDS.TopoDS_Wire):
         super().__init__()
         self.occ_wire = occ_wire
@@ -99,37 +126,6 @@ class OCCBrepLoop(BrepLoop):
         if not isinstance(other, OCCBrepLoop):
             return False
         return self.occ_wire.IsEqual(other.occ_wire)
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
-    @property
-    def __data__(self):
-        # return {
-        #     "type": str(self._loop.LoopType),
-        #     "trims": [t.data for t in self._trims],
-        # }
-        raise NotImplementedError
-
-    @classmethod
-    def __from_data__(cls, data, builder):
-        """Construct an object of this type from the provided data.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-        builder : :class:`compas_rhino.geometry.BrepFaceBuilder`
-            The object reconstructing the current BrepFace.
-
-        Returns
-        -------
-        :class:`compas.data.Data`
-            An instance of this object type if the data contained in the dict has the correct schema.
-
-        """
-        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties

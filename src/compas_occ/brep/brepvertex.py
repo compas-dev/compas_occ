@@ -22,6 +22,16 @@ class OCCBrepVertex(BrepVertex):
 
     """
 
+    @property
+    def __data__(self):
+        return {
+            "point": self.point.__data__,
+        }
+
+    @classmethod
+    def __from_data__(cls, data):
+        return cls.from_point(Point.__from_data__(data["point"]))
+
     def __init__(self, occ_vertex: TopoDS.TopoDS_Vertex):
         super().__init__()
         self._occ_vertex = None
@@ -69,20 +79,6 @@ class OCCBrepVertex(BrepVertex):
         if not isinstance(other, OCCBrepVertex):
             return False
         return self.occ_vertex.IsEqual(other.occ_vertex)
-
-    # ==============================================================================
-    # Data
-    # ==============================================================================
-
-    @property
-    def __data__(self):
-        return {
-            "point": self.point.__data__,
-        }
-
-    @classmethod
-    def __from_data__(cls, data):
-        return cls.from_point(Point.__from_data__(data["point"]))
 
     # ==============================================================================
     # OCC Properties
