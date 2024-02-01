@@ -2,26 +2,19 @@ from typing import List
 from typing import Tuple
 from typing import Optional
 
-# from typing import TypeVar
-
-from OCC.Core.TopoDS import TopoDS_Face
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopAbs import TopAbs_VERTEX
-from OCC.Core.TopAbs import TopAbs_EDGE
-from OCC.Core.TopAbs import TopAbs_WIRE
-from OCC.Core.TopAbs import TopAbs_Orientation
-from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.Core.BRepAlgo import brepalgo_IsValid
-from OCC.Core.BRepGProp import brepgprop
-from OCC.Core.ShapeFix import ShapeFix_Face
-from OCC.Core.GProp import GProp_GProps
-from OCC.Core.GeomConvert import GeomConvert_ApproxSurface
-from OCC.Core.GeomAbs import GeomAbs_Shape
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
-from OCC.Core.BRepTools import breptools_OuterWire
-from OCC.Core.gp import gp_Pnt
-from OCC.Core.gp import gp_Pln
+from OCC.Core import TopoDS
+from OCC.Core import TopExp
+from OCC.Core import TopAbs
+from OCC.Core import BRepAdaptor
+from OCC.Core import BRepBuilderAPI
+from OCC.Core import BRepAlgo
+from OCC.Core import BRepGProp
+from OCC.Core import ShapeFix
+from OCC.Core import GProp
+from OCC.Core import GeomConvert
+from OCC.Core import GeomAbs
+from OCC.Core import BRepTools
+from OCC.Core import gp
 
 import compas.geometry
 
@@ -33,31 +26,22 @@ from compas.geometry import Torus
 from compas.geometry import Polygon
 from compas.geometry import BrepFace
 from compas.geometry import Frame
-
-# from compas.geometry import Surface
 from compas.geometry import SurfaceType
 
 from compas_occ.brep import OCCBrepVertex
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepLoop
-
 from compas_occ.conversions import cylinder_to_compas
 from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import plane_to_compas
 from compas_occ.conversions import sphere_to_compas
-
-# from compas_occ.conversions import torus_to_compas
-
 from compas_occ.conversions import cone_to_occ
 from compas_occ.conversions import cylinder_to_occ
 from compas_occ.conversions import plane_to_occ
 from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
-
 from compas_occ.geometry import OCCSurface
 from compas_occ.geometry import OCCNurbsSurface
-
-# S = TypeVar("S", bound="Surface")
 
 
 class OCCBrepFace(BrepFace):
@@ -66,7 +50,7 @@ class OCCBrepFace(BrepFace):
 
     Parameters
     ----------
-    occ_face : ``TopoDS_Face``
+    occ_face : ``TopoDS.TopoDS_Face``
         An OCC BRep face.
 
     Attributes
@@ -82,9 +66,9 @@ class OCCBrepFace(BrepFace):
 
     """
 
-    _occ_face: TopoDS_Face
+    _occ_face: TopoDS.TopoDS_Face
 
-    def __init__(self, occ_face: TopoDS_Face):
+    def __init__(self, occ_face: TopoDS.TopoDS_Face):
         super().__init__()
         self.precision = 1e-6
         self._surface = None
@@ -140,18 +124,19 @@ class OCCBrepFace(BrepFace):
     # ==============================================================================
 
     @property
-    def data(self):
+    def __data__(self):
         return {
             "type": self.type,
-            "surface": self.surface.data,
+            "surface": self.surface.__data__,
             "domain_u": self.domain_u,
             "domain_v": self.domain_v,
-            "frame": Frame.worldXY().data,
-            "loops": [self.outerloop.data] + [loop.data for loop in self.innerloops],
+            "frame": Frame.worldXY().__data__,
+            "loops": [self.outerloop.__data__]
+            + [loop.__data__ for loop in self.innerloops],
         }
 
     @classmethod
-    def from_data(cls, data, builder):
+    def __from_data__(cls, data, builder):
         """Construct an object of this type from the provided data.
 
         Parameters
@@ -167,45 +152,36 @@ class OCCBrepFace(BrepFace):
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
-        # instance = cls()
-        # instance._surface = instance._make_surface_from_data(
-        #     data["surface_type"], data["surface"], data["uv_domain"], data["frame"]
-        # )
-        # face_builder = builder.add_face(instance._surface)
-        # for loop_data in data["loops"]:
-        #     RhinoBrepLoop.from_data(loop_data, face_builder)
-        # instance.native_face = face_builder.result
-        # return instance
-        pass
+        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties
     # ==============================================================================
 
     @property
-    def occ_shape(self) -> TopoDS_Face:
+    def occ_shape(self) -> TopoDS.TopoDS_Face:
         return self.occ_face
 
     @property
-    def occ_face(self) -> TopoDS_Face:
+    def occ_face(self) -> TopoDS.TopoDS_Face:
         return self._occ_face
 
     @occ_face.setter
-    def occ_face(self, face: TopoDS_Face) -> None:
+    def occ_face(self, face: TopoDS.TopoDS_Face) -> None:
         self._occ_adaptor = None
         self._surface = None
         self._nurbssurface = None
         self._occ_face = face
 
     @property
-    def occ_adaptor(self) -> BRepAdaptor_Surface:
+    def occ_adaptor(self) -> BRepAdaptor.BRepAdaptor_Surface:
         if not self._occ_adaptor:
-            self._occ_adaptor = BRepAdaptor_Surface(self.occ_face)
+            self._occ_adaptor = BRepAdaptor.BRepAdaptor_Surface(self.occ_face)
         return self._occ_adaptor
 
     # rename to occ_orientation
     @property
-    def orientation(self) -> TopAbs_Orientation:
+    def orientation(self) -> TopAbs.TopAbs_Orientation:
         return self.occ_face.Orientation()
 
     # @property
@@ -280,7 +256,7 @@ class OCCBrepFace(BrepFace):
     @property
     def vertices(self) -> List[OCCBrepVertex]:
         vertices = []
-        explorer = TopExp_Explorer(self.occ_face, TopAbs_VERTEX)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_VERTEX)
         while explorer.More():
             vertex = explorer.Current()
             vertices.append(OCCBrepVertex(vertex))  # type: ignore
@@ -290,7 +266,7 @@ class OCCBrepFace(BrepFace):
     @property
     def edges(self) -> List[OCCBrepEdge]:
         edges = []
-        explorer = TopExp_Explorer(self.occ_face, TopAbs_EDGE)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_EDGE)
         while explorer.More():
             edge = explorer.Current()
             edges.append(OCCBrepEdge(edge))  # type: ignore
@@ -300,7 +276,7 @@ class OCCBrepFace(BrepFace):
     @property
     def loops(self) -> List[OCCBrepLoop]:
         loops = []
-        explorer = TopExp_Explorer(self.occ_face, TopAbs_WIRE)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)
         while explorer.More():
             wire = explorer.Current()
             loops.append(OCCBrepLoop(wire))  # type: ignore
@@ -309,7 +285,7 @@ class OCCBrepFace(BrepFace):
 
     @property
     def outerloop(self) -> OCCBrepLoop:
-        wire = breptools_OuterWire(self.occ_face)
+        wire = BRepTools.breptools_OuterWire(self.occ_face)
         return OCCBrepLoop(wire)
 
     @property
@@ -323,14 +299,14 @@ class OCCBrepFace(BrepFace):
 
     @property
     def area(self) -> float:
-        props = GProp_GProps()
-        brepgprop.SurfaceProperties(self.occ_shape, props)
+        props = GProp.GProp_GProps()
+        BRepGProp.brepgprop.SurfaceProperties(self.occ_shape, props)
         return props.Mass()
 
     @property
     def centroid(self) -> compas.geometry.Point:
-        props = GProp_GProps()
-        brepgprop.VolumeProperties(self.occ_shape, props)
+        props = GProp.GProp_GProps()
+        BRepGProp.brepgprop.VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
         return point_to_compas(pnt)
 
@@ -360,12 +336,12 @@ class OCCBrepFace(BrepFace):
         :class:`OCCBrepFace`
 
         """
-        polygon = BRepBuilderAPI_MakePolygon()
+        polygon = BRepBuilderAPI.BRepBuilderAPI_MakePolygon()
         for point in points:
-            polygon.Add(gp_Pnt(*point))
+            polygon.Add(gp.gp_Pnt(*point))
         polygon.Close()
         wire = polygon.Wire()
-        return cls(BRepBuilderAPI_MakeFace(wire).Face())
+        return cls(BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire).Face())
 
     @classmethod
     def from_plane(
@@ -397,15 +373,19 @@ class OCCBrepFace(BrepFace):
         :class:`OCCBrepFace`
 
         """
-        occ_plane: gp_Pln = plane_to_occ(plane)
+        occ_plane: gp.gp_Pln = plane_to_occ(plane)
         if domain_u and domain_v:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
-            builder = BRepBuilderAPI_MakeFace(occ_plane, min_u, max_u, min_v, max_v)
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
+                occ_plane, min_u, max_u, min_v, max_v
+            )
         elif loop:
-            builder = BRepBuilderAPI_MakeFace(occ_plane, loop.occ_wire, inside)
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
+                occ_plane, loop.occ_wire, inside
+            )
         else:
-            builder = BRepBuilderAPI_MakeFace(occ_plane)
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(occ_plane)
         return cls(builder.Face())
 
     @classmethod
@@ -433,13 +413,13 @@ class OCCBrepFace(BrepFace):
 
         """
         if loop:
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 cylinder_to_occ(cylinder),
                 loop.occ_wire,
                 inside,
             )
         else:
-            builder = BRepBuilderAPI_MakeFace(cylinder_to_occ(cylinder))
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(cylinder_to_occ(cylinder))
         return cls(builder.Face())
 
     @classmethod
@@ -467,13 +447,13 @@ class OCCBrepFace(BrepFace):
 
         """
         if loop:
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 cone_to_occ(cone),
                 loop.occ_wire,
                 inside,
             )
         else:
-            builder = BRepBuilderAPI_MakeFace(cone_to_occ(cone))
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(cone_to_occ(cone))
         return cls(builder.Face())
 
     @classmethod
@@ -501,11 +481,11 @@ class OCCBrepFace(BrepFace):
 
         """
         if loop:
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 sphere_to_occ(sphere), loop.occ_wire, inside
             )
         else:
-            builder = BRepBuilderAPI_MakeFace(sphere_to_occ(sphere))
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(sphere_to_occ(sphere))
         return cls(builder.Face())
 
     @classmethod
@@ -533,11 +513,11 @@ class OCCBrepFace(BrepFace):
 
         """
         if loop:
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 torus_to_occ(torus), loop.occ_wire, inside
             )
         else:
-            builder = BRepBuilderAPI_MakeFace(torus_to_occ(torus))
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(torus_to_occ(torus))
         return cls(builder.Face())
 
     @classmethod
@@ -576,15 +556,17 @@ class OCCBrepFace(BrepFace):
         if domain_u and domain_v:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 surface.occ_surface, min_u, max_u, min_v, max_v, precision
             )
         elif loop:
-            builder = BRepBuilderAPI_MakeFace(
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 surface.occ_surface, loop.occ_wire, inside
             )
         else:
-            builder = BRepBuilderAPI_MakeFace(surface.occ_surface, precision)
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
+                surface.occ_surface, precision
+            )
         face = cls(builder.Face())
         face.precision = precision
         return face
@@ -648,12 +630,13 @@ class OCCBrepFace(BrepFace):
         :class:`compas.geometry.Cone`
 
         """
-        if not self.is_cone:
-            raise Exception("Face is not a cone.")
+        # if not self.is_cone:
+        #     raise Exception("Face is not a cone.")
 
-        surface = self.occ_adaptor.Surface()
-        cone = surface.Cone()
-        return cone_to_compas(cone)  # noqa: F821
+        # surface = self.occ_adaptor.Surface()
+        # cone = surface.Cone()
+        # return cone_to_compas(cone)  # noqa: F821
+        raise NotImplementedError
 
     def to_sphere(self) -> Sphere:
         """
@@ -680,12 +663,13 @@ class OCCBrepFace(BrepFace):
         :class:`compas.geometry.Torus`
 
         """
-        if not self.is_torus:
-            raise Exception("Face is not a torus.")
+        # if not self.is_torus:
+        #     raise Exception("Face is not a torus.")
 
-        surface = self.occ_adaptor.Surface()
-        torus = surface.Torus()
-        return torus_to_compas(torus)  # noqa: F821
+        # surface = self.occ_adaptor.Surface()
+        # torus = surface.Torus()
+        # return torus_to_compas(torus)  # noqa: F821
+        raise NotImplementedError
 
     # ==============================================================================
     # Methods
@@ -709,11 +693,11 @@ class OCCBrepFace(BrepFace):
         try:
             occ_surface = self.occ_adaptor.BSpline()
         except Exception:
-            convert = GeomConvert_ApproxSurface(
+            convert = GeomConvert.GeomConvert_ApproxSurface(
                 self.occ_adaptor.Surface().Surface(),
                 precision,
-                GeomAbs_Shape.GeomAbs_C1,
-                GeomAbs_Shape.GeomAbs_C1,
+                GeomAbs.GeomAbs_Shape.GeomAbs_C1,
+                GeomAbs.GeomAbs_Shape.GeomAbs_C1,
                 maxdegree_u,
                 maxdegree_v,
                 maxsegments_u,
@@ -732,7 +716,7 @@ class OCCBrepFace(BrepFace):
         bool
 
         """
-        return brepalgo_IsValid(self.occ_face)
+        return BRepAlgo.brepalgo_IsValid(self.occ_face)
 
     def fix(self) -> None:
         """
@@ -743,7 +727,7 @@ class OCCBrepFace(BrepFace):
         None
 
         """
-        fixer = ShapeFix_Face(self.occ_face)
+        fixer = ShapeFix.ShapeFix_Face(self.occ_face)
         fixer.Perform()
         self.occ_face = fixer.Face()
 
@@ -761,7 +745,7 @@ class OCCBrepFace(BrepFace):
         None
 
         """
-        builder = BRepBuilderAPI_MakeFace(self.occ_face)
+        builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(self.occ_face)
         if reverse:
             builder.Add(loop.occ_wire.Reversed())  # type: ignore
         else:
@@ -784,7 +768,7 @@ class OCCBrepFace(BrepFace):
         None
 
         """
-        builder = BRepBuilderAPI_MakeFace(self.occ_face)
+        builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(self.occ_face)
         for loop in loops:
             if reverse:
                 builder.Add(loop.occ_wire.Reversed())  # type: ignore

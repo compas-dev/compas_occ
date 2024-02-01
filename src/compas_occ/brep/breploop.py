@@ -1,10 +1,10 @@
 from typing import List
 
-from OCC.Core.TopoDS import TopoDS_Wire
-from OCC.Core.BRepTools import BRepTools_WireExplorer
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeWire
-from OCC.Core.BRepAlgo import brepalgo_IsValid
-from OCC.Core.ShapeFix import ShapeFix_Wire
+from OCC.Core import TopoDS
+from OCC.Core import BRepTools
+from OCC.Core import BRepBuilderAPI
+from OCC.Core import BRepAlgo
+from OCC.Core import ShapeFix
 
 from compas.utilities import pairwise
 from compas.geometry import Polyline
@@ -15,7 +15,7 @@ from compas_occ.brep import OCCBrepVertex
 from compas_occ.brep import OCCBrepEdge
 
 
-def wire_from_edges(edges: List[OCCBrepEdge]) -> TopoDS_Wire:
+def wire_from_edges(edges: List[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
     """Construct a wire from a list of edges.
 
     Parameters
@@ -25,10 +25,10 @@ def wire_from_edges(edges: List[OCCBrepEdge]) -> TopoDS_Wire:
 
     Returns
     -------
-    ``TopoDS_Wire``
+    ``TopoDS.TopoDS_Wire``
 
     """
-    builder = BRepBuilderAPI_MakeWire()
+    builder = BRepBuilderAPI.BRepBuilderAPI_MakeWire()
     for edge in edges:
         builder.Add(edge.occ_edge)
     return builder.Wire()
@@ -39,7 +39,7 @@ class OCCBrepLoop(BrepLoop):
 
     Parameters
     ----------
-    occ_wire : ``TopoDS_Wire``
+    occ_wire : ``TopoDS.TopoDS_Wire``
         An OCC BRep wire.
 
     Attributes
@@ -51,9 +51,9 @@ class OCCBrepLoop(BrepLoop):
 
     """
 
-    _occ_wire: TopoDS_Wire
+    _occ_wire: TopoDS.TopoDS_Wire
 
-    def __init__(self, occ_wire: TopoDS_Wire):
+    def __init__(self, occ_wire: TopoDS.TopoDS_Wire):
         super().__init__()
         self.occ_wire = occ_wire
 
@@ -105,15 +105,15 @@ class OCCBrepLoop(BrepLoop):
     # ==============================================================================
 
     @property
-    def data(self):
+    def __data__(self):
         # return {
         #     "type": str(self._loop.LoopType),
         #     "trims": [t.data for t in self._trims],
         # }
-        return self
+        raise NotImplementedError
 
     @classmethod
-    def from_data(cls, data, builder):
+    def __from_data__(cls, data, builder):
         """Construct an object of this type from the provided data.
 
         Parameters
@@ -129,32 +129,22 @@ class OCCBrepLoop(BrepLoop):
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
-        # instance = cls()
-        # instance._type = (
-        #     Rhino.Geometry.BrepLoopType.Outer
-        #     if data["type"] == "Outer"
-        #     else Rhino.Geometry.BrepLoopType.Inner
-        # )
-        # loop_builder = builder.add_loop(instance._type)
-        # for trim_data in data["trims"]:
-        #     RhinoBrepTrim.from_data(trim_data, loop_builder)
-        # instance.native_loop = loop_builder.result
-        # return instance
+        raise NotImplementedError
 
     # ==============================================================================
     # OCC Properties
     # ==============================================================================
 
     @property
-    def occ_shape(self) -> TopoDS_Wire:
+    def occ_shape(self) -> TopoDS.TopoDS_Wire:
         return self.occ_wire
 
     @property
-    def occ_wire(self) -> TopoDS_Wire:
+    def occ_wire(self) -> TopoDS.TopoDS_Wire:
         return self._occ_wire
 
     @occ_wire.setter
-    def occ_wire(self, loop: TopoDS_Wire) -> None:
+    def occ_wire(self, loop: TopoDS.TopoDS_Wire) -> None:
         self._occ_wire = loop
 
     # ==============================================================================
@@ -163,12 +153,12 @@ class OCCBrepLoop(BrepLoop):
 
     @property
     def is_valid(self) -> bool:
-        return brepalgo_IsValid(self.occ_wire)
+        return BRepAlgo.brepalgo_IsValid(self.occ_wire)
 
     @property
     def vertices(self) -> List[OCCBrepVertex]:
         vertices = []
-        explorer = BRepTools_WireExplorer(self.occ_wire)
+        explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
             vertex = explorer.CurrentVertex()
             vertices.append(OCCBrepVertex(vertex))
@@ -178,7 +168,7 @@ class OCCBrepLoop(BrepLoop):
     @property
     def edges(self) -> List[OCCBrepEdge]:
         edges = []
-        explorer = BRepTools_WireExplorer(self.occ_wire)
+        explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
             edge = explorer.Current()
             edges.append(OCCBrepEdge(edge))
@@ -261,6 +251,6 @@ class OCCBrepLoop(BrepLoop):
         None
 
         """
-        fixer = ShapeFix_Wire(self.occ_wire)  # type: ignore
+        fixer = ShapeFix.ShapeFix_Wire(self.occ_wire)  # type: ignore
         fixer.Perform()
         self.occ_wire = fixer.Wire()

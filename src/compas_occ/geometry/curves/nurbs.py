@@ -110,9 +110,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @property
-    def data(self) -> Dict:
+    def __data__(self) -> Dict:
         return {
-            "points": [point.data for point in self.points],
+            "points": [point.__data__ for point in self.points],
             "weights": self.weights,
             "knots": self.knots,
             "multiplicities": self.multiplicities,
@@ -121,8 +121,8 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         }
 
     @classmethod
-    def from_data(cls, data: Dict) -> "OCCNurbsCurve":
-        points = [Point.from_data(point) for point in data["points"]]
+    def __from_data__(cls, data: Dict) -> "OCCNurbsCurve":
+        points = [Point.__from_data__(point) for point in data["points"]]
         weights = data["weights"]
         knots = data["knots"]
         multiplicities = data["multiplicities"]
@@ -492,7 +492,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         """
         cls = type(self)
-        return cls.from_data(deepcopy(self.data))
+        return cls.__from_data__(deepcopy(self.__data__))
 
     def segment(self, u: float, v: float, precision: float = 1e-3) -> None:
         """Modifies this curve by segmenting it between the parameters u and v.

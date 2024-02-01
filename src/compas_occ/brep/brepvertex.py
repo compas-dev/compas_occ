@@ -1,6 +1,6 @@
-from OCC.Core.TopoDS import TopoDS_Vertex
-from OCC.Core.BRep import BRep_Tool
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeVertex
+from OCC.Core import TopoDS
+from OCC.Core import BRep
+from OCC.Core import BRepBuilderAPI
 
 from compas.geometry import Point
 from compas.geometry import BrepVertex
@@ -12,7 +12,7 @@ class OCCBrepVertex(BrepVertex):
 
     Parameters
     ----------
-    occ_vertex : ``TopoDS_Vertex``
+    occ_vertex : ``TopoDS.TopoDS_Vertex``
         An OCC topological vertex data structure.
 
     Attributes
@@ -22,7 +22,7 @@ class OCCBrepVertex(BrepVertex):
 
     """
 
-    def __init__(self, occ_vertex: TopoDS_Vertex):
+    def __init__(self, occ_vertex: TopoDS.TopoDS_Vertex):
         super().__init__()
         self._occ_vertex = None
         self.occ_vertex = occ_vertex
@@ -75,25 +75,25 @@ class OCCBrepVertex(BrepVertex):
     # ==============================================================================
 
     @property
-    def data(self):
+    def __data__(self):
         return {
-            "point": self.point.data,
+            "point": self.point.__data__,
         }
 
     @classmethod
-    def from_data(cls, data):
-        return cls.from_point(Point.from_data(data["point"]))
+    def __from_data__(cls, data):
+        return cls.from_point(Point.__from_data__(data["point"]))
 
     # ==============================================================================
     # OCC Properties
     # ==============================================================================
 
     @property
-    def occ_vertex(self) -> TopoDS_Vertex:
+    def occ_vertex(self) -> TopoDS.TopoDS_Vertex:
         return self._occ_vertex  # type: ignore
 
     @occ_vertex.setter
-    def occ_vertex(self, occ_vertex: TopoDS_Vertex) -> None:
+    def occ_vertex(self, occ_vertex: TopoDS.TopoDS_Vertex) -> None:
         self._occ_vertex = occ_vertex
 
     # ==============================================================================
@@ -102,12 +102,12 @@ class OCCBrepVertex(BrepVertex):
 
     @property
     def point(self) -> Point:
-        p = BRep_Tool.Pnt(self.occ_vertex)
+        p = BRep.BRep_Tool.Pnt(self.occ_vertex)
         return Point(p.X(), p.Y(), p.Z())
 
     @point.setter
     def point(self, point: Point) -> None:
-        builder = BRepBuilderAPI_MakeVertex(point_to_occ(point))
+        builder = BRepBuilderAPI.BRepBuilderAPI_MakeVertex(point_to_occ(point))
         self._occ_vertex = builder.Vertex()
 
     # ==============================================================================
@@ -128,5 +128,5 @@ class OCCBrepVertex(BrepVertex):
         :class:`BrepVertex`
 
         """
-        builder = BRepBuilderAPI_MakeVertex(point_to_occ(point))
+        builder = BRepBuilderAPI.BRepBuilderAPI_MakeVertex(point_to_occ(point))
         return cls(builder.Vertex())

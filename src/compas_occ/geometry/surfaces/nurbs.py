@@ -177,10 +177,10 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     # ==============================================================================
 
     @property
-    def data(self) -> Dict:
+    def __data__(self) -> Dict:
         """dict : Represenation of the surface as a Python dict."""
         return {
-            "points": [[point.data for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
+            "points": [[point.__data__ for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
             "weights": self.weights,
             "knots_u": self.knots_u,
             "knots_v": self.knots_v,
@@ -193,7 +193,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         }
 
     @classmethod
-    def from_data(cls, data: Dict) -> "OCCNurbsSurface":
+    def __from_data__(cls, data: Dict) -> "OCCNurbsSurface":
         """Construct a BSpline surface from its data representation.
 
         Parameters
@@ -207,7 +207,9 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             The constructed surface.
 
         """
-        points = [[Point.from_data(point) for point in row] for row in data["points"]]
+        points = [
+            [Point.__from_data__(point) for point in row] for row in data["points"]
+        ]
         weights = data["weights"]
         knots_u = data["knots_u"]
         knots_v = data["knots_v"]
@@ -557,4 +559,4 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         """
         cls = type(self)
-        return cls.from_data(deepcopy(self.data))
+        return cls.__from_data__(deepcopy(self.__data__))
