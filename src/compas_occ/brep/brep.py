@@ -907,7 +907,7 @@ class OCCBrep(Brep):
 
     def to_tesselation(
         self, linear_deflection: float = 1
-    ) -> tuple[Mesh, List[Polyline]]:
+    ) -> Tuple[Mesh, List[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
