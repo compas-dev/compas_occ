@@ -24,6 +24,11 @@ def new_nurbssurface(cls, *args, **kwargs):
 
 
 @plugin(category="factories", requires=["compas_occ"])
+def new_nurbssurface_from_native(cls, *args, **kwargs):
+    return OCCNurbsSurface.from_occ(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["compas_occ"])
 def new_nurbssurface_from_parameters(cls, *args, **kwargs):
     return OCCNurbsSurface.from_parameters(*args, **kwargs)
 

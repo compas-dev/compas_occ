@@ -962,6 +962,21 @@ class OCCBrep(Brep):
                         node = nodes.Value(i)
                         points.append(vertices[node - 1])
                     polylines.append(Polyline(points))
+        lines = []
+        for edge in self.edges:
+            if any(edge.is_same(e) for e in seen):
+                continue
+            if edge.is_line:
+                lines.append(
+                    Polyline([edge.vertices[0].point, edge.vertices[-1].point])
+                )
+            elif edge.is_circle:
+                lines.append(edge.curve.to_polyline())
+            elif edge.is_ellipse:
+                lines.append(edge.curve.to_polyline())
+            elif edge.is_bspline:
+                lines.append(edge.curve.to_polyline())
+        polylines += lines
         return mesh, polylines
 
     def to_meshes(self, u=16, v=16):

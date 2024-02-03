@@ -18,6 +18,11 @@ def new_nurbscurve(cls, *args, **kwargs):
 
 
 @plugin(category="factories", requires=["compas_occ"])
+def new_nurbscurve_from_native(cls, *args, **kwargs):
+    return OCCNurbsCurve.from_occ(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["compas_occ"])
 def new_nurbscurve_from_parameters(cls, *args, **kwargs):
     return OCCNurbsCurve.from_parameters(*args, **kwargs)
 

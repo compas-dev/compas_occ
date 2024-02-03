@@ -9,10 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.geometry.curves.new_nurbscurve_from_native`.
+* Added `compas_occ.geometry.surfaces.new_nurbssurface_from_native`.
+
 ### Changed
 
-### Removed
+* Fixed bug in `compas_occ.brep.OCCBrep.to_tesselation`.
 
+### Removed
 
 ## [1.0.0] 2024-02-01
 
