@@ -69,6 +69,11 @@ def from_native(*args, **kwargs):
 
 
 @plugin(category="factories", requires=["compas_occ"])
+def from_planes(*args, **kwargs):
+    return OCCBrep.from_planes(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["compas_occ"])
 def from_polygons(*args, **kwargs):
     return OCCBrep.from_polygons(*args, **kwargs)
 

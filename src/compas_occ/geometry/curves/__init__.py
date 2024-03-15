@@ -1,20 +1,20 @@
 from .curve2d import OCCCurve2d  # noqa : F401
-from .curve import OCCCurve  # noqa : F401
+from .curve import OCCCurve
 from .nurbs import OCCNurbsCurve
 
-from compas.geometry import Curve
-from compas.geometry import NurbsCurve
 from compas.plugins import plugin
 
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_curve(cls, *args, **kwargs):
-    return super(Curve, cls).__new__(cls)
+    curve = object.__new__(OCCCurve)
+    return curve
 
 
 @plugin(category="factories", requires=["compas_occ"])
 def new_nurbscurve(cls, *args, **kwargs):
-    return super(NurbsCurve, cls).__new__(cls)
+    curve = object.__new__(OCCNurbsCurve)
+    return curve
 
 
 @plugin(category="factories", requires=["compas_occ"])

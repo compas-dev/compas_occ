@@ -725,6 +725,7 @@ class OCCBrep(Brep):
         cls,
         profile: Union[OCCBrepEdge, OCCBrepFace],
         vector: Vector,
+        cap_ends: bool = False,
     ) -> "OCCBrep":
         """
         Construct a BRep by extruding a closed curve along a direction vector.
@@ -735,6 +736,9 @@ class OCCBrep(Brep):
 
         """
         from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
+
+        if cap_ends:
+            raise NotImplementedError
 
         brep = cls()
         brep.native_brep = BRepPrimAPI_MakePrism(
@@ -1436,7 +1440,7 @@ class OCCBrep(Brep):
         """
         from compas_occ.occ import split_shapes
         from compas_occ.occ import compute_shape_centreofmass
-        from compas.geometry import is_point_infrontof_plane
+        from compas.geometry import is_point_behind_plane
 
         if isinstance(plane, Frame):
             plane = Plane.from_frame(plane)
@@ -1448,7 +1452,7 @@ class OCCBrep(Brep):
         occ_shape = None
         for test in results:
             point = compute_shape_centreofmass(test)
-            if is_point_infrontof_plane(point, plane):
+            if is_point_behind_plane(point, plane):
                 occ_shape = test
                 break
         if occ_shape:

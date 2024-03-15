@@ -3,6 +3,10 @@ from compas.geometry import Frame
 from compas.geometry import Box, Cylinder
 from compas_view2.app import App
 
+from compas.tolerance import TOL
+
+TOL.lineardeflection = 0.1
+
 R = 1.4
 YZ = Frame.worldYZ()
 ZX = Frame.worldZX()
