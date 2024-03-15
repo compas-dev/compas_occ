@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.brep.from_planes` as plugin for `compas.geometry.brep.from_planes`.
+
 ### Changed
+
+* Fixed bug in `Brep.from_extrusion` by adding `cap_ends` parameter and by raising an exception when it is used :)
+* Fixed bug in `Brep.trim` by removing the part of the brep that is in front of the trim plane.
 
 ### Removed
 
