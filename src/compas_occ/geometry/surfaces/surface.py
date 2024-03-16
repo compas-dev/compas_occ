@@ -1,15 +1,17 @@
-from typing import List, Tuple, Optional, Union
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
-from compas.geometry import Point
-from compas.geometry import Vector
-from compas.geometry import Frame
+from compas.datastructures import Mesh
 from compas.geometry import Box
+from compas.geometry import Frame
 from compas.geometry import Line
 from compas.geometry import Plane
+from compas.geometry import Point
 from compas.geometry import Surface
 from compas.geometry import Transformation
-from compas.datastructures import Mesh
-
+from compas.geometry import Vector
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BndLib import BndLib_AddSurface_Add
@@ -24,22 +26,21 @@ from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
 from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 from OCC.Core.GeomLProp import GeomLProp_SLProps
-from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Vec
-from OCC.Core.TopoDS import topods_Face
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import topods_Face
 
-from compas_occ.geometry import OCCCurve
-
+from compas_occ.conversions import ax3_to_compas
+from compas_occ.conversions import direction_to_compas
+from compas_occ.conversions import line_to_occ
+from compas_occ.conversions import plane_to_occ
 from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import vector_to_compas
-from compas_occ.conversions import direction_to_compas
-from compas_occ.conversions import ax3_to_compas
-from compas_occ.conversions import line_to_occ
-from compas_occ.conversions import plane_to_occ
+from compas_occ.geometry import OCCCurve
 
 
 class OCCSurface(Surface):
@@ -160,10 +161,10 @@ class OCCSurface(Surface):
         None
 
         """
-        from OCC.Core.STEPControl import STEPControl_Writer
-        from OCC.Core.STEPControl import STEPControl_AsIs
-        from OCC.Core.Interface import Interface_Static_SetCVal
         from OCC.Core.IFSelect import IFSelect_RetDone
+        from OCC.Core.Interface import Interface_Static_SetCVal
+        from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.STEPControl import STEPControl_Writer
 
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)

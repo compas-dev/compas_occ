@@ -1,38 +1,36 @@
-from typing import Dict, Literal
-from typing import Iterable
-from typing import List
-from typing import Tuple
-from typing import Union
-from typing import Optional
-
 import warnings
 from copy import deepcopy
+from typing import Dict
+from typing import Iterable
+from typing import List
+from typing import Literal
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
+from compas.geometry import Curve
+from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Translation
-from compas.geometry import NurbsSurface
-from compas.geometry import Curve
 from compas.geometry import Vector
 from compas.utilities import flatten
-
-from compas_occ.conversions import point_to_compas
-from compas_occ.conversions import point_to_occ
-from compas_occ.conversions import array2_from_points2
-from compas_occ.conversions import array1_from_floats1
-from compas_occ.conversions import array2_from_floats2
-from compas_occ.conversions import array1_from_integers1
-from compas_occ.conversions import floats2_from_array2
-from compas_occ.conversions import points2_from_array2
-
-from compas_occ.geometry import OCCNurbsCurve
-
 from OCC.Core.Geom import Geom_BSplineSurface
+from OCC.Core.GeomAbs import GeomAbs_C2
+from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
-from OCC.Core.GeomFill import GeomFill_StretchStyle
 from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
-from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
-from OCC.Core.GeomAbs import GeomAbs_C2
+from OCC.Core.GeomFill import GeomFill_StretchStyle
+
+from compas_occ.conversions import array1_from_floats1
+from compas_occ.conversions import array1_from_integers1
+from compas_occ.conversions import array2_from_floats2
+from compas_occ.conversions import array2_from_points2
+from compas_occ.conversions import floats2_from_array2
+from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import point_to_occ
+from compas_occ.conversions import points2_from_array2
+from compas_occ.geometry import OCCNurbsCurve
 
 from .surface import OCCSurface
 
@@ -134,8 +132,8 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         surface = OCCNurbsSurface.from_parameters(
             points=points,
             weights=weights,
-            knots_u=[1.0, 1 + 1/9, 1 + 2/9, 1 + 3/9, 1 + 4/9, 1 + 5/9, 1 + 6/9, 1 + 7/9, 1 + 8/9, 2.0],
-            knots_v=[0.0, 1/9, 2/9, 3/9, 4/9, 5/9, 6/9, 7/9, 8/9, 1.0],
+            knots_u=[1.0, 1 + 1 / 9, 1 + 2 / 9, 1 + 3 / 9, 1 + 4 / 9, 1 + 5 / 9, 1 + 6 / 9, 1 + 7 / 9, 1 + 8 / 9, 2.0],
+            knots_v=[0.0, 1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9, 1.0],
             mults_u=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             mults_v=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             degree_u=3,
@@ -163,9 +161,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
     @classmethod
     def __from_data__(cls, data: Dict) -> "OCCNurbsSurface":
-        points = [
-            [Point.__from_data__(point) for point in row] for row in data["points"]
-        ]
+        points = [[Point.__from_data__(point) for point in row] for row in data["points"]]
         weights = data["weights"]
         knots_u = data["knots_u"]
         knots_v = data["knots_v"]
@@ -188,9 +184,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             is_periodic_v,
         )
 
-    def __init__(
-        self, occ_surface: Geom_BSplineSurface, name: Optional[str] = None
-    ) -> None:
+    def __init__(self, occ_surface: Geom_BSplineSurface, name: Optional[str] = None) -> None:
         super().__init__(occ_surface, name=name)
         self._points = None
         self.occ_surface = occ_surface
@@ -441,9 +435,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return cls.from_fill(curve, other)  # type: ignore (not sure how to solve this)
 
     @classmethod
-    def from_interpolation(
-        cls, points: List[List[Point]], precision: float = 1e-3
-    ) -> "OCCNurbsSurface":
+    def from_interpolation(cls, points: List[List[Point]], precision: float = 1e-3) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
         Parameters

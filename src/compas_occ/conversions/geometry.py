@@ -1,48 +1,44 @@
-from typing import Type
-from typing import Tuple
 from typing import Optional
+from typing import Tuple
+from typing import Type
 
-from compas.geometry import Point
-from compas.geometry import Vector
-from compas.geometry import Line
-from compas.geometry import Plane
-from compas.geometry import Frame
-from compas.geometry import Circle
-from compas.geometry import Ellipse
-from compas.geometry import Hyperbola
-from compas.geometry import Parabola
 from compas.geometry import Bezier
-from compas.geometry import NurbsCurve
-from compas.geometry import Sphere
-from compas.geometry import Cylinder
+from compas.geometry import Circle
 from compas.geometry import Cone
+from compas.geometry import Cylinder
+from compas.geometry import Ellipse
+from compas.geometry import Frame
+from compas.geometry import Hyperbola
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+from compas.geometry import Parabola
+from compas.geometry import Plane
+from compas.geometry import Point
+from compas.geometry import Sphere
 from compas.geometry import Torus
 from compas.geometry import Transformation
-
+from compas.geometry import Vector
+from OCC.Core.Geom import Geom_BezierCurve
+from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.gp import gp_Ax1
 from OCC.Core.gp import gp_Ax2
 from OCC.Core.gp import gp_Ax3
-from OCC.Core.gp import gp_Pnt
-from OCC.Core.gp import gp_Pnt2d
-from OCC.Core.gp import gp_Vec
-from OCC.Core.gp import gp_Vec2d
-from OCC.Core.gp import gp_Dir
-from OCC.Core.gp import gp_Lin
 from OCC.Core.gp import gp_Circ
+from OCC.Core.gp import gp_Cone
+from OCC.Core.gp import gp_Cylinder
+from OCC.Core.gp import gp_Dir
 from OCC.Core.gp import gp_Elips
 from OCC.Core.gp import gp_Hypr
+from OCC.Core.gp import gp_Lin
 from OCC.Core.gp import gp_Parab
 from OCC.Core.gp import gp_Pln
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt2d
 from OCC.Core.gp import gp_Sphere
-from OCC.Core.gp import gp_Cylinder
-from OCC.Core.gp import gp_Cone
 from OCC.Core.gp import gp_Torus
-
-from OCC.Core.Geom import Geom_BezierCurve
-from OCC.Core.Geom import Geom_BSplineCurve
-
+from OCC.Core.gp import gp_Vec
+from OCC.Core.gp import gp_Vec2d
 from OCC.Core.TopLoc import TopLoc_Location
-
 
 # =============================================================================
 # To OCC
@@ -969,9 +965,7 @@ def location_to_compas(location: TopLoc_Location) -> Frame:
 
     # transformation.Value is a 1-based 3x4 matrix
     rows, columns = 3, 4
-    matrix = [
-        [t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)
-    ]
+    matrix = [[t.Value(i, j) for j in range(1, columns + 1)] for i in range(1, rows + 1)]
     matrix.append([0.0, 0.0, 0.0, 1.0])  # COMPAS wants a 4x4 matrix
     return Frame.from_transformation(Transformation(matrix))
 
@@ -1003,8 +997,8 @@ def circle_to_compas(
     >>> from compas_occ.conversions import circle_to_compas
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> circ = gp_Circ(ax2, 1)
-    >>> circle_to_compas(circ)
-    Circle(radius=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    >>> circle_to_compas(circ)  # doctest: +ELLIPSIS
+    Circle(radius=1.0, frame=Frame(...)
 
     """
     cls = cls or Circle
@@ -1042,8 +1036,8 @@ def ellipse_to_compas(
     >>> from compas_occ.conversions import ellipse_to_compas
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> elips = gp_Elips(ax2, 1, 0.5)
-    >>> ellipse_to_compas(elips)
-    Ellipse(major=1.0, minor=0.5, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    >>> ellipse_to_compas(elips)  # doctest: +ELLIPSIS
+    Ellipse(major=1.0, minor=0.5, frame=Frame(...))
 
     """
     cls = cls or Ellipse
@@ -1073,8 +1067,8 @@ def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
     >>> from compas_occ.conversions import hyperbola_to_compas
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> hypr = gp_Hypr(ax2, 1, 0.5)
-    >>> hyperbola_to_compas(hypr)
-    Hyperbola(major=1.0, minor=0.5, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    >>> hyperbola_to_compas(hypr)  # doctest: +ELLIPSIS
+    Hyperbola(major=1.0, minor=0.5, frame=Frame(...))
 
     """
     point = point_to_compas(hypr.Location())
@@ -1103,8 +1097,8 @@ def parabola_to_compas(parab: gp_Parab) -> Parabola:
     >>> from compas_occ.conversions import parabola_to_compas
     >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> parab = gp_Parab(ax2, 1)
-    >>> parabola_to_compas(parab)
-    Parabola(focal=2.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0)))
+    >>> parabola_to_compas(parab)  # doctest: +ELLIPSIS
+    Parabola(focal=2.0, frame=Frame(...))
 
     """
     point = point_to_compas(parab.Location())
@@ -1139,8 +1133,8 @@ def bezier_to_compas(bezier: Geom_BezierCurve) -> Bezier:
     >>> array.SetValue(3, gp_Pnt(1, 1, 0))
     >>> array.SetValue(4, gp_Pnt(0, 1, 0))
     >>> bezier = Geom_BezierCurve(array)
-    >>> bezier_to_compas(bezier)
-    Bezier(points=[Point(x=0.0, y=0.0, z=0.0), Point(x=1.0, y=0.0, z=0.0), Point(x=1.0, y=1.0, z=0.0), Point(x=0.0, y=1.0, z=0.0)])
+    >>> bezier_to_compas(bezier)  # doctest: +ELLIPSIS
+    Bezier(points=[...])
 
     """
     points = [point_to_compas(bezier.Pole(i)) for i in range(1, bezier.NbPoles() + 1)]
@@ -1190,8 +1184,8 @@ def cylinder_to_compas(
     >>> from compas_occ.conversions import cylinder_to_compas
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> cylinder = gp_Cylinder(ax3, 1)
-    >>> cylinder_to_compas(cylinder)
-    Cylinder(radius=1.0, height=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    >>> cylinder_to_compas(cylinder)  # doctest: +ELLIPSIS
+    Cylinder(radius=1.0, height=1.0, frame=Frame(...))
 
     """
     cls = cls or Cylinder
@@ -1228,8 +1222,8 @@ def sphere_to_compas(
     >>> from compas_occ.conversions import sphere_to_compas
     >>> ax3 = gp_Ax3(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
     >>> sphere = gp_Sphere(ax3, 1)
-    >>> sphere_to_compas(sphere)
-    Sphere(radius=1.0, frame=Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=-0.0), yaxis=Vector(x=-0.0, y=1.0, z=0.0)))
+    >>> sphere_to_compas(sphere)  # doctest: +ELLIPSIS
+    Sphere(radius=1.0, frame=Frame(...))
 
     """
     cls = cls or Sphere

@@ -1,37 +1,38 @@
-from typing import List, Tuple, Union
+from typing import List
+from typing import Tuple
+from typing import Union
 
-from compas.geometry import Point
-from compas.geometry import Vector
-from compas.geometry import Frame
-from compas.geometry import Curve
 from compas.geometry import Box
+from compas.geometry import Curve
+from compas.geometry import Frame
+from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.geometry import Transformation
+from compas.geometry import Vector
 from compas.geometry import distance_point_point
-
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.BndLib import BndLib_Add3dCurve_Add
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint
+from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.Geom import Geom_Curve
 from OCC.Core.Geom import Geom_OffsetCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
-from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
-from OCC.Core.GeomProjLib import geomprojlib_Project
+from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.Core.GeomProjLib import geomprojlib_Curve2d
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint
+from OCC.Core.GeomProjLib import geomprojlib_Project
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
-from OCC.Core.TopoDS import topods_Edge
-from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Edge
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import topods_Edge
 
-from compas_occ.conversions import point_to_compas
-from compas_occ.conversions import vector_to_compas
-from compas_occ.conversions import direction_to_occ
-from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import compas_transformation_to_trsf
+from compas_occ.conversions import direction_to_occ
+from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import point_to_occ
+from compas_occ.conversions import vector_to_compas
 
 from .curve2d import OCCCurve2d
 
@@ -160,10 +161,10 @@ class OCCCurve(Curve):
         None
 
         """
-        from OCC.Core.Interface import Interface_Static_SetCVal
         from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.Interface import Interface_Static_SetCVal
         from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.STEPControl import STEPControl_Writer
 
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
@@ -248,9 +249,7 @@ class OCCCurve(Curve):
         start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError(
-                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(
-                    t, self.domain
-                )
+                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain)
             )
 
         point = self.occ_curve.Value(t)
@@ -353,7 +352,8 @@ class OCCCurve(Curve):
         precision: float = 0.1,
     ) -> float:
         """
-        Compute the parameter of a point on the curve at a given distance along the curve from a point at a given parameter.
+        Compute the parameter of a point on the curve at a given distance along the curve
+        from a point at a given parameter.
 
         Parameters
         ----------
@@ -370,9 +370,7 @@ class OCCCurve(Curve):
             The new parameter.
 
         """
-        a = GCPnts_AbscissaPoint(
-            GeomAdaptor_Curve(self.occ_curve), distance, t, precision
-        )
+        a = GCPnts_AbscissaPoint(GeomAdaptor_Curve(self.occ_curve), distance, t, precision)
         return a.Parameter()
 
     def aabb(self, precision: float = 0.0) -> Box:

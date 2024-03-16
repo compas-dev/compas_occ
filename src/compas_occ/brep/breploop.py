@@ -1,18 +1,17 @@
 from typing import List
 
-from OCC.Core import TopoDS
-from OCC.Core import BRepTools
-from OCC.Core import BRepBuilderAPI
-from OCC.Core import BRepAlgo
-from OCC.Core import ShapeFix
-
-from compas.utilities import pairwise
-from compas.geometry import Polyline
-from compas.geometry import Polygon
 from compas.geometry import BrepLoop
+from compas.geometry import Polygon
+from compas.geometry import Polyline
+from compas.utilities import pairwise
+from OCC.Core import BRepAlgo
+from OCC.Core import BRepBuilderAPI
+from OCC.Core import BRepTools
+from OCC.Core import ShapeFix
+from OCC.Core import TopoDS
 
-from compas_occ.brep import OCCBrepVertex
 from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepVertex
 
 
 def wire_from_edges(edges: List[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:

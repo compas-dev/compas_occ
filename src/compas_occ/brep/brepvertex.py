@@ -1,9 +1,9 @@
-from OCC.Core import TopoDS
+from compas.geometry import BrepVertex
+from compas.geometry import Point
 from OCC.Core import BRep
 from OCC.Core import BRepBuilderAPI
+from OCC.Core import TopoDS
 
-from compas.geometry import Point
-from compas.geometry import BrepVertex
 from compas_occ.conversions.geometry import point_to_occ
 
 

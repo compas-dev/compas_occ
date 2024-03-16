@@ -1,29 +1,31 @@
-from math import sqrt
 from copy import deepcopy
-from typing import Dict, List, Optional, Union
+from math import sqrt
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
+from compas.geometry import Circle
+from compas.geometry import Ellipse
+from compas.geometry import Frame
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+
+# from OCC.Core.TopoDS import TopoDS_Edge
+from compas.geometry import Point
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomConvert import GeomConvert_CompCurveToBSplineCurve
 from OCC.Core.TColgp import TColgp_Array1OfPnt
-from OCC.Core.TColStd import TColStd_Array1OfReal
 from OCC.Core.TColStd import TColStd_Array1OfInteger
+from OCC.Core.TColStd import TColStd_Array1OfReal
 
-# from OCC.Core.TopoDS import TopoDS_Edge
-
-from compas.geometry import Point
-from compas.geometry import Circle
-from compas.geometry import Ellipse
-from compas.geometry import Line
-from compas.geometry import Frame
-from compas.geometry import NurbsCurve
-
-from compas_occ.conversions import harray1_from_points1
-from compas_occ.conversions import array1_from_points1
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
-from compas_occ.conversions import points1_from_array1
+from compas_occ.conversions import array1_from_points1
+from compas_occ.conversions import harray1_from_points1
 from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import points1_from_array1
 
 from .curve import OCCCurve
 
@@ -90,11 +92,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     >>> from compas_occ.geometry import OCCNurbsCurve
     >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
     >>> curve = OCCNurbsCurve.from_parameters(
-    ...     points=points,
-    ...     weights=[1.0, 1.0, 1.0, 1.0],
-    ...     knots=[0.0, 1.0],
-    ...     multiplicities=[4, 4],
-    ...     degree=3
+    ...     points=points, weights=[1.0, 1.0, 1.0, 1.0], knots=[0.0, 1.0], multiplicities=[4, 4], degree=3
     ... )
 
     """
@@ -510,9 +508,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             u, v = v, u
         s, e = self.domain
         if u < s or v > e:
-            raise ValueError(
-                "At least one of the given parameters is outside the curve domain."
-            )
+            raise ValueError("At least one of the given parameters is outside the curve domain.")
         if u == v:
             raise ValueError("The given domain is zero length.")
         self.occ_curve.Segment(u, v, precision)

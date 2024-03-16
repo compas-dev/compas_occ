@@ -1,33 +1,27 @@
 from typing import List
 from typing import Union
-from typing_extensions import Annotated
 
 import compas.geometry
-from compas.geometry import Point
 from compas.datastructures import Mesh
+from compas.geometry import Point
 from compas.geometry import Polygon
+from OCC.Core.BRep import BRep_Builder
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
+from OCC.Core.BRepFill import BRepFill_Filling
+from OCC.Core.GeomAbs import GeomAbs_C0
+from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
+from OCC.Core.GeomFill import geomfill
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.TopoDS import TopoDS_Face
+from OCC.Core.TopoDS import TopoDS_Shell
+from OCC.Extend.TopologyUtils import TopologyExplorer
+from typing_extensions import Annotated
 
 from .arrays import array1_from_points1
 
-from OCC.Core.gp import gp_Pnt
-from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
-from OCC.Core.TopoDS import TopoDS_Shell
-from OCC.Core.TopoDS import TopoDS_Face
-from OCC.Core.BRep import BRep_Builder
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
-from OCC.Core.GeomFill import geomfill
-from OCC.Core.BRepFill import BRepFill_Filling
-from OCC.Core.GeomAbs import GeomAbs_C0
-from OCC.Extend.TopologyUtils import TopologyExplorer
-
-
-Triangle = Union[
-    Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 3]
-]
-Quad = Union[
-    Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 4]
-]
+Triangle = Union[Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 3]]
+Quad = Union[Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 4]]
 NGon = Union[Polygon, List[Union[Annotated[List[float], 3], compas.geometry.Point]]]
 
 
@@ -104,12 +98,8 @@ def quad_to_face(quad: Quad) -> TopoDS_Face:
         raise ValueError("The number of input points should be four.")
 
     points = [Point(*point) for point in quad]
-    curve1 = GeomAPI_PointsToBSpline(
-        array1_from_points1([points[0], points[1]])
-    ).Curve()
-    curve2 = GeomAPI_PointsToBSpline(
-        array1_from_points1([points[3], points[2]])
-    ).Curve()
+    curve1 = GeomAPI_PointsToBSpline(array1_from_points1([points[0], points[1]])).Curve()
+    curve2 = GeomAPI_PointsToBSpline(array1_from_points1([points[3], points[2]])).Curve()
     srf = geomfill.Surface(curve1, curve2)
     return BRepBuilderAPI_MakeFace(srf, 1e-6).Face()
 

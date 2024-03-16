@@ -1,5 +1,4 @@
 import compas.geometry
-
 from OCC.Core.gp import gp_Trsf
 
 

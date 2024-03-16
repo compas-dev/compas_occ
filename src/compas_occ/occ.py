@@ -1,23 +1,19 @@
+from compas.geometry import Point
 from OCC.Core.BOPAlgo import BOPAlgo_Splitter
 from OCC.Core.BRepGProp import brepgprop_VolumeProperties
 from OCC.Core.GProp import GProp_GProps
-from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Compound
 from OCC.Core.TopoDS import TopoDS_Iterator
-
-from compas.geometry import Point
+from OCC.Core.TopoDS import TopoDS_Shape
 
 from .conversions import point_to_compas
-
 
 # =============================================================================
 # Brep ops
 # =============================================================================
 
 
-def split_shapes(
-    arguments: list[TopoDS_Shape], tools: list[TopoDS_Shape]
-) -> list[TopoDS_Shape]:
+def split_shapes(arguments: list[TopoDS_Shape], tools: list[TopoDS_Shape]) -> list[TopoDS_Shape]:
     """Split a group of breps by another group of breps.
 
     Parameters

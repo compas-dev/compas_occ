@@ -1,21 +1,22 @@
-from typing import List, Tuple, Union, Optional
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
-import compas.geometry
 import compas.datastructures
-
-from compas.geometry import Vector
-from compas.geometry import Frame
-from compas.geometry import Translation
-from compas.geometry import Point
-from compas.geometry import Polyline
-from compas.geometry import Polygon
-from compas.geometry import Plane
+import compas.geometry
 from compas.datastructures import Mesh
 from compas.geometry import Brep
-
+from compas.geometry import Frame
+from compas.geometry import Plane
+from compas.geometry import Point
+from compas.geometry import Polygon
+from compas.geometry import Polyline
+from compas.geometry import Translation
+from compas.geometry import Vector
 from OCC.Core import BOPAlgo
-from OCC.Core import BRepAlgoAPI
 from OCC.Core import BRep
+from OCC.Core import BRepAlgoAPI
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepCheck
 from OCC.Core import BRepExtrema
@@ -23,7 +24,6 @@ from OCC.Core import BRepFilletAPI
 from OCC.Core import BRepGProp
 from OCC.Core import BRepMesh
 from OCC.Core import BRepPrimAPI
-from OCC.Core import gp
 from OCC.Core import GProp
 from OCC.Core import IFSelect
 from OCC.Core import IGESControl
@@ -36,25 +36,24 @@ from OCC.Core import TopExp
 from OCC.Core import TopLoc
 from OCC.Core import TopoDS
 from OCC.Core import TopTools
-
+from OCC.Core import gp
 from OCC.Extend import DataExchange
 
-from compas_occ.conversions import triangle_to_face
-from compas_occ.conversions import quad_to_face
-from compas_occ.conversions import ngon_to_face
 from compas_occ.conversions import compas_transformation_to_trsf
-from compas_occ.conversions import point_to_compas
-from compas_occ.conversions import vector_to_occ
-from compas_occ.conversions import location_to_compas
 from compas_occ.conversions import frame_to_occ_ax2
+from compas_occ.conversions import location_to_compas
+from compas_occ.conversions import ngon_to_face
+from compas_occ.conversions import point_to_compas
+from compas_occ.conversions import quad_to_face
+from compas_occ.conversions import triangle_to_face
+from compas_occ.conversions import vector_to_occ
 from compas_occ.geometry import OCCNurbsSurface
 
-from .errors import BrepFilletError
-
-from .brepvertex import OCCBrepVertex
 from .brepedge import OCCBrepEdge
-from .breploop import OCCBrepLoop
 from .brepface import OCCBrepFace
+from .breploop import OCCBrepLoop
+from .brepvertex import OCCBrepVertex
+from .errors import BrepFilletError
 
 
 class OCCBrep(Brep):
@@ -563,9 +562,7 @@ class OCCBrep(Brep):
         zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
         frame = box.frame.transformed(Translation.from_vector(xaxis + yaxis + zaxis))
         ax2 = frame_to_occ_ax2(frame)  # type: ignore
-        shape = BRepPrimAPI.BRepPrimAPI_MakeBox(
-            ax2, box.xsize, box.ysize, box.zsize
-        ).Shape()
+        shape = BRepPrimAPI.BRepPrimAPI_MakeBox(ax2, box.xsize, box.ysize, box.zsize).Shape()
         return cls.from_native(shape)
 
     @classmethod
@@ -582,9 +579,7 @@ class OCCBrep(Brep):
         :class:`~compas_occ.brep.OCCBrep`
 
         """
-        shape = BRepPrimAPI.BRepPrimAPI_MakeSphere(
-            gp.gp_Pnt(*sphere.frame.point), sphere.radius
-        ).Shape()
+        shape = BRepPrimAPI.BRepPrimAPI_MakeSphere(gp.gp_Pnt(*sphere.frame.point), sphere.radius).Shape()
         return cls.from_native(shape)
 
     @classmethod
@@ -642,9 +637,7 @@ class OCCBrep(Brep):
         raise NotImplementedError
 
     @classmethod
-    def from_mesh(
-        cls, mesh: compas.datastructures.Mesh, solid: bool = True
-    ) -> "OCCBrep":
+    def from_mesh(cls, mesh: compas.datastructures.Mesh, solid: bool = True) -> "OCCBrep":
         """
         Construct a BRep from a COMPAS mesh.
 
@@ -909,9 +902,7 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    def to_tesselation(
-        self, linear_deflection: float = 1
-    ) -> Tuple[Mesh, List[Polyline]]:
+    def to_tesselation(self, linear_deflection: float = 1) -> Tuple[Mesh, List[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
@@ -955,9 +946,7 @@ class OCCBrep(Brep):
                     if any(edge.is_same(e) for e in seen):
                         continue
                     seen.append(edge)
-                    pot = bt.PolygonOnTriangulation(
-                        edge.occ_edge, triangulation, location
-                    )
+                    pot = bt.PolygonOnTriangulation(edge.occ_edge, triangulation, location)
                     if pot is None:
                         continue
                     points = []
@@ -971,9 +960,7 @@ class OCCBrep(Brep):
             if any(edge.is_same(e) for e in seen):
                 continue
             if edge.is_line:
-                lines.append(
-                    Polyline([edge.vertices[0].point, edge.vertices[-1].point])
-                )
+                lines.append(Polyline([edge.vertices[0].point, edge.vertices[-1].point]))
             elif edge.is_circle:
                 lines.append(edge.curve.to_polyline())
             elif edge.is_ellipse:
@@ -1042,9 +1029,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(
-            self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map
-        )
+        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         vertices = []
@@ -1072,9 +1057,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(
-            self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map
-        )
+        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         edges = []
@@ -1098,9 +1081,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(
-            self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_FACE, map
-        )
+        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_FACE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
@@ -1124,9 +1105,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(
-            self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_FACE, map
-        )
+        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_FACE, map)
         results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
@@ -1152,9 +1131,7 @@ class OCCBrep(Brep):
         """
 
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(
-            self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_WIRE, map
-        )
+        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_WIRE, map)
         results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         loops = []
@@ -1332,9 +1309,7 @@ class OCCBrep(Brep):
         shape = builder.ModifiedShape(self.occ_shape)
         return OCCBrep.from_shape(shape)
 
-    def contours(
-        self, planes: List[compas.geometry.Plane]
-    ) -> List[List[compas.geometry.Polyline]]:
+    def contours(self, planes: List[compas.geometry.Plane]) -> List[List[compas.geometry.Polyline]]:
         """
         Generate contour lines by slicing the BRep shape with a series of planes.
 
@@ -1438,9 +1413,10 @@ class OCCBrep(Brep):
         None
 
         """
-        from compas_occ.occ import split_shapes
-        from compas_occ.occ import compute_shape_centreofmass
         from compas.geometry import is_point_behind_plane
+
+        from compas_occ.occ import compute_shape_centreofmass
+        from compas_occ.occ import split_shapes
 
         if isinstance(plane, Frame):
             plane = Plane.from_frame(plane)
@@ -1540,9 +1516,7 @@ class OCCBrep(Brep):
         else:
             raise BrepFilletError("Fillet operation could not be completed.")
 
-    def filleted(
-        self, radius: float, exclude: Optional[List[OCCBrepEdge]] = None
-    ) -> "OCCBrep":
+    def filleted(self, radius: float, exclude: Optional[List[OCCBrepEdge]] = None) -> "OCCBrep":
         """Construct a copy of a Brep with filleted edges.
 
         Parameters

@@ -1,12 +1,11 @@
 from compas.geometry import Point
 from compas.geometry import Vector
+from OCC.Core.Geom import Geom_Curve
+from OCC.Core.Geom import Geom_SurfaceOfRevolution
 
 from compas_occ.conversions.geometry import axis_to_occ
 from compas_occ.geometry.curves.curve import OCCCurve
 from compas_occ.geometry.surfaces.surface import OCCSurface
-
-from OCC.Core.Geom import Geom_Curve
-from OCC.Core.Geom import Geom_SurfaceOfRevolution
 
 
 class OCCRevolutionSurface(OCCSurface):

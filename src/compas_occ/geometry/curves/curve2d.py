@@ -1,18 +1,17 @@
 from typing import Tuple
 
-from compas.geometry import Point
-from compas.geometry import Vector
 from compas.geometry import Curve
-from compas.geometry import Polyline
 from compas.geometry import Frame
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas.geometry import Vector
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge2d
 from OCC.Core.Geom2d import Geom2d_Curve
 from OCC.Core.gp import gp_Pnt2d
 from OCC.Core.gp import gp_Vec2d
-from OCC.Core.TopoDS import topods_Edge
-from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import TopoDS_Edge
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import topods_Edge
 
 from compas_occ.conversions import point2d_to_compas
 from compas_occ.conversions import vector2d_to_compas
@@ -141,10 +140,10 @@ class OCCCurve2d(Curve):
         None
 
         """
-        from OCC.Core.Interface import Interface_Static_SetCVal
         from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.STEPControl import STEPControl_Writer
+        from OCC.Core.Interface import Interface_Static_SetCVal
         from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.STEPControl import STEPControl_Writer
 
         step_writer = STEPControl_Writer()
         Interface_Static_SetCVal("write.step.schema", schema)
@@ -205,9 +204,7 @@ class OCCCurve2d(Curve):
         start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
         if t < start or t > end:
             raise ValueError(
-                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(
-                    t, self.domain
-                )
+                "The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain)
             )
 
         point = self.occ_curve.Value(t)

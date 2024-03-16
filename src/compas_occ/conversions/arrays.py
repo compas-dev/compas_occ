@@ -1,14 +1,13 @@
 from typing import List
 
 from compas.geometry import Point
-
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColgp import TColgp_Array2OfPnt
 from OCC.Core.TColgp import TColgp_HArray1OfPnt
+from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.TColStd import TColStd_Array1OfReal
 from OCC.Core.TColStd import TColStd_Array2OfReal
-from OCC.Core.TColStd import TColStd_Array1OfInteger
 
 
 def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
@@ -40,14 +39,12 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
 
     >>> for item in array1:
     ...     print(item)
-    ...
     <class 'gp_Pnt'>
     <class 'gp_Pnt'>
     <class 'gp_Pnt'>
 
     >>> for item in array1:
     ...     print(item.X(), item.Y(), item.Z())
-    ...
     0.0 0.0 0.0
     1.0 0.0 0.0
     2.0 0.0 0.0
@@ -87,14 +84,12 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
 
     >>> for item in harray1:
     ...     print(item)
-    ...
     <class 'gp_Pnt'>
     <class 'gp_Pnt'>
     <class 'gp_Pnt'>
 
     >>> for item in harray1:
     ...     print(item.X(), item.Y(), item.Z())
-    ...
     0.0 0.0 0.0
     1.0 0.0 0.0
     2.0 0.0 0.0
@@ -136,7 +131,6 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
     >>> points1 = points1_from_array1(array1)
     >>> for point in points1:
     ...     print(point)
-    ...
     Point(x=0.0, y=0.0, z=0.0)
     Point(x=1.0, y=0.0, z=0.0)
     Point(x=2.0, y=0.0, z=0.0)
@@ -183,7 +177,6 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     ...     y = value.Y()
     ...     z = value.Z()
     ...     print(x, y, z)
-    ...
     0.0 0.0 0.0
     0.0 1.0 0.0
     1.0 0.0 0.0
@@ -235,7 +228,6 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     >>> points2 = points2_from_array2(array2)
     >>> for i, j in product(range(len(points2)), range(len(points2[0]))):
     ...     print(points2[i][j])
-    ...
     Point(x=0.0, y=0.0, z=0.0)
     Point(x=0.0, y=1.0, z=0.0)
     Point(x=1.0, y=0.0, z=0.0)
