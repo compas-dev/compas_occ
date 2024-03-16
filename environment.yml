@@ -4,4 +4,6 @@ channels:
 dependencies:
   - pythonocc-core
   - pip:
-    - -r requirements-dev.txt
+      - -r requirements.txt
+      - -r requirements-dev.txt
+      - -e .
