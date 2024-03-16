@@ -684,11 +684,7 @@ document.write(`
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">compas_occ.geometry</span> <span class="kn">import</span> <span class="n">OCCNurbsCurve</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">curve</span> <span class="o">=</span> <span class="n">OCCNurbsCurve</span><span class="o">.</span><span class="n">from_parameters</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">knots</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">multiplicities</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-<span class="gp">... </span>    <span class="n">degree</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">knots</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">multiplicities</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
@@ -774,6 +770,12 @@ document.write(`
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.closest_points_curve.html#compas_occ.geometry.OCCNurbsCurve.closest_points_curve" title="compas_occ.geometry.OCCNurbsCurve.closest_points_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closest_points_curve</span></code></a></p></td>
 <td><p>Computes the points on curves where the curve is the closest to another given curve.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.compute_aabb.html#compas_occ.geometry.OCCNurbsCurve.compute_aabb" title="compas_occ.geometry.OCCNurbsCurve.compute_aabb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_aabb</span></code></a></p></td>
+<td><p>Compute the axis-aligned bounding box of the geometry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.compute_obb.html#compas_occ.geometry.OCCNurbsCurve.compute_obb" title="compas_occ.geometry.OCCNurbsCurve.compute_obb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_obb</span></code></a></p></td>
+<td><p>Compute the oriented bounding box of the geometry.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsCurve.curvature_at.html#compas_occ.geometry.OCCNurbsCurve.curvature_at" title="compas_occ.geometry.OCCNurbsCurve.curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curvature_at</span></code></a></p></td>
 <td><p>Compute the curvature vector at a curve parameter.</p></td>
