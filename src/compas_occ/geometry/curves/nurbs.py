@@ -10,9 +10,9 @@ from compas.geometry import Ellipse
 from compas.geometry import Frame
 from compas.geometry import Line
 from compas.geometry import NurbsCurve
+from compas.geometry import Point
 
 # from OCC.Core.TopoDS import TopoDS_Edge
-from compas.geometry import Point
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.GeomAPI import GeomAPI_Interpolate
 from OCC.Core.GeomConvert import GeomConvert_CompCurveToBSplineCurve
