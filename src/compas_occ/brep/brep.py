@@ -29,6 +29,7 @@ from OCC.Core import IFSelect
 from OCC.Core import IGESControl
 from OCC.Core import Interface
 from OCC.Core import ShapeFix
+from OCC.Core import ShapeUpgrade
 from OCC.Core import STEPControl
 from OCC.Core import StlAPI
 from OCC.Core import TopAbs
@@ -695,6 +696,29 @@ class OCCBrep(Brep):
         return brep
 
     @classmethod
+    def from_plane(
+        cls,
+        plane: Plane,
+        domain_u: Tuple[float, float] = (-1.0, +1.0),
+        domain_v: Tuple[float, float] = (-1.0, +1.0),
+    ) -> "OCCBrep":
+        """
+        Make a BRep from a plane.
+
+        Parameters
+        ----------
+        plane : :class:`compas.geometry.Plane`
+        domain_u : tuple[float, float], optional
+        domain_v : tuple[float, float], optional
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        return cls.from_brepfaces([OCCBrepFace.from_plane(plane, domain_u=domain_u, domain_v=domain_v)])
+
+    @classmethod
     def from_planes(cls, planes: List[Plane]) -> "OCCBrep":
         """
         Make a BRep from a list of planes.
@@ -827,20 +851,28 @@ class OCCBrep(Brep):
     # ==============================================================================
 
     @classmethod
-    def from_boolean_difference(cls, A: "OCCBrep", B: "OCCBrep") -> "OCCBrep":
+    def from_boolean_difference(cls, A: "OCCBrep", B: Union["OCCBrep", list["OCCBrep"]]) -> "OCCBrep":
         """
         Construct a BRep from the boolean difference of two other BReps.
 
         Parameters
         ----------
         A : :class:`~compas_occ.brep.OCCBrep`
-        B : :class:`~compas_occ.brep.OCCBrep`
+        B : :class:`~compas_occ.brep.OCCBrep` | list[:class:`~compas_occ.brep.OCCBrep`]
 
         Returns
         -------
         :class:`~compas_occ.brep.OCCBrep`
 
         """
+        if isinstance(B, list):
+            compound = TopoDS.TopoDS_Compound()
+            builder = BRep.BRep_Builder()
+            builder.MakeCompound(compound)
+            for brep in B:
+                builder.Add(compound, brep.native_brep)
+            B = Brep.from_native(compound)
+
         cut = BRepAlgoAPI.BRepAlgoAPI_Cut(A.native_brep, B.native_brep)
         if not cut.IsDone():
             raise Exception("Boolean difference operation could not be completed.")
@@ -902,21 +934,25 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    def to_tesselation(self, linear_deflection: float = 1) -> Tuple[Mesh, List[Polyline]]:
+    def to_tesselation(
+        self, linear_deflection: float = 1, angular_deflection: float = 0.1
+    ) -> Tuple[Mesh, List[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
         Parameters
         ----------
         linear_deflection : float, optional
-            Allowable deviation between curved geometry and mesh discretisation.
+            Allowable "distance" deviation between curved geometry and mesh discretisation.
+        angular_deflection : float, optional
+            Allowable "curvature" deviation between curved geometry and mesh discretisation.
 
         Returns
         -------
         tuple[:class:`~compas.datastructures.Mesh`, list[:class:`~compas.geometry.Polyline`]]
 
         """
-        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection)
+        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
         bt = BRep.BRep_Tool()
         mesh = Mesh()
         polylines = []
@@ -1029,7 +1065,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
+        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         vertices = []
@@ -1057,7 +1093,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
+        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         edges = []
@@ -1081,7 +1117,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_FACE, map)
+        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_FACE, map)
         results = map.FindFromKey(vertex.occ_vertex)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
@@ -1105,7 +1141,7 @@ class OCCBrep(Brep):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_FACE, map)
+        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_FACE, map)
         results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
@@ -1131,7 +1167,7 @@ class OCCBrep(Brep):
         """
 
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp_MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_WIRE, map)
+        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_WIRE, map)
         results = map.FindFromKey(edge.occ_edge)
         iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         loops = []
@@ -1226,6 +1262,29 @@ class OCCBrep(Brep):
         """
         self.sew()
         self.fix()
+
+    def simplify(self, merge_edges=True, merge_faces=True):
+        """Simplify the shape by merging colinear edges and coplanar faces.
+
+        Parameters
+        ----------
+        merge_edges : bool, optional
+            Merge edges with the same underlying geometry.
+        merge_faces : bool, optional
+            Merge faces with the same underlying geometry.
+
+        Returns
+        -------
+        None
+
+        """
+        if not merge_edges and not merge_faces:
+            return
+        simplifier = ShapeUpgrade.ShapeUpgrade_UnifySameDomain()
+        simplifier.Initialize(self.native_brep, UnifyEdges=merge_edges, UnifyFaces=merge_faces)
+        simplifier.Build()
+        shape = simplifier.Shape()
+        self.native_brep = shape
 
     def cull_unused_vertices(self) -> None:
         """
@@ -1365,14 +1424,14 @@ class OCCBrep(Brep):
         faces1 = []
         for key in keys1:
             face = proximity.GetSubShape1(key)
-            faces1.append(OCCBrepFace(face))
+            faces1.append(OCCBrepFace(face))  # type: ignore
 
         overlaps2 = proximity.OverlapSubShapes2()
         keys2 = overlaps2.Keys()
         faces2 = []
         for key in keys2:
             face = proximity.GetSubShape2(key)
-            faces2.append(OCCBrepFace(face))
+            faces2.append(OCCBrepFace(face))  # type: ignore
 
         return faces1, faces2
 
