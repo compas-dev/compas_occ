@@ -273,7 +273,7 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def is_valid(self) -> bool:
-        return BRepAlgo.brepalgo_IsValid(self.occ_edge)
+        return BRepAlgo.brepalgo.IsValid(self.occ_edge)
 
     @property
     def vertices(self) -> List[OCCBrepVertex]:
@@ -287,16 +287,16 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def first_vertex(self) -> OCCBrepVertex:
-        return OCCBrepVertex(TopExp.topexp_FirstVertex(self.occ_edge))
+        return OCCBrepVertex(TopExp.topexp.FirstVertex(self.occ_edge))
 
     @property
     def last_vertex(self) -> OCCBrepVertex:
-        return OCCBrepVertex(TopExp.topexp_LastVertex(self.occ_edge))
+        return OCCBrepVertex(TopExp.topexp.LastVertex(self.occ_edge))
 
     @property
     def length(self) -> float:
         props = GProp.GProp_GProps()
-        BRepGProp.brepgprop_LinearProperties(self.occ_edge, props)
+        BRepGProp.brepgprop.LinearProperties(self.occ_edge, props)
         return props.Mass()
 
     @property

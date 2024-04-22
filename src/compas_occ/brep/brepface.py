@@ -278,7 +278,7 @@ class OCCBrepFace(BrepFace):
 
     @property
     def outerloop(self) -> OCCBrepLoop:
-        wire = BRepTools.breptools_OuterWire(self.occ_face)
+        wire = BRepTools.breptools.OuterWire(self.occ_face)
         return OCCBrepLoop(wire)
 
     @property
@@ -697,7 +697,7 @@ class OCCBrepFace(BrepFace):
         bool
 
         """
-        return BRepAlgo.brepalgo_IsValid(self.occ_face)
+        return BRepAlgo.brepalgo.IsValid(self.occ_face)
 
     def fix(self) -> None:
         """
