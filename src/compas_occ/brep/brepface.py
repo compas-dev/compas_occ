@@ -184,13 +184,13 @@ class OCCBrepFace(BrepFace):
     #         self._surface = OCCSurface(occ_surface)
     #     return self._surface
 
-    # # remove this if possible
-    # @property
-    # def nurbssurface(self) -> OCCNurbsSurface:
-    #     if not self._nurbssurface:
-    #         occ_surface = self.occ_adaptor.BSpline()
-    #         self._nurbssurface = OCCNurbsSurface(occ_surface)
-    #     return self._nurbssurface
+    # remove this if possible
+    @property
+    def nurbssurface(self) -> OCCNurbsSurface:
+        if not self._nurbssurface:
+            occ_surface = self.occ_adaptor.BSpline()
+            self._nurbssurface = OCCNurbsSurface(occ_surface)
+        return self._nurbssurface
 
     @property
     def surface(self):

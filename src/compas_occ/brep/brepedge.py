@@ -32,6 +32,7 @@ from compas_occ.conversions import parabola_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCCurve2d
+from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCSurface
 
 
@@ -200,13 +201,13 @@ class OCCBrepEdge(BrepEdge):
     #         self._curve = OCCCurve(occ_curve)  # type: ignore
     #     return self._curve
 
-    # # remove this if possible
-    # @property
-    # def nurbscurve(self) -> OCCNurbsCurve:
-    #     if not self._nurbscurve:
-    #         occ_curve = self.occ_adaptor.BSpline()
-    #         self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
-    #     return self._nurbscurve  # type: ignore (don't understand why this is necessary)
+    # remove this if possible
+    @property
+    def nurbscurve(self) -> OCCNurbsCurve:
+        if not self._nurbscurve:
+            occ_curve = self.occ_adaptor.BSpline()
+            self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
+        return self._nurbscurve  # type: ignore (don't understand why this is necessary)
 
     @property
     def curve(self):
