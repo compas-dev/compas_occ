@@ -1281,7 +1281,7 @@ class OCCBrep(Brep):
         if not merge_edges and not merge_faces:
             return
         simplifier = ShapeUpgrade.ShapeUpgrade_UnifySameDomain()
-        simplifier.Initialize(self.native_brep, UnifyEdges=merge_edges, UnifyFaces=merge_faces)
+        simplifier.Initialize(self.native_brep, merge_edges, merge_faces)
         simplifier.Build()
         shape = simplifier.Shape()
         self.native_brep = shape
