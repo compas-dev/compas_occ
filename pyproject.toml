@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "compas_occ"
 description = "COMPAS wrapper for the Python bindings of OCC."
-keywords = ["form finding", "dynamic relaxation"]
+keywords = ["compas", "nurbs", "brep", "occ"]
 authors = [
     { name = "tom van mele", email = "tom.v.mele@gmail.com" },
     { name = "Lotte Aldinger", email = "aldinger@arch.ethz.ch" },
@@ -18,7 +18,7 @@ authors = [
 license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.9"
-dynamic = ['dependencies', 'optional-dependencies', 'version']
+dynamic = ["dependencies", "optional-dependencies", "version"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
