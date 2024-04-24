@@ -31,4 +31,4 @@ To get the latest development version, you can install from local source, or dir
     conda activate occ
     git clone https://github.com/compas-dev/compas_occ.git
     cd compas_occ
-    pip install -e '.[dev]'
+    pip install -e ".[dev]"
