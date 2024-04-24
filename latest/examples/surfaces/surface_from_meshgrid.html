@@ -652,14 +652,12 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../../_images/example_surface_from_meshgrid.png" class="figure-img img-fluid" src="../../_images/example_surface_from_meshgrid.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># type: ignore</span>
-
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsSurface</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Polyline</span>
-<span class="kn">from</span> <span class="nn">compas.utilities</span> <span class="kn">import</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">linspace</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">NurbsSurface</span>
-<span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
-
+<span class="kn">from</span> <span class="nn">compas.itertools</span> <span class="kn">import</span> <span class="n">linspace</span>
+<span class="kn">from</span> <span class="nn">compas.itertools</span> <span class="kn">import</span> <span class="n">meshgrid</span>
+<span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
 
 <span class="n">UU</span><span class="p">,</span> <span class="n">VV</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
@@ -687,10 +685,10 @@ document.write(`
 <span class="c1"># Visualisation</span>
 <span class="c1"># ==============================================================================</span>
 
-<span class="n">view</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">surface</span><span class="o">.</span><span class="n">points</span><span class="p">:</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
         <span class="n">Polyline</span><span class="p">(</span><span class="n">row</span><span class="p">),</span>
         <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -700,7 +698,7 @@ document.write(`
     <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">surface</span><span class="o">.</span><span class="n">points</span><span class="p">):</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
         <span class="n">Polyline</span><span class="p">(</span><span class="n">col</span><span class="p">),</span>
         <span class="n">show_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">pointsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -709,9 +707,9 @@ document.write(`
         <span class="n">linecolor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
     <span class="p">)</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="mi">50</span><span class="p">))</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">nv</span><span class="o">=</span><span class="mi">50</span><span class="p">))</span>
 
-<span class="n">view</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

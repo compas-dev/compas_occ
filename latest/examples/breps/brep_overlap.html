@@ -652,11 +652,9 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../../_images/example_brep_overlap.png" class="figure-img img-fluid" src="../../_images/example_brep_overlap.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># type: ignore</span>
-<span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
-<span class="kn">from</span> <span class="nn">compas.colors</span> <span class="kn">import</span> <span class="n">Color</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Brep</span>
-<span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
+<span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
 
 <span class="n">A</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_brep</span><span class="p">()</span>
 
@@ -670,30 +668,31 @@ document.write(`
 <span class="c1"># Visualization</span>
 <span class="c1"># =============================================================================</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">look_at</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># viewer.view.camera.position = [3, -3, 1]</span>
+<span class="c1"># viewer.view.camera.look_at([-1, 2, 0])</span>
 
-<span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">FA</span><span class="p">[:</span><span class="mi">1</span><span class="p">]:</span>
-    <span class="n">brep</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_brepfaces</span><span class="p">([</span><span class="n">face</span><span class="p">])</span>
-    <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-        <span class="n">brep</span><span class="p">,</span>
-        <span class="n">facecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">()</span><span class="o">.</span><span class="n">lightened</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-        <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">linecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">(),</span>
-    <span class="p">)</span>
+<span class="c1"># viewer.scene.add(A, opacity=0.5, linewidth=3)</span>
+<span class="c1"># viewer.scene.add(B, opacity=0.5, linewidth=3)</span>
 
-<span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">FB</span><span class="p">[:</span><span class="mi">1</span><span class="p">]:</span>
-    <span class="n">brep</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">from_brepfaces</span><span class="p">([</span><span class="n">face</span><span class="p">])</span>
-    <span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-        <span class="n">brep</span><span class="p">,</span>
-        <span class="n">facecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">()</span><span class="o">.</span><span class="n">lightened</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-        <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">linecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">(),</span>
-    <span class="p">)</span>
+<span class="c1"># for face in FA[:1]:</span>
+<span class="c1">#     brep = Brep.from_brepfaces([face])</span>
+<span class="c1">#     viewer.scene.add(</span>
+<span class="c1">#         brep,</span>
+<span class="c1">#         facecolor=Color.red().lightened(50),</span>
+<span class="c1">#         linewidth=3,</span>
+<span class="c1">#         linecolor=Color.red(),</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># for face in FB[:1]:</span>
+<span class="c1">#     brep = Brep.from_brepfaces([face])</span>
+<span class="c1">#     viewer.scene.add(</span>
+<span class="c1">#         brep,</span>
+<span class="c1">#         facecolor=Color.blue().lightened(50),</span>
+<span class="c1">#         linewidth=3,</span>
+<span class="c1">#         linecolor=Color.blue(),</span>
+<span class="c1">#     )</span>
 
 <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>

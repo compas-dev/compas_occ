@@ -652,12 +652,12 @@ document.write(`
 <figure class="figure align-default">
 <img alt="../../_images/example_brep_slice.png" class="figure-img img-fluid" src="../../_images/example_brep_slice.png" />
 </figure>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># type: ignore</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span>
+
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Box</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Plane</span>
 <span class="kn">from</span> <span class="nn">compas.geometry</span> <span class="kn">import</span> <span class="n">Rotation</span>
-<span class="kn">from</span> <span class="nn">compas_view2.app</span> <span class="kn">import</span> <span class="n">App</span>
+<span class="kn">from</span> <span class="nn">compas_viewer</span> <span class="kn">import</span> <span class="n">Viewer</span>
 
 <span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_brep</span><span class="p">()</span>
 
@@ -667,21 +667,20 @@ document.write(`
 
 <span class="nb">slice</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">plane</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="nb">slice</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
-
 <span class="c1"># =============================================================================</span>
 <span class="c1"># Visualization</span>
 <span class="c1"># =============================================================================</span>
 
 <span class="c1"># TODO: this is currently not working properly, because of the new tessellation imlpementation.</span>
 
-<span class="n">viewer</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">look_at</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">viewer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># viewer.view.camera.position = [2, -4, 1]</span>
+<span class="c1"># viewer.view.camera.look_at([0, 0, 0])</span>
+
+<span class="c1"># viewer.scene.add(box, opacity=0.5)</span>
+<span class="c1"># viewer.scene.add(slice, linewidth=2)</span>
+
 <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

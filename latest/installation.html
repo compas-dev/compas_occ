@@ -649,44 +649,27 @@ document.write(`
 <h1>Installation</h1>
 <section id="stable">
 <h2>Stable</h2>
-<section id="install-with-conda">
-<h3>Install with conda</h3>
-<p>In an existing environment, for example “research”.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas_occ<span class="w"> </span>compas_view2<span class="w"> </span>--yes
+<p>Stable releases of <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ</span></code> can be installed via <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>compas_occ
 </pre></div>
 </div>
-<p>In a new environment, for example … “research” 😀</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas_occ<span class="w"> </span>compas_view2<span class="w"> </span>--yes
+<p>Several examples use the COMPAS Viewer for visualisation.
+To install <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_viewer</span></code> in the same environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>occ
+pip<span class="w"> </span>install<span class="w"> </span>compas_viewer
 </pre></div>
 </div>
-<p>In both cases, <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_view2</span></code> is optional.</p>
-</section>
-<section id="install-with-pip">
-<h3>Install with pip</h3>
-<p>To install <code class="xref py py-mod docutils literal notranslate"><span class="pre">compas_occ</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>, some of its dependencies have to be installed from <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> first.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>research<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
-conda<span class="w"> </span>activate<span class="w"> </span>occ
-pip<span class="w"> </span>install<span class="w"> </span>compas_occ
-</pre></div>
-</div>
-</section>
 </section>
 <section id="development">
 <h2>Development</h2>
 <p>To get the latest development version, you can install from local source, or directly from the github repo.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>compas<span class="w"> </span>pythonocc-core
 conda<span class="w"> </span>activate<span class="w"> </span>occ
-pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>occ<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9<span class="w"> </span>compas<span class="w"> </span>compas_view2<span class="w"> </span>pythonocc-core
-conda<span class="w"> </span>activate<span class="w"> </span>occ
-git<span class="w"> </span>pull<span class="w"> </span>https://github.com/compas-dev/compas_occ.git#egg<span class="o">=</span>compas_occ
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/compas-dev/compas_occ.git
 <span class="nb">cd</span><span class="w"> </span>compas_occ
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
 </pre></div>
 </div>
-<p>You can use whichever Python version you prefer, but <code class="docutils literal notranslate"><span class="pre">3.9</span></code> is compatible with Blender…</p>
 </section>
 </section>
 
@@ -711,11 +694,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable">Stable</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-with-conda">Install with conda</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#install-with-pip">Install with pip</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable">Stable</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 </ul>
   </nav></div>
