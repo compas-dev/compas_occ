@@ -1,9 +1,6 @@
-# type: ignore
-
-from compas.geometry import Point
 from compas.geometry import NurbsCurve
-from compas_view2.app import App
-
+from compas.geometry import Point
+from compas_viewer import Viewer
 
 pointsA = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 curveA = NurbsCurve.from_points(pointsA)
@@ -24,10 +21,10 @@ print(segment.domain)
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(curveA.to_polyline(), linewidth=4, linecolor=(1, 0, 0))
-view.add(curveB.to_polyline(), linewidth=1, linecolor=(0, 0, 0))
-view.add(segment.to_polyline(), linewidth=4, linecolor=(0, 1, 0))
+viewer.scene.add(curveA.to_polyline(), linewidth=4, linecolor=(1, 0, 0))
+viewer.scene.add(curveB.to_polyline(), linewidth=1, linecolor=(0, 0, 0))
+viewer.scene.add(segment.to_polyline(), linewidth=4, linecolor=(0, 1, 0))
 
-view.run()
+viewer.show()

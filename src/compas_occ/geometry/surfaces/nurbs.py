@@ -13,7 +13,7 @@ from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Translation
 from compas.geometry import Vector
-from compas.utilities import flatten
+from compas.itertools import flatten
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.GeomAbs import GeomAbs_C2
 from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
@@ -381,11 +381,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         elif style == "curved":
             occ_style = GeomFill_CurvedStyle
         else:
-            warnings.warn(
-                'This fill style is not supported: {}. We will use GeomFill_StretchStyle ("stretch") instead.'.format(
-                    style
-                )
-            )
+            warnings.warn('This fill style is not supported: {}. We will use GeomFill_StretchStyle ("stretch") instead.'.format(style))
             occ_style = GeomFill_StretchStyle
 
         if curve3 and curve4:

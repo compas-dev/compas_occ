@@ -1,10 +1,7 @@
-# type: ignore
-
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
-
-from compas_view2.app import App
+from compas_viewer import Viewer
 
 points1 = [Point(0, -10, 0), Point(1, -8, 0), Point(-1, -6, 0), Point(0, -4, 0)]
 points2 = [Point(5, -10, 0), Point(4, -8, 0), Point(6, -6, 0), Point(5, -4, 0)]
@@ -36,17 +33,17 @@ nurbssurface_4curves = NurbsSurface.from_fill(
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(nurbscurve1.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
-view.add(nurbscurve2.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
+viewer.scene.add(nurbscurve1.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
+viewer.scene.add(nurbscurve2.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
 
-view.add(nurbscurve3.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
-view.add(nurbscurve4.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
-view.add(nurbscurve5.to_polyline(), linewidth=3, linecolor=(1, 0, 1))
-view.add(nurbscurve6.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
+viewer.scene.add(nurbscurve3.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
+viewer.scene.add(nurbscurve4.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
+viewer.scene.add(nurbscurve5.to_polyline(), linewidth=3, linecolor=(1, 0, 1))
+viewer.scene.add(nurbscurve6.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
 
-view.add(nurbssurface_2curves)
-view.add(nurbssurface_4curves)
+viewer.scene.add(nurbssurface_2curves)
+viewer.scene.add(nurbssurface_4curves)
 
-view.run()
+viewer.show()

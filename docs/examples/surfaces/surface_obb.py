@@ -1,11 +1,11 @@
-# type: ignore
-
 from math import radians
-from compas.geometry import Point, Translation, Rotation
-from compas.geometry import Polyline
-from compas.geometry import NurbsSurface
-from compas_view2.app import App
 
+from compas.geometry import NurbsSurface
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas.geometry import Rotation
+from compas.geometry import Translation
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0), Point(4, 0, 0)],
@@ -31,10 +31,10 @@ box = surface.obb()
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
 for row in surface.points:
-    view.add(
+    viewer.scene.add(
         Polyline(row),
         show_points=True,
         pointsize=20,
@@ -44,8 +44,8 @@ for row in surface.points:
     )
 
 for col in zip(*surface.points):
-    view.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
+    viewer.scene.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
 
-view.add(surface)
-view.add(box, show_faces=False)
-view.run()
+viewer.scene.add(surface)
+viewer.scene.add(box, show_faces=False)
+viewer.show()

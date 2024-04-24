@@ -1,9 +1,7 @@
-# type: ignore
-
-from compas.utilities import pairwise
-from compas.geometry import Point
 from compas.geometry import NurbsCurve
-from compas_view2.app import App
+from compas.geometry import Point
+from compas.itertools import pairwise
+from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(3, -6, 0), Point(6, 2, 0), Point(9, -2, 0)]
 curve = NurbsCurve.from_points(points)
@@ -19,9 +17,9 @@ for u, v in pairwise(params):
 # Visualization
 # =============================================================================
 
-viewer = App()
+viewer = Viewer()
 
-viewer.add(curve.to_polyline())
+viewer.scene.add(curve.to_polyline())
 for point in points:
-    viewer.add(point)
+    viewer.scene.add(point)
 viewer.show()

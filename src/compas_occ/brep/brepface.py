@@ -541,9 +541,7 @@ class OCCBrepFace(BrepFace):
         if domain_u and domain_v:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
-            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
-                surface.occ_surface, min_u, max_u, min_v, max_v, precision
-            )
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface.occ_surface, min_u, max_u, min_v, max_v, precision)
         elif loop:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface.occ_surface, loop.occ_wire, inside)
         else:

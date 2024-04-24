@@ -1,12 +1,11 @@
-# type: ignore
-from compas.geometry import Frame, Plane, Circle
-from compas_occ.brep import (
-    OCCBrepEdge,
-    OCCBrepLoop,
-    OCCBrepFace,
-)  # this should be included in the compas API
 from compas.geometry import Brep
-from compas_view2.app import App
+from compas.geometry import Circle
+from compas.geometry import Frame
+from compas.geometry import Plane
+from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepFace
+from compas_occ.brep import OCCBrepLoop
+from compas_viewer import Viewer
 
 circle1 = Circle(1.0, frame=Frame([2, 2, 0]))
 circle2 = Circle(2.0, frame=Frame([-2, -2, 0]))
@@ -25,6 +24,6 @@ brep = Brep.from_brepfaces([face])
 # Visualization
 # =============================================================================
 
-viewer = App()
-viewer.add(brep, linewidth=2)
+viewer = Viewer()
+# viewer.scene.add(brep, linewidth=2)
 viewer.show()

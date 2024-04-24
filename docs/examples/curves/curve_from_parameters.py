@@ -1,10 +1,7 @@
-# type: ignore
-
+from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas.geometry import NurbsCurve
-from compas_view2.app import App
-
+from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 
@@ -20,10 +17,10 @@ curve = NurbsCurve.from_parameters(
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(curve.to_polyline(), linewidth=3)
-view.add(
+viewer.scene.add(curve.to_polyline(), linewidth=3)
+viewer.scene.add(
     Polyline(curve.points),
     show_points=True,
     pointsize=20,
@@ -32,4 +29,4 @@ view.add(
     linecolor=(0.3, 0.3, 0.3),
 )
 
-view.run()
+viewer.show()

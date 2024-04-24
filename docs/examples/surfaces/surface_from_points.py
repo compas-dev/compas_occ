@@ -1,9 +1,7 @@
-# type: ignore
-
+from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas.geometry import NurbsSurface
-from compas_view2.app import App
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -18,10 +16,10 @@ surface = NurbsSurface.from_points(points=points)
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
 for row in surface.points:
-    view.add(
+    viewer.scene.add(
         Polyline(row),
         show_points=True,
         pointsize=20,
@@ -31,7 +29,7 @@ for row in surface.points:
     )
 
 for col in zip(*surface.points):
-    view.add(
+    viewer.scene.add(
         Polyline(col),
         show_points=True,
         pointsize=20,
@@ -40,5 +38,5 @@ for col in zip(*surface.points):
         linecolor=(0.3, 0.3, 0.3),
     )
 
-view.add(surface)
-view.run()
+viewer.scene.add(surface)
+viewer.show()

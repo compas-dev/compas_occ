@@ -1,13 +1,16 @@
 # type: ignore
-from compas.geometry import Point, Vector, Frame, Circle
-from compas_occ.brep import (
-    OCCBrepEdge,
-    OCCBrepLoop,
-    OCCBrepFace,
-)  # this should be included in the compas API
+# this should be included in the compas API
 from compas.geometry import Brep
-from compas.geometry import NurbsCurve, NurbsSurface
-from compas_view2.app import App
+from compas.geometry import Circle
+from compas.geometry import Frame
+from compas.geometry import NurbsCurve
+from compas.geometry import NurbsSurface
+from compas.geometry import Point
+from compas.geometry import Vector
+from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepFace
+from compas_occ.brep import OCCBrepLoop
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -49,6 +52,6 @@ brep = Brep.from_brepfaces([face])
 # Visualization
 # =============================================================================
 
-viewer = App()
-viewer.add(brep, linewidth=2)
+viewer = Viewer()
+# viewer.scene.add(brep, linewidth=2)
 viewer.show()

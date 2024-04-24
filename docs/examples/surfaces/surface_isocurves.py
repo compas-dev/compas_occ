@@ -1,9 +1,6 @@
-# type: ignore
-
-from compas.geometry import Point
 from compas.geometry import NurbsSurface
-from compas_view2.app import App
-
+from compas.geometry import Point
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0), Point(4, 0, 0)],
@@ -30,12 +27,12 @@ for v in surface.space_v(10):
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
 for curve in u_curves:
-    view.add(curve.to_polyline(), linecolor=(1, 0, 0), linewidth=2)
+    viewer.scene.add(curve.to_polyline(), linecolor=(1, 0, 0), linewidth=2)
 
 for curve in v_curves:
-    view.add(curve.to_polyline(), linecolor=(0, 1, 0), linewidth=2)
+    viewer.scene.add(curve.to_polyline(), linecolor=(0, 1, 0), linewidth=2)
 
-view.run()
+viewer.show()

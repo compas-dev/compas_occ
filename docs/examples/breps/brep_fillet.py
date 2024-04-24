@@ -1,7 +1,7 @@
-# type: ignore
 from pathlib import Path
-from compas_view2.app import App
+
 from compas.geometry import Brep
+from compas_viewer import Viewer
 
 # Load the brep from a STEP file
 # and extract the individual letters.
@@ -41,10 +41,12 @@ for letter in letters:
 # Visualization
 # =============================================================================
 
-viewer = App()
-viewer.view.camera.position = [5, -1, 10]
-viewer.view.camera.look_at([5, 2, 0])
+viewer = Viewer()
 
-for letter in letters:
-    viewer.add(letter, linewidth=2, opacity=0.7)
-viewer.run()
+# viewer.view.camera.position = [5, -1, 10]
+# viewer.view.camera.look_at([5, 2, 0])
+
+# for letter in letters:
+#     viewer.scene.add(letter, linewidth=2, opacity=0.7)
+
+viewer.show()

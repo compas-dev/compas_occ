@@ -1,9 +1,10 @@
-# type: ignore
 from pathlib import Path
-from compas.geometry import Frame
-from compas.geometry import Box, Cylinder
+
+from compas.geometry import Box
 from compas.geometry import Brep
-from compas_view2.app import App
+from compas.geometry import Cylinder
+from compas.geometry import Frame
+from compas_viewer import Viewer
 
 filepath = Path(__file__).parent / "booleans.iges"
 
@@ -39,10 +40,12 @@ brep = Brep.from_iges(filepath)
 # Visualisation
 # =============================================================================
 
-viewer = App(viewmode="ghosted", width=1600, height=900)
-viewer.view.camera.rz = -30
-viewer.view.camera.rx = -75
-viewer.view.camera.distance = 7
+viewer = Viewer()
 
-viewer.add(brep, linewidth=2)
-viewer.run()
+# viewer.view.camera.rz = -30
+# viewer.view.camera.rx = -75
+# viewer.view.camera.distance = 7
+
+# viewer.scene.add(brep, linewidth=2)
+
+viewer.show()

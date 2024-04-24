@@ -1,11 +1,9 @@
-# type: ignore
-
-from compas.geometry import Point
-from compas.utilities import meshgrid, flatten, linspace
 from compas.geometry import NurbsSurface
-from compas_view2.app import App
-from compas_view2.objects import Collection
-
+from compas.geometry import Point
+from compas.itertools import flatten
+from compas.itertools import linspace
+from compas.itertools import meshgrid
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -27,9 +25,9 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(surface, show_lines=False)
-view.add(Collection(frames, [{"size": 0.1} for frame in frames]), pointsize=0.25)
+viewer.scene.add(surface, show_lines=False)
+# viewer.scene.add(Collection(frames, [{"size": 0.1} for frame in frames]), pointsize=0.25)
 
-view.run()
+viewer.show()

@@ -1,9 +1,8 @@
-# type: ignore
-
-from compas.geometry import Point, Polyline, Bezier
+from compas.geometry import Bezier
+from compas.geometry import Point
+from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsCurve
-from compas_view2.app import App
-
+from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(1, 2, 0), Point(2, -2, 0), Point(3, 0, 0)]
 bezier = Bezier(points)
@@ -62,9 +61,9 @@ curve6 = OCCNurbsCurve.from_parameters(
 # Visualization
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(
+viewer.scene.add(
     Polyline(bezier.points),
     show_points=True,
     pointsize=20,
@@ -72,9 +71,9 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+viewer.scene.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
 
-view.add(
+viewer.scene.add(
     Polyline(curve1.points),
     show_points=True,
     pointsize=20,
@@ -82,11 +81,11 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
-view.add(curve2.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
-view.add(curve3.to_polyline(), linewidth=3, linecolor=(0.2, 0.2, 1))
-view.add(curve4.to_polyline(), linewidth=3, linecolor=(0.4, 0.4, 1))
-view.add(curve5.to_polyline(), linewidth=3, linecolor=(0.6, 0.6, 1))
-view.add(curve6.to_polyline(), linewidth=3, linecolor=(0.8, 0.8, 1))
+viewer.scene.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+viewer.scene.add(curve2.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
+viewer.scene.add(curve3.to_polyline(), linewidth=3, linecolor=(0.2, 0.2, 1))
+viewer.scene.add(curve4.to_polyline(), linewidth=3, linecolor=(0.4, 0.4, 1))
+viewer.scene.add(curve5.to_polyline(), linewidth=3, linecolor=(0.6, 0.6, 1))
+viewer.scene.add(curve6.to_polyline(), linewidth=3, linecolor=(0.8, 0.8, 1))
 
-view.run()
+viewer.show()

@@ -1,9 +1,6 @@
-# type: ignore
-
-from compas.geometry import Point
 from compas.geometry import NurbsSurface
-from compas_view2.app import App
-
+from compas.geometry import Point
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -30,16 +27,16 @@ print(surface == other)
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
 u = surface.isocurve_u(0.5 * sum(surface.domain_u))
 v = surface.isocurve_v(0.5 * sum(surface.domain_v))
 
-view.add(u.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
-view.add(v.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+viewer.scene.add(u.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+viewer.scene.add(v.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
 
 for curve in surface.boundary():
-    view.add(curve.to_polyline(), linewidth=2, linecolor=(0, 0, 0))
+    viewer.scene.add(curve.to_polyline(), linewidth=2, linecolor=(0, 0, 0))
 
-view.add(other)
-view.run()
+viewer.scene.add(other)
+viewer.show()

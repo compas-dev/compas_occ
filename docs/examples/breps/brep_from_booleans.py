@@ -1,9 +1,8 @@
-# type: ignore
+from compas.geometry import Box
+from compas.geometry import Cylinder
 from compas.geometry import Frame
-from compas.geometry import Box, Cylinder
-from compas_view2.app import App
-
 from compas.tolerance import TOL
+from compas_viewer import Viewer
 
 TOL.lineardeflection = 0.1
 
@@ -23,10 +22,12 @@ result = box - (cx + cy + cz)
 # Visualisation
 # ==============================================================================
 
-viewer = App(viewmode="ghosted", width=1600, height=900)
-viewer.view.camera.rz = -30
-viewer.view.camera.rx = -75
-viewer.view.camera.distance = 7
+viewer = Viewer()
 
-viewer.add(result, linewidth=2)
-viewer.run()
+# viewer.view.camera.rz = -30
+# viewer.view.camera.rx = -75
+# viewer.view.camera.distance = 7
+
+# viewer.scene.add(result, linewidth=2)
+
+viewer.show()

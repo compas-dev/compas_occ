@@ -1,9 +1,8 @@
-# type: ignore
-
-from compas.geometry import Point, Polyline, Bezier
+from compas.geometry import Bezier
 from compas.geometry import NurbsCurve
-from compas_view2.app import App
-
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(1, 3, 0), Point(2, 0, 0)]
 bezier = Bezier(points)
@@ -38,9 +37,9 @@ curve3 = NurbsCurve.from_parameters(
 # Visualization
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(
+viewer.scene.add(
     Polyline(bezier.points),
     show_points=True,
     pointsize=20,
@@ -48,9 +47,9 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+viewer.scene.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
 
-view.add(
+viewer.scene.add(
     Polyline(curve1.points),
     show_points=True,
     pointsize=20,
@@ -58,8 +57,8 @@ view.add(
     linewidth=1,
     linecolor=(0.3, 0.3, 0.3),
 )
-view.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
-view.add(curve2.to_polyline(), linewidth=5, linecolor=(0, 1, 1))
-view.add(curve3.to_polyline(), linewidth=5, linecolor=(0, 0, 1))
+viewer.scene.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+viewer.scene.add(curve2.to_polyline(), linewidth=5, linecolor=(0, 1, 1))
+viewer.scene.add(curve3.to_polyline(), linewidth=5, linecolor=(0, 0, 1))
 
-view.run()
+viewer.show()

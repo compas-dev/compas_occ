@@ -1,10 +1,10 @@
-from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
-
-from compas.geometry import Circle, Frame
-from compas_occ.brep import OCCBrepEdge, OCCBrepLoop
 from compas.geometry import Brep
-
-from compas_view2.app import App
+from compas.geometry import Circle
+from compas.geometry import Frame
+from compas_occ.brep import OCCBrepEdge
+from compas_occ.brep import OCCBrepLoop
+from compas_viewer import Viewer
+from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
 
 frame = Frame.worldYZ()
 c1 = Circle(1.0, frame=frame)
@@ -31,6 +31,6 @@ thru.Build()
 
 brep = Brep.from_native(thru.Shape())
 
-viewer = App()
-viewer.add(brep, linewidth=2)
+viewer = Viewer()
+# viewer.scene.add(brep, linewidth=2)
 viewer.show()

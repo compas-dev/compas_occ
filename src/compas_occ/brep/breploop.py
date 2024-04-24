@@ -3,7 +3,7 @@ from typing import List
 from compas.geometry import BrepLoop
 from compas.geometry import Polygon
 from compas.geometry import Polyline
-from compas.utilities import pairwise
+from compas.itertools import pairwise
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepTools

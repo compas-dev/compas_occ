@@ -1,14 +1,14 @@
-# type: ignore
-
 from math import radians
-from compas.geometry import Point, Vector, Line, Polyline
-from compas.geometry import Rotation
-from compas.geometry import centroid_points_xy
-from compas.utilities import flatten
-from compas.geometry import NurbsSurface
 
-from compas_view2.app import App
-from compas_view2.objects import Collection
+from compas.geometry import Line
+from compas.geometry import NurbsSurface
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas.geometry import Rotation
+from compas.geometry import Vector
+from compas.geometry import centroid_points_xy
+from compas.itertools import flatten
+from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -44,10 +44,10 @@ for line in lines:
 # Visualisation
 # ==============================================================================
 
-view = App(viewmode="ghosted")
+viewer = Viewer(rendermode="ghosted")
 
 for row in surface.points:
-    view.add(
+    viewer.scene.add(
         Polyline(row),
         show_points=True,
         pointsize=20,
@@ -57,7 +57,7 @@ for row in surface.points:
     )
 
 for col in zip(*surface.points):
-    view.add(
+    viewer.scene.add(
         Polyline(col),
         show_points=True,
         pointsize=20,
@@ -66,12 +66,10 @@ for col in zip(*surface.points):
         linecolor=(0.3, 0.3, 0.3),
     )
 
-view.add(Collection(intersections), pointsize=20, pointcolor=(0, 0, 1))
+# viewer.scene.add(Collection(intersections), pointsize=20, pointcolor=(0, 0, 1))
 
 for x in intersections:
-    view.add(
-        Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1)
-    )
+    viewer.scene.add(Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1))
 
-view.add(surface)
-view.run()
+viewer.scene.add(surface)
+viewer.show()

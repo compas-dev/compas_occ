@@ -1,11 +1,7 @@
-# type: ignore
-
-from compas.geometry import Point
 from compas.geometry import Bezier
 from compas.geometry import NurbsCurve
-from compas_view2.app import App
-from compas_view2.objects import Collection
-
+from compas.geometry import Point
+from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 bezier = Bezier(points)
@@ -17,9 +13,9 @@ curve = NurbsCurve.from_interpolation(points)
 # Visualisation
 # ==============================================================================
 
-view = App()
+viewer = Viewer()
 
-view.add(curve.to_polyline(), linewidth=3)
-view.add(Collection(points))
+viewer.scene.add(curve.to_polyline(), linewidth=3)
+# viewer.scene.add(Collection(points))
 
-view.run()
+viewer.show()

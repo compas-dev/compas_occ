@@ -505,18 +505,14 @@ class OCCBrepEdge(BrepEdge):
                 p1 = point_to_occ(points[0])
                 p2 = point_to_occ(points[1])
                 if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(
-                        curve2d.occ_curve, surface.occ_surface, p1, p2, *params
-                    )
+                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2, *params)
                 else:
                     builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2)
             elif vertices:
                 v1 = vertices[0].occ_vertex
                 v2 = vertices[1].occ_vertex
                 if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(
-                        curve2d.occ_curve, surface.occ_surface, v1, v2, *params
-                    )
+                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2, *params)
                 else:
                     builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2)
             else:
