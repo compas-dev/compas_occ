@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Changed constructor plugin `compas.geometry.curves.new_curve` to use `super(Curve, cls)` (otherwise it doesn't work).
+* Changed constructor plugin `compas.geometry.curves.new_nurbscurve` to use `super(NurbsCurve, cls)` (otherwise it doesn't work).
+
 ### Removed
 
 
