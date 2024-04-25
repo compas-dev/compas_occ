@@ -17,14 +17,12 @@ slice = box.slice(plane)
 # Visualization
 # =============================================================================
 
-# TODO: this is currently not working properly, because of the new tessellation imlpementation.
-
 viewer = Viewer()
 
 # viewer.view.camera.position = [2, -4, 1]
 # viewer.view.camera.look_at([0, 0, 0])
 
-# viewer.scene.add(box, opacity=0.5)
-# viewer.scene.add(slice, linewidth=2)
+viewer.scene.add(box, opacity=0.5, show_points=False)
+viewer.scene.add(slice, linewidth=2)
 
 viewer.show()

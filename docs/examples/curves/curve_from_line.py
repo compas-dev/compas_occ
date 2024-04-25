@@ -12,7 +12,7 @@ curve = NurbsCurve.from_line(line)
 
 viewer = Viewer()
 
-viewer.scene.add(curve.to_polyline(), linewidth=3)
+viewer.scene.add(curve.to_polyline(), lineswidth=3, show_points=False)
 # viewer.scene.add(Collection(curve.points), pointsize=20, pointcolor=(1, 0, 0))
 
 viewer.show()

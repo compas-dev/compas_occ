@@ -53,5 +53,5 @@ brep = Brep.from_brepfaces([face])
 # =============================================================================
 
 viewer = Viewer()
-# viewer.scene.add(brep, linewidth=2)
+viewer.scene.add(brep, linewidth=2, show_points=False)
 viewer.show()

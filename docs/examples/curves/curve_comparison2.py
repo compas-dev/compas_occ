@@ -1,3 +1,4 @@
+from compas.colors import Color
 from compas.geometry import Bezier
 from compas.geometry import Point
 from compas.geometry import Polyline
@@ -67,25 +68,25 @@ viewer.scene.add(
     Polyline(bezier.points),
     show_points=True,
     pointsize=20,
-    pointcolor=(1, 0, 0),
+    pointcolor=Color.red(),
     linewidth=1,
-    linecolor=(0.3, 0.3, 0.3),
+    linecolor=Color(0.3, 0.3, 0.3),
 )
-viewer.scene.add(bezier.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
+viewer.scene.add(bezier.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)
 
 viewer.scene.add(
     Polyline(curve1.points),
     show_points=True,
     pointsize=20,
-    pointcolor=(1, 0, 0),
+    pointcolor=Color.red(),
     linewidth=1,
-    linecolor=(0.3, 0.3, 0.3),
+    linecolor=Color(0.3, 0.3, 0.3),
 )
-viewer.scene.add(curve1.to_polyline(), linewidth=5, linecolor=(0, 0, 0))
-viewer.scene.add(curve2.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
-viewer.scene.add(curve3.to_polyline(), linewidth=3, linecolor=(0.2, 0.2, 1))
-viewer.scene.add(curve4.to_polyline(), linewidth=3, linecolor=(0.4, 0.4, 1))
-viewer.scene.add(curve5.to_polyline(), linewidth=3, linecolor=(0.6, 0.6, 1))
-viewer.scene.add(curve6.to_polyline(), linewidth=3, linecolor=(0.8, 0.8, 1))
+viewer.scene.add(curve1.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)
+viewer.scene.add(curve2.to_polyline(), lineswidth=3, linecolor=Color.blue(), show_points=False)
+viewer.scene.add(curve3.to_polyline(), lineswidth=3, linecolor=Color(0.2, 0.2, 1.0), show_points=False)
+viewer.scene.add(curve4.to_polyline(), lineswidth=3, linecolor=Color(0.4, 0.4, 1.0), show_points=False)
+viewer.scene.add(curve5.to_polyline(), lineswidth=3, linecolor=Color(0.6, 0.6, 1.0), show_points=False)
+viewer.scene.add(curve6.to_polyline(), lineswidth=3, linecolor=Color(0.8, 0.8, 1.0), show_points=False)
 
 viewer.show()

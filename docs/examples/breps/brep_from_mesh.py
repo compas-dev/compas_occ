@@ -18,6 +18,6 @@ viewer = Viewer()
 # viewer.view.camera.position = [1, -6, 2]
 # viewer.view.camera.look_at([1, 1, 1])
 
-# viewer.scene.add(brep, linewidth=2)
+viewer.scene.add(brep, linewidth=2, show_points=False)
 
 viewer.show()

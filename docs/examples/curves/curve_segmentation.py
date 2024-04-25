@@ -1,3 +1,4 @@
+from compas.colors import Color
 from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas_viewer import Viewer
@@ -23,8 +24,8 @@ print(segment.domain)
 
 viewer = Viewer()
 
-viewer.scene.add(curveA.to_polyline(), linewidth=4, linecolor=(1, 0, 0))
-viewer.scene.add(curveB.to_polyline(), linewidth=1, linecolor=(0, 0, 0))
-viewer.scene.add(segment.to_polyline(), linewidth=4, linecolor=(0, 1, 0))
+viewer.scene.add(curveA.to_polyline(), lineswidth=4, linecolor=Color.red(), show_points=False)
+viewer.scene.add(curveB.to_polyline(), lineswidth=1, linecolor=Color(0, 0, 0), show_points=False)
+viewer.scene.add(segment.to_polyline(), lineswidth=4, linecolor=Color.green(), show_points=False)
 
 viewer.show()

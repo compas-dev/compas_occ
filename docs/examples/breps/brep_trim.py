@@ -22,8 +22,8 @@ viewer = Viewer()
 # viewer.view.camera.position = [2, -4, 1]
 # viewer.view.camera.look_at([0, 0, 0])
 
-# viewer.scene.add(plane, opacity=0.5)
-# viewer.scene.add(trimmed, linewidth=2)
-# viewer.scene.add(box, linewidth=1, show_faces=False)
+viewer.scene.add(plane, opacity=0.5)
+viewer.scene.add(trimmed, linewidth=2, show_points=False)
+viewer.scene.add(box, linewidth=1, show_points=False, show_faces=False)
 
 viewer.show()

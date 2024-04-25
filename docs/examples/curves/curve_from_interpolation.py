@@ -15,7 +15,7 @@ curve = NurbsCurve.from_interpolation(points)
 
 viewer = Viewer()
 
-viewer.scene.add(curve.to_polyline(), linewidth=3)
+viewer.scene.add(curve.to_polyline(), lineswidth=3, show_points=False)
 # viewer.scene.add(Collection(points))
 
 viewer.show()

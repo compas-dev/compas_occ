@@ -28,6 +28,6 @@ viewer = Viewer()
 # viewer.view.camera.rx = -75
 # viewer.view.camera.distance = 7
 
-# viewer.scene.add(result, linewidth=2)
+viewer.scene.add(result, linewidth=2, show_points=False)
 
 viewer.show()

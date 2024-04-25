@@ -46,7 +46,7 @@ viewer = Viewer()
 # viewer.view.camera.position = [5, -1, 10]
 # viewer.view.camera.look_at([5, 2, 0])
 
-# for letter in letters:
-#     viewer.scene.add(letter, linewidth=2, opacity=0.7)
+for letter in letters:
+    viewer.scene.add(letter, linewidth=2, opacity=0.7, show_points=False)
 
 viewer.show()
