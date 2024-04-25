@@ -661,7 +661,7 @@ document.write(`
 <span class="n">curve</span> <span class="o">=</span> <span class="n">NurbsCurve</span><span class="o">.</span><span class="n">from_points</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
 <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">params</span><span class="p">,</span> <span class="n">points</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">return_points</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">params</span><span class="p">,</span> <span class="n">points</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">return_points</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
 <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pairwise</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
     <span class="n">segment</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">segmented</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
@@ -673,7 +673,7 @@ document.write(`
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">to_polyline</span><span class="p">())</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">to_polyline</span><span class="p">(),</span> <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
     <span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
 <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
