@@ -10,23 +10,24 @@ from compas.geometry import Polyline
 from compas.geometry import Transformation
 from compas.geometry import Vector
 from compas.geometry import distance_point_point
+from OCC.Core import IFSelect
+from OCC.Core import Interface
+from OCC.Core import STEPControl
 from OCC.Core.Bnd import Bnd_Box
-from OCC.Core.BndLib import BndLib_Add3dCurve_Add
+from OCC.Core.BndLib import BndLib_Add3dCurve
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 from OCC.Core.GCPnts import GCPnts_AbscissaPoint
-from OCC.Core.GCPnts import GCPnts_AbscissaPoint_Length
 from OCC.Core.Geom import Geom_Curve
 from OCC.Core.Geom import Geom_OffsetCurve
 from OCC.Core.GeomAdaptor import GeomAdaptor_Curve
 from OCC.Core.GeomAPI import GeomAPI_ExtremaCurveCurve
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnCurve
-from OCC.Core.GeomProjLib import geomprojlib_Curve2d
-from OCC.Core.GeomProjLib import geomprojlib_Project
+from OCC.Core.GeomProjLib import geomprojlib
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Vec
 from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
-from OCC.Core.TopoDS import topods_Edge
+from OCC.Core.TopoDS import topods
 
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import direction_to_occ
@@ -62,11 +63,10 @@ class OCCCurve(Curve):
 
     """
 
-    _occ_curve: Geom_Curve
-
     def __init__(self, occ_curve: Geom_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 3
+        self._occ_curve: Geom_Curve = None  # type: ignore
         self.occ_curve = occ_curve
 
     def __eq__(self, other: "OCCCurve") -> bool:
@@ -94,7 +94,7 @@ class OCCCurve(Curve):
 
     @property
     def occ_edge(self) -> TopoDS_Edge:
-        return topods_Edge(self.occ_shape)
+        return topods.Edge(self.occ_shape)
 
     # ==============================================================================
     # Properties
@@ -161,16 +161,11 @@ class OCCCurve(Curve):
         None
 
         """
-        from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.Interface import Interface_Static_SetCVal
-        from OCC.Core.STEPControl import STEPControl_AsIs
-        from OCC.Core.STEPControl import STEPControl_Writer
-
-        step_writer = STEPControl_Writer()
-        Interface_Static_SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
+        step_writer = STEPControl.STEPControl_Writer()
+        Interface.Interface_Static.SetCVal("write.step.schema", schema)
+        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)
         status = step_writer.Write(filepath)
-        if status != IFSelect_RetDone:
+        if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
     def to_polyline(self, n: int = 100) -> Polyline:
@@ -384,7 +379,7 @@ class OCCCurve(Curve):
 
         """
         box = Bnd_Box()
-        BndLib_Add3dCurve_Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
+        BndLib_Add3dCurve.Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
         return Box.from_diagonal(
             (
                 point_to_compas(box.CornerMin()),
@@ -404,7 +399,7 @@ class OCCCurve(Curve):
         float
 
         """
-        return GCPnts_AbscissaPoint_Length(GeomAdaptor_Curve(self.occ_curve), precision)
+        return GCPnts_AbscissaPoint.Length(GeomAdaptor_Curve(self.occ_curve), precision)
 
     def closest_point(
         self,
@@ -616,7 +611,7 @@ class OCCCurve(Curve):
         :class:`OCCCurve`
 
         """
-        result = geomprojlib_Project(self.occ_curve, surface.occ_surface)
+        result = geomprojlib.Project(self.occ_curve, surface.occ_surface)
         curve = OCCCurve.from_occ(result)
         return curve
 
@@ -633,7 +628,7 @@ class OCCCurve(Curve):
         :class:`OCCCurve2d`
 
         """
-        result = geomprojlib_Curve2d(self.occ_curve, surface.occ_surface)
+        result = geomprojlib.Curve2d(self.occ_curve, surface.occ_surface)
         curve = OCCCurve2d.from_occ(result)
         return curve
 

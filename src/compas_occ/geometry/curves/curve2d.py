@@ -5,13 +5,13 @@ from compas.geometry import Frame
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.geometry import Vector
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge2d
-from OCC.Core.Geom2d import Geom2d_Curve
-from OCC.Core.gp import gp_Pnt2d
-from OCC.Core.gp import gp_Vec2d
-from OCC.Core.TopoDS import TopoDS_Edge
-from OCC.Core.TopoDS import TopoDS_Shape
-from OCC.Core.TopoDS import topods_Edge
+from OCC.Core import BRepBuilderAPI
+from OCC.Core import Geom2d
+from OCC.Core import IFSelect
+from OCC.Core import Interface
+from OCC.Core import STEPControl
+from OCC.Core import TopoDS
+from OCC.Core import gp
 
 from compas_occ.conversions import point2d_to_compas
 from compas_occ.conversions import vector2d_to_compas
@@ -42,11 +42,10 @@ class OCCCurve2d(Curve):
 
     """
 
-    _occ_curve: Geom2d_Curve
-
-    def __init__(self, occ_curve: Geom2d_Curve, name=None):
+    def __init__(self, occ_curve: Geom2d.Geom2d_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 2
+        self._occ_curve: Geom2d.Geom2d_Curve = None  # type: ignore
         self.occ_curve = occ_curve
 
     def __eq__(self, other: "OCCCurve2d") -> bool:
@@ -61,20 +60,20 @@ class OCCCurve2d(Curve):
     # ==============================================================================
 
     @property
-    def occ_curve(self) -> Geom2d_Curve:
+    def occ_curve(self) -> Geom2d.Geom2d_Curve:
         return self._occ_curve
 
     @occ_curve.setter
-    def occ_curve(self, curve: Geom2d_Curve):
+    def occ_curve(self, curve: Geom2d.Geom2d_Curve):
         self._occ_curve = curve
 
     @property
-    def occ_shape(self) -> TopoDS_Shape:
-        return BRepBuilderAPI_MakeEdge2d(self.occ_curve).Shape()
+    def occ_shape(self) -> TopoDS.TopoDS_Shape:
+        return BRepBuilderAPI.BRepBuilderAPI_MakeEdge2d(self.occ_curve).Shape()
 
     @property
-    def occ_edge(self) -> TopoDS_Edge:
-        return topods_Edge(self.occ_shape)
+    def occ_edge(self) -> TopoDS.TopoDS_Edge:
+        return TopoDS.topods.Edge(self.occ_shape)
 
     # ==============================================================================
     # Properties
@@ -109,7 +108,7 @@ class OCCCurve2d(Curve):
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve: Geom2d_Curve) -> "OCCCurve2d":
+    def from_occ(cls, occ_curve: Geom2d.Geom2d_Curve) -> "OCCCurve2d":
         """Construct a NURBS curve from an existing OCC BSplineCurve.
 
         Parameters
@@ -140,16 +139,11 @@ class OCCCurve2d(Curve):
         None
 
         """
-        from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.Interface import Interface_Static_SetCVal
-        from OCC.Core.STEPControl import STEPControl_AsIs
-        from OCC.Core.STEPControl import STEPControl_Writer
-
-        step_writer = STEPControl_Writer()
-        Interface_Static_SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl_AsIs)
+        step_writer = STEPControl.STEPControl_Writer()
+        Interface.Interface_Static.SetCVal("write.step.schema", schema)
+        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)
         status = step_writer.Write(filepath)
-        if status != IFSelect_RetDone:
+        if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
     def to_polyline(self, n: int = 100) -> Polyline:
@@ -230,8 +224,8 @@ class OCCCurve2d(Curve):
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
-        point = gp_Pnt2d()
-        uvec = gp_Vec2d()
+        point = gp.gp_Pnt2d()
+        uvec = gp.gp_Vec2d()
         self.occ_curve.D1(t, point, uvec)
         return vector2d_to_compas(uvec)
 
@@ -257,9 +251,9 @@ class OCCCurve2d(Curve):
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
-        point = gp_Pnt2d()
-        uvec = gp_Vec2d()
-        vvec = gp_Vec2d()
+        point = gp.gp_Pnt2d()
+        uvec = gp.gp_Vec2d()
+        vvec = gp.gp_Vec2d()
         self.occ_curve.D2(t, point, uvec, vvec)
         return vector2d_to_compas(vvec)
 
@@ -285,9 +279,9 @@ class OCCCurve2d(Curve):
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
-        point = gp_Pnt2d()
-        uvec = gp_Vec2d()
-        vvec = gp_Vec2d()
+        point = gp.gp_Pnt2d()
+        uvec = gp.gp_Vec2d()
+        vvec = gp.gp_Vec2d()
         self.occ_curve.D2(t, point, uvec, vvec)
 
         return Frame(
