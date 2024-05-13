@@ -91,9 +91,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     >>> from compas.geometry import Point
     >>> from compas_occ.geometry import OCCNurbsCurve
     >>> points = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
-    >>> curve = OCCNurbsCurve.from_parameters(
-    ...     points=points, weights=[1.0, 1.0, 1.0, 1.0], knots=[0.0, 1.0], multiplicities=[4, 4], degree=3
-    ... )
+    >>> curve = OCCNurbsCurve.from_parameters(points=points, weights=[1.0, 1.0, 1.0, 1.0], knots=[0.0, 1.0], multiplicities=[4, 4], degree=3)
 
     """
 
