@@ -35,13 +35,13 @@ nurbssurface_4curves = NurbsSurface.from_fill(
 
 viewer = Viewer()
 
-viewer.scene.add(nurbscurve1.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
-viewer.scene.add(nurbscurve2.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
+viewer.scene.add(nurbscurve1.to_polyline(), lineswidth=3, linecolor=(1, 0, 0))
+viewer.scene.add(nurbscurve2.to_polyline(), lineswidth=3, linecolor=(0, 1, 0))
 
-viewer.scene.add(nurbscurve3.to_polyline(), linewidth=3, linecolor=(1, 0, 0))
-viewer.scene.add(nurbscurve4.to_polyline(), linewidth=3, linecolor=(0, 1, 0))
-viewer.scene.add(nurbscurve5.to_polyline(), linewidth=3, linecolor=(1, 0, 1))
-viewer.scene.add(nurbscurve6.to_polyline(), linewidth=3, linecolor=(0, 0, 1))
+viewer.scene.add(nurbscurve3.to_polyline(), lineswidth=3, linecolor=(1, 0, 0))
+viewer.scene.add(nurbscurve4.to_polyline(), lineswidth=3, linecolor=(0, 1, 0))
+viewer.scene.add(nurbscurve5.to_polyline(), lineswidth=3, linecolor=(1, 0, 1))
+viewer.scene.add(nurbscurve6.to_polyline(), lineswidth=3, linecolor=(0, 0, 1))
 
 viewer.scene.add(nurbssurface_2curves)
 viewer.scene.add(nurbssurface_4curves)

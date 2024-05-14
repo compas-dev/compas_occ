@@ -32,11 +32,11 @@ viewer = Viewer()
 u = surface.isocurve_u(0.5 * sum(surface.domain_u))
 v = surface.isocurve_v(0.5 * sum(surface.domain_v))
 
-viewer.scene.add(u.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
-viewer.scene.add(v.to_polyline(), linewidth=1, linecolor=(0.3, 0.3, 0.3))
+viewer.scene.add(u.to_polyline(), lineswidth=1, linecolor=(0.3, 0.3, 0.3))
+viewer.scene.add(v.to_polyline(), lineswidth=1, linecolor=(0.3, 0.3, 0.3))
 
 for curve in surface.boundary():
-    viewer.scene.add(curve.to_polyline(), linewidth=2, linecolor=(0, 0, 0))
+    viewer.scene.add(curve.to_polyline(), lineswidth=2, linecolor=(0, 0, 0))
 
 viewer.scene.add(other)
 viewer.show()

@@ -43,10 +43,10 @@ for letter in letters:
 
 viewer = Viewer()
 
-# viewer.view.camera.position = [5, -1, 10]
-# viewer.view.camera.look_at([5, 2, 0])
+viewer.renderer.camera.target = [5, 2, 0]
+viewer.renderer.camera.position = [5, -1, 10]
 
 for letter in letters:
-    viewer.scene.add(letter, linewidth=2, opacity=0.7, show_points=False)
+    viewer.scene.add(letter, lineswidth=2, opacity=0.7, show_points=False)
 
 viewer.show()

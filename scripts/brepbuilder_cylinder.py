@@ -113,5 +113,5 @@ brep.fix()
 brep.sew()
 
 viewer = App()
-viewer.add(brep, linewidth=2)
+viewer.add(brep, lineswidth=2)
 viewer.run()

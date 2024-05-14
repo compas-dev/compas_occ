@@ -15,9 +15,10 @@ surface = NurbsSurface.from_extrusion(curve, vector)
 # =============================================================================
 
 viewer = Viewer()
-# viewer.view.camera.position = [-7, -10, 6]
-# viewer.view.camera.target = [2, 0, 5]
 
-viewer.scene.add(curve.to_polyline(), linewidth=5, linecolor=(1, 0, 0))
+viewer.renderer.camera.target = [2, 0, 5]
+viewer.renderer.camera.position = [-7, -10, 6]
+
+viewer.scene.add(curve.to_polyline(), lineswidth=5, linecolor=(1, 0, 0))
 viewer.scene.add(surface)
 viewer.show()

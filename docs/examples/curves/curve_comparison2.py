@@ -69,7 +69,7 @@ viewer.scene.add(
     show_points=True,
     pointsize=20,
     pointcolor=Color.red(),
-    linewidth=1,
+    lineswidth=1,
     linecolor=Color(0.3, 0.3, 0.3),
 )
 viewer.scene.add(bezier.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)
@@ -79,7 +79,7 @@ viewer.scene.add(
     show_points=True,
     pointsize=20,
     pointcolor=Color.red(),
-    linewidth=1,
+    lineswidth=1,
     linecolor=Color(0.3, 0.3, 0.3),
 )
 viewer.scene.add(curve1.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)

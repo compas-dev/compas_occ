@@ -42,10 +42,9 @@ brep = Brep.from_iges(filepath)
 
 viewer = Viewer()
 
-# viewer.view.camera.rz = -30
-# viewer.view.camera.rx = -75
-# viewer.view.camera.distance = 7
+viewer.renderer.camera.target = [0, 0, 0]
+viewer.renderer.camera.position = [4, -6, 2]
 
-viewer.scene.add(brep, linewidth=2, show_points=False)
+viewer.scene.add(brep, lineswidth=2, show_points=False)
 
 viewer.show()

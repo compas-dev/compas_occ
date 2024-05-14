@@ -14,7 +14,7 @@ curve = NurbsCurve.from_points(points)
 
 viewer = Viewer()
 
-viewer.scene.add(curve.to_polyline(), linewidth=3)
+viewer.scene.add(curve.to_polyline(), lineswidth=3)
 
 viewer.scene.add(
     Polyline(curve.points),

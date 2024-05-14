@@ -39,12 +39,12 @@ for row in surface.points:
         show_points=True,
         pointsize=20,
         pointcolor=(1, 0, 0),
-        linewidth=2,
+        lineswidth=2,
         linecolor=(1.0, 0, 0),
     )
 
 for col in zip(*surface.points):
-    viewer.scene.add(Polyline(col), linewidth=2, linecolor=(0, 1.0, 0))
+    viewer.scene.add(Polyline(col), lineswidth=2, linecolor=(0, 1.0, 0))
 
 viewer.scene.add(surface)
 viewer.scene.add(box, show_faces=False)

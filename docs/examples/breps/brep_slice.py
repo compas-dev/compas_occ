@@ -19,10 +19,10 @@ slice = box.slice(plane)
 
 viewer = Viewer()
 
-# viewer.view.camera.position = [2, -4, 1]
-# viewer.view.camera.look_at([0, 0, 0])
+viewer.renderer.camera.target = [0, 0, 0]
+viewer.renderer.camera.position = [2, -4, 1]
 
 viewer.scene.add(box, opacity=0.5, show_points=False)
-viewer.scene.add(slice, linewidth=2)
+viewer.scene.add(slice, lineswidth=2)
 
 viewer.show()

@@ -23,10 +23,10 @@ result = box.split(splitter)
 
 viewer = Viewer()
 
-# viewer.view.camera.position = [2, -4, 1]
-# viewer.view.camera.look_at([0, 0, 0])
+viewer.renderer.camera.target = [0, 0, 0]
+viewer.renderer.camera.position = [2, -4, 1]
 
-viewer.scene.add(splitter, linewidth=2, opacity=0.3)
+viewer.scene.add(splitter, lineswidth=2, opacity=0.3)
 
 for brep in result:  # type: ignore
     if is_point_infrontof_plane(brep.centroid, plane):
@@ -34,7 +34,7 @@ for brep in result:  # type: ignore
             brep,
             surfacecolor=Color.red().lightened(50),
             linecolor=Color.red(),
-            linewidth=2,
+            lineswidth=2,
             show_points=False,
         )
     else:
@@ -42,7 +42,7 @@ for brep in result:  # type: ignore
             brep,
             surfacecolor=Color.blue().lightened(50),
             linecolor=Color.blue(),
-            linewidth=2,
+            lineswidth=2,
             show_points=False,
         )
 

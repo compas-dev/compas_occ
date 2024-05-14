@@ -17,9 +17,9 @@ surface = OCCRevolutionSurface(curve, point=point, vector=vector)
 # =============================================================================
 
 viewer = Viewer()
-# viewer.view.camera.position = [-5, -10, 7]
-# viewer.view.camera.target = [0, 0, 5]
+# viewer.renderer.camera.position = [-5, -10, 7]
+# viewer.renderer.camera.target = [0, 0, 5]
 
-viewer.scene.add(curve.to_polyline(), linewidth=5, linecolor=(1, 0, 0))
+viewer.scene.add(curve.to_polyline(), lineswidth=5, linecolor=(1, 0, 0))
 viewer.scene.add(surface.to_mesh())
 viewer.show()

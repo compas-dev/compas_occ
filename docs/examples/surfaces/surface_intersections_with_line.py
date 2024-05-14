@@ -52,7 +52,7 @@ for row in surface.points:
         show_points=True,
         pointsize=20,
         pointcolor=(1, 0, 0),
-        linewidth=2,
+        lineswidth=2,
         linecolor=(0.3, 0.3, 0.3),
     )
 
@@ -62,14 +62,14 @@ for col in zip(*surface.points):
         show_points=True,
         pointsize=20,
         pointcolor=(1, 0, 0),
-        linewidth=2,
+        lineswidth=2,
         linecolor=(0.3, 0.3, 0.3),
     )
 
 # viewer.scene.add(Collection(intersections), pointsize=20, pointcolor=(0, 0, 1))
 
 for x in intersections:
-    viewer.scene.add(Line(base, base + (x - base).scaled(1.2)), linewidth=1, linecolor=(0, 0, 1))
+    viewer.scene.add(Line(base, base + (x - base).scaled(1.2)), lineswidth=1, linecolor=(0, 0, 1))
 
 viewer.scene.add(surface)
 viewer.show()

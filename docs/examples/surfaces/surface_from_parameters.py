@@ -97,7 +97,7 @@ for row in surface.points:
         show_points=True,
         pointsize=20,
         pointcolor=(1, 0, 0),
-        linewidth=2,
+        lineswidth=2,
         linecolor=(0.3, 0.3, 0.3),
     )
 
@@ -107,7 +107,7 @@ for col in zip(*surface.points):
         show_points=True,
         pointsize=20,
         pointcolor=(1, 0, 0),
-        linewidth=2,
+        lineswidth=2,
         linecolor=(0.3, 0.3, 0.3),
     )
 

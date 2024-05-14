@@ -30,9 +30,9 @@ for v in surface.space_v(10):
 viewer = Viewer()
 
 for curve in u_curves:
-    viewer.scene.add(curve.to_polyline(), linecolor=(1, 0, 0), linewidth=2)
+    viewer.scene.add(curve.to_polyline(), linecolor=(1, 0, 0), lineswidth=2)
 
 for curve in v_curves:
-    viewer.scene.add(curve.to_polyline(), linecolor=(0, 1, 0), linewidth=2)
+    viewer.scene.add(curve.to_polyline(), linecolor=(0, 1, 0), lineswidth=2)
 
 viewer.show()

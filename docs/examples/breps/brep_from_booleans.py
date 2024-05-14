@@ -24,10 +24,9 @@ result = box - (cx + cy + cz)
 
 viewer = Viewer()
 
-# viewer.view.camera.rz = -30
-# viewer.view.camera.rx = -75
-# viewer.view.camera.distance = 7
+viewer.renderer.camera.target = [0, 0, 0]
+viewer.renderer.camera.position = [4, -6, 2]
 
-viewer.scene.add(result, linewidth=2, show_points=False)
+viewer.scene.add(result, lineswidth=2, show_points=False)
 
 viewer.show()
