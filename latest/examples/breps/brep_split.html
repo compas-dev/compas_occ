@@ -677,10 +677,10 @@ document.write(`
 
 <span class="n">viewer</span> <span class="o">=</span> <span class="n">Viewer</span><span class="p">()</span>
 
-<span class="c1"># viewer.view.camera.position = [2, -4, 1]</span>
-<span class="c1"># viewer.view.camera.look_at([0, 0, 0])</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">splitter</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">viewer</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">splitter</span><span class="p">,</span> <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">brep</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
     <span class="k">if</span> <span class="n">is_point_infrontof_plane</span><span class="p">(</span><span class="n">brep</span><span class="o">.</span><span class="n">centroid</span><span class="p">,</span> <span class="n">plane</span><span class="p">):</span>
@@ -688,7 +688,7 @@ document.write(`
             <span class="n">brep</span><span class="p">,</span>
             <span class="n">surfacecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">()</span><span class="o">.</span><span class="n">lightened</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
             <span class="n">linecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">(),</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -696,7 +696,7 @@ document.write(`
             <span class="n">brep</span><span class="p">,</span>
             <span class="n">surfacecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">()</span><span class="o">.</span><span class="n">lightened</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
             <span class="n">linecolor</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">(),</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">lineswidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">show_points</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
 
