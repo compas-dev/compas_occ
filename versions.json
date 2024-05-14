@@ -2,46 +2,46 @@
   {
     "name": "Latest",
     "version": "latest",
-    "url": "/latest/"
+    "url": "https://compas.dev/compas_occ/latest/"
   },
   {
     "name": "1.1.0 (stable)",
     "version": "1.1.0",
-    "url": "/1.1.0/"
+    "url": "https://compas.dev/compas_occ/1.1.0/"
   },
   {
     "name": "1.0.1",
     "version": "1.0.1",
-    "url": "/1.0.1/"
+    "url": "https://compas.dev/compas_occ/1.0.1/"
   },
   {
     "name": "0.7.1",
     "version": "0.7.1",
-    "url": "/0.7.1/"
+    "url": "https://compas.dev/compas_occ/0.7.1/"
   },
   {
     "name": "0.6.0",
     "version": "0.6.0",
-    "url": "/0.6.0/"
+    "url": "https://compas.dev/compas_occ/0.6.0/"
   },
   {
     "name": "0.5.0",
     "version": "0.5.0",
-    "url": "/0.5.0/"
+    "url": "https://compas.dev/compas_occ/0.5.0/"
   },
   {
     "name": "0.4.2",
     "version": "0.4.2",
-    "url": "/0.4.2/"
+    "url": "https://compas.dev/compas_occ/0.4.2/"
   },
   {
     "name": "0.3.4",
     "version": "0.3.4",
-    "url": "/0.3.4/"
+    "url": "https://compas.dev/compas_occ/0.3.4/"
   },
   {
     "name": "0.2.1",
     "version": "0.2.1",
-    "url": "/0.2.1/"
+    "url": "https://compas.dev/compas_occ/0.2.1/"
   }
 ]
