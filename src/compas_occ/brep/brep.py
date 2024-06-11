@@ -1261,7 +1261,7 @@ class OCCBrep(Brep):
         self.sew()
         self.fix()
 
-    def simplify(self, merge_edges=True, merge_faces=True):
+    def simplify(self, merge_edges=True, merge_faces=True, linear=0.001, angular=0.1):
         """Simplify the shape by merging colinear edges and coplanar faces.
 
         Parameters
@@ -1279,6 +1279,8 @@ class OCCBrep(Brep):
         if not merge_edges and not merge_faces:
             return
         simplifier = ShapeUpgrade.ShapeUpgrade_UnifySameDomain()
+        simplifier.SetLinearTolerance(linear)
+        simplifier.SetAngularTolerance(angular)
         simplifier.Initialize(self.native_brep, merge_edges, merge_faces)
         simplifier.Build()
         shape = simplifier.Shape()
