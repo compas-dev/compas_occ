@@ -148,7 +148,7 @@ class OCCBrepLoop(BrepLoop):
 
     @property
     def is_valid(self) -> bool:
-        return BRepAlgo.brepalgo_IsValid(self.occ_wire)
+        return BRepAlgo.brepalgo.IsValid(self.occ_wire)
 
     @property
     def vertices(self) -> List[OCCBrepVertex]:
