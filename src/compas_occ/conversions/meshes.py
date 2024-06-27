@@ -1,3 +1,4 @@
+from typing import Annotated
 from typing import List
 from typing import Union
 
@@ -16,7 +17,6 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Extend.TopologyUtils import TopologyExplorer
-from typing_extensions import Annotated
 
 from .arrays import array1_from_points1
 
