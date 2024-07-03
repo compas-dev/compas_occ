@@ -14,6 +14,7 @@ from compas.geometry import Polygon
 from compas.geometry import Polyline
 from compas.geometry import Translation
 from compas.geometry import Vector
+from compas.tolerance import TOL
 from OCC.Core import BOPAlgo
 from OCC.Core import BRep
 from OCC.Core import BRepAlgoAPI
@@ -1261,7 +1262,7 @@ class OCCBrep(Brep):
         self.sew()
         self.fix()
 
-    def simplify(self, merge_edges=True, merge_faces=True, linear=0.001, angular=0.1):
+    def simplify(self, merge_edges=True, merge_faces=True, lineardeflection=None, angulardeflection=None):
         """Simplify the shape by merging colinear edges and coplanar faces.
 
         Parameters
@@ -1270,6 +1271,10 @@ class OCCBrep(Brep):
             Merge edges with the same underlying geometry.
         merge_faces : bool, optional
             Merge faces with the same underlying geometry.
+        lineardeflection : float, optional
+            Default is `compas.tolerance.Tolerance.lineardeflection`.
+        angulardeflection : float, optional
+            Default is `compas.tolerance.Tolerance.angulardeflection`.
 
         Returns
         -------
@@ -1278,9 +1283,13 @@ class OCCBrep(Brep):
         """
         if not merge_edges and not merge_faces:
             return
+
+        lineardeflection = lineardeflection or TOL.lineardeflection
+        angulardeflection = angulardeflection or TOL.angulardeflection
+
         simplifier = ShapeUpgrade.ShapeUpgrade_UnifySameDomain()
-        simplifier.SetLinearTolerance(linear)
-        simplifier.SetAngularTolerance(angular)
+        simplifier.SetLinearTolerance(lineardeflection)
+        simplifier.SetAngularTolerance(angulardeflection)
         simplifier.Initialize(self.native_brep, merge_edges, merge_faces)
         simplifier.Build()
         shape = simplifier.Shape()

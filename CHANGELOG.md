@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Changed default precision of `compas_occ.brep.Brep.simplify`.
+* Fixed bug due to import of `typing_extensions`.
+
 ### Removed
 
 
