@@ -660,7 +660,7 @@ document.write(`
 <h1>OCCBrep.simplify</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.simplify">
-<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineardeflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angulardeflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Simplify the shape by merging colinear edges and coplanar faces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -668,6 +668,10 @@ document.write(`
 <dt><strong>merge_edges</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge edges with the same underlying geometry.</p>
 </dd>
 <dt><strong>merge_faces</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge faces with the same underlying geometry.</p>
+</dd>
+<dt><strong>lineardeflection</strong><span class="classifier">float, optional</span></dt><dd><p>Default is <cite>compas.tolerance.Tolerance.lineardeflection</cite>.</p>
+</dd>
+<dt><strong>angulardeflection</strong><span class="classifier">float, optional</span></dt><dd><p>Default is <cite>compas.tolerance.Tolerance.angulardeflection</cite>.</p>
 </dd>
 </dl>
 </dd>
