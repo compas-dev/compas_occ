@@ -9,10 +9,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.geometry.curves.OCCcurve.from_native`.
+* Added `compas_occ.geometry.curves.OCCNurbsCurve.from_native`.
+* Added `compas_occ.geometry.surfaces.nurbssurface_from_extrusion`.
+* Added `compas_occ.geometry.surfaces.nurbssurface_from_plane`.
+* Added `compas_occ.geometry.surfaces.OCCSurface.from_native`.
+* Added `compas_occ.geometry.surfaces.OCCNurbsSurface.from_native`.
+* Added `compas_occ.geometry.surfaces.OCCNurbsSurface.from_plane`.
+
 ### Changed
+
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.curve_from_native`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.nurbscurve_from_native`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.nurbscurve_from_interpolation`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.nurbscurve_from_parameters`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.nurbscurve_from_points`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.curves.nurbscurve_from_step`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.surface_from_native`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_native`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_interpolation`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_fill`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_parameters`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_plane`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_points`.
+* Changed plugin name to match pluggable name for `compas_occ.geometry.surfaces.nurbssurface_from_step`.
 
 ### Removed
 
+* Removed `compas_occ.geometry.curves.new_curve`.
+* Removed `compas_occ.geometry.curves.new_nurbscurve`.
+* Removed `compas_occ.geometry.surfaces.new_surface`.
+* Removed `compas_occ.geometry.surfaces.new_nurbssurface`.
 
 ## [1.1.1] 2024-07-03
 
