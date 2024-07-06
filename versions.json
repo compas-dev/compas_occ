@@ -5,7 +5,12 @@
     "url": "https://compas.dev/compas_occ/latest/"
   },
   {
-    "name": "1.1.1 (stable)",
+    "name": "1.2.0 (stable)",
+    "version": "1.2.0",
+    "url": "https://compas.dev/compas_occ/1.2.0/"
+  },
+  {
+    "name": "1.1.1",
     "version": "1.1.1",
     "url": "https://compas.dev/compas_occ/1.1.1/"
   },
