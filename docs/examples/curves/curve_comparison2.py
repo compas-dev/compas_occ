@@ -63,30 +63,31 @@ curve6 = OCCNurbsCurve.from_parameters(
 # ==============================================================================
 
 viewer = Viewer()
+viewer.renderer.view = "top"
 
 viewer.scene.add(
     Polyline(bezier.points),
     show_points=True,
     pointsize=20,
     pointcolor=Color.red(),
-    lineswidth=1,
+    linewidth=1,
     linecolor=Color(0.3, 0.3, 0.3),
 )
-viewer.scene.add(bezier.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)
+viewer.scene.add(bezier.to_polyline(), linewidth=5, linecolor=Color(0, 0, 0))
 
 viewer.scene.add(
     Polyline(curve1.points),
     show_points=True,
     pointsize=20,
     pointcolor=Color.red(),
-    lineswidth=1,
+    linewidth=1,
     linecolor=Color(0.3, 0.3, 0.3),
 )
-viewer.scene.add(curve1.to_polyline(), lineswidth=5, linecolor=Color(0, 0, 0), show_points=False)
-viewer.scene.add(curve2.to_polyline(), lineswidth=3, linecolor=Color.blue(), show_points=False)
-viewer.scene.add(curve3.to_polyline(), lineswidth=3, linecolor=Color(0.2, 0.2, 1.0), show_points=False)
-viewer.scene.add(curve4.to_polyline(), lineswidth=3, linecolor=Color(0.4, 0.4, 1.0), show_points=False)
-viewer.scene.add(curve5.to_polyline(), lineswidth=3, linecolor=Color(0.6, 0.6, 1.0), show_points=False)
-viewer.scene.add(curve6.to_polyline(), lineswidth=3, linecolor=Color(0.8, 0.8, 1.0), show_points=False)
+viewer.scene.add(curve1, linewidth=5, linecolor=Color(0, 0, 0))
+viewer.scene.add(curve2, linewidth=3, linecolor=Color.blue())
+viewer.scene.add(curve3, linewidth=3, linecolor=Color(0.2, 0.2, 1.0))
+viewer.scene.add(curve4, linewidth=3, linecolor=Color(0.4, 0.4, 1.0))
+viewer.scene.add(curve5, linewidth=3, linecolor=Color(0.6, 0.6, 1.0))
+viewer.scene.add(curve6, linewidth=3, linecolor=Color(0.8, 0.8, 1.0))
 
 viewer.show()

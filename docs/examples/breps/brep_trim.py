@@ -23,7 +23,7 @@ viewer.renderer.camera.target = [0, 0, 0]
 viewer.renderer.camera.position = [2, -4, 1]
 
 viewer.scene.add(plane, opacity=0.5)
-viewer.scene.add(trimmed, lineswidth=2, show_points=False)
-viewer.scene.add(box, lineswidth=1, show_points=False, show_faces=False)
+viewer.scene.add(trimmed, linewidth=2, show_points=False)
+viewer.scene.add(box, linewidth=1, show_points=False, show_faces=False)
 
 viewer.show()

@@ -18,8 +18,8 @@ for u, v in pairwise(params):
 # =============================================================================
 
 viewer = Viewer()
+viewer.renderer.view = "top"
 
-viewer.scene.add(curve.to_polyline(), show_points=False)
-for point in points:
-    viewer.scene.add(point)
+viewer.scene.add(curve, linewidth=2)
+viewer.scene.add(points, pointsize=20)
 viewer.show()

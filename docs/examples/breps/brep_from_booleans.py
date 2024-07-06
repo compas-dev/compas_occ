@@ -27,6 +27,6 @@ viewer = Viewer()
 viewer.renderer.camera.target = [0, 0, 0]
 viewer.renderer.camera.position = [4, -6, 2]
 
-viewer.scene.add(result, lineswidth=2, show_points=False)
+viewer.scene.add(result, linewidth=2, show_points=False)
 
 viewer.show()

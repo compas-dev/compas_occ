@@ -17,8 +17,8 @@ joined = curve1.joined(curve2)
 
 viewer = Viewer()
 
-viewer.scene.add(curve1.to_polyline(), lineswidth=3, linecolor=Color.red(), show_points=False)
-viewer.scene.add(curve2.to_polyline(), lineswidth=3, linecolor=Color.green(), show_points=False)
-viewer.scene.add(joined.to_polyline(), lineswidth=3, linecolor=Color.blue(), show_points=False)
+viewer.scene.add(curve1, linewidth=3, linecolor=Color.red(), name="Red")
+viewer.scene.add(curve2, linewidth=3, linecolor=Color.green(), name="Green")
+viewer.scene.add(joined, linewidth=3, linecolor=Color.blue(), name="Blue")
 
 viewer.show()

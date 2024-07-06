@@ -4,6 +4,7 @@ from compas.itertools import flatten
 from compas.itertools import linspace
 from compas.itertools import meshgrid
 from compas_viewer import Viewer
+from compas_viewer.scene import Collection
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
@@ -28,6 +29,6 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 viewer = Viewer()
 
 viewer.scene.add(surface, show_lines=False)
-# viewer.scene.add(Collection(frames, [{"size": 0.1} for frame in frames]), pointsize=0.25)
+viewer.scene.add(Collection(frames), size=0.1, pointsize=0.25)  # type: ignore
 
 viewer.show()

@@ -20,13 +20,14 @@ curve = NurbsCurve.from_parameters(
 
 viewer = Viewer()
 
-viewer.scene.add(curve.to_polyline(), lineswidth=3, show_points=False)
+viewer.scene.add(curve, linewidth=3)
+
 viewer.scene.add(
     Polyline(curve.points),
     show_points=True,
     pointsize=20,
     pointcolor=Color.red(),
-    lineswidth=1,
+    linewidth=1,
     linecolor=Color(0.3, 0.3, 0.3),
 )
 

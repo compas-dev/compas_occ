@@ -1,3 +1,4 @@
+from compas.colors import Color
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas_viewer import Viewer
@@ -12,27 +13,20 @@ points = [
 surface = NurbsSurface.from_points(points=points)
 
 # ==============================================================================
-# Isocurves
-# ==============================================================================
-
-u_curves = []
-for u in surface.space_u(5):
-    u_curves.append(surface.isocurve_u(u))
-
-v_curves = []
-for v in surface.space_v(10):
-    v_curves.append(surface.isocurve_v(v))
-
-# ==============================================================================
 # Visualisation
 # ==============================================================================
 
 viewer = Viewer()
 
-for curve in u_curves:
-    viewer.scene.add(curve.to_polyline(), linecolor=(1, 0, 0), lineswidth=2)
+u_curves = []
+for u in surface.space_u(17):  # type: ignore
+    u_curves.append(surface.isocurve_u(u).to_polyline())
 
-for curve in v_curves:
-    viewer.scene.add(curve.to_polyline(), linecolor=(0, 1, 0), lineswidth=2)
+v_curves = []
+for v in surface.space_v(17):  # type: ignore
+    v_curves.append(surface.isocurve_v(v).to_polyline())
+
+viewer.scene.add(u_curves, linecolor=Color.red(), linewidth=3)
+viewer.scene.add(v_curves, linecolor=Color.green(), linewidth=3)
 
 viewer.show()

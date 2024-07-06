@@ -1,5 +1,6 @@
 from math import radians
 
+from compas.colors import Color
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Polyline
@@ -33,18 +34,22 @@ box = surface.aabb()
 
 viewer = Viewer()
 
-for row in surface.points:
-    viewer.scene.add(
-        Polyline(row),
-        show_points=True,
-        pointsize=20,
-        pointcolor=(1, 0, 0),
-        lineswidth=2,
-        linecolor=(1.0, 0, 0),
-    )
+points = list(surface.points)
+u_direction = [Polyline(row) for row in points]
+v_direction = [Polyline(col) for col in zip(*points)]
 
-for col in zip(*surface.points):
-    viewer.scene.add(Polyline(col), lineswidth=2, linecolor=(0, 1.0, 0))
+viewer.scene.add(
+    u_direction,
+    linewidth=2,
+    linecolor=Color.red(),
+)
+viewer.scene.add(
+    v_direction,
+    linewidth=2,
+    linecolor=Color.green(),
+)
+viewer.scene.add(points, pointsize=20)
+
 
 viewer.scene.add(surface, show_lines=False)
 viewer.scene.add(box, show_faces=False)

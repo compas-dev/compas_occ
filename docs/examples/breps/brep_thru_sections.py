@@ -32,5 +32,5 @@ thru.Build()
 brep = Brep.from_native(thru.Shape())
 
 viewer = Viewer()
-# viewer.scene.add(brep, lineswidth=2)
+# viewer.scene.add(brep, linewidth=2)
 viewer.show()

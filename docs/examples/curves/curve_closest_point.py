@@ -15,8 +15,8 @@ closest, t = curve.closest_point(point, return_parameter=True)  # type: ignore
 
 viewer = Viewer()
 
-viewer.scene.add(curve.to_polyline(), lineswidth=3, show_points=False)
-viewer.scene.add(point, pointcolor=Color(0, 0, 1))
-viewer.scene.add(closest, pointcolor=Color(1, 0, 0))
+viewer.scene.add(curve, linewidth=3)
+viewer.scene.add(point, pointcolor=Color(0, 0, 1), pointsize=20, name="Point")
+viewer.scene.add(closest, pointcolor=Color(1, 0, 0), pointsize=20, name="Closest")
 
 viewer.show()

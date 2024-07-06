@@ -3,6 +3,9 @@ from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas_viewer import Viewer
 
+curve0: NurbsCurve
+curve1: NurbsCurve
+
 points0 = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 curve0 = NurbsCurve.from_points(points0)
 
@@ -18,10 +21,9 @@ points = curve0.closest_points_curve(curve1, return_distance=False)
 
 viewer = Viewer()
 
-viewer.scene.add(curve0.to_polyline(), lineswidth=3, show_points=False)
-viewer.scene.add(curve1.to_polyline(), lineswidth=3, show_points=False)
+viewer.scene.add(curve0, linewidth=3)
+viewer.scene.add(curve1, linewidth=3)
 
-viewer.scene.add(points[0], pointcolor=Color(1, 0, 0))
-viewer.scene.add(points[1], pointcolor=Color(1, 0, 0))
+viewer.scene.add(list(points), pointcolor=Color(1, 0, 0), pointsize=20)
 
 viewer.show()

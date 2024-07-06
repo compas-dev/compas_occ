@@ -24,8 +24,8 @@ print(segment.domain)
 
 viewer = Viewer()
 
-viewer.scene.add(curveA.to_polyline(), lineswidth=4, linecolor=Color.red(), show_points=False)
-viewer.scene.add(curveB.to_polyline(), lineswidth=1, linecolor=Color(0, 0, 0), show_points=False)
-viewer.scene.add(segment.to_polyline(), lineswidth=4, linecolor=Color.green(), show_points=False)
+viewer.scene.add(curveA, linewidth=4, linecolor=Color.red())
+viewer.scene.add(curveB, linewidth=1, linecolor=Color(0, 0, 0))
+viewer.scene.add(segment, linewidth=4, linecolor=Color.green())
 
 viewer.show()

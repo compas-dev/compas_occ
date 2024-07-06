@@ -1,3 +1,4 @@
+from compas.colors import Color
 from compas.geometry import Line
 from compas.geometry import NurbsCurve
 from compas.geometry import Point
@@ -11,8 +12,9 @@ curve = NurbsCurve.from_line(line)
 # ==============================================================================
 
 viewer = Viewer()
+viewer.renderer.view = "top"
 
-viewer.scene.add(curve.to_polyline(), lineswidth=3, show_points=False)
-# viewer.scene.add(Collection(curve.points), pointsize=20, pointcolor=(1, 0, 0))
+viewer.scene.add(curve, linewidth=3)
+viewer.scene.add(curve.points, pointsize=20, pointcolor=Color(1, 0, 0))
 
 viewer.show()
