@@ -7,20 +7,17 @@ from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
 from compas.geometry import Line
-from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Surface
 from compas.geometry import Transformation
 from compas.geometry import Vector
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.Bnd import Bnd_OBB
-from OCC.Core.BndLib import BndLib_AddSurface_Add
-from OCC.Core.BndLib import BndLib_AddSurface_AddOptimal
-from OCC.Core.BRep import BRep_Tool_Surface
-from OCC.Core.BRepBndLib import brepbndlib_AddOBB
+from OCC.Core.BndLib import BndLib_AddSurface
+from OCC.Core.BRep import BRep_Tool
+from OCC.Core.BRepBndLib import brepbndlib
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.Geom import Geom_Line
-from OCC.Core.Geom import Geom_Plane
 from OCC.Core.Geom import Geom_Surface
 from OCC.Core.GeomAdaptor import GeomAdaptor_Surface
 from OCC.Core.GeomAPI import GeomAPI_IntCS
@@ -31,12 +28,11 @@ from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Vec
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
-from OCC.Core.TopoDS import topods_Face
+from OCC.Core.TopoDS import topods
 
 from compas_occ.conversions import ax3_to_compas
 from compas_occ.conversions import direction_to_compas
 from compas_occ.conversions import line_to_occ
-from compas_occ.conversions import plane_to_occ
 from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import vector_to_compas
@@ -70,48 +66,65 @@ class OCCSurface(Surface):
 
     """
 
-    _occ_surface: Geom_Surface
+    _native_surface: Geom_Surface
 
-    def __init__(self, occ_surface: Geom_Surface, name: Optional[str] = None):
+    def __init__(self, native_surface: Geom_Surface, name: Optional[str] = None):
         super().__init__(name=name)
-        self.occ_surface = occ_surface
+        self.native_surface = native_surface
+
+    @property
+    def native_surface(self) -> Geom_Surface:
+        return self._native_surface
+
+    @native_surface.setter
+    def native_surface(self, surface: Geom_Surface) -> None:
+        self._native_surface = surface
 
     @property
     def occ_surface(self) -> Geom_Surface:
-        return self._occ_surface
-
-    @occ_surface.setter
-    def occ_surface(self, surface: Geom_Surface) -> None:
-        self._occ_surface = surface
+        return self._native_surface
 
     # ==============================================================================
-    # Data
+    # OCC Properties
     # ==============================================================================
+
+    @property
+    def occ_shape(self) -> TopoDS_Shape:
+        return BRepBuilderAPI_MakeFace(self.native_surface, 1e-6).Shape()
+
+    @property
+    def occ_face(self) -> TopoDS_Face:
+        return topods.Face(self.occ_shape)
+
+    # ==============================================================================
+    # Properties
+    # ==============================================================================
+
+    @property
+    def domain_u(self) -> Tuple[float, float]:
+        umin, umax, _, _ = self.native_surface.Bounds()
+        return umin, umax
+
+    @property
+    def domain_v(self) -> Tuple[float, float]:
+        _, _, vmin, vmax = self.native_surface.Bounds()
+        return vmin, vmax
+
+    @property
+    def is_periodic_u(self) -> bool:
+        return self.native_surface.IsUPeriodic()
+
+    @property
+    def is_periodic_v(self) -> bool:
+        return self.native_surface.IsVPeriodic()
 
     # ==============================================================================
     # Constructors
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_surface: Geom_Surface) -> "OCCSurface":
-        """Construct a NUBRS surface from an existing OCC BSplineSurface.
-
-        Parameters
-        ----------
-        occ_surface : Geom_BSplineSurface
-            A OCC surface.
-
-        Returns
-        -------
-        :class:`OCCSurface`
-            The constructed surface.
-
-        """
-        return cls(occ_surface)
-
-    @classmethod
     def from_face(cls, face: TopoDS_Face) -> "OCCSurface":
-        """Construct surface from an existing OCC TopoDS_Face.
+        """Construct a surface from an existing OCC TopoDS_Face.
 
         Parameters
         ----------
@@ -123,26 +136,47 @@ class OCCSurface(Surface):
         :class:`OCCSurface`
 
         """
-        srf = BRep_Tool_Surface(face)
-        return cls.from_occ(srf)
+        srf = BRep_Tool.Surface(face)
+        return cls.from_native(srf)
 
     @classmethod
-    def from_plane(cls, plane: Plane) -> "OCCSurface":
-        """Construct a surface from a plane.
+    def from_native(cls, native_surface: Geom_Surface) -> "OCCSurface":
+        """Construct a surface from an existing OCC Surface.
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
-            The plane.
+        native_surface : Geom_Surface
+            An OCC surface.
 
         Returns
         -------
         :class:`OCCSurface`
+            The constructed surface.
 
         """
-        occ_plane = plane_to_occ(plane)
-        srf = Geom_Plane(occ_plane)
-        return cls.from_occ(srf)
+        return cls(native_surface)
+
+    @classmethod
+    def from_occ(cls, native_surface: Geom_Surface) -> "OCCSurface":
+        """Construct a surface from an existing OCC Surface.
+
+        Parameters
+        ----------
+        native_surface : Geom_Surface
+            An OCC surface.
+
+        Returns
+        -------
+        :class:`OCCSurface`
+            The constructed surface.
+
+        Warnings
+        --------
+        .. deprecated:: 1.3
+            Use `from_native` instead
+
+        """
+        return cls(native_surface)
 
     # ==============================================================================
     # Conversions
@@ -162,12 +196,12 @@ class OCCSurface(Surface):
 
         """
         from OCC.Core.IFSelect import IFSelect_RetDone
-        from OCC.Core.Interface import Interface_Static_SetCVal
+        from OCC.Core.Interface import Interface_Static
         from OCC.Core.STEPControl import STEPControl_AsIs
         from OCC.Core.STEPControl import STEPControl_Writer
 
         step_writer = STEPControl_Writer()
-        Interface_Static_SetCVal("write.step.schema", schema)
+        Interface_Static.SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_face, STEPControl_AsIs)
         status = step_writer.Write(filepath)
         if status != IFSelect_RetDone:
@@ -194,40 +228,6 @@ class OCCSurface(Surface):
         return Mesh.from_vertices_and_faces(vertices, triangles)
 
     # ==============================================================================
-    # OCC
-    # ==============================================================================
-
-    @property
-    def occ_shape(self) -> TopoDS_Shape:
-        return BRepBuilderAPI_MakeFace(self.occ_surface, 1e-6).Shape()
-
-    @property
-    def occ_face(self) -> TopoDS_Face:
-        return topods_Face(self.occ_shape)
-
-    # ==============================================================================
-    # Properties
-    # ==============================================================================
-
-    @property
-    def domain_u(self) -> Tuple[float, float]:
-        umin, umax, _, _ = self.occ_surface.Bounds()
-        return umin, umax
-
-    @property
-    def domain_v(self) -> Tuple[float, float]:
-        _, _, vmin, vmax = self.occ_surface.Bounds()
-        return vmin, vmax
-
-    @property
-    def is_periodic_u(self) -> bool:
-        return self.occ_surface.IsUPeriodic()
-
-    @property
-    def is_periodic_v(self) -> bool:
-        return self.occ_surface.IsVPeriodic()
-
-    # ==============================================================================
     # Methods
     # ==============================================================================
 
@@ -240,8 +240,8 @@ class OCCSurface(Surface):
 
         """
         cls = type(self)
-        occ_surface = self.occ_surface.Copy()
-        return cls.from_occ(occ_surface)  # type: ignore
+        native_surface = self.native_surface.Copy()
+        return cls.from_native(native_surface)  # type: ignore
 
     def transform(self, T: Transformation) -> None:
         """Transform this surface.
@@ -257,7 +257,7 @@ class OCCSurface(Surface):
         """
         _T = gp_Trsf()
         _T.SetValues(*T.list[:12])
-        self.occ_surface.Transform(_T)
+        self.native_surface.Transform(_T)
 
     def isocurve_u(self, u: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter u.
@@ -271,8 +271,8 @@ class OCCSurface(Surface):
         :class:`~compas_occ.geometry.OCCCurve`
 
         """
-        occ_curve = self.occ_surface.UIso(u)
-        return OCCCurve.from_occ(occ_curve)
+        occ_curve = self.native_surface.UIso(u)
+        return OCCCurve.from_native(occ_curve)
 
     def isocurve_v(self, v: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter v.
@@ -286,8 +286,8 @@ class OCCSurface(Surface):
         :class:`~compas_occ.geometry.OCCCurve`
 
         """
-        occ_curve = self.occ_surface.VIso(v)
-        return OCCCurve.from_occ(occ_curve)
+        occ_curve = self.native_surface.VIso(v)
+        return OCCCurve.from_native(occ_curve)
 
     def boundary(self) -> List[OCCCurve]:
         """Compute the boundary curves of the surface.
@@ -297,7 +297,7 @@ class OCCSurface(Surface):
         list[:class:`~compas_occ.geometry.OCCCurve`]
 
         """
-        umin, umax, vmin, vmax = self.occ_surface.Bounds()
+        umin, umax, vmin, vmax = self.native_surface.Bounds()
         curves = [
             self.isocurve_v(vmin),
             self.isocurve_u(umax),
@@ -321,7 +321,7 @@ class OCCSurface(Surface):
         :class:`~compas.geometry.Point`
 
         """
-        point = self.occ_surface.Value(u, v)
+        point = self.native_surface.Value(u, v)
         return point_to_compas(point)
 
     def curvature_at(self, u: float, v: float) -> Vector:
@@ -337,7 +337,7 @@ class OCCSurface(Surface):
         :class:`~compas.geometry.Vector`
 
         """
-        props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
+        props = GeomLProp_SLProps(self.native_surface, u, v, 2, 1e-6)
         normal = props.Normal()
         return direction_to_compas(normal)
 
@@ -354,7 +354,7 @@ class OCCSurface(Surface):
         float
 
         """
-        props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
+        props = GeomLProp_SLProps(self.native_surface, u, v, 2, 1e-6)
         return props.GaussianCurvature()
 
     def mean_curvature_at(self, u: float, v: float) -> float:
@@ -370,7 +370,7 @@ class OCCSurface(Surface):
         float
 
         """
-        props = GeomLProp_SLProps(self.occ_surface, u, v, 2, 1e-6)
+        props = GeomLProp_SLProps(self.native_surface, u, v, 2, 1e-6)
         return props.MeanCurvature()
 
     def frame_at(self, u: float, v: float) -> Frame:
@@ -389,7 +389,7 @@ class OCCSurface(Surface):
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
-        self.occ_surface.D1(u, v, point, uvec, vvec)
+        self.native_surface.D1(u, v, point, uvec, vvec)
         return Frame(
             point_to_compas(point),
             vector_to_compas(uvec),
@@ -411,10 +411,10 @@ class OCCSurface(Surface):
         """
         box = Bnd_Box()
         if optimal:
-            add = BndLib_AddSurface_AddOptimal
+            add = BndLib_AddSurface.AddOptimal
         else:
-            add = BndLib_AddSurface_Add
-        add(GeomAdaptor_Surface(self.occ_surface), precision, box)
+            add = BndLib_AddSurface.Add
+        add(GeomAdaptor_Surface(self.native_surface), precision, box)
         return Box.from_diagonal(
             (
                 point_to_compas(box.CornerMin()),
@@ -445,7 +445,7 @@ class OCCSurface(Surface):
         """
         projector = GeomAPI_ProjectPointOnSurf(
             point_to_occ(point),
-            self.occ_surface,
+            self.native_surface,
         )
         point = point_to_compas(projector.NearestPoint())
         if not return_parameters:
@@ -465,7 +465,7 @@ class OCCSurface(Surface):
 
         """
         box = Bnd_OBB()
-        brepbndlib_AddOBB(self.occ_shape, box, True, True, True)
+        brepbndlib.AddOBB(self.occ_shape, box, True, True, True)
         return Box(
             box.XHSize(),
             box.YHSize(),
@@ -485,7 +485,7 @@ class OCCSurface(Surface):
         list[:class:`~compas.geometry.Point`]
 
         """
-        intersection = GeomAPI_IntCS(Geom_Line(line_to_occ(line)), self.occ_surface)
+        intersection = GeomAPI_IntCS(Geom_Line(line_to_occ(line)), self.native_surface)
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)
@@ -505,7 +505,7 @@ class OCCSurface(Surface):
         list[:class:`compas.geometry.Point`]
 
         """
-        intersection = GeomAPI_IntCS(curve.occ_curve, self.occ_surface)
+        intersection = GeomAPI_IntCS(curve.occ_curve, self.native_surface)
         points = []
         for index in range(intersection.NbPoints()):
             pnt = intersection.Point(index + 1)

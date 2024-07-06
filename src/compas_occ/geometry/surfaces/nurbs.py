@@ -10,11 +10,13 @@ from typing import Union
 
 from compas.geometry import Curve
 from compas.geometry import NurbsSurface
+from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Translation
 from compas.geometry import Vector
 from compas.itertools import flatten
 from OCC.Core.Geom import Geom_BSplineSurface
+from OCC.Core.Geom import Geom_Plane
 from OCC.Core.GeomAbs import GeomAbs_C2
 from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
@@ -27,6 +29,7 @@ from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import array2_from_floats2
 from compas_occ.conversions import array2_from_points2
 from compas_occ.conversions import floats2_from_array2
+from compas_occ.conversions import plane_to_occ
 from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import points2_from_array2
@@ -37,11 +40,11 @@ from .surface import OCCSurface
 
 class ControlPoints:
     def __init__(self, surface: "OCCNurbsSurface") -> None:
-        self.occ_surface = surface.occ_surface
+        self.native_surface = surface.native_surface
 
     @property
     def points(self) -> List[List[Point]]:
-        return points2_from_array2(self.occ_surface.Poles())
+        return points2_from_array2(self.native_surface.Poles())
 
     def __getitem__(self, index: Union[int, Tuple[int, int]]) -> Point:
         try:
@@ -49,15 +52,15 @@ class ControlPoints:
         except TypeError:
             return self.points[index]  # type: ignore
         else:
-            pnt = self.occ_surface.Pole(u + 1, v + 1)
+            pnt = self.native_surface.Pole(u + 1, v + 1)
             return point_to_compas(pnt)
 
     def __setitem__(self, index: Tuple[int, int], point: Point) -> None:
         u, v = index
-        self.occ_surface.SetPole(u + 1, v + 1, point_to_occ(point))
+        self.native_surface.SetPole(u + 1, v + 1, point_to_occ(point))
 
     def __len__(self) -> int:
-        return self.occ_surface.NbVPoles()
+        return self.native_surface.NbVPoles()
 
     def __iter__(self) -> Iterable:
         return iter(self.points)
@@ -142,7 +145,8 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
     """
 
-    _occ_surface: Geom_BSplineSurface
+    _native_surface: Geom_BSplineSurface
+    native_surface: Geom_BSplineSurface
 
     @property
     def __data__(self) -> Dict:
@@ -184,11 +188,6 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
             is_periodic_v,
         )
 
-    def __init__(self, occ_surface: Geom_BSplineSurface, name: Optional[str] = None) -> None:
-        super().__init__(occ_surface, name=name)
-        self._points = None
-        self.occ_surface = occ_surface
-
     def __eq__(self, other: "OCCNurbsSurface") -> bool:
         for a, b in zip(flatten(self.points), flatten(other.points)):
             if a != b:
@@ -209,136 +208,75 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return True
 
     # ==============================================================================
+    # Properties
+    # ==============================================================================
+
+    @property
+    def points(self) -> ControlPoints:
+        if not hasattr(self, "_points"):
+            self._points = ControlPoints(self)
+        return self._points
+
+    @property
+    def weights(self) -> List[List[float]]:
+        weights = self.native_surface.Weights()
+        if not weights:
+            rows = len(self.points)
+            cols = len(self.points[0])
+            weights = [[1.0] * cols for _ in range(rows)]
+        else:
+            weights = floats2_from_array2(weights)
+        return weights  # type: ignore (not sure what this is about)
+
+    @property
+    def degree_u(self) -> int:
+        return self.native_surface.UDegree()
+
+    @property
+    def degree_v(self) -> int:
+        return self.native_surface.VDegree()
+
+    @property
+    def knots_u(self) -> List[float]:
+        return list(self.native_surface.UKnots())
+
+    @property
+    def knots_v(self) -> List[float]:
+        return list(self.native_surface.VKnots())
+
+    @property
+    def mults_u(self) -> List[int]:
+        return list(self.native_surface.UMultiplicities())
+
+    @property
+    def mults_v(self) -> List[int]:
+        return list(self.native_surface.VMultiplicities())
+
+    # ==============================================================================
     # Constructors
     # ==============================================================================
 
     @classmethod
-    def from_parameters(
-        cls,
-        points: List[List[Point]],
-        weights: List[List[float]],
-        knots_u: List[float],
-        knots_v: List[float],
-        mults_u: List[int],
-        mults_v: List[int],
-        degree_u: int,
-        degree_v: int,
-        is_periodic_u: bool = False,
-        is_periodic_v: bool = False,
-    ) -> "OCCNurbsSurface":
-        """Construct a NURBS surface from explicit parameters.
+    def from_extrusion(cls, curve: Curve, vector: Vector) -> "OCCNurbsSurface":
+        """Construct a NURBS surface from an extrusion of a basis curve.
+
+        Note that the extrusion surface is constructed by generating an infill
+        between the basis curve and a translated copy with :meth:`from_fill`.
 
         Parameters
         ----------
-        points : list[list[:class:`~compas.geometry.Point`]]
-            The control points of the surface.
-        weights : list[list[float]]
-            The weights of the control points.
-        knots_u : list[float]
-            The knots in the U direction, without multiplicities.
-        knots_v : list[float]
-            The knots in the V direction, without multiplicities.
-        mults_u : list[int]
-            The multiplicities of the knots in the U direction.
-        mults_v : list[int]
-            The multiplicities of the knots in the V direction.
-        u_dergee : int
-            Degree in the U direction.
-        degree_v : int
-            Degree in the V direction.
-        is_periodic_u : bool, optional
-            Flag indicating that the surface is periodic in the U direction.
-        is_periodic_v : bool, optional
-            Flag indicating that the surface is periodic in the V direction.
+        curve : :class:`compas_occ.geometry.Curve`
+            The basis curve for the extrusion.
+        vector : :class:`compas.geometry.Vector`
+            The extrusion vector, which serves as a translation vector for the basis curve.
 
         Returns
         -------
         :class:`OCCNurbsSurface`
 
         """
-        occ_surface = Geom_BSplineSurface(
-            array2_from_points2(points),
-            array2_from_floats2(weights),
-            array1_from_floats1(knots_u),
-            array1_from_floats1(knots_v),
-            array1_from_integers1(mults_u),
-            array1_from_integers1(mults_v),
-            degree_u,
-            degree_v,
-            is_periodic_u,
-            is_periodic_v,
-        )
-        return cls(occ_surface)
-
-    @classmethod
-    def from_points(
-        cls,
-        points: List[List[Point]],
-        degree_u: int = 3,
-        degree_v: int = 3,
-    ) -> "OCCNurbsSurface":
-        """Construct a NURBS surface from control points.
-
-        Parameters
-        ----------
-        points : list[list[:class:`~compas.geometry.Point`]]
-            The control points.
-        degree_u : int, optional
-        degree_v : int, optional
-
-        Returns
-        -------
-        :class:`OCCNurbsSurface`
-
-        """
-        u = len(points[0])
-        v = len(points)
-        weights = [[1.0 for _ in range(u)] for _ in range(v)]
-        degree_u = degree_u if u > degree_u else u - 1
-        degree_v = degree_v if v > degree_v else v - 1
-        u_order = degree_u + 1
-        v_order = degree_v + 1
-        x = u - u_order
-        knots_u = [float(i) for i in range(2 + x)]
-        mults_u = [u_order]
-        for _ in range(x):
-            mults_u.append(1)
-        mults_u.append(u_order)
-        x = v - v_order
-        knots_v = [float(i) for i in range(2 + x)]
-        mults_v = [v_order]
-        for _ in range(x):
-            mults_v.append(1)
-        mults_v.append(v_order)
-        is_periodic_u = False
-        is_periodic_v = False
-        return cls.from_parameters(
-            points,
-            weights,
-            knots_u,
-            knots_v,
-            mults_u,
-            mults_v,
-            degree_u,
-            degree_v,
-            is_periodic_u,
-            is_periodic_v,
-        )
-
-    @classmethod
-    def from_step(cls, filepath: str) -> "OCCNurbsSurface":
-        """Load a NURBS surface from a STP file.
-
-        Parameters
-        ----------
-        filepath : str
-
-        Returns
-        -------
-        :class:`OCCNurbsSurface`
-
-        """
-        raise NotImplementedError
+        other = curve.transformed(Translation.from_vector(vector))
+        return cls.from_fill(curve, other)  # type: ignore (not sure how to solve this)
 
     @classmethod
     def from_fill(
@@ -405,30 +343,8 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
                 curve2.occ_curve,
                 occ_style,
             )
-        occ_surface = occ_fill.Surface()
-        return cls(occ_surface)
-
-    @classmethod
-    def from_extrusion(cls, curve: Curve, vector: Vector) -> "OCCNurbsSurface":
-        """Construct a NURBS surface from an extrusion of a basis curve.
-
-        Note that the extrusion surface is constructed by generating an infill
-        between the basis curve and a translated copy with :meth:`from_fill`.
-
-        Parameters
-        ----------
-        curve : :class:`compas_occ.geometry.Curve`
-            The basis curve for the extrusion.
-        vector : :class:`compas.geometry.Vector`
-            The extrusion vector, which serves as a translation vector for the basis curve.
-
-        Returns
-        -------
-        :class:`OCCNurbsSurface`
-
-        """
-        other = curve.transformed(Translation.from_vector(vector))
-        return cls.from_fill(curve, other)  # type: ignore (not sure how to solve this)
+        native_surface = occ_fill.Surface()
+        return cls.from_native(native_surface)
 
     @classmethod
     def from_interpolation(cls, points: List[List[Point]], precision: float = 1e-3) -> "OCCNurbsSurface":
@@ -446,75 +362,165 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         :class:`OCCNurbsSurface`
 
         """
-        occ_surface = GeomAPI_PointsToBSplineSurface(
+        native_surface = GeomAPI_PointsToBSplineSurface(
             array2_from_points2(points),
             3,
             8,
             GeomAbs_C2,
             precision,
         ).Surface()
-        return cls(occ_surface)
+        return cls(native_surface)
+
+    @classmethod
+    def from_native(cls, native_surface: Geom_BSplineSurface) -> "OCCNurbsSurface":
+        """Construct a NURBS surface from an existing OCC Surface.
+
+        Parameters
+        ----------
+        native_surface : Geom_BSplineSurface
+            An OCC surface.
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+            The constructed surface.
+
+        """
+        return cls(native_surface)
+
+    @classmethod
+    def from_parameters(
+        cls,
+        points: List[List[Point]],
+        weights: List[List[float]],
+        knots_u: List[float],
+        knots_v: List[float],
+        mults_u: List[int],
+        mults_v: List[int],
+        degree_u: int,
+        degree_v: int,
+        is_periodic_u: bool = False,
+        is_periodic_v: bool = False,
+    ) -> "OCCNurbsSurface":
+        """Construct a NURBS surface from explicit parameters.
+
+        Parameters
+        ----------
+        points : list[list[:class:`~compas.geometry.Point`]]
+            The control points of the surface.
+        weights : list[list[float]]
+            The weights of the control points.
+        knots_u : list[float]
+            The knots in the U direction, without multiplicities.
+        knots_v : list[float]
+            The knots in the V direction, without multiplicities.
+        mults_u : list[int]
+            The multiplicities of the knots in the U direction.
+        mults_v : list[int]
+            The multiplicities of the knots in the V direction.
+        u_dergee : int
+            Degree in the U direction.
+        degree_v : int
+            Degree in the V direction.
+        is_periodic_u : bool, optional
+            Flag indicating that the surface is periodic in the U direction.
+        is_periodic_v : bool, optional
+            Flag indicating that the surface is periodic in the V direction.
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+
+        """
+        native_surface = Geom_BSplineSurface(
+            array2_from_points2(points),
+            array2_from_floats2(weights),
+            array1_from_floats1(knots_u),
+            array1_from_floats1(knots_v),
+            array1_from_integers1(mults_u),
+            array1_from_integers1(mults_v),
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
+        )
+        return cls.from_native(native_surface)
+
+    @classmethod
+    def from_plane(cls, plane: Plane) -> "OCCNurbsSurface":
+        """Construct a NURBS surface from a plane.
+
+        Parameters
+        ----------
+        plane : :class:`compas.geometry.Plane`
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+
+        """
+        occ_plane = plane_to_occ(plane)
+        srf = Geom_Plane(occ_plane)
+        return cls.from_native(srf)  # type: ignore
+
+    @classmethod
+    def from_points(
+        cls,
+        points: List[List[Point]],
+        degree_u: int = 3,
+        degree_v: int = 3,
+    ) -> "OCCNurbsSurface":
+        """Construct a NURBS surface from control points.
+
+        Parameters
+        ----------
+        points : list[list[:class:`~compas.geometry.Point`]]
+            The control points.
+        degree_u : int, optional
+        degree_v : int, optional
+
+        Returns
+        -------
+        :class:`OCCNurbsSurface`
+
+        """
+        u = len(points[0])
+        v = len(points)
+        weights = [[1.0 for _ in range(u)] for _ in range(v)]
+        degree_u = degree_u if u > degree_u else u - 1
+        degree_v = degree_v if v > degree_v else v - 1
+        u_order = degree_u + 1
+        v_order = degree_v + 1
+        x = u - u_order
+        knots_u = [float(i) for i in range(2 + x)]
+        mults_u = [u_order]
+        for _ in range(x):
+            mults_u.append(1)
+        mults_u.append(u_order)
+        x = v - v_order
+        knots_v = [float(i) for i in range(2 + x)]
+        mults_v = [v_order]
+        for _ in range(x):
+            mults_v.append(1)
+        mults_v.append(v_order)
+        is_periodic_u = False
+        is_periodic_v = False
+        return cls.from_parameters(
+            points,
+            weights,
+            knots_u,
+            knots_v,
+            mults_u,
+            mults_v,
+            degree_u,
+            degree_v,
+            is_periodic_u,
+            is_periodic_v,
+        )
 
     # ==============================================================================
     # Conversions
     # ==============================================================================
-
-    # ==============================================================================
-    # OCC
-    # ==============================================================================
-
-    @property
-    def occ_surface(self) -> Geom_BSplineSurface:
-        return self._occ_surface
-
-    @occ_surface.setter
-    def occ_surface(self, surface: Geom_BSplineSurface) -> None:
-        self._occ_surface = surface
-
-    # ==============================================================================
-    # Properties
-    # ==============================================================================
-
-    @property
-    def points(self) -> ControlPoints:
-        if not self._points:
-            self._points = ControlPoints(self)
-        return self._points
-
-    @property
-    def weights(self) -> List[List[float]]:
-        weights = self.occ_surface.Weights()
-        if not weights:
-            rows = len(self.points)
-            cols = len(self.points[0])
-            weights = [[1.0] * cols for _ in range(rows)]
-        else:
-            weights = floats2_from_array2(weights)
-        return weights  # type: ignore (not sure what this is about)
-
-    @property
-    def degree_u(self) -> int:
-        return self.occ_surface.UDegree()
-
-    @property
-    def degree_v(self) -> int:
-        return self.occ_surface.VDegree()
-
-    @property
-    def knots_u(self) -> List[float]:
-        return list(self.occ_surface.UKnots())
-
-    @property
-    def knots_v(self) -> List[float]:
-        return list(self.occ_surface.VKnots())
-
-    @property
-    def mults_u(self) -> List[int]:
-        return list(self.occ_surface.UMultiplicities())
-
-    @property
-    def mults_v(self) -> List[int]:
-        return list(self.occ_surface.VMultiplicities())
 
     # ==============================================================================
     # Methods

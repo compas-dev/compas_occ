@@ -63,11 +63,10 @@ class OCCCurve(Curve):
 
     """
 
-    def __init__(self, occ_curve: Geom_Curve, name=None):
+    def __init__(self, native_curve: Geom_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 3
-        self._occ_curve: Geom_Curve = None  # type: ignore
-        self.occ_curve = occ_curve
+        self._native_curve: Geom_Curve = native_curve
 
     def __eq__(self, other: "OCCCurve") -> bool:
         raise NotImplementedError
@@ -81,16 +80,20 @@ class OCCCurve(Curve):
     # ==============================================================================
 
     @property
-    def occ_curve(self) -> Geom_Curve:
-        return self._occ_curve
+    def native_curve(self) -> Geom_Curve:
+        return self._native_curve
 
-    @occ_curve.setter
-    def occ_curve(self, curve: Geom_Curve):
-        self._occ_curve = curve
+    @native_curve.setter
+    def native_curve(self, curve: Geom_Curve):
+        self._native_curve = curve
+
+    @property
+    def occ_curve(self) -> Geom_Curve:
+        return self._native_curve
 
     @property
     def occ_shape(self) -> TopoDS_Shape:
-        return BRepBuilderAPI_MakeEdge(self.occ_curve).Shape()
+        return BRepBuilderAPI_MakeEdge(self.native_curve).Shape()
 
     @property
     def occ_edge(self) -> TopoDS_Edge:
@@ -106,7 +109,7 @@ class OCCCurve(Curve):
 
     @property
     def domain(self) -> Tuple[float, float]:
-        return self.occ_curve.FirstParameter(), self.occ_curve.LastParameter()
+        return self.native_curve.FirstParameter(), self.native_curve.LastParameter()
 
     @property
     def start(self) -> Point:
@@ -118,31 +121,50 @@ class OCCCurve(Curve):
 
     @property
     def is_closed(self) -> bool:
-        return self.occ_curve.IsClosed()
+        return self.native_curve.IsClosed()
 
     @property
     def is_periodic(self) -> bool:
-        return self.occ_curve.IsPeriodic()
+        return self.native_curve.IsPeriodic()
 
     # ==============================================================================
     # Constructors
     # ==============================================================================
 
     @classmethod
-    def from_occ(cls, occ_curve: Geom_Curve) -> "OCCCurve":
-        """Construct a NURBS curve from an existing OCC BSplineCurve.
+    def from_native(cls, native_curve: Geom_Curve) -> "OCCCurve":
+        """Construct a curve from an existing OCC BSplineCurve.
 
         Parameters
         ----------
-        occ_curve : Geom_Curve
+        native_curve : Geom_Curve
 
         Returns
         -------
         :class:`OCCCurve`
 
         """
-        curve = cls(occ_curve)
-        return curve
+        return cls(native_curve)
+
+    @classmethod
+    def from_occ(cls, native_curve: Geom_Curve) -> "OCCCurve":
+        """Construct a curve from an existing OCC BSplineCurve.
+
+        Parameters
+        ----------
+        native_curve : Geom_Curve
+
+        Returns
+        -------
+        :class:`OCCCurve`
+
+        Warnings
+        --------
+        .. deprecated:: 1.3
+            Use `from_native` instead.
+
+        """
+        return cls(native_curve)
 
     # ==============================================================================
     # Conversions
@@ -196,8 +218,8 @@ class OCCCurve(Curve):
 
         """
         cls = type(self)
-        occ_curve = self.occ_curve.Copy()
-        return cls(occ_curve)  # type: ignore (Copy returns Geom_Geometry)
+        native_curve = self.native_curve.Copy()
+        return cls(native_curve)  # type: ignore (Copy returns Geom_Geometry)
 
     def transform(self, T: Transformation) -> None:
         """Transform this curve.
@@ -211,7 +233,7 @@ class OCCCurve(Curve):
         None
 
         """
-        self.occ_curve.Transform(compas_transformation_to_trsf(T))
+        self.native_curve.Transform(compas_transformation_to_trsf(T))
 
     def reverse(self) -> None:
         """Reverse the parametrisation of the curve.
@@ -221,7 +243,7 @@ class OCCCurve(Curve):
         None
 
         """
-        self.occ_curve.Reverse()
+        self.native_curve.Reverse()
 
     def point_at(self, t: float) -> Point:
         """Compute the point at a curve parameter.
@@ -241,11 +263,11 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain))
 
-        point = self.occ_curve.Value(t)
+        point = self.native_curve.Value(t)
         return point_to_compas(point)
 
     def tangent_at(self, t: float) -> Vector:
@@ -266,13 +288,13 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
         point = gp_Pnt()
         uvec = gp_Vec()
-        self.occ_curve.D1(t, point, uvec)
+        self.native_curve.D1(t, point, uvec)
 
         return vector_to_compas(uvec)
 
@@ -294,14 +316,14 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
-        self.occ_curve.D2(t, point, uvec, vvec)
+        self.native_curve.D2(t, point, uvec, vvec)
 
         return vector_to_compas(vvec)
 
@@ -323,14 +345,14 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no occ_curve is set)
+        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
         point = gp_Pnt()
         uvec = gp_Vec()
         vvec = gp_Vec()
-        self.occ_curve.D2(t, point, uvec, vvec)
+        self.native_curve.D2(t, point, uvec, vvec)
 
         return Frame(
             point_to_compas(point),
@@ -363,7 +385,7 @@ class OCCCurve(Curve):
             The new parameter.
 
         """
-        a = GCPnts_AbscissaPoint(GeomAdaptor_Curve(self.occ_curve), distance, t, precision)
+        a = GCPnts_AbscissaPoint(GeomAdaptor_Curve(self.native_curve), distance, t, precision)
         return a.Parameter()
 
     def aabb(self, precision: float = 0.0) -> Box:
@@ -379,7 +401,7 @@ class OCCCurve(Curve):
 
         """
         box = Bnd_Box()
-        BndLib_Add3dCurve.Add(GeomAdaptor_Curve(self.occ_curve), precision, box)
+        BndLib_Add3dCurve.Add(GeomAdaptor_Curve(self.native_curve), precision, box)
         return Box.from_diagonal(
             (
                 point_to_compas(box.CornerMin()),
@@ -399,7 +421,7 @@ class OCCCurve(Curve):
         float
 
         """
-        return GCPnts_AbscissaPoint.Length(GeomAdaptor_Curve(self.occ_curve), precision)
+        return GCPnts_AbscissaPoint.Length(GeomAdaptor_Curve(self.native_curve), precision)
 
     def closest_point(
         self,
@@ -424,7 +446,7 @@ class OCCCurve(Curve):
             If `return_parameter` is True, the nearest point on the curve and the corresponding parameter.
 
         """
-        projector = GeomAPI_ProjectPointOnCurve(point_to_occ(point), self.occ_curve)
+        projector = GeomAPI_ProjectPointOnCurve(point_to_occ(point), self.native_curve)
 
         try:
             point = point_to_compas(projector.NearestPoint())
@@ -448,11 +470,11 @@ class OCCCurve(Curve):
             if d_start <= d_end:
                 if not return_parameter:
                     return start
-                return start, self.occ_curve.FirstParameter()
+                return start, self.native_curve.FirstParameter()
 
             if not return_parameter:
                 return end
-            return end, self.occ_curve.LastParameter()
+            return end, self.native_curve.LastParameter()
 
     def closest_parameters_curve(
         self,
@@ -475,7 +497,7 @@ class OCCCurve(Curve):
             If `return_distance` is True, the distance between the two curves in addition to the curve parameters.
 
         """
-        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
+        extrema = GeomAPI_ExtremaCurveCurve(self.native_curve, curve.native_curve)
         if not return_distance:
             return extrema.LowerDistanceParameters()
         return extrema.LowerDistanceParameters(), extrema.LowerDistance()
@@ -502,7 +524,7 @@ class OCCCurve(Curve):
 
         """
         a, b = gp_Pnt(), gp_Pnt()
-        extrema = GeomAPI_ExtremaCurveCurve(self.occ_curve, curve.occ_curve)
+        extrema = GeomAPI_ExtremaCurveCurve(self.native_curve, curve.native_curve)
         extrema.NearestPoints(a, b)
         points = point_to_compas(a), point_to_compas(b)
         if not return_distance:
@@ -540,7 +562,7 @@ class OCCCurve(Curve):
         a, b = self.domain
         t = a
         params = [t]
-        adaptor = GeomAdaptor_Curve(self.occ_curve)
+        adaptor = GeomAdaptor_Curve(self.native_curve)
         for _ in range(count - 1):
             a = GCPnts_AbscissaPoint(adaptor, length, t, precision)
             t = a.Parameter()
@@ -587,7 +609,7 @@ class OCCCurve(Curve):
         a, b = self.domain
         t = a
         params = [t]
-        adaptor = GeomAdaptor_Curve(self.occ_curve)
+        adaptor = GeomAdaptor_Curve(self.native_curve)
         for _ in range(count - 1):
             a = GCPnts_AbscissaPoint(adaptor, length, t, precision)
             t = a.Parameter()
@@ -611,7 +633,7 @@ class OCCCurve(Curve):
         :class:`OCCCurve`
 
         """
-        result = geomprojlib.Project(self.occ_curve, surface.occ_surface)
+        result = geomprojlib.Project(self.native_curve, surface.occ_surface)
         curve = OCCCurve.from_occ(result)
         return curve
 
@@ -628,7 +650,7 @@ class OCCCurve(Curve):
         :class:`OCCCurve2d`
 
         """
-        result = geomprojlib.Curve2d(self.occ_curve, surface.occ_surface)
+        result = geomprojlib.Curve2d(self.native_curve, surface.occ_surface)
         curve = OCCCurve2d.from_occ(result)
         return curve
 
@@ -651,9 +673,9 @@ class OCCCurve(Curve):
         :class:`OCCCurve`
 
         """
-        occ_curve = Geom_OffsetCurve(
-            self.occ_curve,
+        native_curve = Geom_OffsetCurve(
+            self.native_curve,
             distance,
             direction_to_occ(direction),
         )
-        return OCCCurve.from_occ(occ_curve)
+        return OCCCurve.from_occ(native_curve)
