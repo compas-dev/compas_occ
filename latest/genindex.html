@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -28,28 +27,29 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/compas.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/css/compas.css?v=617b33e2" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/tabs.js"></script>
+    <script src="_static/documentation_options.js?v=bb99e320"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/tabs.js?v=3ee01567"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <script>
@@ -466,6 +466,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_comparison2.html">Curve Comparison 2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_divide.html">Curve Divide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_circle.html">Curve From Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_ellipse.html">Curve From Ellipse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_line.html">Curve From Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/curves/curve_from_parameters.html">Curve From Parameters</a></li>
@@ -477,8 +478,6 @@ document.write(`
 <li class="toctree-l2 has-children"><a class="reference internal" href="examples/surfaces/index.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_frames.html">Surface Frames</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/surfaces/surface_from_parameters.html">Surface From Parameters</a></li>
@@ -646,13 +645,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.aabb.html#compas_occ.geometry.OCCCurve2d.aabb">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.aabb.html#compas_occ.geometry.OCCExtrusionSurface.aabb">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.aabb.html#compas_occ.geometry.OCCNurbsCurve.aabb">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.aabb.html#compas_occ.geometry.OCCNurbsSurface.aabb">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.aabb.html#compas_occ.geometry.OCCRevolutionSurface.aabb">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.aabb.html#compas_occ.geometry.OCCSurface.aabb">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -663,10 +658,10 @@ document.write(`
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.adjacent_faces.html#compas_occ.brep.OCCBrepFace.adjacent_faces">adjacent_faces() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.conversions.array1_from_floats1.html#compas_occ.conversions.array1_from_floats1">array1_from_floats1() (in module compas_occ.conversions)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.conversions.array1_from_integers1.html#compas_occ.conversions.array1_from_integers1">array1_from_integers1() (in module compas_occ.conversions)</a>
 </li>
       <li><a href="api/generated/compas_occ.conversions.array1_from_points1.html#compas_occ.conversions.array1_from_points1">array1_from_points1() (in module compas_occ.conversions)</a>
@@ -695,13 +690,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.conversions.bezier_to_compas.html#compas_occ.conversions.bezier_to_compas">bezier_to_compas() (in module compas_occ.conversions)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.boundary.html#compas_occ.geometry.OCCExtrusionSurface.boundary">boundary() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.boundary.html#compas_occ.geometry.OCCNurbsSurface.boundary">boundary() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.boundary.html#compas_occ.geometry.OCCNurbsSurface.boundary">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.boundary.html#compas_occ.geometry.OCCRevolutionSurface.boundary">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.boundary.html#compas_occ.geometry.OCCSurface.boundary">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -732,13 +723,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.closest_point.html#compas_occ.geometry.OCCCurve2d.closest_point">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.closest_point.html#compas_occ.geometry.OCCExtrusionSurface.closest_point">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.closest_point.html#compas_occ.geometry.OCCNurbsCurve.closest_point">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.closest_point.html#compas_occ.geometry.OCCNurbsSurface.closest_point">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.closest_point.html#compas_occ.geometry.OCCRevolutionSurface.closest_point">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.closest_point.html#compas_occ.geometry.OCCSurface.closest_point">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -757,12 +744,6 @@ document.write(`
 </li>
       <li><a href="api/generated/compas_occ.conversions.compas_trimesh_to_occ_shell.html#compas_occ.conversions.compas_trimesh_to_occ_shell">compas_trimesh_to_occ_shell() (in module compas_occ.conversions)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.compute.html#compas_occ.geometry.OCCExtrusionSurface.compute">compute() (compas_occ.geometry.OCCExtrusionSurface method)</a>
-
-      <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.compute.html#compas_occ.geometry.OCCRevolutionSurface.compute">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
-      </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.compute_aabb.html#compas_occ.brep.OCCBrep.compute_aabb">compute_aabb() (compas_occ.brep.OCCBrep method)</a>
 
       <ul>
@@ -770,13 +751,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.compute_aabb.html#compas_occ.geometry.OCCCurve2d.compute_aabb">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.compute_aabb.html#compas_occ.geometry.OCCExtrusionSurface.compute_aabb">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.compute_aabb.html#compas_occ.geometry.OCCNurbsCurve.compute_aabb">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.compute_aabb.html#compas_occ.geometry.OCCNurbsSurface.compute_aabb">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.compute_aabb.html#compas_occ.geometry.OCCRevolutionSurface.compute_aabb">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.compute_aabb.html#compas_occ.geometry.OCCSurface.compute_aabb">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -788,13 +765,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.compute_obb.html#compas_occ.geometry.OCCCurve2d.compute_obb">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.compute_obb.html#compas_occ.geometry.OCCExtrusionSurface.compute_obb">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.compute_obb.html#compas_occ.geometry.OCCNurbsCurve.compute_obb">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.compute_obb.html#compas_occ.geometry.OCCNurbsSurface.compute_obb">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.compute_obb.html#compas_occ.geometry.OCCRevolutionSurface.compute_obb">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.compute_obb.html#compas_occ.geometry.OCCSurface.compute_obb">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -822,13 +795,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.copy.html#compas_occ.geometry.OCCCurve2d.copy">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.copy.html#compas_occ.geometry.OCCExtrusionSurface.copy">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.copy.html#compas_occ.geometry.OCCNurbsCurve.copy">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.copy.html#compas_occ.geometry.OCCNurbsSurface.copy">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.copy.html#compas_occ.geometry.OCCRevolutionSurface.copy">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.copy.html#compas_occ.geometry.OCCSurface.copy">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -846,13 +815,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.curvature_at.html#compas_occ.geometry.OCCCurve2d.curvature_at">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.curvature_at.html#compas_occ.geometry.OCCExtrusionSurface.curvature_at">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.curvature_at.html#compas_occ.geometry.OCCNurbsCurve.curvature_at">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.curvature_at.html#compas_occ.geometry.OCCNurbsSurface.curvature_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.curvature_at.html#compas_occ.geometry.OCCRevolutionSurface.curvature_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.curvature_at.html#compas_occ.geometry.OCCSurface.curvature_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -954,13 +919,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.frame_at.html#compas_occ.geometry.OCCCurve2d.frame_at">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.frame_at.html#compas_occ.geometry.OCCExtrusionSurface.frame_at">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.frame_at.html#compas_occ.geometry.OCCNurbsCurve.frame_at">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.frame_at.html#compas_occ.geometry.OCCNurbsSurface.frame_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.frame_at.html#compas_occ.geometry.OCCRevolutionSurface.frame_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.frame_at.html#compas_occ.geometry.OCCSurface.frame_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1004,6 +965,8 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_cylinder.html#compas_occ.brep.OCCBrepFace.from_cylinder">(compas_occ.brep.OCCBrepFace class method)</a>
 </li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_cylinder.html#compas_occ.geometry.OCCNurbsSurface.from_cylinder">(compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepLoop.from_edges.html#compas_occ.brep.OCCBrepLoop.from_edges">from_edges() (compas_occ.brep.OCCBrepLoop class method)</a>
 </li>
@@ -1019,17 +982,15 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_extrusion.html#compas_occ.geometry.OCCNurbsSurface.from_extrusion">(compas_occ.geometry.OCCNurbsSurface class method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_face.html#compas_occ.geometry.OCCExtrusionSurface.from_face">from_face() (compas_occ.geometry.OCCExtrusionSurface class method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_face.html#compas_occ.geometry.OCCNurbsSurface.from_face">from_face() (compas_occ.geometry.OCCNurbsSurface class method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_face.html#compas_occ.geometry.OCCNurbsSurface.from_face">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_face.html#compas_occ.geometry.OCCRevolutionSurface.from_face">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_face.html#compas_occ.geometry.OCCSurface.from_face">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_fill.html#compas_occ.geometry.OCCNurbsSurface.from_fill">from_fill() (compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_frame.html#compas_occ.geometry.OCCNurbsSurface.from_frame">from_frame() (compas_occ.geometry.OCCNurbsSurface class method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_iges.html#compas_occ.brep.OCCBrep.from_iges">from_iges() (compas_occ.brep.OCCBrep class method)</a>
 </li>
@@ -1054,13 +1015,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_json.html#compas_occ.geometry.OCCCurve2d.from_json">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_json.html#compas_occ.geometry.OCCExtrusionSurface.from_json">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_json.html#compas_occ.geometry.OCCNurbsCurve.from_json">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_json.html#compas_occ.geometry.OCCNurbsSurface.from_json">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_json.html#compas_occ.geometry.OCCRevolutionSurface.from_json">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_json.html#compas_occ.geometry.OCCSurface.from_json">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -1080,13 +1037,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_jsonstring.html#compas_occ.geometry.OCCCurve2d.from_jsonstring">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_jsonstring.html#compas_occ.geometry.OCCExtrusionSurface.from_jsonstring">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_jsonstring.html#compas_occ.geometry.OCCNurbsCurve.from_jsonstring">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.from_jsonstring">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_jsonstring.html#compas_occ.geometry.OCCRevolutionSurface.from_jsonstring">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_jsonstring.html#compas_occ.geometry.OCCSurface.from_jsonstring">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -1108,9 +1061,15 @@ document.write(`
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_native.html#compas_occ.brep.OCCBrep.from_native">from_native() (compas_occ.brep.OCCBrep class method)</a>
 
       <ul>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve.from_native.html#compas_occ.geometry.OCCCurve.from_native">(compas_occ.geometry.OCCCurve class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_native.html#compas_occ.geometry.OCCCurve2d.from_native">(compas_occ.geometry.OCCCurve2d class method)</a>
+</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_native.html#compas_occ.geometry.OCCNurbsCurve.from_native">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_native.html#compas_occ.geometry.OCCNurbsSurface.from_native">(compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
+        <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_native.html#compas_occ.geometry.OCCSurface.from_native">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve.from_obj.html#compas_occ.geometry.OCCCurve.from_obj">from_obj() (compas_occ.geometry.OCCCurve class method)</a>
@@ -1118,13 +1077,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_obj.html#compas_occ.geometry.OCCCurve2d.from_obj">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_obj.html#compas_occ.geometry.OCCExtrusionSurface.from_obj">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_obj.html#compas_occ.geometry.OCCNurbsCurve.from_obj">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_obj.html#compas_occ.geometry.OCCNurbsSurface.from_obj">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_obj.html#compas_occ.geometry.OCCRevolutionSurface.from_obj">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_obj.html#compas_occ.geometry.OCCSurface.from_obj">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -1134,13 +1089,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_occ.html#compas_occ.geometry.OCCCurve2d.from_occ">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_occ.html#compas_occ.geometry.OCCExtrusionSurface.from_occ">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_occ.html#compas_occ.geometry.OCCNurbsCurve.from_occ">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_occ.html#compas_occ.geometry.OCCNurbsSurface.from_occ">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_occ.html#compas_occ.geometry.OCCRevolutionSurface.from_occ">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_occ.html#compas_occ.geometry.OCCSurface.from_occ">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -1158,13 +1109,7 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_plane.html#compas_occ.brep.OCCBrepFace.from_plane">(compas_occ.brep.OCCBrepFace class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_plane.html#compas_occ.geometry.OCCExtrusionSurface.from_plane">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_plane.html#compas_occ.geometry.OCCNurbsSurface.from_plane">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_plane.html#compas_occ.geometry.OCCRevolutionSurface.from_plane">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_plane.html#compas_occ.geometry.OCCSurface.from_plane">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_planes.html#compas_occ.brep.OCCBrep.from_planes">from_planes() (compas_occ.brep.OCCBrep class method)</a>
@@ -1198,6 +1143,8 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_sphere.html#compas_occ.brep.OCCBrepFace.from_sphere">(compas_occ.brep.OCCBrepFace class method)</a>
 </li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_sphere.html#compas_occ.geometry.OCCNurbsSurface.from_sphere">(compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.from_step.html#compas_occ.brep.OCCBrep.from_step">from_step() (compas_occ.brep.OCCBrep class method)</a>
 
@@ -1206,13 +1153,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.from_step.html#compas_occ.geometry.OCCCurve2d.from_step">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.from_step.html#compas_occ.geometry.OCCExtrusionSurface.from_step">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.from_step.html#compas_occ.geometry.OCCNurbsCurve.from_step">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_step.html#compas_occ.geometry.OCCNurbsSurface.from_step">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.from_step.html#compas_occ.geometry.OCCRevolutionSurface.from_step">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.from_step.html#compas_occ.geometry.OCCSurface.from_step">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -1230,6 +1173,8 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.brep.OCCBrepFace.from_torus.html#compas_occ.brep.OCCBrepFace.from_torus">(compas_occ.brep.OCCBrepFace class method)</a>
 </li>
+        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.from_torus.html#compas_occ.geometry.OCCNurbsSurface.from_torus">(compas_occ.geometry.OCCNurbsSurface class method)</a>
+</li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.from_vertex_vertex.html#compas_occ.brep.OCCBrepEdge.from_vertex_vertex">from_vertex_vertex() (compas_occ.brep.OCCBrepEdge class method)</a>
 </li>
@@ -1241,13 +1186,9 @@ document.write(`
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCExtrusionSurface.gaussian_curvature_at">gaussian_curvature_at() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at">gaussian_curvature_at() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCRevolutionSurface.gaussian_curvature_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCSurface.gaussian_curvature_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1273,33 +1214,21 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.insert_knot.html#compas_occ.geometry.OCCNurbsCurve.insert_knot">insert_knot() (compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.intersections_with_curve.html#compas_occ.geometry.OCCExtrusionSurface.intersections_with_curve">intersections_with_curve() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve">intersections_with_curve() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.intersections_with_curve.html#compas_occ.geometry.OCCRevolutionSurface.intersections_with_curve">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.intersections_with_curve.html#compas_occ.geometry.OCCSurface.intersections_with_curve">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.intersections_with_line.html#compas_occ.geometry.OCCExtrusionSurface.intersections_with_line">intersections_with_line() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line">intersections_with_line() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.intersections_with_line.html#compas_occ.geometry.OCCRevolutionSurface.intersections_with_line">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.intersections_with_line.html#compas_occ.geometry.OCCSurface.intersections_with_line">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.intersections_with_plane.html#compas_occ.geometry.OCCExtrusionSurface.intersections_with_plane">intersections_with_plane() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane">intersections_with_plane() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.intersections_with_plane.html#compas_occ.geometry.OCCRevolutionSurface.intersections_with_plane">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.intersections_with_plane.html#compas_occ.geometry.OCCSurface.intersections_with_plane">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1327,23 +1256,15 @@ document.write(`
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.is_valid.html#compas_occ.brep.OCCBrepFace.is_valid">is_valid() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.isocurve_u.html#compas_occ.geometry.OCCExtrusionSurface.isocurve_u">isocurve_u() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u">isocurve_u() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.isocurve_u.html#compas_occ.geometry.OCCRevolutionSurface.isocurve_u">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.isocurve_u.html#compas_occ.geometry.OCCSurface.isocurve_u">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.isocurve_v.html#compas_occ.geometry.OCCExtrusionSurface.isocurve_v">isocurve_v() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v">isocurve_v() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.isocurve_v.html#compas_occ.geometry.OCCRevolutionSurface.isocurve_v">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.isocurve_v.html#compas_occ.geometry.OCCSurface.isocurve_v">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1389,13 +1310,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.make_solid.html#compas_occ.brep.OCCBrep.make_solid">make_solid() (compas_occ.brep.OCCBrep method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.mean_curvature_at.html#compas_occ.geometry.OCCExtrusionSurface.mean_curvature_at">mean_curvature_at() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at">mean_curvature_at() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.mean_curvature_at.html#compas_occ.geometry.OCCRevolutionSurface.mean_curvature_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.mean_curvature_at.html#compas_occ.geometry.OCCSurface.mean_curvature_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1412,13 +1331,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.normal_at.html#compas_occ.geometry.OCCCurve2d.normal_at">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.normal_at.html#compas_occ.geometry.OCCExtrusionSurface.normal_at">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.normal_at.html#compas_occ.geometry.OCCNurbsCurve.normal_at">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.normal_at.html#compas_occ.geometry.OCCNurbsSurface.normal_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.normal_at.html#compas_occ.geometry.OCCRevolutionSurface.normal_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.normal_at.html#compas_occ.geometry.OCCSurface.normal_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1429,13 +1344,9 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.obb.html#compas_occ.geometry.OCCExtrusionSurface.obb">obb() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb">obb() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.obb.html#compas_occ.geometry.OCCRevolutionSurface.obb">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.obb.html#compas_occ.geometry.OCCSurface.obb">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1455,13 +1366,9 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.html#compas_occ.geometry.OCCCurve2d">OCCCurve2d (class in compas_occ.geometry)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.html#compas_occ.geometry.OCCExtrusionSurface">OCCExtrusionSurface (class in compas_occ.geometry)</a>
-</li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.html#compas_occ.geometry.OCCNurbsCurve">OCCNurbsCurve (class in compas_occ.geometry)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.html#compas_occ.geometry.OCCNurbsSurface">OCCNurbsSurface (class in compas_occ.geometry)</a>
-</li>
-      <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.html#compas_occ.geometry.OCCRevolutionSurface">OCCRevolutionSurface (class in compas_occ.geometry)</a>
 </li>
       <li><a href="api/generated/compas_occ.geometry.OCCSurface.html#compas_occ.geometry.OCCSurface">OCCSurface (class in compas_occ.geometry)</a>
 </li>
@@ -1504,13 +1411,9 @@ document.write(`
       <ul>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.point_at.html#compas_occ.geometry.OCCCurve2d.point_at">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.point_at.html#compas_occ.geometry.OCCExtrusionSurface.point_at">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.point_at.html#compas_occ.geometry.OCCNurbsCurve.point_at">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.point_at.html#compas_occ.geometry.OCCNurbsSurface.point_at">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.point_at.html#compas_occ.geometry.OCCRevolutionSurface.point_at">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.point_at.html#compas_occ.geometry.OCCSurface.point_at">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1521,13 +1424,9 @@ document.write(`
 </li>
       <li><a href="api/generated/compas_occ.conversions.point_to_occ.html#compas_occ.conversions.point_to_occ">point_to_occ() (in module compas_occ.conversions)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.pointgrid.html#compas_occ.geometry.OCCExtrusionSurface.pointgrid">pointgrid() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid">pointgrid() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.pointgrid.html#compas_occ.geometry.OCCRevolutionSurface.pointgrid">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.pointgrid.html#compas_occ.geometry.OCCSurface.pointgrid">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1584,13 +1483,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.rotate.html#compas_occ.geometry.OCCCurve2d.rotate">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.rotate.html#compas_occ.geometry.OCCExtrusionSurface.rotate">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.rotate.html#compas_occ.geometry.OCCNurbsCurve.rotate">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.rotate.html#compas_occ.geometry.OCCRevolutionSurface.rotate">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.rotate.html#compas_occ.geometry.OCCSurface.rotate">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1604,13 +1499,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.rotated.html#compas_occ.geometry.OCCCurve2d.rotated">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.rotated.html#compas_occ.geometry.OCCExtrusionSurface.rotated">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.rotated.html#compas_occ.geometry.OCCNurbsCurve.rotated">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.rotated.html#compas_occ.geometry.OCCRevolutionSurface.rotated">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.rotated.html#compas_occ.geometry.OCCSurface.rotated">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1628,13 +1519,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.scale.html#compas_occ.geometry.OCCCurve2d.scale">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.scale.html#compas_occ.geometry.OCCExtrusionSurface.scale">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.scale.html#compas_occ.geometry.OCCNurbsCurve.scale">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.scale.html#compas_occ.geometry.OCCRevolutionSurface.scale">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.scale.html#compas_occ.geometry.OCCSurface.scale">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1646,13 +1533,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.scaled.html#compas_occ.geometry.OCCCurve2d.scaled">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.scaled.html#compas_occ.geometry.OCCExtrusionSurface.scaled">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.scaled.html#compas_occ.geometry.OCCNurbsCurve.scaled">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.scaled.html#compas_occ.geometry.OCCRevolutionSurface.scaled">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.scaled.html#compas_occ.geometry.OCCSurface.scaled">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1678,13 +1561,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.sha256.html#compas_occ.geometry.OCCCurve2d.sha256">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.sha256.html#compas_occ.geometry.OCCExtrusionSurface.sha256">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.sha256.html#compas_occ.geometry.OCCNurbsCurve.sha256">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.sha256.html#compas_occ.geometry.OCCNurbsSurface.sha256">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.sha256.html#compas_occ.geometry.OCCRevolutionSurface.sha256">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.sha256.html#compas_occ.geometry.OCCSurface.sha256">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1703,23 +1582,15 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.smooth.html#compas_occ.geometry.OCCNurbsCurve.smooth">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.space_u.html#compas_occ.geometry.OCCExtrusionSurface.space_u">space_u() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u">space_u() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.space_u.html#compas_occ.geometry.OCCRevolutionSurface.space_u">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.space_u.html#compas_occ.geometry.OCCSurface.space_u">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.space_v.html#compas_occ.geometry.OCCExtrusionSurface.space_v">space_v() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v">space_v() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.space_v.html#compas_occ.geometry.OCCRevolutionSurface.space_v">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.space_v.html#compas_occ.geometry.OCCSurface.space_v">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1753,13 +1624,9 @@ document.write(`
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_bezier.html#compas_occ.brep.OCCBrepEdge.to_bezier">to_bezier() (compas_occ.brep.OCCBrepEdge method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_brep.html#compas_occ.geometry.OCCExtrusionSurface.to_brep">to_brep() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep">to_brep() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_brep.html#compas_occ.geometry.OCCRevolutionSurface.to_brep">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_brep.html#compas_occ.geometry.OCCSurface.to_brep">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1794,13 +1661,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.to_json.html#compas_occ.geometry.OCCCurve2d.to_json">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_json.html#compas_occ.geometry.OCCExtrusionSurface.to_json">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.to_json.html#compas_occ.geometry.OCCNurbsCurve.to_json">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_json.html#compas_occ.geometry.OCCRevolutionSurface.to_json">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_json.html#compas_occ.geometry.OCCSurface.to_json">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -1820,26 +1683,18 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.to_jsonstring.html#compas_occ.geometry.OCCCurve2d.to_jsonstring">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_jsonstring.html#compas_occ.geometry.OCCExtrusionSurface.to_jsonstring">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.to_jsonstring.html#compas_occ.geometry.OCCNurbsCurve.to_jsonstring">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.to_jsonstring">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_jsonstring.html#compas_occ.geometry.OCCRevolutionSurface.to_jsonstring">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_jsonstring.html#compas_occ.geometry.OCCSurface.to_jsonstring">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepEdge.to_line.html#compas_occ.brep.OCCBrepEdge.to_line">to_line() (compas_occ.brep.OCCBrepEdge method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_mesh.html#compas_occ.geometry.OCCExtrusionSurface.to_mesh">to_mesh() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_mesh.html#compas_occ.geometry.OCCNurbsSurface.to_mesh">to_mesh() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_mesh.html#compas_occ.geometry.OCCNurbsSurface.to_mesh">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_mesh.html#compas_occ.geometry.OCCRevolutionSurface.to_mesh">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_mesh.html#compas_occ.geometry.OCCSurface.to_mesh">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1877,13 +1732,9 @@ document.write(`
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_polygons.html#compas_occ.brep.OCCBrep.to_polygons">to_polygons() (compas_occ.brep.OCCBrep method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_polyhedron.html#compas_occ.geometry.OCCExtrusionSurface.to_polyhedron">to_polyhedron() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_polyhedron.html#compas_occ.geometry.OCCNurbsSurface.to_polyhedron">to_polyhedron() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_polyhedron.html#compas_occ.geometry.OCCNurbsSurface.to_polyhedron">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_polyhedron.html#compas_occ.geometry.OCCRevolutionSurface.to_polyhedron">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_polyhedron.html#compas_occ.geometry.OCCSurface.to_polyhedron">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1895,16 +1746,14 @@ document.write(`
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.to_polyline.html#compas_occ.geometry.OCCNurbsCurve.to_polyline">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_quads.html#compas_occ.geometry.OCCExtrusionSurface.to_quads">to_quads() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_quads.html#compas_occ.geometry.OCCNurbsSurface.to_quads">to_quads() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_quads.html#compas_occ.geometry.OCCNurbsSurface.to_quads">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_quads.html#compas_occ.geometry.OCCRevolutionSurface.to_quads">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_quads.html#compas_occ.geometry.OCCSurface.to_quads">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_sphere.html#compas_occ.brep.OCCBrepFace.to_sphere">to_sphere() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_step.html#compas_occ.brep.OCCBrep.to_step">to_step() (compas_occ.brep.OCCBrep method)</a>
@@ -1914,52 +1763,34 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.to_step.html#compas_occ.geometry.OCCCurve2d.to_step">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_step.html#compas_occ.geometry.OCCExtrusionSurface.to_step">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.to_step.html#compas_occ.geometry.OCCNurbsCurve.to_step">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_step.html#compas_occ.geometry.OCCNurbsSurface.to_step">(compas_occ.geometry.OCCNurbsSurface method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_step.html#compas_occ.geometry.OCCRevolutionSurface.to_step">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_step.html#compas_occ.geometry.OCCSurface.to_step">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_stl.html#compas_occ.brep.OCCBrep.to_stl">to_stl() (compas_occ.brep.OCCBrep method)</a>
 </li>
       <li><a href="api/generated/compas_occ.brep.OCCBrep.to_tesselation.html#compas_occ.brep.OCCBrep.to_tesselation">to_tesselation() (compas_occ.brep.OCCBrep method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_tesselation.html#compas_occ.geometry.OCCExtrusionSurface.to_tesselation">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_tesselation.html#compas_occ.geometry.OCCNurbsSurface.to_tesselation">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_tesselation.html#compas_occ.geometry.OCCRevolutionSurface.to_tesselation">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_tesselation.html#compas_occ.geometry.OCCSurface.to_tesselation">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/compas_occ.brep.OCCBrepFace.to_torus.html#compas_occ.brep.OCCBrepFace.to_torus">to_torus() (compas_occ.brep.OCCBrepFace method)</a>
 </li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_triangles.html#compas_occ.geometry.OCCExtrusionSurface.to_triangles">to_triangles() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_triangles.html#compas_occ.geometry.OCCNurbsSurface.to_triangles">to_triangles() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_triangles.html#compas_occ.geometry.OCCNurbsSurface.to_triangles">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_triangles.html#compas_occ.geometry.OCCRevolutionSurface.to_triangles">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_triangles.html#compas_occ.geometry.OCCSurface.to_triangles">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCExtrusionSurface.to_vertices_and_faces">to_vertices_and_faces() (compas_occ.geometry.OCCExtrusionSurface method)</a>
+      <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces">to_vertices_and_faces() (compas_occ.geometry.OCCNurbsSurface method)</a>
 
       <ul>
-        <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCRevolutionSurface.to_vertices_and_faces">(compas_occ.geometry.OCCRevolutionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCSurface.to_vertices_and_faces">(compas_occ.geometry.OCCSurface method)</a>
 </li>
       </ul></li>
@@ -1982,13 +1813,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.ToString.html#compas_occ.geometry.OCCCurve2d.ToString">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.ToString.html#compas_occ.geometry.OCCExtrusionSurface.ToString">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.ToString.html#compas_occ.geometry.OCCNurbsCurve.ToString">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.ToString.html#compas_occ.geometry.OCCNurbsSurface.ToString">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.ToString.html#compas_occ.geometry.OCCRevolutionSurface.ToString">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.ToString.html#compas_occ.geometry.OCCSurface.ToString">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -2000,13 +1827,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.transform.html#compas_occ.geometry.OCCCurve2d.transform">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.transform.html#compas_occ.geometry.OCCExtrusionSurface.transform">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.transform.html#compas_occ.geometry.OCCNurbsCurve.transform">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.transform.html#compas_occ.geometry.OCCNurbsSurface.transform">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.transform.html#compas_occ.geometry.OCCRevolutionSurface.transform">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.transform.html#compas_occ.geometry.OCCSurface.transform">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -2018,13 +1841,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.transformed.html#compas_occ.geometry.OCCCurve2d.transformed">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.transformed.html#compas_occ.geometry.OCCExtrusionSurface.transformed">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.transformed.html#compas_occ.geometry.OCCNurbsCurve.transformed">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.transformed.html#compas_occ.geometry.OCCNurbsSurface.transformed">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.transformed.html#compas_occ.geometry.OCCRevolutionSurface.transformed">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.transformed.html#compas_occ.geometry.OCCSurface.transformed">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -2036,13 +1855,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.translate.html#compas_occ.geometry.OCCCurve2d.translate">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.translate.html#compas_occ.geometry.OCCExtrusionSurface.translate">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.translate.html#compas_occ.geometry.OCCNurbsCurve.translate">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.translate.html#compas_occ.geometry.OCCNurbsSurface.translate">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.translate.html#compas_occ.geometry.OCCRevolutionSurface.translate">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.translate.html#compas_occ.geometry.OCCSurface.translate">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -2054,13 +1869,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.translated.html#compas_occ.geometry.OCCCurve2d.translated">(compas_occ.geometry.OCCCurve2d method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.translated.html#compas_occ.geometry.OCCExtrusionSurface.translated">(compas_occ.geometry.OCCExtrusionSurface method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.translated.html#compas_occ.geometry.OCCNurbsCurve.translated">(compas_occ.geometry.OCCNurbsCurve method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.translated.html#compas_occ.geometry.OCCNurbsSurface.translated">(compas_occ.geometry.OCCNurbsSurface method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.translated.html#compas_occ.geometry.OCCRevolutionSurface.translated">(compas_occ.geometry.OCCRevolutionSurface method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.translated.html#compas_occ.geometry.OCCSurface.translated">(compas_occ.geometry.OCCSurface method)</a>
 </li>
@@ -2102,13 +1913,9 @@ document.write(`
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCCurve2d.validate_data.html#compas_occ.geometry.OCCCurve2d.validate_data">(compas_occ.geometry.OCCCurve2d class method)</a>
 </li>
-        <li><a href="api/generated/compas_occ.geometry.OCCExtrusionSurface.validate_data.html#compas_occ.geometry.OCCExtrusionSurface.validate_data">(compas_occ.geometry.OCCExtrusionSurface class method)</a>
-</li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsCurve.validate_data.html#compas_occ.geometry.OCCNurbsCurve.validate_data">(compas_occ.geometry.OCCNurbsCurve class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCNurbsSurface.validate_data.html#compas_occ.geometry.OCCNurbsSurface.validate_data">(compas_occ.geometry.OCCNurbsSurface class method)</a>
-</li>
-        <li><a href="api/generated/compas_occ.geometry.OCCRevolutionSurface.validate_data.html#compas_occ.geometry.OCCRevolutionSurface.validate_data">(compas_occ.geometry.OCCRevolutionSurface class method)</a>
 </li>
         <li><a href="api/generated/compas_occ.geometry.OCCSurface.validate_data.html#compas_occ.geometry.OCCSurface.validate_data">(compas_occ.geometry.OCCSurface class method)</a>
 </li>
@@ -2174,7 +1981,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>

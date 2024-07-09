@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="../../_static/compas.ico" type="image/x-icon">
     <title>OCCNurbsSurface &#8212; COMPAS OCC</title>
   
@@ -29,28 +28,29 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/compas.css?v=617b33e2" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=bb99e320"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.geometry.OCCNurbsSurface';</script>
     <script>
@@ -60,7 +60,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="OCCNurbsSurface.copy" href="compas_occ.geometry.OCCNurbsSurface.copy.html" />
-    <link rel="prev" title="OCCRevolutionSurface.validate_data" href="compas_occ.geometry.OCCRevolutionSurface.validate_data.html" />
+    <link rel="prev" title="OCCSurface.validate_data" href="compas_occ.geometry.OCCSurface.validate_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -473,6 +473,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_comparison2.html">Curve Comparison 2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_divide.html">Curve Divide</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_circle.html">Curve From Circle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_ellipse.html">Curve From Ellipse</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_interpolation.html">Curve From Interpolation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_line.html">Curve From Line</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/curves/curve_from_parameters.html">Curve From Parameters</a></li>
@@ -484,8 +485,6 @@ document.write(`
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/surfaces/index.html">Surfaces</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_aabb.html">Surface Axis-Aligned Bounding Box</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_frames.html">Surface Frames</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-1.html">Surface From Extrusion 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_extrusion-2.html">Surface From Extrusion 2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_fill.html">Surface From Fill</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_meshgrid.html">Surface From Meshgrid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/surfaces/surface_from_parameters.html">Surface From Parameters</a></li>
@@ -753,14 +752,17 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_interpolation.html#compas_occ.geometry.OCCNurbsSurface.from_interpolation" title="compas_occ.geometry.OCCNurbsSurface.from_interpolation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_interpolation</span></code></a></p></td>
 <td><p>Construct a NURBS surface by approximating or interpolating a 2D collection of points.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_parameters.html#compas_occ.geometry.OCCNurbsSurface.from_parameters" title="compas_occ.geometry.OCCNurbsSurface.from_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_parameters</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_native.html#compas_occ.geometry.OCCNurbsSurface.from_native" title="compas_occ.geometry.OCCNurbsSurface.from_native"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_native</span></code></a></p></td>
+<td><p>Construct a NURBS surface from an existing OCC Surface.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_parameters.html#compas_occ.geometry.OCCNurbsSurface.from_parameters" title="compas_occ.geometry.OCCNurbsSurface.from_parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_parameters</span></code></a></p></td>
 <td><p>Construct a NURBS surface from explicit parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_plane.html#compas_occ.geometry.OCCNurbsSurface.from_plane" title="compas_occ.geometry.OCCNurbsSurface.from_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_plane</span></code></a></p></td>
+<td><p>Construct a NURBS surface from a plane.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_points.html#compas_occ.geometry.OCCNurbsSurface.from_points" title="compas_occ.geometry.OCCNurbsSurface.from_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_points</span></code></a></p></td>
 <td><p>Construct a NURBS surface from control points.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_step.html#compas_occ.geometry.OCCNurbsSurface.from_step" title="compas_occ.geometry.OCCNurbsSurface.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
-<td><p>Load a NURBS surface from a STP file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -791,8 +793,14 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.frame_at.html#compas_occ.geometry.OCCNurbsSurface.frame_at" title="compas_occ.geometry.OCCNurbsSurface.frame_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_at</span></code></a></p></td>
 <td><p>Compute the local frame at a point on the curve.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_face.html#compas_occ.geometry.OCCNurbsSurface.from_face" title="compas_occ.geometry.OCCNurbsSurface.from_face"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_face</span></code></a></p></td>
-<td><p>Construct surface from an existing OCC TopoDS_Face.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_cylinder.html#compas_occ.geometry.OCCNurbsSurface.from_cylinder" title="compas_occ.geometry.OCCNurbsSurface.from_cylinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_cylinder</span></code></a></p></td>
+<td><p>Construct a surface from a cylinder.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_face.html#compas_occ.geometry.OCCNurbsSurface.from_face" title="compas_occ.geometry.OCCNurbsSurface.from_face"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_face</span></code></a></p></td>
+<td><p>Construct a surface from an existing OCC TopoDS_Face.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_frame.html#compas_occ.geometry.OCCNurbsSurface.from_frame" title="compas_occ.geometry.OCCNurbsSurface.from_frame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_frame</span></code></a></p></td>
+<td><p>Construct a surface from a frame.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_json.html#compas_occ.geometry.OCCNurbsSurface.from_json" title="compas_occ.geometry.OCCNurbsSurface.from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_json</span></code></a></p></td>
 <td><p>Construct an object of this type from a JSON file.</p></td>
@@ -803,115 +811,118 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_meshgrid.html#compas_occ.geometry.OCCNurbsSurface.from_meshgrid" title="compas_occ.geometry.OCCNurbsSurface.from_meshgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_meshgrid</span></code></a></p></td>
 <td><p>Construct a NURBS surface from a mesh grid.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_native.html#compas_occ.geometry.OCCNurbsSurface.from_native" title="compas_occ.geometry.OCCNurbsSurface.from_native"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_native</span></code></a></p></td>
-<td><p>Construct a NURBS surface from a surface object.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_obj.html#compas_occ.geometry.OCCNurbsSurface.from_obj" title="compas_occ.geometry.OCCNurbsSurface.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_obj</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_obj.html#compas_occ.geometry.OCCNurbsSurface.from_obj" title="compas_occ.geometry.OCCNurbsSurface.from_obj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_obj</span></code></a></p></td>
 <td><p>Load a surface from an OBJ file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_occ.html#compas_occ.geometry.OCCNurbsSurface.from_occ" title="compas_occ.geometry.OCCNurbsSurface.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
-<td><p>Construct a NUBRS surface from an existing OCC BSplineSurface.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_occ.html#compas_occ.geometry.OCCNurbsSurface.from_occ" title="compas_occ.geometry.OCCNurbsSurface.from_occ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_occ</span></code></a></p></td>
+<td><p>Construct a surface from an existing OCC Surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_plane.html#compas_occ.geometry.OCCNurbsSurface.from_plane" title="compas_occ.geometry.OCCNurbsSurface.from_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_plane</span></code></a></p></td>
-<td><p>Construct a surface from a plane.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_sphere.html#compas_occ.geometry.OCCNurbsSurface.from_sphere" title="compas_occ.geometry.OCCNurbsSurface.from_sphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_sphere</span></code></a></p></td>
+<td><p>Construct a surface from a sphere.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_curvature_at</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_step.html#compas_occ.geometry.OCCNurbsSurface.from_step" title="compas_occ.geometry.OCCNurbsSurface.from_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_step</span></code></a></p></td>
+<td><p>Load a NURBS surface from a STP file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.from_torus.html#compas_occ.geometry.OCCNurbsSurface.from_torus" title="compas_occ.geometry.OCCNurbsSurface.from_torus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_torus</span></code></a></p></td>
+<td><p>Construct a surface from a torus.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.gaussian_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gaussian_curvature_at</span></code></a></p></td>
 <td><p>Compute the Gaussian curvature at a point on the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_curve</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_curve" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_curve</span></code></a></p></td>
 <td><p>Compute the intersections with a curve.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_line</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_line.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_line" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_line</span></code></a></p></td>
 <td><p>Compute the intersections with a line.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_plane</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane.html#compas_occ.geometry.OCCNurbsSurface.intersections_with_plane" title="compas_occ.geometry.OCCNurbsSurface.intersections_with_plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intersections_with_plane</span></code></a></p></td>
 <td><p>Compute the intersections with a plane.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u" title="compas_occ.geometry.OCCNurbsSurface.isocurve_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_u</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_u.html#compas_occ.geometry.OCCNurbsSurface.isocurve_u" title="compas_occ.geometry.OCCNurbsSurface.isocurve_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_u</span></code></a></p></td>
 <td><p>Compute the isoparametric curve at parameter u.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v" title="compas_occ.geometry.OCCNurbsSurface.isocurve_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_v</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.isocurve_v.html#compas_occ.geometry.OCCNurbsSurface.isocurve_v" title="compas_occ.geometry.OCCNurbsSurface.isocurve_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isocurve_v</span></code></a></p></td>
 <td><p>Compute the isoparametric curve at parameter v.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_curvature_at</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at.html#compas_occ.geometry.OCCNurbsSurface.mean_curvature_at" title="compas_occ.geometry.OCCNurbsSurface.mean_curvature_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_curvature_at</span></code></a></p></td>
 <td><p>Compute the mean curvature at a point on the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.normal_at.html#compas_occ.geometry.OCCNurbsSurface.normal_at" title="compas_occ.geometry.OCCNurbsSurface.normal_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_at</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.normal_at.html#compas_occ.geometry.OCCNurbsSurface.normal_at" title="compas_occ.geometry.OCCNurbsSurface.normal_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_at</span></code></a></p></td>
 <td><p>Compute a normal at a point on the surface.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb" title="compas_occ.geometry.OCCNurbsSurface.obb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obb</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.obb.html#compas_occ.geometry.OCCNurbsSurface.obb" title="compas_occ.geometry.OCCNurbsSurface.obb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">obb</span></code></a></p></td>
 <td><p>Compute the oriented bounding box of the surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.point_at.html#compas_occ.geometry.OCCNurbsSurface.point_at" title="compas_occ.geometry.OCCNurbsSurface.point_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_at</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.point_at.html#compas_occ.geometry.OCCNurbsSurface.point_at" title="compas_occ.geometry.OCCNurbsSurface.point_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point_at</span></code></a></p></td>
 <td><p>Compute a point on the surface.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid" title="compas_occ.geometry.OCCNurbsSurface.pointgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointgrid</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.pointgrid.html#compas_occ.geometry.OCCNurbsSurface.pointgrid" title="compas_occ.geometry.OCCNurbsSurface.pointgrid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointgrid</span></code></a></p></td>
 <td><p>Compute point locations corresponding to evenly spaced parameters over the surface domain.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate" title="compas_occ.geometry.OCCNurbsSurface.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotate.html#compas_occ.geometry.OCCNurbsSurface.rotate" title="compas_occ.geometry.OCCNurbsSurface.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a></p></td>
 <td><p>Rotate the geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated" title="compas_occ.geometry.OCCNurbsSurface.rotated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotated</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.rotated.html#compas_occ.geometry.OCCNurbsSurface.rotated" title="compas_occ.geometry.OCCNurbsSurface.rotated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotated</span></code></a></p></td>
 <td><p>Returns a rotated copy of this geometry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale" title="compas_occ.geometry.OCCNurbsSurface.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scale.html#compas_occ.geometry.OCCNurbsSurface.scale" title="compas_occ.geometry.OCCNurbsSurface.scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale</span></code></a></p></td>
 <td><p>Scale the geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled" title="compas_occ.geometry.OCCNurbsSurface.scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaled</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.scaled.html#compas_occ.geometry.OCCNurbsSurface.scaled" title="compas_occ.geometry.OCCNurbsSurface.scaled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaled</span></code></a></p></td>
 <td><p>Returns a scaled copy of this geometry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.sha256.html#compas_occ.geometry.OCCNurbsSurface.sha256" title="compas_occ.geometry.OCCNurbsSurface.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.sha256.html#compas_occ.geometry.OCCNurbsSurface.sha256" title="compas_occ.geometry.OCCNurbsSurface.sha256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sha256</span></code></a></p></td>
 <td><p>Compute a hash of the data for comparison during version control using the sha256 algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u" title="compas_occ.geometry.OCCNurbsSurface.space_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_u</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_u.html#compas_occ.geometry.OCCNurbsSurface.space_u" title="compas_occ.geometry.OCCNurbsSurface.space_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_u</span></code></a></p></td>
 <td><p>Compute evenly spaced parameters over the surface domain in the U direction.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v" title="compas_occ.geometry.OCCNurbsSurface.space_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_v</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.space_v.html#compas_occ.geometry.OCCNurbsSurface.space_v" title="compas_occ.geometry.OCCNurbsSurface.space_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">space_v</span></code></a></p></td>
 <td><p>Compute evenly spaced parameters over the surface domain in the V direction.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep" title="compas_occ.geometry.OCCNurbsSurface.to_brep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_brep</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_brep.html#compas_occ.geometry.OCCNurbsSurface.to_brep" title="compas_occ.geometry.OCCNurbsSurface.to_brep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_brep</span></code></a></p></td>
 <td><p>Convert the surface to a BREP representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json" title="compas_occ.geometry.OCCNurbsSurface.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_json.html#compas_occ.geometry.OCCNurbsSurface.to_json" title="compas_occ.geometry.OCCNurbsSurface.to_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_json</span></code></a></p></td>
 <td><p>Convert an object to its native data representation and save it to a JSON file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.to_jsonstring" title="compas_occ.geometry.OCCNurbsSurface.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_jsonstring.html#compas_occ.geometry.OCCNurbsSurface.to_jsonstring" title="compas_occ.geometry.OCCNurbsSurface.to_jsonstring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_jsonstring</span></code></a></p></td>
 <td><p>Convert an object to its native data representation and save it to a JSON string.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_mesh.html#compas_occ.geometry.OCCNurbsSurface.to_mesh" title="compas_occ.geometry.OCCNurbsSurface.to_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_mesh</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_mesh.html#compas_occ.geometry.OCCNurbsSurface.to_mesh" title="compas_occ.geometry.OCCNurbsSurface.to_mesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_mesh</span></code></a></p></td>
 <td><p>Convert the surface to a mesh.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_polyhedron.html#compas_occ.geometry.OCCNurbsSurface.to_polyhedron" title="compas_occ.geometry.OCCNurbsSurface.to_polyhedron"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_polyhedron</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_polyhedron.html#compas_occ.geometry.OCCNurbsSurface.to_polyhedron" title="compas_occ.geometry.OCCNurbsSurface.to_polyhedron"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_polyhedron</span></code></a></p></td>
 <td><p>Convert the surface to a polyhedron.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_quads.html#compas_occ.geometry.OCCNurbsSurface.to_quads" title="compas_occ.geometry.OCCNurbsSurface.to_quads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_quads</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_quads.html#compas_occ.geometry.OCCNurbsSurface.to_quads" title="compas_occ.geometry.OCCNurbsSurface.to_quads"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_quads</span></code></a></p></td>
 <td><p>Convert the surface to a list of quads.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_step.html#compas_occ.geometry.OCCNurbsSurface.to_step" title="compas_occ.geometry.OCCNurbsSurface.to_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_step</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_step.html#compas_occ.geometry.OCCNurbsSurface.to_step" title="compas_occ.geometry.OCCNurbsSurface.to_step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_step</span></code></a></p></td>
 <td><p>Write the surface geometry to a STP file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_tesselation.html#compas_occ.geometry.OCCNurbsSurface.to_tesselation" title="compas_occ.geometry.OCCNurbsSurface.to_tesselation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tesselation</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_tesselation.html#compas_occ.geometry.OCCNurbsSurface.to_tesselation" title="compas_occ.geometry.OCCNurbsSurface.to_tesselation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_tesselation</span></code></a></p></td>
 <td><p>Convert the surface to a triangle mesh.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_triangles.html#compas_occ.geometry.OCCNurbsSurface.to_triangles" title="compas_occ.geometry.OCCNurbsSurface.to_triangles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_triangles</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_triangles.html#compas_occ.geometry.OCCNurbsSurface.to_triangles" title="compas_occ.geometry.OCCNurbsSurface.to_triangles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_triangles</span></code></a></p></td>
 <td><p>Convert the surface to a list of triangles.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces" title="compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_vertices_and_faces</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces.html#compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces" title="compas_occ.geometry.OCCNurbsSurface.to_vertices_and_faces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_vertices_and_faces</span></code></a></p></td>
 <td><p>Convert the surface to a list of vertices and faces.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.transform.html#compas_occ.geometry.OCCNurbsSurface.transform" title="compas_occ.geometry.OCCNurbsSurface.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.transform.html#compas_occ.geometry.OCCNurbsSurface.transform" title="compas_occ.geometry.OCCNurbsSurface.transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code></a></p></td>
 <td><p>Transform this surface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.transformed.html#compas_occ.geometry.OCCNurbsSurface.transformed" title="compas_occ.geometry.OCCNurbsSurface.transformed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.transformed.html#compas_occ.geometry.OCCNurbsSurface.transformed" title="compas_occ.geometry.OCCNurbsSurface.transformed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transformed</span></code></a></p></td>
 <td><p>Returns a transformed copy of this geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.translate.html#compas_occ.geometry.OCCNurbsSurface.translate" title="compas_occ.geometry.OCCNurbsSurface.translate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">translate</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.translate.html#compas_occ.geometry.OCCNurbsSurface.translate" title="compas_occ.geometry.OCCNurbsSurface.translate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">translate</span></code></a></p></td>
 <td><p>Translate the geometry.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.translated.html#compas_occ.geometry.OCCNurbsSurface.translated" title="compas_occ.geometry.OCCNurbsSurface.translated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">translated</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.translated.html#compas_occ.geometry.OCCNurbsSurface.translated" title="compas_occ.geometry.OCCNurbsSurface.translated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">translated</span></code></a></p></td>
 <td><p>Returns a translated copy of this geometry.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.validate_data.html#compas_occ.geometry.OCCNurbsSurface.validate_data" title="compas_occ.geometry.OCCNurbsSurface.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.geometry.OCCNurbsSurface.validate_data.html#compas_occ.geometry.OCCNurbsSurface.validate_data" title="compas_occ.geometry.OCCNurbsSurface.validate_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_data</span></code></a></p></td>
 <td><p>Validate the data against the object's data schema.</p></td>
 </tr>
 </tbody>
@@ -977,7 +988,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
