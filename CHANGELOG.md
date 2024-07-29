@@ -11,7 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Removed
+
+
+## [1.2.1] 2024-07-11
+
+### Added
+
+### Changed
+
 * Changed `brepgprop_VolumeProperties` to `brepgprop.VolumeProperties`.
+* Pined `pythonocc-core` to `< 7.8` to avoid qt conflict with Pyside6.
 
 ### Removed
 
