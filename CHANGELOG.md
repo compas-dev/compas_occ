@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* `compas_occ.brep.OCCBrep.make_positive` which reverses the winding of a solid if it has negative volume.
+
 ### Changed
+
+* Changed `compas_occ.brep.OCCBrep.heal` to inlude `make_positive`.
 
 ### Removed
 
@@ -24,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Pined `pythonocc-core` to `< 7.8` to avoid qt conflict with Pyside6.
 
 ### Removed
-
 
 ## [1.2.0] 2024-07-06
 
