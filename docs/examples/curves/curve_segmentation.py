@@ -1,7 +1,8 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import NurbsCurve
 from compas.geometry import Point
-from compas_viewer import Viewer
 
 pointsA = [Point(0, 0, 0), Point(3, 6, 0), Point(6, -3, 3), Point(10, 0, 0)]
 curveA = NurbsCurve.from_points(pointsA)

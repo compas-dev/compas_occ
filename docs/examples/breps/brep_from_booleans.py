@@ -1,8 +1,9 @@
+from compas_viewer import Viewer
+
 from compas.geometry import Box
 from compas.geometry import Cylinder
 from compas.geometry import Frame
 from compas.tolerance import TOL
-from compas_viewer import Viewer
 
 TOL.lineardeflection = 0.1
 

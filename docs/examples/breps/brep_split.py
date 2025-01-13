@@ -1,12 +1,13 @@
 from math import radians
 
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Box
 from compas.geometry import Brep
 from compas.geometry import Plane
 from compas.geometry import Rotation
 from compas.geometry import is_point_infrontof_plane
-from compas_viewer import Viewer
 
 box = Box(1).to_brep()
 

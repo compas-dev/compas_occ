@@ -1,8 +1,9 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Ellipse
 from compas.geometry import NurbsCurve
 from compas.geometry import Polyline
-from compas_viewer import Viewer
 
 ellipse = Ellipse(2.0, 1.0)
 curve = NurbsCurve.from_ellipse(ellipse)

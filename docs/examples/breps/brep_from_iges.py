@@ -1,10 +1,11 @@
 from pathlib import Path
 
+from compas_viewer import Viewer
+
 from compas.geometry import Box
 from compas.geometry import Brep
 from compas.geometry import Cylinder
 from compas.geometry import Frame
-from compas_viewer import Viewer
 
 filepath = Path(__file__).parent / "booleans.iges"
 

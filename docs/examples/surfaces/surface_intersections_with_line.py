@@ -1,5 +1,7 @@
 from math import radians
 
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Line
 from compas.geometry import NurbsSurface
@@ -9,7 +11,6 @@ from compas.geometry import Rotation
 from compas.geometry import Vector
 from compas.geometry import centroid_points_xy
 from compas.itertools import flatten
-from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],

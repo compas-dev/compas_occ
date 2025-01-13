@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from compas.geometry import Brep
 from compas_viewer import Viewer
+
+from compas.geometry import Brep
 
 # Load the brep from a STEP file
 # and extract the individual letters.

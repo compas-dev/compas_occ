@@ -1,9 +1,10 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Bezier
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas_occ.geometry import OCCNurbsCurve
-from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(1, 2, 0), Point(2, -2, 0), Point(3, 0, 0)]
 bezier = Bezier(points)

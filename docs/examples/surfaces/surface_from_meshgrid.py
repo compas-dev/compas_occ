@@ -1,10 +1,11 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Polyline
 from compas.itertools import linspace
 from compas.itertools import meshgrid
-from compas_viewer import Viewer
 
 UU, VV = meshgrid(linspace(0, 8, 9), linspace(0, 5, 6))
 

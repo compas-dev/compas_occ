@@ -1,5 +1,7 @@
 # type: ignore
 # this should be included in the compas API
+from compas_viewer import Viewer
+
 from compas.geometry import Brep
 from compas.geometry import Circle
 from compas.geometry import Frame
@@ -10,7 +12,6 @@ from compas.geometry import Vector
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepFace
 from compas_occ.brep import OCCBrepLoop
-from compas_viewer import Viewer
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],

@@ -1,9 +1,10 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Circle
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
 from compas.geometry import Vector
-from compas_viewer import Viewer
 
 curve = NurbsCurve.from_circle(Circle(2.0))
 

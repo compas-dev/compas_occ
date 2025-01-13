@@ -1,7 +1,8 @@
+from compas_viewer import Viewer
+
 from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas.itertools import pairwise
-from compas_viewer import Viewer
 
 points = [Point(0, 0, 0), Point(3, -6, 0), Point(6, 2, 0), Point(9, -2, 0)]
 curve = NurbsCurve.from_points(points)

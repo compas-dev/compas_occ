@@ -1,7 +1,8 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Box
 from compas.geometry import Brep
-from compas_viewer import Viewer
 
 box = Box(1).to_brep()
 

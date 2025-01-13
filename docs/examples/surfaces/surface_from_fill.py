@@ -1,8 +1,9 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
-from compas_viewer import Viewer
 
 points1 = [Point(0, -10, 0), Point(1, -8, 0), Point(-1, -6, 0), Point(0, -4, 0)]
 points2 = [Point(5, -10, 0), Point(4, -8, 0), Point(6, -6, 0), Point(5, -4, 0)]

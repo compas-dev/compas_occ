@@ -1,10 +1,11 @@
+from compas_viewer import Viewer
+from compas_viewer.scene import Collection
+
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.itertools import flatten
 from compas.itertools import linspace
 from compas.itertools import meshgrid
-from compas_viewer import Viewer
-from compas_viewer.scene import Collection
 
 points = [
     [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],

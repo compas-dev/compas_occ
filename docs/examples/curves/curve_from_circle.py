@@ -1,8 +1,9 @@
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import Circle
 from compas.geometry import NurbsCurve
 from compas.geometry import Polyline
-from compas_viewer import Viewer
 
 circle = Circle(1.0)
 curve = NurbsCurve.from_circle(circle)

@@ -1,9 +1,10 @@
 from math import radians
 
+from compas_viewer import Viewer
+
 from compas.geometry import Box
 from compas.geometry import Plane
 from compas.geometry import Rotation
-from compas_viewer import Viewer
 
 box = Box(1).to_brep()
 

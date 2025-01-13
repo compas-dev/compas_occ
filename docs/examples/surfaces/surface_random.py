@@ -1,9 +1,10 @@
 import random
 
+from compas_viewer import Viewer
+
 from compas.colors import Color
 from compas.geometry import NurbsSurface
 from compas.geometry import Polyline
-from compas_viewer import Viewer
 
 U = 10
 V = 20
