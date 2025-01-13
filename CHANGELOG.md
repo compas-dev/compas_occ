@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Changed `compas_occ.brep.OCCBrep.heal` to inlude `make_positive`.
+* Changed `compas_occ.brep.OCCBrep.points` to return only unique points instead of repeating points for every repeated occurrence of a vertex within the data structure.
 
 ### Removed
 
