@@ -111,6 +111,10 @@ select = ["E", "F", "I"]
 
 [tool.ruff.lint.isort]
 force-single-line = true
+known-first-party = [
+    "compas",
+    "compas_occ",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
