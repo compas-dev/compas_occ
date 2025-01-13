@@ -1,10 +1,3 @@
-from typing import Tuple
-
-from compas.geometry import Curve
-from compas.geometry import Frame
-from compas.geometry import Point
-from compas.geometry import Polyline
-from compas.geometry import Vector
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import Geom2d
 from OCC.Core import IFSelect
@@ -13,6 +6,11 @@ from OCC.Core import STEPControl
 from OCC.Core import TopoDS
 from OCC.Core import gp
 
+from compas.geometry import Curve
+from compas.geometry import Frame
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas.geometry import Vector
 from compas_occ.conversions import point2d_to_compas
 from compas_occ.conversions import vector2d_to_compas
 
@@ -42,11 +40,13 @@ class OCCCurve2d(Curve):
 
     """
 
+    _native_curve: Geom2d.Geom2d_Curve
+    native_curve: Geom2d.Geom2d_Curve
+
     def __init__(self, native_curve: Geom2d.Geom2d_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 2
-        self._native_curve: Geom2d.Geom2d_Curve = None  # type: ignore
-        self.native_curve = native_curve
+        self._native_curve = native_curve
 
     def __eq__(self, other: "OCCCurve2d") -> bool:
         raise NotImplementedError
@@ -62,14 +62,6 @@ class OCCCurve2d(Curve):
     @property
     def occ_curve(self) -> Geom2d.Geom2d_Curve:
         return self._native_curve
-
-    @property
-    def native_curve(self) -> Geom2d.Geom2d_Curve:
-        return self._native_curve
-
-    @native_curve.setter
-    def native_curve(self, curve: Geom2d.Geom2d_Curve):
-        self._native_curve = curve
 
     @property
     def occ_shape(self) -> TopoDS.TopoDS_Shape:
@@ -88,7 +80,7 @@ class OCCCurve2d(Curve):
         return self._dimension
 
     @property
-    def domain(self) -> Tuple[float, float]:
+    def domain(self) -> tuple[float, float]:
         return self.native_curve.FirstParameter(), self.native_curve.LastParameter()
 
     @property
@@ -165,7 +157,7 @@ class OCCCurve2d(Curve):
         """
         step_writer = STEPControl.STEPControl_Writer()
         Interface.Interface_Static.SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)
+        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)  # type: ignore
         status = step_writer.Write(filepath)
         if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
@@ -219,7 +211,7 @@ class OCCCurve2d(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain))
 
@@ -244,7 +236,7 @@ class OCCCurve2d(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
@@ -271,7 +263,7 @@ class OCCCurve2d(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
@@ -299,7 +291,7 @@ class OCCCurve2d(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 

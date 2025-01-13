@@ -1,16 +1,6 @@
-from typing import List
 from typing import Optional
-from typing import Tuple
 from typing import Union
 
-from compas.datastructures import Mesh
-from compas.geometry import Box
-from compas.geometry import Frame
-from compas.geometry import Line
-from compas.geometry import Point
-from compas.geometry import Surface
-from compas.geometry import Transformation
-from compas.geometry import Vector
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.BndLib import BndLib_AddSurface
@@ -30,6 +20,14 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
+from compas.datastructures import Mesh
+from compas.geometry import Box
+from compas.geometry import Frame
+from compas.geometry import Line
+from compas.geometry import Point
+from compas.geometry import Surface
+from compas.geometry import Transformation
+from compas.geometry import Vector
 from compas_occ.conversions import ax3_to_compas
 from compas_occ.conversions import direction_to_compas
 from compas_occ.conversions import line_to_occ
@@ -101,12 +99,12 @@ class OCCSurface(Surface):
     # ==============================================================================
 
     @property
-    def domain_u(self) -> Tuple[float, float]:
+    def domain_u(self) -> tuple[float, float]:
         umin, umax, _, _ = self.native_surface.Bounds()
         return umin, umax
 
     @property
-    def domain_v(self) -> Tuple[float, float]:
+    def domain_v(self) -> tuple[float, float]:
         _, _, vmin, vmax = self.native_surface.Bounds()
         return vmin, vmax
 
@@ -202,7 +200,7 @@ class OCCSurface(Surface):
 
         step_writer = STEPControl_Writer()
         Interface_Static.SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_face, STEPControl_AsIs)
+        step_writer.Transfer(self.occ_face, STEPControl_AsIs)  # type: ignore
         status = step_writer.Write(filepath)
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
@@ -289,7 +287,7 @@ class OCCSurface(Surface):
         occ_curve = self.native_surface.VIso(v)
         return OCCCurve.from_native(occ_curve)
 
-    def boundary(self) -> List[OCCCurve]:
+    def boundary(self) -> list[OCCCurve]:
         """Compute the boundary curves of the surface.
 
         Returns
@@ -426,7 +424,7 @@ class OCCSurface(Surface):
         self,
         point: Point,
         return_parameters: bool = False,
-    ) -> Union[Point, Tuple[Point, Tuple[float, float]]]:
+    ) -> Union[Point, tuple[Point, tuple[float, float]]]:
         """Compute the closest point on the curve to a given point.
 
         Parameters
@@ -473,7 +471,7 @@ class OCCSurface(Surface):
             frame=ax3_to_compas(box.Position()),
         )
 
-    def intersections_with_line(self, line: Line) -> List[Point]:
+    def intersections_with_line(self, line: Line) -> list[Point]:
         """Compute the intersections with a line.
 
         Parameters
@@ -493,7 +491,7 @@ class OCCSurface(Surface):
             points.append(point)
         return points
 
-    def intersections_with_curve(self, curve: OCCCurve) -> List[Point]:
+    def intersections_with_curve(self, curve: OCCCurve) -> list[Point]:
         """Compute the intersections with a curve.
 
         Parameters

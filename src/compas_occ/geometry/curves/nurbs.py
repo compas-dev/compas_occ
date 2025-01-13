@@ -1,16 +1,7 @@
 from copy import deepcopy
 from math import sqrt
-from typing import Dict
-from typing import List
 from typing import Optional
 from typing import Union
-
-from compas.geometry import Circle
-from compas.geometry import Ellipse
-from compas.geometry import Frame
-from compas.geometry import Line
-from compas.geometry import NurbsCurve
-from compas.geometry import Point
 
 # from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.Geom import Geom_BSplineCurve
@@ -20,6 +11,12 @@ from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.TColStd import TColStd_Array1OfReal
 
+from compas.geometry import Circle
+from compas.geometry import Ellipse
+from compas.geometry import Frame
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+from compas.geometry import Point
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import array1_from_points1
@@ -31,10 +28,10 @@ from .curve import OCCCurve
 
 
 def native_curve_from_parameters(
-    points: List[Point],
-    weights: List[float],
-    knots: List[float],
-    multiplicities: List[int],
+    points: list[Point],
+    weights: list[float],
+    knots: list[float],
+    multiplicities: list[int],
     degree: int,
     is_periodic: bool,
 ) -> Geom_BSplineCurve:
@@ -96,9 +93,10 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     """
 
     _native_curve: Geom_BSplineCurve
+    native_curve: Geom_BSplineCurve
 
     @property
-    def __data__(self) -> Dict:
+    def __data__(self) -> dict:
         return {
             "points": [point.__data__ for point in self.points],
             "weights": self.weights,
@@ -109,7 +107,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         }
 
     @classmethod
-    def __from_data__(cls, data: Dict) -> "OCCNurbsCurve":
+    def __from_data__(cls, data: dict) -> "OCCNurbsCurve":
         points = [Point.__from_data__(point) for point in data["points"]]
         weights = data["weights"]
         knots = data["knots"]
@@ -133,16 +131,8 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @property
-    def native_curve(self) -> Geom_BSplineCurve:
-        return self._native_curve
-
-    @native_curve.setter
-    def native_curve(self, native_curve: Geom_BSplineCurve):
-        self._native_curve = native_curve
-
-    @property
     def occ_curve(self) -> Geom_BSplineCurve:
-        return self._native_curve
+        return self.native_curve
 
     @property
     def occ_points(self) -> TColgp_Array1OfPnt:
@@ -182,23 +172,23 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return point_to_compas(pnt)
 
     @property
-    def points(self) -> List[Point]:
+    def points(self) -> list[Point]:
         return points1_from_array1(self.occ_points)
 
     @property
-    def weights(self) -> List[float]:
+    def weights(self) -> list[float]:
         return list(self.occ_weights)
 
     @property
-    def knots(self) -> List[float]:
+    def knots(self) -> list[float]:
         return list(self.occ_knots)
 
     @property
-    def knotsequence(self) -> List[float]:
+    def knotsequence(self) -> list[float]:
         return list(self.occ_knotsequence)
 
     @property
-    def multiplicities(self) -> List[int]:
+    def multiplicities(self) -> list[int]:
         return list(self.occ_multiplicities)
 
     @property
@@ -325,7 +315,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     @classmethod
     def from_interpolation(
         cls,
-        points: List[Point],
+        points: list[Point],
         precision: float = 1e-3,
     ) -> "OCCNurbsCurve":
         """Construct a NURBS curve by interpolating a set of points.
@@ -387,10 +377,10 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     @classmethod
     def from_parameters(
         cls,
-        points: List[Point],
-        weights: List[float],
-        knots: List[float],
-        multiplicities: List[int],
+        points: list[Point],
+        weights: list[float],
+        knots: list[float],
+        multiplicities: list[int],
         degree: int,
         is_periodic: bool = False,
     ) -> "OCCNurbsCurve":
@@ -427,7 +417,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return cls.from_native(native_curve)
 
     @classmethod
-    def from_points(cls, points: List[Point], degree: int = 3) -> "OCCNurbsCurve":
+    def from_points(cls, points: list[Point], degree: int = 3) -> "OCCNurbsCurve":
         """Construct a NURBS curve from control points.
 
         Parameters

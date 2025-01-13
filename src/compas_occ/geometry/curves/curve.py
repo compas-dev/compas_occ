@@ -1,15 +1,5 @@
-from typing import List
-from typing import Tuple
 from typing import Union
 
-from compas.geometry import Box
-from compas.geometry import Curve
-from compas.geometry import Frame
-from compas.geometry import Point
-from compas.geometry import Polyline
-from compas.geometry import Transformation
-from compas.geometry import Vector
-from compas.geometry import distance_point_point
 from OCC.Core import IFSelect
 from OCC.Core import Interface
 from OCC.Core import STEPControl
@@ -29,6 +19,14 @@ from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
+from compas.geometry import Box
+from compas.geometry import Curve
+from compas.geometry import Frame
+from compas.geometry import Point
+from compas.geometry import Polyline
+from compas.geometry import Transformation
+from compas.geometry import Vector
+from compas.geometry import distance_point_point
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import direction_to_occ
 from compas_occ.conversions import point_to_compas
@@ -63,10 +61,12 @@ class OCCCurve(Curve):
 
     """
 
+    _native_curve: Geom_Curve
+
     def __init__(self, native_curve: Geom_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 3
-        self._native_curve: Geom_Curve = native_curve
+        self._native_curve = native_curve
 
     def __eq__(self, other: "OCCCurve") -> bool:
         raise NotImplementedError
@@ -108,7 +108,7 @@ class OCCCurve(Curve):
         return self._dimension
 
     @property
-    def domain(self) -> Tuple[float, float]:
+    def domain(self) -> tuple[float, float]:
         return self.native_curve.FirstParameter(), self.native_curve.LastParameter()
 
     @property
@@ -185,7 +185,7 @@ class OCCCurve(Curve):
         """
         step_writer = STEPControl.STEPControl_Writer()
         Interface.Interface_Static.SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)
+        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)  # type: ignore
         status = step_writer.Write(filepath)
         if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
@@ -263,7 +263,7 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain))
 
@@ -288,7 +288,7 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
@@ -316,7 +316,7 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
@@ -345,7 +345,7 @@ class OCCCurve(Curve):
             If the parameter is not in the curve domain.
 
         """
-        start, end = self.domain  # type: ignore (domain could be None if no native_curve is set)
+        start, end = self.domain
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve.")
 
@@ -427,7 +427,7 @@ class OCCCurve(Curve):
         self,
         point: Point,
         return_parameter: bool = False,
-    ) -> Union[Point, Tuple[Point, float], None]:
+    ) -> Union[Point, tuple[Point, float], None]:
         """
         Compute the closest point on the curve to a given point.
         If an orthogonal projection is not possible, the start or end point is returned, whichever is closer.
@@ -480,7 +480,7 @@ class OCCCurve(Curve):
         self,
         curve: "OCCCurve",
         return_distance: bool = False,
-    ) -> Union[Tuple[float, float], Tuple[Tuple[float, float], float]]:
+    ) -> Union[tuple[float, float], tuple[tuple[float, float], float]]:
         """Computes the curve parameters where the curve is the closest to another given curve.
 
         Parameters
@@ -506,7 +506,7 @@ class OCCCurve(Curve):
         self,
         curve: "OCCCurve",
         return_distance: bool = False,
-    ) -> Union[Tuple[Point, Point], Tuple[Tuple[Point, Point], float]]:
+    ) -> Union[tuple[Point, Point], tuple[tuple[Point, Point], float]]:
         """Computes the points on curves where the curve is the closest to another given curve.
 
         Parameters
@@ -536,7 +536,7 @@ class OCCCurve(Curve):
         count: int,
         return_points: bool = False,
         precision: float = 1e-6,
-    ) -> Union[List[float], Tuple[List[float], List[Point]]]:
+    ) -> Union[list[float], tuple[list[float], list[Point]]]:
         """Divide the curve into a specific number of equal length segments.
 
         Parameters
@@ -580,7 +580,7 @@ class OCCCurve(Curve):
         length: float,
         return_points: bool = False,
         precision: float = 1e-6,
-    ) -> Union[List[float], Tuple[List[float], List[Point]]]:
+    ) -> Union[list[float], tuple[list[float], list[Point]]]:
         """Divide the curve into segments of a given length.
 
         Note that the end point of the last segment might not coincide

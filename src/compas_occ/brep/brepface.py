@@ -1,17 +1,5 @@
-from typing import List
 from typing import Optional
-from typing import Tuple
 
-import compas.geometry
-from compas.geometry import BrepFace
-from compas.geometry import Cone
-from compas.geometry import Cylinder
-from compas.geometry import Frame
-from compas.geometry import Plane
-from compas.geometry import Polygon
-from compas.geometry import Sphere
-from compas.geometry import SurfaceType
-from compas.geometry import Torus
 from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
@@ -26,6 +14,16 @@ from OCC.Core import TopExp
 from OCC.Core import TopoDS
 from OCC.Core import gp
 
+import compas.geometry
+from compas.geometry import BrepFace
+from compas.geometry import Cone
+from compas.geometry import Cylinder
+from compas.geometry import Frame
+from compas.geometry import Plane
+from compas.geometry import Polygon
+from compas.geometry import Sphere
+from compas.geometry import SurfaceType
+from compas.geometry import Torus
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepLoop
 from compas_occ.brep import OCCBrepVertex
@@ -67,7 +65,7 @@ class OCCBrepFace(BrepFace):
     _occ_face: TopoDS.TopoDS_Face
 
     @property
-    def __data__(self):
+    def __data__(self) -> dict:
         return {
             "type": self.type,
             "surface": self.surface.__data__,
@@ -78,19 +76,17 @@ class OCCBrepFace(BrepFace):
         }
 
     @classmethod
-    def __from_data__(cls, data, builder):
+    def __from_data__(cls, data: dict) -> "OCCBrepFace":
         """Construct an object of this type from the provided data.
 
         Parameters
         ----------
         data : dict
             The data dictionary.
-        builder : :class:`compas_rhino.geometry.BrepBuilder`
-            The object reconstructing the current Brep.
 
         Returns
         -------
-        :class:`compas.data.Data`
+        :class:`OCCBrepFace`
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
@@ -102,12 +98,12 @@ class OCCBrepFace(BrepFace):
         self._surface = None
         self._nurbssurface = None
         self._occ_adaptor = None
-        self.occ_face = occ_face
+        self._occ_face = occ_face
 
-    def __eq__(self, other: "OCCBrepFace"):
+    def __eq__(self, other: "OCCBrepFace") -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepFace"):
+    def is_same(self, other: "OCCBrepFace") -> bool:
         """Check if this face is the same as another face.
 
         Two faces are the same if they have the same location.
@@ -127,7 +123,7 @@ class OCCBrepFace(BrepFace):
             return False
         return self.occ_face.IsSame(other.occ_face)
 
-    def is_equal(self, other: "OCCBrepFace"):
+    def is_equal(self, other: "OCCBrepFace") -> bool:
         """Check if this face is equal to another face.
 
         Two faces are equal if they have the same location and orientation.
@@ -172,7 +168,6 @@ class OCCBrepFace(BrepFace):
             self._occ_adaptor = BRepAdaptor.BRepAdaptor_Surface(self.occ_face)
         return self._occ_adaptor
 
-    # rename to occ_orientation
     @property
     def orientation(self) -> TopAbs.TopAbs_Orientation:
         return self.occ_face.Orientation()
@@ -247,9 +242,9 @@ class OCCBrepFace(BrepFace):
     # other
 
     @property
-    def vertices(self) -> List[OCCBrepVertex]:
+    def vertices(self) -> list[OCCBrepVertex]:
         vertices = []
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_VERTEX)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_VERTEX)  # type: ignore
         while explorer.More():
             vertex = explorer.Current()
             vertices.append(OCCBrepVertex(vertex))  # type: ignore
@@ -257,9 +252,9 @@ class OCCBrepFace(BrepFace):
         return vertices
 
     @property
-    def edges(self) -> List[OCCBrepEdge]:
+    def edges(self) -> list[OCCBrepEdge]:
         edges = []
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_EDGE)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_EDGE)  # type: ignore
         while explorer.More():
             edge = explorer.Current()
             edges.append(OCCBrepEdge(edge))  # type: ignore
@@ -267,9 +262,9 @@ class OCCBrepFace(BrepFace):
         return edges
 
     @property
-    def loops(self) -> List[OCCBrepLoop]:
+    def loops(self) -> list[OCCBrepLoop]:
         loops = []
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)
+        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)  # type: ignore
         while explorer.More():
             wire = explorer.Current()
             loops.append(OCCBrepLoop(wire))  # type: ignore
@@ -282,7 +277,7 @@ class OCCBrepFace(BrepFace):
         return OCCBrepLoop(wire)
 
     @property
-    def innerloops(self) -> List[OCCBrepLoop]:
+    def innerloops(self) -> list[OCCBrepLoop]:
         outerloop = self.outerloop
         inner = []
         for loop in self.loops:
@@ -304,11 +299,11 @@ class OCCBrepFace(BrepFace):
         return point_to_compas(pnt)
 
     @property
-    def domain_u(self) -> Tuple[float, float]:
+    def domain_u(self) -> tuple[float, float]:
         return self.occ_adaptor.FirstUParameter(), self.occ_adaptor.LastUParameter()
 
     @property
-    def domain_v(self) -> Tuple[float, float]:
+    def domain_v(self) -> tuple[float, float]:
         return self.occ_adaptor.FirstVParameter(), self.occ_adaptor.LastVParameter()
 
     # ==============================================================================
@@ -340,8 +335,8 @@ class OCCBrepFace(BrepFace):
     def from_plane(
         cls,
         plane: Plane,
-        domain_u: Optional[Tuple[float, float]] = None,
-        domain_v: Optional[Tuple[float, float]] = None,
+        domain_u: Optional[tuple[float, float]] = None,
+        domain_v: Optional[tuple[float, float]] = None,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
     ) -> "OCCBrepFace":
@@ -352,9 +347,9 @@ class OCCBrepFace(BrepFace):
         ----------
         plane : :class:`compas.geometry.Plane`
             The plane.
-        domain_u : Tuple[float, float], optional
+        domain_u : tuple[float, float], optional
             U parameter minimum and maximum.
-        domain_v : Tuple[float, float], optional
+        domain_v : tuple[float, float], optional
             V parameter minimum and maximum.
         loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
             A boundary loop.
@@ -509,8 +504,8 @@ class OCCBrepFace(BrepFace):
     def from_surface(
         cls,
         surface: OCCSurface,
-        domain_u: Optional[Tuple[float, float]] = None,
-        domain_v: Optional[Tuple[float, float]] = None,
+        domain_u: Optional[tuple[float, float]] = None,
+        domain_v: Optional[tuple[float, float]] = None,
         precision: float = 1e-6,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
@@ -522,9 +517,9 @@ class OCCBrepFace(BrepFace):
         ----------
         surface : :class:`compas_occ.geometry.OCCSurface`
             The torus.
-        domain_u : Tuple[float, float], optional
+        domain_u : tuple[float, float], optional
             U parameter minimum and maximum.
-        domain_v : Tuple[float, float], optional
+        domain_v : tuple[float, float], optional
             V parameter minimum and maximum.
         precision : float, optional
             Precision for face construction.
@@ -668,23 +663,21 @@ class OCCBrepFace(BrepFace):
         Try to convert the underlying geometry to a Nurbs surface.
 
         """
-        nurbs = OCCNurbsSurface()
         try:
             occ_surface = self.occ_adaptor.BSpline()
         except Exception:
             convert = GeomConvert.GeomConvert_ApproxSurface(
                 self.occ_adaptor.Surface().Surface(),
                 precision,
-                GeomAbs.GeomAbs_Shape.GeomAbs_C1,
-                GeomAbs.GeomAbs_Shape.GeomAbs_C1,
+                GeomAbs.GeomAbs_Shape.GeomAbs_C1,  # type: ignore
+                GeomAbs.GeomAbs_Shape.GeomAbs_C1,  # type: ignore
                 maxdegree_u,
                 maxdegree_v,
                 maxsegments_u,
                 maxsegments_v,
-            )
+            )  # type: ignore
             occ_surface = convert.Surface()
-        nurbs.occ_surface = occ_surface
-        return nurbs
+        return OCCNurbsSurface(occ_surface)
 
     def is_valid(self) -> bool:
         """
@@ -733,7 +726,7 @@ class OCCBrepFace(BrepFace):
             raise Exception(builder.Error())
         self.occ_face = builder.Face()
 
-    def add_loops(self, loops: List[OCCBrepLoop], reverse: bool = False) -> None:
+    def add_loops(self, loops: list[OCCBrepLoop], reverse: bool = False) -> None:
         """
         Add an inner loop to the face.
 

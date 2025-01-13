@@ -1,6 +1,3 @@
-from typing import List
-
-from compas.geometry import Point
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColgp import TColgp_Array2OfPnt
@@ -9,8 +6,10 @@ from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.TColStd import TColStd_Array1OfReal
 from OCC.Core.TColStd import TColStd_Array2OfReal
 
+from compas.geometry import Point
 
-def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
+
+def array1_from_points1(points: list[Point]) -> TColgp_Array1OfPnt:
     """Construct a one-dimensional point array from a list of points.
 
     Parameters
@@ -56,7 +55,7 @@ def array1_from_points1(points: List[Point]) -> TColgp_Array1OfPnt:
     return array
 
 
-def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
+def harray1_from_points1(points: list[Point]) -> TColgp_HArray1OfPnt:
     """Construct a horizontal one-dimensional point array from a list of points.
 
     Parameters
@@ -101,7 +100,7 @@ def harray1_from_points1(points: List[Point]) -> TColgp_HArray1OfPnt:
     return array
 
 
-def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
+def points1_from_array1(array: TColgp_Array1OfPnt) -> list[Point]:
     """Construct a list of points from a one-dimensional point array.
 
     Parameters
@@ -139,7 +138,7 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> List[Point]:
     return [Point(point.X(), point.Y(), point.Z()) for point in array]
 
 
-def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
+def array2_from_points2(points: list[list[Point]]) -> TColgp_Array2OfPnt:
     """Construct a two-dimensional point array from a list of lists of points.
 
     Parameters
@@ -195,7 +194,7 @@ def array2_from_points2(points: List[List[Point]]) -> TColgp_Array2OfPnt:
     return array
 
 
-def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
+def points2_from_array2(array: TColgp_Array2OfPnt) -> list[list[Point]]:
     """Construct a list of lists of points from two-dimensional point array.
 
     Parameters
@@ -226,7 +225,9 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     >>> array2.SetValue(2, 3, gp_Pnt(2, 1, 0))
 
     >>> points2 = points2_from_array2(array2)
-    >>> for i, j in product(range(len(points2)), range(len(points2[0]))):
+    >>> rows = len(points2)
+    >>> cols = len(points2[0])
+    >>> for i, j in product(range(rows), range(cols)):
     ...     print(points2[i][j])
     Point(x=0.0, y=0.0, z=0.0)
     Point(x=0.0, y=1.0, z=0.0)
@@ -244,7 +245,7 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> List[List[Point]]:
     return points  # type: ignore
 
 
-def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
+def array1_from_integers1(numbers: list[int]) -> TColStd_Array1OfInteger:
     """Construct a one-dimensional integer array from a list of integers.
 
     Parameters
@@ -274,7 +275,7 @@ def array1_from_integers1(numbers: List[int]) -> TColStd_Array1OfInteger:
     return array
 
 
-def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
+def array1_from_floats1(numbers: list[float]) -> TColStd_Array1OfReal:
     """Construct a one-dimensional float array from a list of floats.
 
     Parameters
@@ -305,7 +306,7 @@ def array1_from_floats1(numbers: List[float]) -> TColStd_Array1OfReal:
     return array
 
 
-def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
+def array2_from_floats2(numbers: list[list[float]]) -> TColStd_Array2OfReal:
     """Construct a two-dimensional real array from a list of lists of floats.
 
     Parameters
@@ -343,7 +344,7 @@ def array2_from_floats2(numbers: List[List[float]]) -> TColStd_Array2OfReal:
     return array
 
 
-def floats2_from_array2(array: TColStd_Array2OfReal) -> List[List[Point]]:
+def floats2_from_array2(array: TColStd_Array2OfReal) -> list[list[Point]]:
     """Construct a list of lists of floats from two-dimensional real array.
 
     Parameters

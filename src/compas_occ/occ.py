@@ -1,10 +1,11 @@
-from compas.geometry import Point
 from OCC.Core.BOPAlgo import BOPAlgo_Splitter
 from OCC.Core.BRepGProp import brepgprop
 from OCC.Core.GProp import GProp_GProps
 from OCC.Core.TopoDS import TopoDS_Compound
 from OCC.Core.TopoDS import TopoDS_Iterator
 from OCC.Core.TopoDS import TopoDS_Shape
+
+from compas.geometry import Point
 
 from .conversions import point_to_compas
 

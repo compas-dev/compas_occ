@@ -1,20 +1,10 @@
 import warnings
 from copy import deepcopy
-from typing import Dict
 from typing import Iterable
-from typing import List
 from typing import Literal
 from typing import Optional
-from typing import Tuple
 from typing import Union
 
-from compas.geometry import Curve
-from compas.geometry import NurbsSurface
-from compas.geometry import Plane
-from compas.geometry import Point
-from compas.geometry import Translation
-from compas.geometry import Vector
-from compas.itertools import flatten
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.Geom import Geom_Plane
 from OCC.Core.GeomAbs import GeomAbs_C2
@@ -24,6 +14,13 @@ from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 
+from compas.geometry import Curve
+from compas.geometry import NurbsSurface
+from compas.geometry import Plane
+from compas.geometry import Point
+from compas.geometry import Translation
+from compas.geometry import Vector
+from compas.itertools import flatten
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import array2_from_floats2
@@ -43,10 +40,10 @@ class ControlPoints:
         self.native_surface = surface.native_surface
 
     @property
-    def points(self) -> List[List[Point]]:
+    def points(self) -> list[list[Point]]:
         return points2_from_array2(self.native_surface.Poles())
 
-    def __getitem__(self, index: Union[int, Tuple[int, int]]) -> Point:
+    def __getitem__(self, index: Union[int, tuple[int, int]]) -> Point:
         try:
             u, v = index  # type: ignore
         except TypeError:
@@ -55,7 +52,7 @@ class ControlPoints:
             pnt = self.native_surface.Pole(u + 1, v + 1)
             return point_to_compas(pnt)
 
-    def __setitem__(self, index: Tuple[int, int], point: Point) -> None:
+    def __setitem__(self, index: tuple[int, int], point: Point) -> None:
         u, v = index
         self.native_surface.SetPole(u + 1, v + 1, point_to_occ(point))
 
@@ -149,7 +146,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     native_surface: Geom_BSplineSurface
 
     @property
-    def __data__(self) -> Dict:
+    def __data__(self) -> dict:
         return {
             "points": [[point.__data__ for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
             "weights": self.weights,
@@ -164,7 +161,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         }
 
     @classmethod
-    def __from_data__(cls, data: Dict) -> "OCCNurbsSurface":
+    def __from_data__(cls, data: dict) -> "OCCNurbsSurface":
         points = [[Point.__from_data__(point) for point in row] for row in data["points"]]
         weights = data["weights"]
         knots_u = data["knots_u"]
@@ -218,7 +215,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return self._points
 
     @property
-    def weights(self) -> List[List[float]]:
+    def weights(self) -> list[list[float]]:
         weights = self.native_surface.Weights()
         if not weights:
             rows = len(self.points)
@@ -237,19 +234,19 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         return self.native_surface.VDegree()
 
     @property
-    def knots_u(self) -> List[float]:
+    def knots_u(self) -> list[float]:
         return list(self.native_surface.UKnots())
 
     @property
-    def knots_v(self) -> List[float]:
+    def knots_v(self) -> list[float]:
         return list(self.native_surface.VKnots())
 
     @property
-    def mults_u(self) -> List[int]:
+    def mults_u(self) -> list[int]:
         return list(self.native_surface.UMultiplicities())
 
     @property
-    def mults_v(self) -> List[int]:
+    def mults_v(self) -> list[int]:
         return list(self.native_surface.VMultiplicities())
 
     # ==============================================================================
@@ -328,26 +325,26 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
                 curve2.occ_curve,
                 curve3.occ_curve,
                 curve4.occ_curve,
-                occ_style,
+                occ_style,  # type: ignore
             )
         elif curve3:
             occ_fill = GeomFill_BSplineCurves(
                 curve1.occ_curve,
                 curve2.occ_curve,
                 curve3.occ_curve,
-                occ_style,
+                occ_style,  # type: ignore
             )
         else:
             occ_fill = GeomFill_BSplineCurves(
                 curve1.occ_curve,
                 curve2.occ_curve,
-                occ_style,
+                occ_style,  # type: ignore
             )
         native_surface = occ_fill.Surface()
         return cls.from_native(native_surface)
 
     @classmethod
-    def from_interpolation(cls, points: List[List[Point]], precision: float = 1e-3) -> "OCCNurbsSurface":
+    def from_interpolation(cls, points: list[list[Point]], precision: float = 1e-3) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
         Parameters
@@ -391,12 +388,12 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     @classmethod
     def from_parameters(
         cls,
-        points: List[List[Point]],
-        weights: List[List[float]],
-        knots_u: List[float],
-        knots_v: List[float],
-        mults_u: List[int],
-        mults_v: List[int],
+        points: list[list[Point]],
+        weights: list[list[float]],
+        knots_u: list[float],
+        knots_v: list[float],
+        mults_u: list[int],
+        mults_v: list[int],
         degree_u: int,
         degree_v: int,
         is_periodic_u: bool = False,
@@ -466,7 +463,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
     @classmethod
     def from_points(
         cls,
-        points: List[List[Point]],
+        points: list[list[Point]],
         degree_u: int = 3,
         degree_v: int = 3,
     ) -> "OCCNurbsSurface":

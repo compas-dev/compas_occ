@@ -1,20 +1,18 @@
-from typing import List
-
-from compas.geometry import BrepLoop
-from compas.geometry import Polygon
-from compas.geometry import Polyline
-from compas.itertools import pairwise
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepTools
 from OCC.Core import ShapeFix
 from OCC.Core import TopoDS
 
+from compas.geometry import BrepLoop
+from compas.geometry import Polygon
+from compas.geometry import Polyline
+from compas.itertools import pairwise
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepVertex
 
 
-def wire_from_edges(edges: List[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
+def wire_from_edges(edges: list[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
     """Construct a wire from a list of edges.
 
     Parameters
@@ -53,27 +51,21 @@ class OCCBrepLoop(BrepLoop):
     _occ_wire: TopoDS.TopoDS_Wire
 
     @property
-    def __data__(self):
-        # return {
-        #     "type": str(self._loop.LoopType),
-        #     "trims": [t.data for t in self._trims],
-        # }
+    def __data__(self) -> dict:
         raise NotImplementedError
 
     @classmethod
-    def __from_data__(cls, data, builder):
+    def __from_data__(cls, data: dict) -> "OCCBrepLoop":
         """Construct an object of this type from the provided data.
 
         Parameters
         ----------
         data : dict
             The data dictionary.
-        builder : :class:`compas_rhino.geometry.BrepFaceBuilder`
-            The object reconstructing the current BrepFace.
 
         Returns
         -------
-        :class:`compas.data.Data`
+        :class:`OCCBrepLoop`
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
@@ -81,12 +73,12 @@ class OCCBrepLoop(BrepLoop):
 
     def __init__(self, occ_wire: TopoDS.TopoDS_Wire):
         super().__init__()
-        self.occ_wire = occ_wire
+        self._occ_wire = occ_wire
 
-    def __eq__(self, other: "OCCBrepLoop"):
+    def __eq__(self, other: "OCCBrepLoop") -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepLoop"):
+    def is_same(self, other: "OCCBrepLoop") -> bool:
         """Check if this loop is the same as another loop.
 
         Two loops are the same if they have the same location.
@@ -106,7 +98,7 @@ class OCCBrepLoop(BrepLoop):
             return False
         return self.occ_wire.IsSame(other.occ_wire)
 
-    def is_equal(self, other: "OCCBrepLoop"):
+    def is_equal(self, other: "OCCBrepLoop") -> bool:
         """Check if this loop is equal to another loop.
 
         Two loops are equal if they have the same location and orientation.
@@ -132,7 +124,7 @@ class OCCBrepLoop(BrepLoop):
 
     @property
     def occ_shape(self) -> TopoDS.TopoDS_Wire:
-        return self.occ_wire
+        return self._occ_wire
 
     @property
     def occ_wire(self) -> TopoDS.TopoDS_Wire:
@@ -151,7 +143,7 @@ class OCCBrepLoop(BrepLoop):
         return BRepAlgo.brepalgo.IsValid(self.occ_wire)
 
     @property
-    def vertices(self) -> List[OCCBrepVertex]:
+    def vertices(self) -> list[OCCBrepVertex]:
         vertices = []
         explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
@@ -161,7 +153,7 @@ class OCCBrepLoop(BrepLoop):
         return vertices
 
     @property
-    def edges(self) -> List[OCCBrepEdge]:
+    def edges(self) -> list[OCCBrepEdge]:
         edges = []
         explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
@@ -171,7 +163,7 @@ class OCCBrepLoop(BrepLoop):
         return edges
 
     @edges.setter
-    def edges(self, edges: List[OCCBrepEdge]) -> None:
+    def edges(self, edges: list[OCCBrepEdge]) -> None:
         self.occ_wire = wire_from_edges(edges)
 
     # ==============================================================================
@@ -179,7 +171,7 @@ class OCCBrepLoop(BrepLoop):
     # ==============================================================================
 
     @classmethod
-    def from_edges(cls, edges: List[OCCBrepEdge]) -> "OCCBrepLoop":
+    def from_edges(cls, edges: list[OCCBrepEdge]) -> "OCCBrepLoop":
         """Construct a loop from a collection of edges.
 
         Parameters
@@ -189,7 +181,7 @@ class OCCBrepLoop(BrepLoop):
 
         Returns
         -------
-        ``OCCBrepLoop``
+        :class:`OCCBrepLoop`
 
         """
         return cls(wire_from_edges(edges))
@@ -205,7 +197,7 @@ class OCCBrepLoop(BrepLoop):
 
         Returns
         -------
-        ``OCCBrepLoop``
+        :class:`OCCBrepLoop`
 
         """
         edges = []
@@ -225,7 +217,7 @@ class OCCBrepLoop(BrepLoop):
 
         Returns
         -------
-        ``OCCBrepLoop``
+        :class:`OCCBrepLoop`
 
         """
         edges = []

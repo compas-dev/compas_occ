@@ -1,16 +1,5 @@
-from typing import List
 from typing import Optional
-from typing import Tuple
 
-from compas.geometry import Bezier
-from compas.geometry import BrepEdge
-from compas.geometry import Circle
-from compas.geometry import Ellipse
-from compas.geometry import Hyperbola
-from compas.geometry import Line
-from compas.geometry import NurbsCurve
-from compas.geometry import Parabola
-from compas.geometry import Point
 from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
@@ -20,6 +9,16 @@ from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopoDS
 
+import compas.geometry
+from compas.geometry import Bezier
+from compas.geometry import BrepEdge
+from compas.geometry import Circle
+from compas.geometry import Ellipse
+from compas.geometry import Hyperbola
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+from compas.geometry import Parabola
+from compas.geometry import Point
 from compas_occ.brep import OCCBrepVertex
 from compas_occ.conversions import bezier_to_compas
 from compas_occ.conversions import bspline_to_compas
@@ -90,7 +89,7 @@ class OCCBrepEdge(BrepEdge):
     _occ_edge: TopoDS.TopoDS_Edge
 
     @property
-    def __data__(self):
+    def __data__(self) -> dict:
         if self.is_line:
             curve = self.to_line()
         elif self.is_circle:
@@ -113,19 +112,19 @@ class OCCBrepEdge(BrepEdge):
         }
 
     @classmethod
-    def __from_data__(cls, data):
+    def __from_data__(cls, data: dict) -> "OCCBrepEdge":
         raise NotImplementedError
 
-    def __init__(self, occ_edge: TopoDS.TopoDS_Edge):
+    def __init__(self, occ_edge: TopoDS.TopoDS_Edge) -> None:
         super().__init__()
         self._occ_adaptor = None
-        self.occ_edge = occ_edge
+        self._occ_edge = occ_edge
         self.is_2d = False
 
-    def __eq__(self, other: "OCCBrepEdge"):
+    def __eq__(self, other: "OCCBrepEdge") -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepEdge"):
+    def is_same(self, other: "OCCBrepEdge") -> bool:
         """Check if this edge is the same as another edge.
 
         Two edges are the same if they have the same location.
@@ -145,7 +144,7 @@ class OCCBrepEdge(BrepEdge):
             return False
         return self.occ_edge.IsSame(other.occ_edge)
 
-    def is_equal(self, other: "OCCBrepEdge"):
+    def is_equal(self, other: "OCCBrepEdge") -> bool:
         """Check if this edge is equal to another edge.
 
         Two edges are equal if they have the same location and orientation.
@@ -171,7 +170,7 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def occ_shape(self) -> TopoDS.TopoDS_Edge:
-        return self._occ_edge
+        return self.occ_edge
 
     @property
     def occ_edge(self) -> TopoDS.TopoDS_Edge:
@@ -201,16 +200,16 @@ class OCCBrepEdge(BrepEdge):
     #         self._curve = OCCCurve(occ_curve)  # type: ignore
     #     return self._curve
 
-    # remove this if possible
-    @property
-    def nurbscurve(self) -> OCCNurbsCurve:
-        if not self._nurbscurve:
-            occ_curve = self.occ_adaptor.BSpline()
-            self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
-        return self._nurbscurve  # type: ignore (don't understand why this is necessary)
+    # # remove this if possible
+    # @property
+    # def nurbscurve(self) -> OCCNurbsCurve:
+    #     if not self._nurbscurve:
+    #         occ_curve = self.occ_adaptor.BSpline()
+    #         self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
+    #     return self._nurbscurve
 
     @property
-    def curve(self):
+    def curve(self) -> compas.geometry.Curve:
         if self.is_line:
             return self.to_line()
         if self.is_circle:
@@ -225,7 +224,6 @@ class OCCBrepEdge(BrepEdge):
             return self.to_bezier()
         if self.is_bspline:
             return self.to_bspline()
-        print(self.type)
         raise NotImplementedError
 
     # ==============================================================================
@@ -277,9 +275,9 @@ class OCCBrepEdge(BrepEdge):
         return BRepAlgo.brepalgo.IsValid(self.occ_edge)
 
     @property
-    def vertices(self) -> List[OCCBrepVertex]:
+    def vertices(self) -> list[OCCBrepVertex]:
         vertices = []
-        explorer = TopExp.TopExp_Explorer(self.occ_edge, TopAbs.TopAbs_VERTEX)
+        explorer = TopExp.TopExp_Explorer(self.occ_edge, TopAbs.TopAbs_VERTEX)  # type: ignore
         while explorer.More():
             vertex = explorer.Current()
             vertices.append(OCCBrepVertex(vertex))  # type: ignore
@@ -301,7 +299,7 @@ class OCCBrepEdge(BrepEdge):
         return props.Mass()
 
     @property
-    def domain(self) -> Tuple[float, float]:
+    def domain(self) -> tuple[float, float]:
         return self.occ_adaptor.FirstParameter(), self.occ_adaptor.LastParameter()
 
     # ==============================================================================
@@ -352,9 +350,9 @@ class OCCBrepEdge(BrepEdge):
     def from_line(
         cls,
         line: Line,
-        params: Optional[Tuple[float, float]] = None,
-        points: Optional[Tuple[Point, Point]] = None,
-        vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
+        params: Optional[tuple[float, float]] = None,
+        points: Optional[tuple[Point, Point]] = None,
+        vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
         """Construct an edge from a line.
 
@@ -397,9 +395,9 @@ class OCCBrepEdge(BrepEdge):
     def from_circle(
         cls,
         circle: Circle,
-        params: Optional[Tuple[float, float]] = None,
-        points: Optional[Tuple[Point, Point]] = None,
-        vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
+        params: Optional[tuple[float, float]] = None,
+        points: Optional[tuple[Point, Point]] = None,
+        vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
         """Construct an edge from a circle.
 
@@ -461,9 +459,9 @@ class OCCBrepEdge(BrepEdge):
         curve: Optional[OCCCurve] = None,
         curve2d: Optional[OCCCurve2d] = None,
         surface: Optional[OCCSurface] = None,
-        params: Optional[Tuple[float, float]] = None,
-        points: Optional[Tuple[Point, Point]] = None,
-        vertices: Optional[Tuple[OCCBrepVertex, OCCBrepVertex]] = None,
+        params: Optional[tuple[float, float]] = None,
+        points: Optional[tuple[Point, Point]] = None,
+        vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
     ) -> "OCCBrepEdge":
         """Construct an edge from a curve.
 
@@ -564,9 +562,6 @@ class OCCBrepEdge(BrepEdge):
             If the underlying geometry is not a line.
 
         """
-        # if not self.is_line:
-        #     raise ValueError(f"The underlying geometry is not a line: {self.type}")
-
         a = self.first_vertex.point
         b = self.last_vertex.point
         return Line(a, b)
@@ -692,42 +687,3 @@ class OCCBrepEdge(BrepEdge):
         curve = self.occ_adaptor.Curve()
         bspline = curve.BSpline()
         return bspline_to_compas(bspline)
-
-    # # remove this if possible
-    # def to_curve(self) -> OCCCurve:
-    #     """Convert the edge geometry to a NURBS curve.
-
-    #     Returns
-    #     -------
-    #     :class:`~compas_occ.geometry.OCCCurve`
-
-    #     """
-    #     return self.curve
-
-    # ==============================================================================
-    # Methods
-    # ==============================================================================
-
-    # def try_get_nurbscurve(
-    #     self,
-    #     precision=1e-3,
-    #     continuity=None,
-    #     maxsegments=1,
-    #     maxdegree=5,
-    # ) -> OCCNurbsCurve:
-    #     """Try to convert the underlying geometry to a Nurbs curve."""
-    #     nurbs = OCCNurbsCurve()
-    #     try:
-    #         occ_curve = self.occ_adaptor.BSpline()
-    #     except Exception as e:
-    #         print(e)
-    #         convert = GeomConvert_ApproxCurve(
-    #             self.occ_adaptor,
-    #             precision,
-    #             GeomAbs_Shape.GeomAbs_C1,
-    #             maxsegments,
-    #             maxdegree,
-    #         )  # type: ignore
-    #         occ_curve = convert.Curve()
-    #     nurbs.occ_curve = occ_curve
-    #     return nurbs

@@ -1,9 +1,9 @@
-from compas.geometry import BrepVertex
-from compas.geometry import Point
 from OCC.Core import BRep
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import TopoDS
 
+from compas.geometry import BrepVertex
+from compas.geometry import Point
 from compas_occ.conversions.geometry import point_to_occ
 
 
@@ -22,25 +22,26 @@ class OCCBrepVertex(BrepVertex):
 
     """
 
+    _occ_vertex: TopoDS.TopoDS_Vertex
+
     @property
-    def __data__(self):
+    def __data__(self) -> dict:
         return {
             "point": self.point.__data__,
         }
 
     @classmethod
-    def __from_data__(cls, data):
-        return cls.from_point(Point.__from_data__(data["point"]))
+    def __from_data__(cls, data: dict) -> "OCCBrepVertex":
+        return cls.from_point(Point.__from_data__(data["point"]))  # type: ignore
 
     def __init__(self, occ_vertex: TopoDS.TopoDS_Vertex):
         super().__init__()
-        self._occ_vertex = None
-        self.occ_vertex = occ_vertex
+        self._occ_vertex = occ_vertex
 
-    def __eq__(self, other: "OCCBrepVertex"):
+    def __eq__(self, other: "OCCBrepVertex") -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepVertex"):
+    def is_same(self, other: "OCCBrepVertex") -> bool:
         """Check if this vertex is the same as another vertex.
 
         Two vertices are the same if they have the same location.
@@ -60,7 +61,7 @@ class OCCBrepVertex(BrepVertex):
             return False
         return self.occ_vertex.IsSame(other.occ_vertex)
 
-    def is_equal(self, other: "OCCBrepVertex"):
+    def is_equal(self, other: "OCCBrepVertex") -> bool:
         """Check if this vertex is equal to another vertex.
 
         Two vertices are equal if they have the same location and orientation.
@@ -86,7 +87,7 @@ class OCCBrepVertex(BrepVertex):
 
     @property
     def occ_vertex(self) -> TopoDS.TopoDS_Vertex:
-        return self._occ_vertex  # type: ignore
+        return self._occ_vertex
 
     @occ_vertex.setter
     def occ_vertex(self, occ_vertex: TopoDS.TopoDS_Vertex) -> None:

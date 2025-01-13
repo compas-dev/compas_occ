@@ -1,23 +1,6 @@
 from typing import Optional
-from typing import Tuple
 from typing import Type
 
-from compas.geometry import Bezier
-from compas.geometry import Circle
-from compas.geometry import Cone
-from compas.geometry import Cylinder
-from compas.geometry import Ellipse
-from compas.geometry import Frame
-from compas.geometry import Hyperbola
-from compas.geometry import Line
-from compas.geometry import NurbsCurve
-from compas.geometry import Parabola
-from compas.geometry import Plane
-from compas.geometry import Point
-from compas.geometry import Sphere
-from compas.geometry import Torus
-from compas.geometry import Transformation
-from compas.geometry import Vector
 from OCC.Core.Geom import Geom_BezierCurve
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.gp import gp_Ax1
@@ -39,6 +22,23 @@ from OCC.Core.gp import gp_Torus
 from OCC.Core.gp import gp_Vec
 from OCC.Core.gp import gp_Vec2d
 from OCC.Core.TopLoc import TopLoc_Location
+
+from compas.geometry import Bezier
+from compas.geometry import Circle
+from compas.geometry import Cone
+from compas.geometry import Cylinder
+from compas.geometry import Ellipse
+from compas.geometry import Frame
+from compas.geometry import Hyperbola
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+from compas.geometry import Parabola
+from compas.geometry import Plane
+from compas.geometry import Point
+from compas.geometry import Sphere
+from compas.geometry import Torus
+from compas.geometry import Transformation
+from compas.geometry import Vector
 
 # =============================================================================
 # To OCC
@@ -125,7 +125,7 @@ def direction_to_occ(vector: Vector) -> gp_Dir:
     return gp_Dir(*vector)
 
 
-def axis_to_occ(axis: Tuple[Point, Vector]) -> gp_Ax1:
+def axis_to_occ(axis: tuple[Point, Vector]) -> gp_Ax1:
     """Convert a COMPAS point and vector to an OCC axis.
 
     Parameters
@@ -761,7 +761,7 @@ def axis_to_compas_vector(
     return direction_to_compas(axis.Direction(), cls=cls)
 
 
-def axis_to_compas(axis: gp_Ax1) -> Tuple[Point, Vector]:
+def axis_to_compas(axis: gp_Ax1) -> tuple[Point, Vector]:
     """Convert an OCC axis to a tuple of COMPAS point and vector.
 
     Parameters

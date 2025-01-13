@@ -1,11 +1,6 @@
 from typing import Annotated
-from typing import List
 from typing import Union
 
-import compas.geometry
-from compas.datastructures import Mesh
-from compas.geometry import Point
-from compas.geometry import Polygon
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
@@ -18,11 +13,16 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
+import compas.geometry
+from compas.datastructures import Mesh
+from compas.geometry import Point
+from compas.geometry import Polygon
+
 from .arrays import array1_from_points1
 
-Triangle = Union[Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 3]]
-Quad = Union[Polygon, Annotated[List[Union[Annotated[List[float], 3], compas.geometry.Point]], 4]]
-NGon = Union[Polygon, List[Union[Annotated[List[float], 3], compas.geometry.Point]]]
+Triangle = Union[Polygon, Annotated[list[Union[Annotated[list[float], 3], compas.geometry.Point]], 3]]
+Quad = Union[Polygon, Annotated[list[Union[Annotated[list[float], 3], compas.geometry.Point]], 4]]
+NGon = Union[Polygon, list[Union[Annotated[list[float], 3], compas.geometry.Point]]]
 
 
 def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
@@ -131,7 +131,7 @@ def ngon_to_face(ngon: NGon) -> TopoDS_Face:
     edges = TopologyExplorer(poly.Wire()).edges()
     nsided = BRepFill_Filling()
     for edge in edges:
-        nsided.Add(edge, GeomAbs_C0)
+        nsided.Add(edge, GeomAbs_C0)  # type: ignore
     nsided.Build()
     return nsided.Face()
 
