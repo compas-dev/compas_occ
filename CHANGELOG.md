@@ -9,12 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* `compas_occ.brep.OCCBrep.make_positive` which reverses the winding of a solid if it has negative volume.
+* Added `compas_occ.brep.OCCBrep.make_positive` which reverses the winding of a solid if it has negative volume.
+* Added `compas_occ.brep.OCCBrep.boolean_difference` method in addition to the `from_boolean_difference` constructor.
+* Added `compas_occ.brep.OCCBrep.boolean_intersection` method in addition to the `from_boolean_intersection` constructor.
+* Added `compas_occ.brep.OCCBrep.boolean_union` method in addition to the `from_boolean_union` constructor.
+* Added `compas_occ.conversions.aabb_to_compas` to convert an OCC AABB to a COMPAS box.
+* Added `compas_occ.conversions.obb_to_compas` to convert an OCC OBB to a COMPAS box.
+* Added `compas_occ.brep.OCCBrep.aabb`.
+* Added `compas_occ.brep.OCCBrep.obb`.
 
 ### Changed
 
 * Changed `compas_occ.brep.OCCBrep.heal` to inlude `make_positive`.
 * Changed `compas_occ.brep.OCCBrep.points` to return only unique points instead of repeating points for every repeated occurrence of a vertex within the data structure.
+* Changed `compas_occ.brep.OCCBrep.from_boolean_difference` to also accept a list of `A` shapes.
+* Changed `compas_occ.brep.OCCBrep.from_boolean_intersection` to also accept lists of shapes for `A` and `B`.
+* Changed `compas_occ.brep.OCCBrep.from_boolean_union` to also accept lists of shapes for `A` and `B`.
 
 ### Removed
 

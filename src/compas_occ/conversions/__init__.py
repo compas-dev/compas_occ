@@ -45,6 +45,8 @@ from .geometry import direction_to_compas
 from .geometry import vector_to_compas
 from .geometry import vector2d_to_compas
 from .geometry import sphere_to_compas
+from .geometry import aabb_to_compas
+from .geometry import obb_to_compas
 
 from .transformations import compas_transformation_to_trsf
 
@@ -61,6 +63,7 @@ __all__ = [
     "array1_from_points1",
     "array2_from_floats2",
     "array2_from_points2",
+    "aabb_to_compas",
     "axis_to_compas",
     "axis_to_compas_vector",
     "ax2_to_compas",
@@ -71,9 +74,10 @@ __all__ = [
     "cylinder_to_compas",
     "direction_to_compas",
     "ellipse_to_compas",
+    "hyperbola_to_compas",
     "line_to_compas",
     "location_to_compas",
-    "hyperbola_to_compas",
+    "obb_to_compas",
     "parabola_to_compas",
     "plane_to_compas",
     "point_to_compas",

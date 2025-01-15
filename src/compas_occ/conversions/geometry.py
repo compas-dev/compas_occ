@@ -1,6 +1,8 @@
 from typing import Optional
 from typing import Type
 
+from OCC.Core.Bnd import Bnd_Box
+from OCC.Core.Bnd import Bnd_OBB
 from OCC.Core.Geom import Geom_BezierCurve
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.gp import gp_Ax1
@@ -24,6 +26,7 @@ from OCC.Core.gp import gp_Vec2d
 from OCC.Core.TopLoc import TopLoc_Location
 
 from compas.geometry import Bezier
+from compas.geometry import Box
 from compas.geometry import Circle
 from compas.geometry import Cone
 from compas.geometry import Cylinder
@@ -1230,3 +1233,39 @@ def sphere_to_compas(
     radius = sphere.Radius()
     frame = ax3_to_compas(sphere.Position())
     return cls(radius, frame=frame)
+
+
+def obb_to_compas(obb: Bnd_OBB) -> Box:
+    """Convert an OCC oriented bounding box to a COMPAS box.
+
+    Parameters
+    ----------
+    obb : ``Bnd_OBB``
+        The oriented bounding box.
+
+    Returns
+    -------
+    :class:`Box`
+
+    """
+    frame = ax3_to_compas(obb.Position())
+    xsize = 2 * obb.XHSize()
+    ysize = 2 * obb.YHSize()
+    zsize = 2 * obb.ZHSize()
+    return Box(xsize, ysize, zsize, frame=frame)
+
+
+def aabb_to_compas(aabb: Bnd_Box) -> Box:
+    """Convert an OCC oriented bounding box to a COMPAS box.
+
+    Parameters
+    ----------
+    aabb : ``Bnd_Box``
+        The axis-aligned bounding box.
+
+    Returns
+    -------
+    :class:`Box`
+
+    """
+    return Box.from_diagonal([point_to_compas(aabb.CornerMin()), point_to_compas(aabb.CornerMax())])
