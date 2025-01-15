@@ -383,13 +383,16 @@ class OCCBrep(Brep):
     # ==============================================================================
 
     @classmethod
-    def from_step(cls, filename: Union[str, pathlib.Path]) -> "OCCBrep":
+    def from_step(cls, filename: Union[str, pathlib.Path], solid: bool = True) -> "OCCBrep":
         """
         Conctruct a BRep from the data contained in a STEP file.
 
         Parameters
         ----------
         filename : str | pathlib.Path
+            The file.
+        solid : bool, optional
+            If True, convert shells to solids when possible.
 
         Returns
         -------
@@ -399,16 +402,21 @@ class OCCBrep(Brep):
         shape = DataExchange.read_step_file(str(filename))
         brep = cls.from_native(shape)  # type: ignore
         brep.heal()
+        if solid:
+            brep.make_solid()
         return brep
 
     @classmethod
-    def from_iges(cls, filename: Union[str, pathlib.Path]) -> "OCCBrep":
+    def from_iges(cls, filename: Union[str, pathlib.Path], solid: bool = True) -> "OCCBrep":
         """
         Conctruct a BRep from the data contained in a IGES file.
 
         Parameters
         ----------
         filename : str | pathlib.Path
+            The file.
+        solid : bool, optional
+            If True, convert shells to solids when possible.
 
         Returns
         -------
@@ -418,6 +426,8 @@ class OCCBrep(Brep):
         shape = DataExchange.read_iges_file(str(filename))
         brep = cls.from_native(shape)  # type: ignore
         brep.heal()
+        if solid:
+            brep.make_solid()
         return brep
 
     def to_step(self, filepath: Union[str, pathlib.Path], schema: str = "AP203", unit: str = "MM") -> None:
@@ -1762,44 +1772,6 @@ class OCCBrep(Brep):
         shape = simplifier.Shape()
         self.native_brep = shape
 
-    def transform(self, matrix: compas.geometry.Transformation) -> None:
-        """
-        Transform this Brep.
-
-        Parameters
-        ----------
-        matrix : :class:`compas.geometry.Transformation`
-            A transformation matrix.
-
-        Returns
-        -------
-        None
-
-        """
-        trsf = compas_transformation_to_trsf(matrix)
-        builder = BRepBuilderAPI.BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
-        shape = builder.ModifiedShape(self.occ_shape)
-        self._occ_shape = shape
-
-    def transformed(self, matrix: compas.geometry.Transformation) -> "OCCBrep":
-        """
-        Return a transformed copy of the Brep.
-
-        Parameters
-        ----------
-        matrix : :class:`compas.geometry.Transformation`
-            A transformation matrix.
-
-        Returns
-        -------
-        :class:`OCCBrep`
-
-        """
-        trsf = compas_transformation_to_trsf(matrix)
-        builder = BRepBuilderAPI.BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
-        shape = builder.ModifiedShape(self.occ_shape)
-        return OCCBrep.from_shape(shape)
-
     def slice(self, plane: compas.geometry.Plane) -> Union["OCCBrep", None]:
         """Slice a BRep with a plane.
 
@@ -1842,15 +1814,53 @@ class OCCBrep(Brep):
         splitter.AddTool(other.occ_shape)
         splitter.Perform()
         shape = splitter.Shape()
-        results = []
+        results: list[OCCBrep] = []
         if isinstance(shape, TopoDS.TopoDS_Compound):
             it = TopoDS.TopoDS_Iterator(shape)
             while it.More():
-                results.append(it.Value())
+                results.append(OCCBrep.from_shape(it.Value()))
                 it.Next()
         else:
-            results.append(shape)
-        return [OCCBrep.from_shape(result) for result in results]
+            results.append(OCCBrep.from_shape(shape))
+        return results
+
+    def transform(self, matrix: compas.geometry.Transformation) -> None:
+        """
+        Transform this Brep.
+
+        Parameters
+        ----------
+        matrix : :class:`compas.geometry.Transformation`
+            A transformation matrix.
+
+        Returns
+        -------
+        None
+
+        """
+        trsf = compas_transformation_to_trsf(matrix)
+        builder = BRepBuilderAPI.BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
+        shape = builder.ModifiedShape(self.occ_shape)
+        self._occ_shape = shape
+
+    def transformed(self, matrix: compas.geometry.Transformation) -> "OCCBrep":
+        """
+        Return a transformed copy of the Brep.
+
+        Parameters
+        ----------
+        matrix : :class:`compas.geometry.Transformation`
+            A transformation matrix.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        trsf = compas_transformation_to_trsf(matrix)
+        builder = BRepBuilderAPI.BRepBuilderAPI_Transform(self.occ_shape, trsf, True)
+        shape = builder.ModifiedShape(self.occ_shape)
+        return OCCBrep.from_shape(shape)
 
     def trim(self, plane: compas.geometry.Plane) -> None:
         """Trim a Brep with a plane.

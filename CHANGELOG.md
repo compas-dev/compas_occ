@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed `compas_occ.brep.OCCBrep.from_boolean_difference` to also accept a list of `A` shapes.
 * Changed `compas_occ.brep.OCCBrep.from_boolean_intersection` to also accept lists of shapes for `A` and `B`.
 * Changed `compas_occ.brep.OCCBrep.from_boolean_union` to also accept lists of shapes for `A` and `B`.
+* Changed `compas_occ.brep.OCCBrep.from_step` to convert shells to solid if possible by default.
+* Changed `compas_occ.brep.OCCBrep.from_iges` to convert shells to solid if possible by default.
 
 ### Removed
 
