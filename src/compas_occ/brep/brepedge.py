@@ -31,7 +31,6 @@ from compas_occ.conversions import parabola_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCCurve2d
-from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCSurface
 
 
