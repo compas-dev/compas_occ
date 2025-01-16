@@ -231,11 +231,11 @@ class OCCBrep(Brep):
     @property
     def points(self) -> list[Point]:
         points = []
-        # seen = []
+        seen = []
         for vertex in self.vertices:
-            # if any(vertex.is_same(test) for test in seen):
-            #     continue
-            # seen.append(vertex)
+            if any(vertex.is_same(test) for test in seen):
+                continue
+            seen.append(vertex)
             points.append(vertex.point)
         return points
 
