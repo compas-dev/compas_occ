@@ -3,11 +3,12 @@ from pathlib import Path
 from compas_viewer import Viewer
 
 from compas.geometry import Box
-from compas.geometry import Brep
 from compas.geometry import Cylinder
 from compas.geometry import Frame
+from compas_occ.brep import OCCBrep
 
-filepath = Path(__file__).parent / "booleans.iges"
+IGES = Path(__file__).parent / "booleans.iges"
+STEP = Path(__file__).parent / "booleans.step"
 
 # =============================================================================
 # Construct boolean Brep
@@ -18,24 +19,26 @@ YZ = Frame.worldYZ()
 ZX = Frame.worldZX()
 XY = Frame.worldXY()
 
-box = Box(2 * R).to_brep()
-cx = Cylinder(0.7 * R, 4 * R, frame=YZ).to_brep()
-cy = Cylinder(0.7 * R, 4 * R, frame=ZX).to_brep()
-cz = Cylinder(0.7 * R, 4 * R, frame=XY).to_brep()
+box = OCCBrep.from_box(Box(2 * R))
+cx = OCCBrep.from_cylinder(Cylinder(0.7 * R, 4 * R, frame=YZ))
+cy = OCCBrep.from_cylinder(Cylinder(0.7 * R, 4 * R, frame=ZX))
+cz = OCCBrep.from_cylinder(Cylinder(0.7 * R, 4 * R, frame=XY))
 
-result = box - (cx + cy + cz)
-
-# =============================================================================
-# Export to IGES
-# =============================================================================
-
-result.to_iges(filepath)
+brep = box.boolean_union(cx, cy, cz)
 
 # =============================================================================
-# Read from IGES
+# Write/Read to IGES
 # =============================================================================
 
-brep = Brep.from_iges(filepath)
+brep.to_iges(IGES)
+brep = OCCBrep.from_iges(IGES)
+
+# =============================================================================
+# Write/Read to STEP
+# =============================================================================
+
+brep.to_step(STEP)
+brep = OCCBrep.from_step(STEP)
 
 # =============================================================================
 # Visualisation

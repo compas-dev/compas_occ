@@ -5,6 +5,8 @@ from compas.geometry import Cylinder
 from compas.geometry import Frame
 from compas.tolerance import TOL
 
+# from compas_occ.brep import OCCBrep
+
 TOL.lineardeflection = 0.1
 
 R = 1.4
@@ -17,7 +19,10 @@ cx = Cylinder(0.7 * R, 4 * R, frame=YZ).to_brep()
 cy = Cylinder(0.7 * R, 4 * R, frame=ZX).to_brep()
 cz = Cylinder(0.7 * R, 4 * R, frame=XY).to_brep()
 
+# result = OCCBrep.from_boolean_difference(box, [cx, cy, cz])
 result = box - (cx + cy + cz)
+
+result.to_step("/Users/vanmelet/Desktop/booleans.step")
 
 # ==============================================================================
 # Visualisation
