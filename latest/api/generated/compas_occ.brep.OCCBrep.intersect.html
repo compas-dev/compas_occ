@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="../../_static/compas.ico" type="image/x-icon">
-    <title>OCCBrep.heal &#8212; COMPAS OCC</title>
+    <title>OCCBrep.intersect &#8212; COMPAS OCC</title>
   
   
   
@@ -52,15 +52,15 @@
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.brep.OCCBrep.heal';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.brep.OCCBrep.intersect';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_occ/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="OCCBrep.intersect" href="compas_occ.brep.OCCBrep.intersect.html" />
-    <link rel="prev" title="OCCBrep.from_torus" href="compas_occ.brep.OCCBrep.from_torus.html" />
+    <link rel="next" title="OCCBrep.make_positive" href="compas_occ.brep.OCCBrep.make_positive.html" />
+    <link rel="prev" title="OCCBrep.heal" href="compas_occ.brep.OCCBrep.heal.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -638,7 +638,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="compas_occ.brep.OCCBrep.html" class="nav-link">OCCBrep</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">OCCBrep.heal</li>
+    <li class="breadcrumb-item active" aria-current="page">OCCBrep.intersect</li>
   </ul>
 </nav>
 </div>
@@ -655,16 +655,24 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="occbrep-heal">
-<h1>OCCBrep.heal</h1>
+  <section id="occbrep-intersect">
+<h1>OCCBrep.intersect</h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.heal">
-<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">heal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Heal the shape.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>None</dt><dd></dd>
+<dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.intersect">
+<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">intersect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Intersect this Brep with another.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>other</strong><span class="classifier"><a class="reference internal" href="compas_occ.brep.OCCBrep.html#compas_occ.brep.OCCBrep" title="compas_occ.brep.OCCBrep"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCBrep</span></code></a></span></dt><dd><p>The other brep.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><a class="reference internal" href="compas_occ.brep.OCCBrep.html#compas_occ.brep.OCCBrep" title="compas_occ.brep.OCCBrep"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCBrep</span></code></a></dt><dd><p>If it exists, the intersection is a curve
+that can be accessed via the edges of the returned brep.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -693,7 +701,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_occ.brep.OCCBrep.heal"><code class="docutils literal notranslate"><span class="pre">OCCBrep.heal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_occ.brep.OCCBrep.intersect"><code class="docutils literal notranslate"><span class="pre">OCCBrep.intersect()</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -59,8 +59,8 @@
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="OCCBrep.from_pipe" href="compas_occ.brep.OCCBrep.from_pipe.html" />
-    <link rel="prev" title="OCCBrep.from_jsonstring" href="compas_occ.brep.OCCBrep.from_jsonstring.html" />
+    <link rel="next" title="OCCBrep.from_mesh" href="compas_occ.brep.OCCBrep.from_mesh.html" />
+    <link rel="prev" title="OCCBrep.from_iges" href="compas_occ.brep.OCCBrep.from_iges.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -659,17 +659,22 @@ document.write(`
 <h1>OCCBrep.from_loft</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.from_loft">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">from_loft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curves</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Construct a Brep by lofting a set of curves.</p>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">from_loft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curves</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Construct a Brep by lofing through a sequence of curves.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>curves</strong><span class="classifier">list[<a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Curve.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Curve</span></code></a>]</span></dt><dd></dd>
+<dt><strong>curves</strong><span class="classifier">list[<code class="xref py py-class docutils literal notranslate"><span class="pre">OCCCurve</span></code>]</span></dt><dd><p>The loft curves.</p>
+</dd>
+<dt><strong>start</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>, optional</span></dt><dd><p>The start point of the loft.</p>
+</dd>
+<dt><strong>end</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Point</span></code>, optional</span></dt><dd><p>The end point of the loft.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><a class="reference external" href="https://compas.dev/compas/latest/api/generated/compas.geometry.Brep.html" title="(in COMPAS vlatest)"><code class="xref py py-class docutils literal notranslate"><span class="pre">compas.geometry.Brep</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="compas_occ.brep.OCCBrep.html#compas_occ.brep.OCCBrep" title="compas_occ.brep.OCCBrep"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCBrep</span></code></a></dt><dd></dd>
 </dl>
 </dd>
 </dl>
