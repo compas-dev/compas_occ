@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `compas_occ.conversions.obb_to_compas` to convert an OCC OBB to a COMPAS box.
 * Added `compas_occ.brep.OCCBrep.aabb`.
 * Added `compas_occ.brep.OCCBrep.obb`.
+* Added `compas_occ.brep.OCCBrep.intersect`.
+* Added first implementation for `compas_occ.brep.OCCBrep.from_loft` (not very well tested).
 
 ### Changed
 
@@ -27,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Changed `compas_occ.brep.OCCBrep.from_boolean_union` to also accept lists of shapes for `A` and `B`.
 * Changed `compas_occ.brep.OCCBrep.from_step` to convert shells to solid if possible by default.
 * Changed `compas_occ.brep.OCCBrep.from_iges` to convert shells to solid if possible by default.
+* Fixed bug in `compas_occ.brep.OCCBrep.to_stl`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_circle`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_ellipse`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_hyperbola`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_parabola`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_bezier`.
+* Fixed malloc problem during Brep edge conversion to curve geometry in `OCCBrepEdge.to_bspline`.
 
 ### Removed
 
