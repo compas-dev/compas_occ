@@ -315,7 +315,7 @@ class OCCBrep(Brep):
             explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_SHELL)  # type: ignore
             while explorer.More():
                 shell = explorer.Current()
-                brep: OCCBrep = Brep.from_native(shell)
+                brep: OCCBrep = OCCBrep.from_native(shell)
                 shells.append(brep)
                 explorer.Next()
             self._shells = shells
@@ -328,7 +328,7 @@ class OCCBrep(Brep):
             explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_SOLID)  # type: ignore
             while explorer.More():
                 solid = explorer.Current()
-                brep: OCCBrep = Brep.from_native(solid)
+                brep: OCCBrep = OCCBrep.from_native(solid)
                 solids.append(brep)
                 explorer.Next()
             self._solids = solids
@@ -477,15 +477,9 @@ class OCCBrep(Brep):
         None
 
         """
-        BRepMesh.BRepMesh_IncrementalMesh(
-            self.occ_shape,
-            linear_deflection,
-            theAngDeflection=angular_deflection,
-        )
-
+        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
         stl_writer = StlAPI.StlAPI_Writer()
         stl_writer.SetASCIIMode(True)
-
         return stl_writer.Write(self.occ_shape, str(filepath))
 
     def to_iges(self, filepath: Union[str, pathlib.Path]) -> bool:
@@ -505,7 +499,6 @@ class OCCBrep(Brep):
         iges_writer = IGESControl.IGESControl_Writer()
         if not iges_writer.AddShape(self.occ_shape):
             raise Exception("Failed to add shape to IGES writer.")
-
         iges_writer.ComputeModel()
         return iges_writer.Write(str(filepath))
 
@@ -514,22 +507,208 @@ class OCCBrep(Brep):
     # ==============================================================================
 
     @classmethod
-    def from_shape(cls, shape: TopoDS.TopoDS_Shape) -> "OCCBrep":
+    def from_box(cls, box: compas.geometry.Box) -> "OCCBrep":
         """
-        Construct a BRep from an OCC shape.
+        Construct a BRep from a COMPAS box.
 
         Parameters
         ----------
-        shape : ``TopoDS_Shape``
-            The OCC shape.
+        box : :class:`compas.geometry.Box`
 
         Returns
         -------
         :class:`compas_occ.brep.OCCBrep`
 
         """
+        xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
+        yaxis = box.frame.yaxis.scaled(-0.5 * box.ysize)
+        zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
+        frame = box.frame.transformed(Translation.from_vector(xaxis + yaxis + zaxis))
+        ax2 = frame_to_occ_ax2(frame)
+        shape = BRepPrimAPI.BRepPrimAPI_MakeBox(ax2, box.xsize, box.ysize, box.zsize).Shape()
+        return cls.from_native(shape)
+
+    @classmethod
+    def from_brepfaces(cls, faces: list[OCCBrepFace], solid: bool = True) -> "OCCBrep":
+        """
+        Make a BRep from a list of BRep faces forming an open or closed shell.
+
+        Parameters
+        ----------
+        faces : list[:class:`OCCBrepFace`]
+            The input faces.
+        solid : bool, optional
+            Flag indicating that if the resulting shape should be converted to a solid, if possible.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        shell = TopoDS.TopoDS_Shell()
+        builder = BRep.BRep_Builder()
+        builder.MakeShell(shell)
+        for face in faces:
+            if not face.is_valid():
+                face.fix()
+            builder.Add(shell, face.occ_face)
+        brep = cls.from_native(shell)
+        brep.heal()
+        if solid:
+            brep.make_solid()
+        return brep
+
+    @classmethod
+    def from_breps(cls, breps: list["OCCBrep"]) -> "OCCBrep":
+        """
+        Construct one compound BRep out of multiple individual BReps.
+        """
+        compound = TopoDS.TopoDS_Compound()
+        builder = BRep.BRep_Builder()
+        builder.MakeCompound(compound)
+        for brep in breps:
+            builder.Add(compound, brep.native_brep)
+        return cls.from_native(compound)
+
+    @classmethod
+    def from_cone(cls, cone: compas.geometry.Cone) -> "OCCBrep":
+        """
+        Construct a BRep from a COMPAS cone.
+
+        Parameters
+        ----------
+        cone : :class:`compas.geometry.Cone`
+
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
+
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def from_curves(cls, curves: list[compas.geometry.NurbsCurve]) -> "OCCBrep":
+        """
+        Construct a BRep from a set of curves.
+
+        Parameters
+        ----------
+        curves : list[:class:`compas.geometry.NurbsCurve`]
+
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
+
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> "OCCBrep":
+        """
+        Construct a BRep from a COMPAS cylinder.
+
+        Parameters
+        ----------
+        cylinder : :class:`compas.geometry.Cylinder`
+
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
+
+        """
+        height = cylinder.height
+        radius = cylinder.radius
+        frame = cylinder.frame
+        ax2 = frame_to_occ_ax2(frame)
+        ax2.Translate(vector_to_occ(frame.zaxis * (-0.5 * height)))
+        shape = BRepPrimAPI.BRepPrimAPI_MakeCylinder(ax2, radius, height).Shape()
+        return cls.from_native(shape)
+
+    @classmethod
+    def from_extrusion(
+        cls,
+        profile: Union[OCCBrepEdge, OCCBrepFace],
+        vector: Vector,
+        cap_ends: bool = False,
+    ) -> "OCCBrep":
+        """
+        Construct a BRep by extruding a closed curve along a direction vector.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        if cap_ends:
+            raise NotImplementedError
+
         brep = cls()
-        brep.native_brep = shape
+        brep.native_brep = BRepPrimAPI.BRepPrimAPI_MakePrism(
+            profile.occ_shape,
+            vector_to_occ(vector),
+        ).Shape()
+        return brep
+
+    @classmethod
+    def from_loft(cls, curves: list[OCCCurve], start: Optional[Point] = None, end: Optional[Point] = None) -> "OCCBrep":
+        """Construct a Brep by lofing through a sequence of curves.
+
+        Parameters
+        ----------
+        curves : list[:class:`OCCCurve`]
+            The loft curves.
+        start : :class:`Point`, optional
+            The start point of the loft.
+        end : :class:`Point`, optional
+            The end point of the loft.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        thru = BRepOffsetAPI.BRepOffsetAPI_ThruSections(False, False)
+        if start:
+            thru.AddVertex(OCCBrepVertex.from_point(start).native_vertex)
+        for curve in curves:
+            thru.AddWire(OCCBrepLoop.from_edges([OCCBrepEdge.from_curve(curve)]).occ_wire)
+        if end:
+            thru.AddVertex(OCCBrepVertex.from_point(end).native_vertex)
+        thru.Build()
+        return Brep.from_native(thru.Shape())
+
+    @classmethod
+    def from_mesh(cls, mesh: compas.datastructures.Mesh, solid: bool = True) -> "OCCBrep":
+        """
+        Construct a BRep from a COMPAS mesh.
+
+        Parameters
+        ----------
+        mesh : :class:`compas.datastructures.Mesh`
+            The input mesh.
+        solid : bool, optional
+            Flag indicating that if the resulting shape should be converted to a solid, if possible.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        shell = TopoDS.TopoDS_Shell()
+        builder = BRep.BRep_Builder()
+        builder.MakeShell(shell)
+        for face in mesh.faces():
+            points = mesh.face_polygon(face)
+            if len(points) == 3:
+                builder.Add(shell, triangle_to_face(points))
+            elif len(points) == 4:
+                builder.Add(shell, quad_to_face(points))
+            else:
+                builder.Add(shell, ngon_to_face(points))
+        brep = cls.from_native(shell)
+        brep.heal()
+        if solid:
+            brep.make_solid()
         return brep
 
     @classmethod
@@ -582,181 +761,9 @@ class OCCBrep(Brep):
             brep.make_solid()
         return brep
 
-    @classmethod
-    def from_curves(cls, curves: list[compas.geometry.NurbsCurve]) -> "OCCBrep":
-        """
-        Construct a BRep from a set of curves.
-
-        Parameters
-        ----------
-        curves : list[:class:`compas.geometry.NurbsCurve`]
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def from_box(cls, box: compas.geometry.Box) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS box.
-
-        Parameters
-        ----------
-        box : :class:`compas.geometry.Box`
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
-        yaxis = box.frame.yaxis.scaled(-0.5 * box.ysize)
-        zaxis = box.frame.zaxis.scaled(-0.5 * box.zsize)
-        frame = box.frame.transformed(Translation.from_vector(xaxis + yaxis + zaxis))
-        ax2 = frame_to_occ_ax2(frame)
-        shape = BRepPrimAPI.BRepPrimAPI_MakeBox(ax2, box.xsize, box.ysize, box.zsize).Shape()
-        return cls.from_native(shape)
-
-    @classmethod
-    def from_sphere(cls, sphere: compas.geometry.Sphere) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS sphere.
-
-        Parameters
-        ----------
-        sphere : :class:`compas.geometry.Sphere`
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        shape = BRepPrimAPI.BRepPrimAPI_MakeSphere(gp.gp_Pnt(*sphere.frame.point), sphere.radius).Shape()
-        return cls.from_native(shape)
-
-    @classmethod
-    def from_cylinder(cls, cylinder: compas.geometry.Cylinder) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS cylinder.
-
-        Parameters
-        ----------
-        cylinder : :class:`compas.geometry.Cylinder`
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        height = cylinder.height
-        radius = cylinder.radius
-        frame = cylinder.frame
-        ax2 = frame_to_occ_ax2(frame)
-        ax2.Translate(vector_to_occ(frame.zaxis * (-0.5 * height)))
-        shape = BRepPrimAPI.BRepPrimAPI_MakeCylinder(ax2, radius, height).Shape()
-        return cls.from_native(shape)
-
-    @classmethod
-    def from_cone(cls, cone: compas.geometry.Cone) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS cone.
-
-        Parameters
-        ----------
-        cone : :class:`compas.geometry.Cone`
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def from_torus(cls, torus: compas.geometry.Torus) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS torus.
-
-        Parameters
-        ----------
-        torus : :class:`compas.geometry.Torus`
-
-        Returns
-        -------
-        :class:`compas_occ.brep.OCCBrep`
-
-        """
-        frame = torus.frame
-        ax2 = frame_to_occ_ax2(frame)
-        shape = BRepPrimAPI.BRepPrimAPI_MakeTorus(ax2, torus.radius_axis, torus.radius_pipe).Shape()
-        return cls.from_native(shape)
-
-    @classmethod
-    def from_mesh(cls, mesh: compas.datastructures.Mesh, solid: bool = True) -> "OCCBrep":
-        """
-        Construct a BRep from a COMPAS mesh.
-
-        Parameters
-        ----------
-        mesh : :class:`compas.datastructures.Mesh`
-            The input mesh.
-        solid : bool, optional
-            Flag indicating that if the resulting shape should be converted to a solid, if possible.
-
-        Returns
-        -------
-        :class:`OCCBrep`
-
-        """
-        shell = TopoDS.TopoDS_Shell()
-        builder = BRep.BRep_Builder()
-        builder.MakeShell(shell)
-        for face in mesh.faces():
-            points = mesh.face_polygon(face)
-            if len(points) == 3:
-                builder.Add(shell, triangle_to_face(points))
-            elif len(points) == 4:
-                builder.Add(shell, quad_to_face(points))
-            else:
-                builder.Add(shell, ngon_to_face(points))
-        brep = cls.from_native(shell)
-        brep.heal()
-        if solid:
-            brep.make_solid()
-        return brep
-
-    @classmethod
-    def from_brepfaces(cls, faces: list[OCCBrepFace], solid: bool = True) -> "OCCBrep":
-        """
-        Make a BRep from a list of BRep faces forming an open or closed shell.
-
-        Parameters
-        ----------
-        faces : list[:class:`OCCBrepFace`]
-            The input faces.
-        solid : bool, optional
-            Flag indicating that if the resulting shape should be converted to a solid, if possible.
-
-        Returns
-        -------
-        :class:`OCCBrep`
-
-        """
-        shell = TopoDS.TopoDS_Shell()
-        builder = BRep.BRep_Builder()
-        builder.MakeShell(shell)
-        for face in faces:
-            if not face.is_valid():
-                face.fix()
-            builder.Add(shell, face.occ_face)
-        brep = cls.from_native(shell)
-        brep.heal()
-        if solid:
-            brep.make_solid()
-        return brep
+    # @classmethod
+    # def from_pipe(cls) -> "OCCBrep":
+    #     pass
 
     @classmethod
     def from_plane(
@@ -804,67 +811,40 @@ class OCCBrep(Brep):
         return cls.from_brepfaces(faces, solid=solid)
 
     @classmethod
-    def from_extrusion(
-        cls,
-        profile: Union[OCCBrepEdge, OCCBrepFace],
-        vector: Vector,
-        cap_ends: bool = False,
-    ) -> "OCCBrep":
+    def from_shape(cls, shape: TopoDS.TopoDS_Shape) -> "OCCBrep":
         """
-        Construct a BRep by extruding a closed curve along a direction vector.
+        Construct a BRep from an OCC shape.
 
-        References
+        Parameters
         ----------
-        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_prim_a_p_i___make_prism.html
+        shape : ``TopoDS_Shape``
+            The OCC shape.
 
-        """
-        if cap_ends:
-            raise NotImplementedError
-
-        brep = cls()
-        brep.native_brep = BRepPrimAPI.BRepPrimAPI_MakePrism(
-            profile.occ_shape,
-            vector_to_occ(vector),
-        ).Shape()
-        return brep
-
-    @classmethod
-    def from_sweep(
-        cls,
-        profile: Union[OCCBrepEdge, OCCBrepFace],
-        path: OCCBrepLoop,
-    ) -> "OCCBrep":
-        """
-        Construct a BRep by sweeping a profile along a path.
-
-        References
-        ----------
-        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_prim_a_p_i___make_sweep.html
-        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe.html
-        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe_shell.html
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
 
         """
         brep = cls()
-        brep.native_brep = BRepOffsetAPI.BRepOffsetAPI_MakePipe(
-            path.occ_wire,
-            profile.occ_shape,
-        ).Shape()
+        brep.native_brep = shape
         return brep
 
-    # create patch
-    # create offset
-
     @classmethod
-    def from_breps(cls, breps: list["OCCBrep"]) -> "OCCBrep":
+    def from_sphere(cls, sphere: compas.geometry.Sphere) -> "OCCBrep":
         """
-        Construct one compound BRep out of multiple individual BReps.
+        Construct a BRep from a COMPAS sphere.
+
+        Parameters
+        ----------
+        sphere : :class:`compas.geometry.Sphere`
+
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
+
         """
-        compound = TopoDS.TopoDS_Compound()
-        builder = BRep.BRep_Builder()
-        builder.MakeCompound(compound)
-        for brep in breps:
-            builder.Add(compound, brep.native_brep)
-        return cls.from_native(compound)
+        shape = BRepPrimAPI.BRepPrimAPI_MakeSphere(gp.gp_Pnt(*sphere.frame.point), sphere.radius).Shape()
+        return cls.from_native(shape)
 
     @classmethod
     def from_surface(
@@ -907,6 +887,51 @@ class OCCBrep(Brep):
             inside=inside,
         )
         return cls.from_brepfaces([face])
+
+    @classmethod
+    def from_sweep(
+        cls,
+        profile: Union[OCCBrepEdge, OCCBrepFace],
+        path: OCCBrepLoop,
+    ) -> "OCCBrep":
+        """
+        Construct a BRep by sweeping a profile along a path.
+
+        References
+        ----------
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_prim_a_p_i___make_sweep.html
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe.html
+        https://dev.opencascade.org/doc/occt-7.4.0/refman/html/class_b_rep_offset_a_p_i___make_pipe_shell.html
+
+        """
+        brep = cls()
+        brep.native_brep = BRepOffsetAPI.BRepOffsetAPI_MakePipe(
+            path.occ_wire,
+            profile.occ_shape,
+        ).Shape()
+        return brep
+
+    @classmethod
+    def from_torus(cls, torus: compas.geometry.Torus) -> "OCCBrep":
+        """
+        Construct a BRep from a COMPAS torus.
+
+        Parameters
+        ----------
+        torus : :class:`compas.geometry.Torus`
+
+        Returns
+        -------
+        :class:`compas_occ.brep.OCCBrep`
+
+        """
+        frame = torus.frame
+        ax2 = frame_to_occ_ax2(frame)
+        shape = BRepPrimAPI.BRepPrimAPI_MakeTorus(ax2, torus.radius_axis, torus.radius_pipe).Shape()
+        return cls.from_native(shape)
+
+    # create patch
+    # create offset
 
     # ==============================================================================
     # Boolean Constructors
@@ -1634,6 +1659,27 @@ class OCCBrep(Brep):
         self.sew()
         self.fix()
         self.make_positive()
+
+    def intersect(self, other: "OCCBrep") -> Union["OCCBrep", None]:
+        """Intersect this Brep with another.
+
+        Parameters
+        ----------
+        other : :class:`OCCBrep`
+            The other brep.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+            If it exists, the intersection is a curve
+            that can be accessed via the edges of the returned brep.
+
+        """
+        section = BRepAlgoAPI.BRepAlgoAPI_Section(self.occ_shape, other.occ_shape)
+        section.Build()
+        if section.IsDone():
+            occ_shape = section.Shape()
+            return OCCBrep.from_native(occ_shape)
 
     def make_positive(self):
         """Make the volume of a closed brep positive if it is not.
