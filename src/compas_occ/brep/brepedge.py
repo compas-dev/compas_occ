@@ -582,8 +582,7 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_circle:
             raise ValueError(f"The underlying geometry is not a circle: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        circle = curve.Circle()
+        circle = self.occ_adaptor.Circle()
         return circle_to_compas(circle)
 
     def to_ellipse(self) -> Ellipse:
@@ -603,8 +602,7 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_ellipse:
             raise ValueError(f"The underlying geometry is not an ellipse: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        ellipse = curve.Ellipse()
+        ellipse = self.occ_adaptor.Ellipse()
         return ellipse_to_compas(ellipse)
 
     def to_hyperbola(self) -> Hyperbola:
@@ -623,8 +621,7 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_hyperbola:
             raise ValueError(f"The underlying geometry is not a hyperbola: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        hyperbola = curve.Hyperbola()
+        hyperbola = self.occ_adaptor.Hyperbola()
         return hyperbola_to_compas(hyperbola)
 
     def to_parabola(self) -> Parabola:
@@ -643,8 +640,7 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_parabola:
             raise ValueError(f"The underlying geometry is not a parabola: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        parabola = curve.Parabola()
+        parabola = self.occ_adaptor.Parabola()
         return parabola_to_compas(parabola)
 
     def to_bezier(self) -> Bezier:
@@ -663,8 +659,7 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_bezier:
             raise ValueError(f"The underlying geometry is not a bezier: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        bezier = curve.Bezier()
+        bezier = self.occ_adaptor.Bezier()
         return bezier_to_compas(bezier)
 
     def to_bspline(self) -> NurbsCurve:
@@ -683,6 +678,5 @@ class OCCBrepEdge(BrepEdge):
         if not self.is_bspline:
             raise ValueError(f"The underlying geometry is not a bspline: {self.type}")
 
-        curve = self.occ_adaptor.Curve()
-        bspline = curve.BSpline()
+        bspline = self.occ_adaptor.BSpline()
         return bspline_to_compas(bspline)
