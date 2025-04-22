@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.conversions.circle_to_occ2d`.
+* Added `compas_occ.conversions.ellipse_to_occ2d`.
+* Added `compas_occ.conversions.frame_to_occ_ax22d`.
+* Added `compas_occ.conversions.line_to_occ2d`.
+* Added `compas_occ.conversions.direction_to_occ2d`.
+* Added `compas_occ.conversions.ax22d_to_compas`.
+* Added `compas_occ.conversions.ax2d_to_compas`.
+* Added `compas_occ.conversions.ax2d_to_compas_vector`.
+* Added `compas_occ.conversions.cylinder2d_to_compas`.
+* Added `compas_occ.conversions.direction2d_to_compas`.
+* Added `compas_occ.conversions.hyperbola2d_to_compas`.
+* Added `compas_occ.conversions.line2d_to_compas`.
+* Added `compas_occ.conversions.parabola2d_to_compas`.
+* Added `compas_occ.conversions.vector2d_to_compas`.
+* Added `compas_occ.brep.builder.OCCBrepBuilder`.
+* Added implementation of `compas_occ.brep.OCCBrepFace.__data__`.
+* Added implementation of `compas_occ.brep.OCCBrep.__data__`.
+* Added implementation of `compas_occ.brep.OCCBrep.__from_data__`.
+
 ### Changed
 
 ### Removed
