@@ -4,12 +4,14 @@ from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
+from OCC.Core import GeomAbs
 from OCC.Core import GProp
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopoDS
 
 import compas.geometry
+import compas_occ.conversions
 from compas.geometry import Bezier
 from compas.geometry import BrepEdge
 from compas.geometry import Circle
@@ -89,26 +91,7 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def __data__(self) -> dict:
-        if self.is_line:
-            curve = self.to_line()
-        elif self.is_circle:
-            curve = self.to_circle()
-        elif self.is_ellipse:
-            curve = self.to_ellipse()
-        elif self.is_hyperbola:
-            curve = self.to_hyperbola()
-        elif self.is_parabola:
-            curve = self.to_parabola()
-        else:
-            raise NotImplementedError
-        return {
-            "curve_type": self.type,
-            "curve": curve.__data__,  # type: ignore
-            "frame": curve.frame.__data__,  # type: ignore
-            "start_vertex": self.first_vertex.__data__,
-            "end_vertex": self.last_vertex.__data__,
-            "domain": curve.domain,  # type: ignore
-        }
+        raise NotImplementedError
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrepEdge":
@@ -192,37 +175,39 @@ class OCCBrepEdge(BrepEdge):
     def orientation(self) -> TopAbs.TopAbs_Orientation:
         return self.occ_edge.Orientation()
 
-    # @property
-    # def curve(self) -> OCCCurve:
-    #     if not self._curve:
-    #         occ_curve = self.occ_adaptor.Curve()
-    #         self._curve = OCCCurve(occ_curve)  # type: ignore
-    #     return self._curve
-
-    # # remove this if possible
-    # @property
-    # def nurbscurve(self) -> OCCNurbsCurve:
-    #     if not self._nurbscurve:
-    #         occ_curve = self.occ_adaptor.BSpline()
-    #         self._nurbscurve = OCCNurbsCurve(occ_curve)  # type: ignore
-    #     return self._nurbscurve
-
     @property
     def curve(self) -> compas.geometry.Curve:
-        if self.is_line:
-            return self.to_line()
-        if self.is_circle:
-            return self.to_circle()
-        if self.is_ellipse:
-            return self.to_ellipse()
-        if self.is_hyperbola:
-            return self.to_hyperbola()
-        if self.is_parabola:
-            return self.to_parabola()
-        if self.is_bezier:
-            return self.to_bezier()
-        if self.is_bspline:
-            return self.to_bspline()
+        if self.is_curve2d:
+            curve2 = self.occ_adaptor.CurveOnSurface().GetCurve()
+            ctype2 = curve2.GetType()
+
+            if ctype2 == CurveType.LINE:
+                return compas_occ.conversions.line2d_to_compas(curve2.Line())
+            if ctype2 == CurveType.CIRCLE:
+                return compas_occ.conversions.circle2d_to_compas(curve2.Circle())
+            if ctype2 == CurveType.ELLIPSE:
+                return compas_occ.conversions.ellipse2d_to_compas(curve2.Ellipse())
+            if ctype2 == CurveType.HYPERBOLA:
+                return compas_occ.conversions.hyperbola2d_to_compas(curve2.Hyperbola())
+            if ctype2 == CurveType.PARABOLA:
+                return compas_occ.conversions.parabola2d_to_compas(curve2.Parabola())
+
+        else:
+            if self.is_line:
+                return self.to_line()
+            if self.is_circle:
+                return self.to_circle()
+            if self.is_ellipse:
+                return self.to_ellipse()
+            if self.is_hyperbola:
+                return self.to_hyperbola()
+            if self.is_parabola:
+                return self.to_parabola()
+            if self.is_bezier:
+                return self.to_bezier()
+            if self.is_bspline:
+                return self.to_bspline()
+
         raise NotImplementedError
 
     # ==============================================================================
@@ -455,9 +440,7 @@ class OCCBrepEdge(BrepEdge):
     @classmethod
     def from_curve(
         cls,
-        curve: Optional[OCCCurve] = None,
-        curve2d: Optional[OCCCurve2d] = None,
-        surface: Optional[OCCSurface] = None,
+        curve: OCCCurve,
         params: Optional[tuple[float, float]] = None,
         points: Optional[tuple[Point, Point]] = None,
         vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
@@ -468,9 +451,59 @@ class OCCBrepEdge(BrepEdge):
         ----------
         curve : :class:`~compas_occ.geometry.OCCCurve`, optional
             The curve.
-        curve2d : :class:`~compas_occ.geometry.OCCCurve2d`, optional
-            The 2D curve.
-        surface : :class:`~compas_occ.geometry.OCCSurface`, optional
+        params : tuple of float, optional
+            The parameters of the curve.
+        points : tuple of :class:`compas.geometry.Point`, optional
+            The start and end points of the curve.
+        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+            The start and end vertices of the curve.
+
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
+
+        """
+        if points:
+            p1 = point_to_occ(points[0])
+            p2 = point_to_occ(points[1])
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2, *params)
+            else:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2)
+        elif vertices:
+            v1 = vertices[0].occ_vertex
+            v2 = vertices[1].occ_vertex
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2, *params)
+            else:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2)
+        else:
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, *params)
+            else:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve)
+
+        return cls(builder.Edge())
+
+    @classmethod
+    def from_curve_and_surface(
+        cls,
+        curve: OCCCurve,
+        surface: OCCSurface,
+        params: Optional[tuple[float, float]] = None,
+        points: Optional[tuple[Point, Point]] = None,
+        vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
+    ) -> "OCCBrepEdge":
+        """Construct an edge from a curve and a surface.
+
+        The curve will be projected onto the surface and embedded into its parameter space automatically.
+
+        Parameters
+        ----------
+        curve : :class:`~compas_occ.geometry.OCCCurve`
+            The curve.
+        surface : :class:`~compas_occ.geometry.OCCSurface`
             The surface.
         params : tuple of float, optional
             The parameters of the curve.
@@ -485,61 +518,58 @@ class OCCBrepEdge(BrepEdge):
             The constructed edge.
 
         """
-        if curve and curve2d:
-            raise ValueError("Providing both a 2D and a 3D curve is not possible.")
+        curve2d = curve.projected(surface).embedded(surface)
+        return cls.from_curve2d_and_surface(curve2d, surface, params=params, points=points, vertices=vertices)
 
-        if not curve and not curve2d:
-            raise ValueError("Not providing any input curve is not possible.")
+    @classmethod
+    def from_curve2d_and_surface(
+        cls,
+        curve2d: OCCCurve2d,
+        surface: OCCSurface,
+        params: Optional[tuple[float, float]] = None,
+        points: Optional[tuple[Point, Point]] = None,
+        vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
+    ) -> "OCCBrepEdge":
+        """Construct an edge from an embedded 2d curve and its embedding surface.
 
-        if surface:
-            if curve:
-                curve2d = curve.projected(surface).embedded(surface)
+        Parameters
+        ----------
+        curve2d : :class:`~compas_occ.geometry.OCCCurve2d`
+            The 2D curve.
+        surface : :class:`~compas_occ.geometry.OCCSurface`
+            The surface.
+        params : tuple of float, optional
+            The parameters of the curve.
+        points : tuple of :class:`compas.geometry.Point`, optional
+            The start and end points of the curve.
+        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+            The start and end vertices of the curve.
 
-            if not curve2d:
-                raise ValueError("No curve was provided.")
+        Returns
+        -------
+        :class:`~compas_occ.brep.BrepEdge`
+            The constructed edge.
 
-            if points:
-                p1 = point_to_occ(points[0])
-                p2 = point_to_occ(points[1])
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2)
-            elif vertices:
-                v1 = vertices[0].occ_vertex
-                v2 = vertices[1].occ_vertex
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2)
+        """
+        if points:
+            p1 = point_to_occ(points[0])
+            p2 = point_to_occ(points[1])
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2, *params)
             else:
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, p1, p2)
+        elif vertices:
+            v1 = vertices[0].occ_vertex
+            v2 = vertices[1].occ_vertex
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2, *params)
+            else:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, v1, v2)
         else:
-            if not curve:
-                raise ValueError("No curve was provided.")
-
-            if points:
-                p1 = point_to_occ(points[0])
-                p2 = point_to_occ(points[1])
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2)
-            elif vertices:
-                v1 = vertices[0].occ_vertex
-                v2 = vertices[1].occ_vertex
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2)
+            if params:
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface, *params)
             else:
-                if params:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, *params)
-                else:
-                    builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface)
 
         return cls(builder.Edge())
 

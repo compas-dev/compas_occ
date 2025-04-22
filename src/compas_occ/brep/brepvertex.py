@@ -26,13 +26,11 @@ class OCCBrepVertex(BrepVertex):
 
     @property
     def __data__(self) -> dict:
-        return {
-            "point": self.point.__data__,
-        }
+        raise NotImplementedError
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrepVertex":
-        return cls.from_point(Point.__from_data__(data["point"]))  # type: ignore
+        raise NotImplementedError
 
     def __init__(self, occ_vertex: TopoDS.TopoDS_Vertex):
         super().__init__()

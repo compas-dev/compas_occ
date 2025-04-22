@@ -56,19 +56,6 @@ class OCCBrepLoop(BrepLoop):
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrepLoop":
-        """Construct an object of this type from the provided data.
-
-        Parameters
-        ----------
-        data : dict
-            The data dictionary.
-
-        Returns
-        -------
-        :class:`OCCBrepLoop`
-            An instance of this object type if the data contained in the dict has the correct schema.
-
-        """
         raise NotImplementedError
 
     def __init__(self, occ_wire: TopoDS.TopoDS_Wire):
