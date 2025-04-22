@@ -10,41 +10,58 @@ from .arrays import floats2_from_array2
 
 from .geometry import axis_to_occ
 from .geometry import circle_to_occ
+from .geometry import circle_to_occ2d
 from .geometry import cone_to_occ
 from .geometry import cylinder_to_occ
 from .geometry import ellipse_to_occ
+from .geometry import ellipse_to_occ2d
 from .geometry import frame_to_occ_ax2
+from .geometry import frame_to_occ_ax22d
 from .geometry import frame_to_occ_ax3
 from .geometry import line_to_occ
+from .geometry import line_to_occ2d
 from .geometry import plane_to_occ
 from .geometry import plane_to_occ_ax2
 from .geometry import plane_to_occ_ax3
 from .geometry import point_to_occ
+from .geometry import point_to_occ2d
 from .geometry import sphere_to_occ
 from .geometry import torus_to_occ
 from .geometry import vector_to_occ
+from .geometry import vector_to_occ2d
 from .geometry import direction_to_occ
+from .geometry import direction_to_occ2d
 
+from .geometry import ax2_to_compas
+from .geometry import ax22d_to_compas
+from .geometry import ax3_to_compas
 from .geometry import axis_to_compas
-from .geometry import circle_to_compas
-from .geometry import cylinder_to_compas
-from .geometry import ellipse_to_compas
-from .geometry import hyperbola_to_compas
-from .geometry import parabola_to_compas
+from .geometry import axis_to_compas_vector
+from .geometry import axis2d_to_compas
+from .geometry import axis2d_to_compas_vector
 from .geometry import bezier_to_compas
 from .geometry import bspline_to_compas
-from .geometry import ax2_to_compas
-from .geometry import ax3_to_compas
-from .geometry import location_to_compas
+from .geometry import circle_to_compas
+from .geometry import circle2d_to_compas
+from .geometry import cylinder_to_compas
+from .geometry import direction_to_compas
+from .geometry import direction2d_to_compas
+from .geometry import ellipse_to_compas
+from .geometry import ellipse2d_to_compas
+from .geometry import hyperbola_to_compas
+from .geometry import hyperbola2d_to_compas
 from .geometry import line_to_compas
+from .geometry import line2d_to_compas
+from .geometry import location_to_compas
+from .geometry import parabola_to_compas
+from .geometry import parabola2d_to_compas
 from .geometry import plane_to_compas
 from .geometry import point_to_compas
 from .geometry import point2d_to_compas
-from .geometry import axis_to_compas_vector
-from .geometry import direction_to_compas
 from .geometry import vector_to_compas
 from .geometry import vector2d_to_compas
 from .geometry import sphere_to_compas
+
 from .geometry import aabb_to_compas
 from .geometry import obb_to_compas
 
@@ -65,20 +82,29 @@ __all__ = [
     "array2_from_points2",
     "aabb_to_compas",
     "axis_to_compas",
+    "axis2d_to_compas",
     "axis_to_compas_vector",
+    "axis2d_to_compas_vector",
     "ax2_to_compas",
+    "ax22d_to_compas",
     "ax3_to_compas",
     "bezier_to_compas",
     "bspline_to_compas",
     "circle_to_compas",
+    "circle2d_to_compas",
     "cylinder_to_compas",
     "direction_to_compas",
+    "direction2d_to_compas",
     "ellipse_to_compas",
+    "ellipse2d_to_compas",
     "hyperbola_to_compas",
+    "hyperbola2d_to_compas",
     "line_to_compas",
+    "line2d_to_compas",
     "location_to_compas",
     "obb_to_compas",
     "parabola_to_compas",
+    "parabola2d_to_compas",
     "plane_to_compas",
     "point_to_compas",
     "point2d_to_compas",
@@ -87,20 +113,27 @@ __all__ = [
     "vector2d_to_compas",
     "axis_to_occ",
     "circle_to_occ",
+    "circle_to_occ2d",
     "cone_to_occ",
     "cylinder_to_occ",
     "direction_to_occ",
+    "direction_to_occ2d",
     "ellipse_to_occ",
+    "ellipse_to_occ2d",
     "frame_to_occ_ax2",
+    "frame_to_occ_ax22d",
     "frame_to_occ_ax3",
     "line_to_occ",
+    "line_to_occ2d",
     "plane_to_occ_ax2",
     "plane_to_occ_ax3",
     "plane_to_occ",
     "point_to_occ",
+    "point_to_occ2d",
     "sphere_to_occ",
     "torus_to_occ",
     "vector_to_occ",
+    "vector_to_occ2d",
     "compas_transformation_to_trsf",
     "compas_mesh_to_occ_shell",
     "compas_quadmesh_to_occ_shell",

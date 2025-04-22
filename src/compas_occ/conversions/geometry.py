@@ -7,15 +7,23 @@ from OCC.Core.Geom import Geom_BezierCurve
 from OCC.Core.Geom import Geom_BSplineCurve
 from OCC.Core.gp import gp_Ax1
 from OCC.Core.gp import gp_Ax2
+from OCC.Core.gp import gp_Ax2d
 from OCC.Core.gp import gp_Ax3
+from OCC.Core.gp import gp_Ax22d
 from OCC.Core.gp import gp_Circ
+from OCC.Core.gp import gp_Circ2d
 from OCC.Core.gp import gp_Cone
 from OCC.Core.gp import gp_Cylinder
 from OCC.Core.gp import gp_Dir
+from OCC.Core.gp import gp_Dir2d
 from OCC.Core.gp import gp_Elips
+from OCC.Core.gp import gp_Elips2d
 from OCC.Core.gp import gp_Hypr
+from OCC.Core.gp import gp_Hypr2d
 from OCC.Core.gp import gp_Lin
+from OCC.Core.gp import gp_Lin2d
 from OCC.Core.gp import gp_Parab
+from OCC.Core.gp import gp_Parab2d
 from OCC.Core.gp import gp_Pln
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.gp import gp_Pnt2d
@@ -72,6 +80,30 @@ def point_to_occ(point: Point) -> gp_Pnt:
     return gp_Pnt(*point)
 
 
+def point_to_occ2d(point: Point) -> gp_Pnt2d:
+    """Convert a COMPAS point to a 2D OCC point.
+
+    Parameters
+    ----------
+    point : :class:`~compas.geometry.Point`
+        The COMPAS point to convert.
+
+    Returns
+    -------
+    ``gp_Pnt2d``
+
+    Examples
+    --------
+    >>> from compas.geometry import Point
+    >>> from compas_occ.conversions import point_to_occ2d
+    >>> point = Point(0, 0, 0)
+    >>> point_to_occ2d(point)
+    <class 'gp_Pnt2d'>
+
+    """
+    return gp_Pnt2d(point.x, point.y)
+
+
 def vector_to_occ(vector: Vector) -> gp_Vec:
     """Convert a COMPAS vector to an OCC vector.
 
@@ -100,6 +132,34 @@ def vector_to_occ(vector: Vector) -> gp_Vec:
     return gp_Vec(*vector)
 
 
+def vector_to_occ2d(vector: Vector) -> gp_Vec2d:
+    """Convert a COMPAS vector to a 2D OCC vector.
+
+    Parameters
+    ----------
+    vector : :class:`~compas.geometry.Vector`
+        The COMPAS vector to convert.
+
+    Returns
+    -------
+    ``gp_Vec``
+
+    See Also
+    --------
+    :func:`direction_to_occ2d`
+
+    Examples
+    --------
+    >>> from compas.geometry import Vector
+    >>> from compas_occ.conversions import vector_to_occ2d
+    >>> vector = Vector(1, 0, 0)
+    >>> vector_to_occ2d(vector)
+    <class 'gp_Vec2d'>
+
+    """
+    return gp_Vec2d(vector.x, vector.y)
+
+
 def direction_to_occ(vector: Vector) -> gp_Dir:
     """Convert a COMPAS vector to an OCC direction.
 
@@ -126,6 +186,34 @@ def direction_to_occ(vector: Vector) -> gp_Dir:
 
     """
     return gp_Dir(*vector)
+
+
+def direction_to_occ2d(vector: Vector) -> gp_Dir2d:
+    """Convert a COMPAS vector to a 2D OCC direction.
+
+    Parameters
+    ----------
+    vector : :class:`~compas.geometry.Vector`
+        The COMPAS vector to convert.
+
+    Returns
+    -------
+    ``gp_Dir2d``
+
+    See Also
+    --------
+    :func:`vector_to_occ2d`
+
+    Examples
+    --------
+    >>> from compas.geometry import Vector
+    >>> from compas_occ.conversions import direction_to_occ2d
+    >>> vector = Vector(1, 0, 0)
+    >>> direction_to_occ2d(vector)
+    <class 'gp_Dir2d'>
+
+    """
+    return gp_Dir2d(vector.x, vector.y)
 
 
 def axis_to_occ(axis: tuple[Point, Vector]) -> gp_Ax1:
@@ -188,6 +276,37 @@ def line_to_occ(line: Line) -> gp_Lin:
     return gp_Lin(
         point_to_occ(line.start),
         direction_to_occ(line.direction),
+    )
+
+
+def line_to_occ2d(line: Line) -> gp_Lin2d:
+    """Convert a COMPAS line to a 2D OCC line.
+
+    Parameters
+    ----------
+    line : :class:`~compas.geometry.Line`
+        The COMPAS line to convert.
+
+    Returns
+    -------
+    ``gp_Lin2d``
+
+    See Also
+    --------
+    :func:`axis_to_occ2d`
+
+    Examples
+    --------
+    >>> from compas.geometry import Line
+    >>> from compas_occ.conversions import line_to_occ2d
+    >>> line = Line([0, 0, 0], [1, 0, 0])
+    >>> line_to_occ2d(line)
+    <class 'gp_Lin2d'>
+
+    """
+    return gp_Lin2d(
+        point_to_occ2d(line.start),
+        direction_to_occ2d(line.direction),
     )
 
 
@@ -319,6 +438,34 @@ def frame_to_occ_ax2(frame: Frame) -> gp_Ax2:
     )
 
 
+def frame_to_occ_ax22d(frame: Frame) -> gp_Ax22d:
+    """Convert a COMPAS frame to a 2D right-handed OCC coordinate system.
+
+    Parameters
+    ----------
+    frame : :class:`compas.geometry.Frame`
+        The COMPAS frame.
+
+    Returns
+    -------
+    ``gp_Ax22d``
+
+    Examples
+    --------
+    >>> from compas.geometry import Frame
+    >>> from compas_occ.conversions import frame_to_occ_ax22d
+    >>> frame = Frame.worldXY()
+    >>> frame_to_occ_ax22d(frame)
+    <class 'gp_Ax22d'>
+
+    """
+    return gp_Ax22d(
+        point_to_occ2d(frame.point),
+        direction_to_occ2d(frame.xaxis),
+        direction_to_occ2d(frame.yaxis),
+    )
+
+
 def frame_to_occ_ax3(frame: Frame) -> gp_Ax3:
     """Convert a COMPAS frame to a right-handed OCC coordinate system.
 
@@ -382,6 +529,37 @@ def circle_to_occ(circle: Circle) -> gp_Circ:
     )
 
 
+def circle_to_occ2d(circle: Circle) -> gp_Circ2d:
+    """Convert a COMPAS circle to a 2D OCC circle.
+
+    Parameters
+    ----------
+    circle : :class:`compas.geometry.Circle`
+        The COMPAS circle.
+
+    Returns
+    -------
+    ``gp_Circ2d``
+
+    See Also
+    --------
+    :func:`ellipse_to_occ2d`
+
+    Examples
+    --------
+    >>> from compas.geometry import Circle
+    >>> from compas_occ.conversions import circle_to_occ2d
+    >>> circle = Circle(1)
+    >>> circle_to_occ2d(circle)
+    <class 'gp_Circ2d'>
+
+    """
+    return gp_Circ2d(
+        frame_to_occ_ax22d(circle.frame),
+        circle.radius,
+    )
+
+
 def ellipse_to_occ(ellipse: Ellipse) -> gp_Elips:
     """Construct an OCC ellipse from a COMPAS ellipse.
 
@@ -409,6 +587,38 @@ def ellipse_to_occ(ellipse: Ellipse) -> gp_Elips:
     """
     return gp_Elips(
         frame_to_occ_ax2(ellipse.frame),
+        ellipse.major,
+        ellipse.minor,
+    )
+
+
+def ellipse_to_occ2d(ellipse: Ellipse) -> gp_Elips2d:
+    """Convert a COMPAS ellipse to a 2D OCC ellipse.
+
+    Parameters
+    ----------
+    ellipse : :class:`compas.geometry.Ellipse`
+        The COMPAS ellipse.
+
+    Returns
+    -------
+    ``gp_Elips2d``
+
+    See Also
+    --------
+    :func:`circle_to_occ2d`
+
+    Examples
+    --------
+    >>> from compas.geometry import Ellipse
+    >>> from compas_occ.conversions import ellipse_to_occ2d
+    >>> ellipse = Ellipse(1, 0.5)
+    >>> ellipse_to_occ2d(ellipse)
+    <class 'gp_Elips2d'>
+
+    """
+    return gp_Elips2d(
+        frame_to_occ_ax22d(ellipse.frame),
         ellipse.major,
         ellipse.minor,
     )
@@ -729,6 +939,42 @@ def direction_to_compas(
     return cls(vector.X(), vector.Y(), vector.Z())
 
 
+def direction2d_to_compas(
+    direction: gp_Dir2d,
+    cls: Optional[Type[Vector]] = None,
+) -> Vector:
+    """Construct a COMPAS vector from a 2D OCC direction.
+
+    Parameters
+    ----------
+    direction : ``gp_Dir2d``
+        The OCC direction.
+    cls : Type[:class:`~compas.geometry.Vector`], optional
+        The type of COMPAS vector.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Vector`
+
+    See Also
+    --------
+    :func:`vector_to_compas`
+    :func:`vector2d_to_compas`
+    :func:`axis_to_compas_vector`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Dir2d
+    >>> from compas_occ.conversions import direction2d_to_compas
+    >>> vector = gp_Dir2d(1, 0)
+    >>> direction2d_to_compas(vector)
+    Vector(x=1.0, y=0.0, z=0.0)
+
+    """
+    cls = cls or Vector
+    return cls(direction.X(), direction.Y(), 0)
+
+
 def axis_to_compas_vector(
     axis: gp_Ax1,
     cls: Optional[Type[Vector]] = None,
@@ -764,6 +1010,41 @@ def axis_to_compas_vector(
     return direction_to_compas(axis.Direction(), cls=cls)
 
 
+def axis2d_to_compas_vector(
+    axis: gp_Ax2d,
+    cls: Optional[Type[Vector]] = None,
+) -> Vector:
+    """Convert a 2D OCC axis to a COMPAS vector.
+
+    Parameters
+    ----------
+    axis : ``gp_Ax1``
+        The OCC axis.
+    cls : Type[:class:`compas.geometry.Vector`], optional
+        The type of COMPAS vector.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Vector`
+
+    See Also
+    --------
+    :func:`direction_to_compas`
+    :func:`vector_to_compas`
+    :func:`vector2d_to_compas`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Ax1
+    >>> from compas_occ.conversions import axis_to_compas_vector
+    >>> axis = gp_Ax2d(gp_Pnt2d(0, 0), gp_Dir2d(1, 0))
+    >>> axis2d_to_compas_vector(axis)
+    Vector(x=1.0, y=0.0, z=0.0)
+
+    """
+    return direction2d_to_compas(axis.Direction(), cls=cls)
+
+
 def axis_to_compas(axis: gp_Ax1) -> tuple[Point, Vector]:
     """Convert an OCC axis to a tuple of COMPAS point and vector.
 
@@ -791,6 +1072,36 @@ def axis_to_compas(axis: gp_Ax1) -> tuple[Point, Vector]:
     """
     point = point_to_compas(axis.Location())
     vector = direction_to_compas(axis.Direction())
+    return point, vector
+
+
+def axis2d_to_compas(axis: gp_Ax2d) -> tuple[Point, Vector]:
+    """Convert a 2D OCC axis to a tuple of COMPAS point and vector.
+
+    Parameters
+    ----------
+    axis : ``gp_Ax2d``
+        The OCC axis.
+
+    Returns
+    -------
+    tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
+
+    See Also
+    --------
+    :func:`axis_to_compas_vector`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax2d
+    >>> from compas_occ.conversions import axis2d_to_compas
+    >>> axis = gp_Ax2d(gp_Pnt2d(0, 0), gp_Dir2d(1, 0))
+    >>> axis2d_to_compas(axis)
+    (Point(x=0.0, y=0.0, z=0.0), Vector(x=1.0, y=0.0, z=0.0))
+
+    """
+    point = point2d_to_compas(axis.Location())
+    vector = direction2d_to_compas(axis.Direction())
     return point, vector
 
 
@@ -827,6 +1138,42 @@ def line_to_compas(
     cls = cls or Line
     point = point_to_compas(lin.Location())
     vector = direction_to_compas(lin.Direction())
+    return cls(point, point + vector)
+
+
+def line2d_to_compas(
+    lin: gp_Lin2d,
+    cls: Optional[Type[Line]] = None,
+) -> Line:
+    """Convert a 2D OCC line to a COMPAS line.
+
+    Parameters
+    ----------
+    lin : ``gp_Lin``
+        The OCC line.
+    cls : Type[:class:`~compas.geometry.Line`], optional
+        The type of COMPAS line.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Line`
+
+    See Also
+    --------
+    :func:`line_to_occ2d`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Lin2d
+    >>> from compas_occ.conversions import line2d_to_compas
+    >>> line = gp_Lin2d(gp_Pnt(0, 0), gp_Dir2d(1, 0))
+    >>> line2d_to_compas(line)
+    Line(Point(x=0.0, y=0.0, z=0.0), Point(x=1.0, y=0.0, z=0.0))
+
+    """
+    cls = cls or Line
+    point = point2d_to_compas(lin.Location())
+    vector = direction2d_to_compas(lin.Direction())
     return cls(point, point + vector)
 
 
@@ -902,6 +1249,44 @@ def ax2_to_compas(
         point_to_compas(position.Location()),
         direction_to_compas(position.XDirection()),
         direction_to_compas(position.YDirection()),
+    )
+
+
+def ax22d_to_compas(
+    position: gp_Ax22d,
+    cls: Optional[Type[Frame]] = None,
+) -> Frame:
+    """Construct a COMPAS frame from a 2D OCC position.
+
+    Parameters
+    ----------
+    position : ``gp_Ax22d``
+        The OCC position.
+    cls : Type[:class:`~compas.geometry.Frame`], optional
+        The type of COMPAS frame.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Frame`
+
+    See Also
+    --------
+    :func:`ax3_to_compas`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d
+    >>> from compas_occ.conversions import ax22d_to_compas
+    >>> ax2 = gp_Ax22d(gp_Pnt2d(0, 0), gp_Dir2d(0, 1), gp_Dir2d(1, 0))
+    >>> ax22d_to_compas(ax2)
+    Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=0.0, y=1.0, z=0.0), yaxis=Vector(x=1.0, y=0.0, z=0.0))
+
+    """
+    cls = cls or Frame
+    return cls(
+        point2d_to_compas(position.Location()),
+        direction2d_to_compas(position.XDirection()),
+        direction2d_to_compas(position.YDirection()),
     )
 
 
@@ -1012,6 +1397,45 @@ def circle_to_compas(
     return cls(radius, frame=frame)
 
 
+def circle2d_to_compas(
+    circ: gp_Circ2d,
+    cls: Optional[Type[Circle]] = None,
+) -> Circle:
+    """Construct a COMPAS circle from a 2D OCC circle.
+
+    Parameters
+    ----------
+    circ : ``gp_Circ2d``
+        The OCC circle.
+    cls : Type[:class:`~compas.geometry.Circle`], optional
+        The type of COMPAS circle.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Circle`
+
+    See Also
+    --------
+    :func:`ellipse2d_to_compas`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d, gp_Circ2d
+    >>> from compas_occ.conversions import circle2d_to_compas
+    >>> ax2 = gp_Ax22d(gp_Pnt2d(0, 0), gp_Dir2d(0, 1), gp_Dir2d(1, 0))
+    >>> circ = gp_Circ2d(ax2, 1)
+    >>> circle2d_to_compas(circ)  # doctest: +ELLIPSIS
+    Circle(radius=1.0, frame=Frame(...)
+
+    """
+    cls = cls or Circle
+    point = point2d_to_compas(circ.Location())
+    frame = ax22d_to_compas(circ.Position())
+    frame.point = point
+    radius = circ.Radius()
+    return cls(radius, frame=frame)
+
+
 def ellipse_to_compas(
     elips: gp_Elips,
     cls: Optional[Type[Ellipse]] = None,
@@ -1052,6 +1476,46 @@ def ellipse_to_compas(
     return cls(major, minor, frame=frame)
 
 
+def ellipse2d_to_compas(
+    elips: gp_Elips2d,
+    cls: Optional[Type[Ellipse]] = None,
+) -> Ellipse:
+    """Construc a COMPAS ellipse from a 2D OCC ellipse.
+
+    Parameters
+    ----------
+    elips : ``gp_Elips2d``
+        The OCC ellipse.
+    cls : Type[:class:`~compas.geometry.Ellipse`], optional
+        The type of COMPAS ellipse.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Ellipse`
+
+    See Also
+    --------
+    :func:`circle2d_to_compas`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d, gp_Elips2d
+    >>> from compas_occ.conversions import ellipse_to_compas
+    >>> ax2 = gp_Ax22d(gp_Pnt2d(0, 0), gp_Dir2d(0, 1), gp_Dir2d(1, 0))
+    >>> elips = gp_Elips2d(ax2, 1, 0.5)
+    >>> ellipse2d_to_compas(elips)  # doctest: +ELLIPSIS
+    Ellipse(major=1.0, minor=0.5, frame=Frame(...))
+
+    """
+    cls = cls or Ellipse
+    point = point2d_to_compas(elips.Location())
+    frame = ax22d_to_compas(elips.Axis())
+    frame.point = point
+    major = elips.MajorRadius()
+    minor = elips.MinorRadius()
+    return cls(major, minor, frame=frame)
+
+
 def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
     """Construct a COMPAS hyperbola from an OCC hyperbola.
 
@@ -1082,6 +1546,36 @@ def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
     return Hyperbola(major, minor, frame=frame)
 
 
+def hyperbola2d_to_compas(hypr: gp_Hypr2d) -> Hyperbola:
+    """Construct a COMPAS hyperbola from a 2D OCC hyperbola.
+
+    Parameters
+    ----------
+    hypr : ``gp_Hypr2d``
+        The OCC hyperbola.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Hyperbola`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d, gp_Hypr2d
+    >>> from compas_occ.conversions import hyperbola_to_compas
+    >>> ax2 = gp_Ax22d(gp_Pnt2d(0, 0), gp_Dir2d(0, 1), gp_Dir2d(1, 0))
+    >>> hypr = gp_Hypr2d(ax2, 1, 0.5)
+    >>> hyperbola2d_to_compas(hypr)  # doctest: +ELLIPSIS
+    Hyperbola(major=1.0, minor=0.5, frame=Frame(...))
+
+    """
+    point = point2d_to_compas(hypr.Location())
+    frame = ax22d_to_compas(hypr.Axis())
+    frame.point = point
+    major = hypr.MajorRadius()
+    minor = hypr.MinorRadius()
+    return Hyperbola(major, minor, frame=frame)
+
+
 def parabola_to_compas(parab: gp_Parab) -> Parabola:
     """Construct a COMPAS parabola from an OCC parabola.
 
@@ -1106,6 +1600,35 @@ def parabola_to_compas(parab: gp_Parab) -> Parabola:
     """
     point = point_to_compas(parab.Location())
     frame = ax2_to_compas(parab.Position())
+    frame.point = point
+    length = parab.Parameter()
+    return Parabola(length, frame=frame)
+
+
+def parabola2d_to_compas(parab: gp_Parab2d) -> Parabola:
+    """Construct a COMPAS parabola from a 2D OCC parabola.
+
+    Parameters
+    ----------
+    parab : ``gp_Parab2d``
+        The OCC parabola.
+
+    Returns
+    -------
+    :class:`~compas.geometry.Parabola`
+
+    Examples
+    --------
+    >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d, gp_Parab2d
+    >>> from compas_occ.conversions import parabola_to_compas
+    >>> ax2 = gp_Ax22d(gp_Pnt2d(0, 0), gp_Dir2d(0, 1), gp_Dir2d(1, 0))
+    >>> parab = gp_Parab2d(ax2, 1)
+    >>> parabola2d_to_compas(parab)  # doctest: +ELLIPSIS
+    Parabola(focal=2.0, frame=Frame(...))
+
+    """
+    point = point2d_to_compas(parab.Location())
+    frame = ax22d_to_compas(parab.Axis())
     frame.point = point
     length = parab.Parameter()
     return Parabola(length, frame=frame)
