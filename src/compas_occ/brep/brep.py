@@ -97,12 +97,9 @@ class OCCBrep(Brep):
     @property
     def __data__(self) -> dict:
         return {
-            "points": [],
-            "curves": [],
-            "surfaces": [],
-            "vertices": [v.__data__ for v in self.vertices],
-            "edges": [e.__data__ for e in self.edges],
-            "faces": [f.__data__ for f in self.faces],
+            # "vertices": [vertex.__data__ for vertex in self.vertices],
+            # "edges": [edge.__data__ for edge in self.edges],
+            "faces": [face.__data__ for face in self.faces],
         }
 
     @classmethod
@@ -119,7 +116,11 @@ class OCCBrep(Brep):
         :class:`compas_occ.geometry.OCCBrep`
 
         """
-        raise NotImplementedError
+        from .builder import OCCBrepBuilder
+
+        builder = OCCBrepBuilder()
+        brep = builder.build(data["faces"])
+        return brep
 
     def __init__(self) -> None:
         super().__init__()

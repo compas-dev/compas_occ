@@ -5,6 +5,8 @@ from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
 from OCC.Core import BRepTools
+from OCC.Core import Geom
+from OCC.Core import Geom2d
 from OCC.Core import GeomAbs
 from OCC.Core import GeomConvert
 from OCC.Core import GProp
@@ -15,10 +17,20 @@ from OCC.Core import TopoDS
 from OCC.Core import gp
 
 import compas.geometry
+import compas_occ.conversions
+from compas.geometry import Bezier
+from compas.geometry import BrepEdge
 from compas.geometry import BrepFace
+from compas.geometry import Circle
 from compas.geometry import Cone
 from compas.geometry import Cylinder
+from compas.geometry import Ellipse
 from compas.geometry import Frame
+from compas.geometry import Hyperbola
+from compas.geometry import Line
+from compas.geometry import NurbsCurve
+from compas.geometry import NurbsSurface
+from compas.geometry import Parabola
 from compas.geometry import Plane
 from compas.geometry import Polygon
 from compas.geometry import Sphere
@@ -27,6 +39,7 @@ from compas.geometry import Torus
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepLoop
 from compas_occ.brep import OCCBrepVertex
+from compas_occ.brep.brepedge import CurveType
 from compas_occ.conversions import cone_to_occ
 from compas_occ.conversions import cylinder_to_compas
 from compas_occ.conversions import cylinder_to_occ
@@ -36,6 +49,7 @@ from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import sphere_to_compas
 from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
+from compas_occ.geometry import OCCCurve2d
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
 
@@ -66,14 +80,64 @@ class OCCBrepFace(BrepFace):
 
     @property
     def __data__(self) -> dict:
-        return {
+        loops = []
+        for loop in self.loops:
+            edges = []
+            for edge in loop.edges:
+                edgedata = {
+                    "type": edge.type,
+                    "curve": edge.curve,
+                    "domain": edge.domain,
+                    "start": edge.first_vertex.point,
+                    "end": edge.last_vertex.point,
+                    "orientation": edge.orientation,
+                    "dimension": 3,
+                }
+                if edge.type == CurveType.CURVE2D:
+                    adaptor2 = BRepAdaptor.BRepAdaptor_Curve2d(edge.occ_edge, self.occ_face)
+                    type2 = adaptor2.GetType()
+
+                    if type2 == GeomAbs.GeomAbs_CurveType.GeomAbs_Line:
+                        ctype = CurveType.LINE
+                        curve = compas_occ.conversions.line2d_to_compas(adaptor2.Line())
+
+                    elif type2 == GeomAbs.GeomAbs_CurveType.GeomAbs_Circle:
+                        ctype = CurveType.CIRCLE
+                        curve = compas_occ.conversions.circle2d_to_compas(adaptor2.Circle())
+
+                    elif type2 == GeomAbs.GeomAbs_CurveType.GeomAbs_Ellipse:
+                        ctype = CurveType.ELLIPSE
+                        curve = compas_occ.conversions.ellipse2d_to_compas(adaptor2.Ellipse())
+
+                    elif type2 == GeomAbs.GeomAbs_CurveType.GeomAbs_Hyperbola:
+                        ctype = CurveType.HYPERBOLA
+                        curve = compas_occ.conversions.hyperbola2d_to_compas(adaptor2.Hyperbola())
+
+                    elif type2 == GeomAbs.GeomAbs_CurveType.GeomAbs_Parabola:
+                        ctype = CurveType.PARABOLA
+                        curve = compas_occ.conversions.parabola2d_to_compas(adaptor2.Parabola())
+
+                    else:
+                        raise NotImplementedError
+
+                    edgedata["type"] = ctype
+                    edgedata["curve"] = curve
+                    edgedata["domain"] = [adaptor2.FirstParameter(), adaptor2.LastParameter()]
+                    edgedata["dimension"] = 2
+
+                edges.append(edgedata)
+            loops.append(edges)
+
+        data = {
             "type": self.type,
-            "surface": self.surface.__data__,
+            "surface": self.surface,
             "domain_u": self.domain_u,
             "domain_v": self.domain_v,
-            "frame": Frame.worldXY().__data__,
-            "loops": [self.outerloop.__data__] + [loop.__data__ for loop in self.innerloops],
+            "frame": Frame.worldXY(),
+            "loops": loops,
+            "orientation": self.orientation,
         }
+        return data
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrepFace":
@@ -172,13 +236,6 @@ class OCCBrepFace(BrepFace):
     def orientation(self) -> TopAbs.TopAbs_Orientation:
         return self.occ_face.Orientation()
 
-    # @property
-    # def surface(self) -> OCCSurface:
-    #     if not self._surface:
-    #         occ_surface = self.occ_adaptor.Surface().Surface()  # this is weird
-    #         self._surface = OCCSurface(occ_surface)
-    #     return self._surface
-
     # remove this if possible
     @property
     def nurbssurface(self) -> OCCNurbsSurface:
@@ -199,8 +256,8 @@ class OCCBrepFace(BrepFace):
             return self.to_sphere()
         if self.is_torus:
             return self.to_torus()
-        # if self.is_bspline:
-        #     return self.to_nurbs()
+        if self.is_bspline:
+            return self.to_nurbs()
         raise NotImplementedError
 
     # ==============================================================================
@@ -232,10 +289,15 @@ class OCCBrepFace(BrepFace):
         return self.type == SurfaceType.CONE
 
     @property
+    def is_bezier(self) -> bool:
+        return self.type == SurfaceType.BEZIER_SURFACE
+
+    @property
     def is_bspline(self) -> bool:
         return self.type == SurfaceType.BSPLINE_SURFACE
 
-    # bezier
+    # other types of surfaces:
+    # -----------------------
     # revolved
     # extruded
     # offset
@@ -575,8 +637,7 @@ class OCCBrepFace(BrepFace):
         if not self.is_plane:
             raise Exception("Face is not a plane.")
 
-        surface = self.occ_adaptor.Surface()
-        plane = surface.Plane()
+        plane = self.occ_adaptor.Plane()
         return plane_to_compas(plane)
 
     def to_cylinder(self) -> Cylinder:
@@ -591,8 +652,7 @@ class OCCBrepFace(BrepFace):
         if not self.is_cylinder:
             raise Exception("Face is not a cylinder.")
 
-        surface = self.occ_adaptor.Surface()
-        cylinder = surface.Cylinder()
+        cylinder = self.occ_adaptor.Cylinder()
         return cylinder_to_compas(cylinder)
 
     def to_cone(self) -> Cone:
@@ -604,12 +664,6 @@ class OCCBrepFace(BrepFace):
         :class:`compas.geometry.Cone`
 
         """
-        # if not self.is_cone:
-        #     raise Exception("Face is not a cone.")
-
-        # surface = self.occ_adaptor.Surface()
-        # cone = surface.Cone()
-        # return cone_to_compas(cone)  # noqa: F821
         raise NotImplementedError
 
     def to_sphere(self) -> Sphere:
@@ -624,8 +678,7 @@ class OCCBrepFace(BrepFace):
         if not self.is_sphere:
             raise Exception("Face is not a sphere.")
 
-        surface = self.occ_adaptor.Surface()
-        sphere = surface.Sphere()
+        sphere = self.occ_adaptor.Sphere()
         return sphere_to_compas(sphere)
 
     def to_torus(self) -> Torus:
@@ -637,13 +690,22 @@ class OCCBrepFace(BrepFace):
         :class:`compas.geometry.Torus`
 
         """
-        # if not self.is_torus:
-        #     raise Exception("Face is not a torus.")
-
-        # surface = self.occ_adaptor.Surface()
-        # torus = surface.Torus()
-        # return torus_to_compas(torus)  # noqa: F821
         raise NotImplementedError
+
+    def to_nurbs(self) -> NurbsSurface:
+        """
+        Convert the face surface geometry to a torus.
+
+        Returns
+        -------
+        :class:`compas.geometry.NurbsSurface`
+
+        """
+        if not self.is_bspline:
+            raise Exception("Face is not a nurbs surface.")
+
+        bspline = self.occ_adaptor.BSpline()
+        return NurbsSurface.from_native(bspline)
 
     # ==============================================================================
     # Methods
