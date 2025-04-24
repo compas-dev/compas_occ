@@ -59,7 +59,7 @@
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="OCCBrepEdge.from_ellipse" href="compas_occ.brep.OCCBrepEdge.from_ellipse.html" />
+    <link rel="next" title="OCCBrepEdge.from_curve2d_and_surface" href="compas_occ.brep.OCCBrepEdge.from_curve2d_and_surface.html" />
     <link rel="prev" title="OCCBrepEdge.from_circle" href="compas_occ.brep.OCCBrepEdge.from_circle.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -659,16 +659,12 @@ document.write(`
 <h1>OCCBrepEdge.from_curve</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.brep.OCCBrepEdge.from_curve">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">OCCBrepEdge.</span></span><span class="sig-name descname"><span class="pre">from_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">OCCBrepEdge.</span></span><span class="sig-name descname"><span class="pre">from_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curve</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Construct an edge from a curve.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>curve</strong><span class="classifier"><a class="reference internal" href="compas_occ.geometry.OCCCurve.html#compas_occ.geometry.OCCCurve" title="compas_occ.geometry.OCCCurve"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCCurve</span></code></a>, optional</span></dt><dd><p>The curve.</p>
-</dd>
-<dt><strong>curve2d</strong><span class="classifier"><a class="reference internal" href="compas_occ.geometry.OCCCurve2d.html#compas_occ.geometry.OCCCurve2d" title="compas_occ.geometry.OCCCurve2d"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCCurve2d</span></code></a>, optional</span></dt><dd><p>The 2D curve.</p>
-</dd>
-<dt><strong>surface</strong><span class="classifier"><a class="reference internal" href="compas_occ.geometry.OCCSurface.html#compas_occ.geometry.OCCSurface" title="compas_occ.geometry.OCCSurface"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCSurface</span></code></a>, optional</span></dt><dd><p>The surface.</p>
 </dd>
 <dt><strong>params</strong><span class="classifier">tuple of float, optional</span></dt><dd><p>The parameters of the curve.</p>
 </dd>
