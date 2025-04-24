@@ -1166,7 +1166,7 @@ def line2d_to_compas(
     --------
     >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Lin2d
     >>> from compas_occ.conversions import line2d_to_compas
-    >>> line = gp_Lin2d(gp_Pnt(0, 0), gp_Dir2d(1, 0))
+    >>> line = gp_Lin2d(gp_Pnt2d(0, 0), gp_Dir2d(1, 0))
     >>> line2d_to_compas(line)
     Line(Point(x=0.0, y=0.0, z=0.0), Point(x=1.0, y=0.0, z=0.0))
 
@@ -1239,7 +1239,7 @@ def ax2_to_compas(
     --------
     >>> from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Ax2
     >>> from compas_occ.conversions import ax2_to_compas
-    >>> ax2 = gp_Ax2(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1), gp_Dir(1, 0, 0))
+    >>> ax2 = gp_Ax2(gp_Pnt2d(0, 0), gp_Dir2d(1, 0), gp_Dir2d(0, 1))
     >>> ax2_to_compas(ax2)
     Frame(point=Point(x=0.0, y=0.0, z=0.0), xaxis=Vector(x=1.0, y=0.0, z=0.0), yaxis=Vector(x=0.0, y=1.0, z=0.0))
 
