@@ -2,6 +2,7 @@ import pathlib
 from typing import Optional
 from typing import Union
 
+from OCC.Core import APIHeaderSection
 from OCC.Core import Bnd
 from OCC.Core import BOPAlgo
 from OCC.Core import BRep
@@ -15,6 +16,7 @@ from OCC.Core import BRepGProp
 from OCC.Core import BRepMesh
 from OCC.Core import BRepOffsetAPI
 from OCC.Core import BRepPrimAPI
+from OCC.Core import BRepTools
 from OCC.Core import GProp
 from OCC.Core import IFSelect
 from OCC.Core import IGESControl
@@ -23,6 +25,7 @@ from OCC.Core import ShapeFix
 from OCC.Core import ShapeUpgrade
 from OCC.Core import STEPControl
 from OCC.Core import StlAPI
+from OCC.Core import TCollection
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopLoc
@@ -97,8 +100,8 @@ class OCCBrep(Brep):
     @property
     def __data__(self) -> dict:
         return {
-            # "vertices": [vertex.__data__ for vertex in self.vertices],
-            # "edges": [edge.__data__ for edge in self.edges],
+            "vertices": [vertex.__data__ for vertex in self.vertices],
+            "edges": [edge.__data__ for edge in self.edges],
             "faces": [face.__data__ for face in self.faces],
         }
 
@@ -130,6 +133,12 @@ class OCCBrep(Brep):
         self._faces = None
         self._shells = None
         self._solids = None
+
+        self._aabb = None
+        self._obb = None
+        self._area = None
+        self._volume = None
+        self._centroid = None
 
     def copy(self) -> "OCCBrep":
         """Deep-copy this BRep using the native OCC copying mechanism.
@@ -232,11 +241,11 @@ class OCCBrep(Brep):
     @property
     def points(self) -> list[Point]:
         points = []
-        seen = []
+        # seen = []
         for vertex in self.vertices:
-            if any(vertex.is_same(test) for test in seen):
-                continue
-            seen.append(vertex)
+            # if any(vertex.is_same(test) for test in seen):
+            #     continue
+            # seen.append(vertex)
             points.append(vertex.point)
         return points
 
@@ -346,22 +355,28 @@ class OCCBrep(Brep):
 
     @property
     def area(self) -> float:
+        # if self._area is None:
         props = GProp.GProp_GProps()
         BRepGProp.brepgprop.SurfaceProperties(self.native_brep, props)
-        return props.Mass()
+        self._area = props.Mass()
+        return self._area
 
     @property
     def volume(self) -> float:
+        # if self._volume is None:
         props = GProp.GProp_GProps()
         BRepGProp.brepgprop.VolumeProperties(self.occ_shape, props)
-        return props.Mass()
+        self._volume = props.Mass()
+        return self._volume
 
     @property
     def centroid(self) -> Point:
+        # if self._centroid is None:
         props = GProp.GProp_GProps()
         BRepGProp.brepgprop.VolumeProperties(self.occ_shape, props)
         pnt = props.CentreOfMass()
-        return point_to_compas(pnt)
+        self._centroid = point_to_compas(pnt)
+        return self._centroid
 
     @property
     def aabb(self) -> Box:
@@ -384,7 +399,7 @@ class OCCBrep(Brep):
     # ==============================================================================
 
     @classmethod
-    def from_step(cls, filename: Union[str, pathlib.Path], solid: bool = True) -> "OCCBrep":
+    def from_step(cls, filename: Union[str, pathlib.Path], heal: bool = False, solid: bool = False) -> "OCCBrep":
         """
         Conctruct a BRep from the data contained in a STEP file.
 
@@ -400,9 +415,10 @@ class OCCBrep(Brep):
         :class:`compas_occ.brep.OCCBrep`
 
         """
-        shape = DataExchange.read_step_file(str(filename))
+        shape = DataExchange.read_step_file(str(filename), verbosity=False)
         brep = cls.from_native(shape)  # type: ignore
-        brep.heal()
+        if heal:
+            brep.heal()
         if solid:
             brep.make_solid()
         return brep
@@ -431,7 +447,35 @@ class OCCBrep(Brep):
             brep.make_solid()
         return brep
 
-    def to_step(self, filepath: Union[str, pathlib.Path], schema: str = "AP203", unit: str = "MM") -> None:
+    def to_brep(
+        self,
+        filepath: Union[str, pathlib.Path],
+    ) -> None:
+        """
+        Write the BRep shape to a BREP file.
+
+        Parameters
+        ----------
+        filepath : str | pathlib.Path
+            Location of the file.
+
+        Returns
+        -------
+        None
+
+        """
+        BRepTools.breptools.Write(self.native_brep, str(filepath))
+
+    def to_step(
+        self,
+        filepath: Union[str, pathlib.Path],
+        schema: str = "AP203",
+        unit: str = "MM",
+        author: Optional[str] = None,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        organization: Optional[str] = None,
+    ) -> None:
         """
         Write the BRep shape to a STEP file.
 
@@ -449,10 +493,33 @@ class OCCBrep(Brep):
         None
 
         """
-        step_writer = STEPControl.STEPControl_Writer()
+        writer = STEPControl.STEPControl_Writer()
+        Interface.Interface_Static.SetCVal("write.step.schema", schema)
         Interface.Interface_Static.SetCVal("write.step.unit", unit)
-        step_writer.Transfer(self.occ_shape, STEPControl.STEPControl_StepModelType.STEPControl_AsIs)  # type: ignore
-        status = step_writer.Write(str(filepath))
+        Interface.Interface_Static.SetCVal("write.step.product.name", name or self.name)
+
+        writer.Transfer(self.occ_shape, STEPControl.STEPControl_StepModelType.STEPControl_AsIs)  # type: ignore
+
+        if author or description or organization:
+            model = writer.Model()
+            model.ClearHeader()
+
+            header = APIHeaderSection.APIHeaderSection_MakeHeader()
+
+            if author:
+                header.SetAuthorValue(1, TCollection.TCollection_HAsciiString(author))
+            if organization:
+                org = Interface.Interface_HArray1OfHAsciiString(1, 1)
+                org.SetValue(1, TCollection.TCollection_HAsciiString(organization))
+            if description:
+                desc = Interface.Interface_HArray1OfHAsciiString(1, 1)
+                desc.SetValue(1, TCollection.TCollection_HAsciiString(description))
+
+            model.AddHeaderEntity(header.FnValue())
+            model.AddHeaderEntity(header.FsValue())
+            model.AddHeaderEntity(header.FdValue())
+
+        status = writer.Write(str(filepath))
         assert status == IFSelect.IFSelect_RetDone, status
 
     def to_stl(
@@ -651,7 +718,12 @@ class OCCBrep(Brep):
         return brep
 
     @classmethod
-    def from_loft(cls, curves: list[OCCCurve], start: Optional[Point] = None, end: Optional[Point] = None) -> "OCCBrep":
+    def from_loft(
+        cls,
+        curves: list[OCCCurve],
+        start: Optional[Point] = None,
+        end: Optional[Point] = None,
+    ) -> "OCCBrep":
         """Construct a Brep by lofing through a sequence of curves.
 
         Parameters
@@ -1101,7 +1173,7 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    def to_tesselation(self, linear_deflection: float = 1, angular_deflection: float = 0.1) -> tuple[Mesh, list[Polyline]]:
+    def to_tesselation(self, linear_deflection: Optional[float] = None, angular_deflection: Optional[float] = None) -> tuple[Mesh, list[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
@@ -1117,6 +1189,9 @@ class OCCBrep(Brep):
         tuple[:class:`compas.datastructures.Mesh`, list[:class:`compas.geometry.Polyline`]]
 
         """
+        linear_deflection = linear_deflection or TOL.lineardeflection
+        angular_deflection = angular_deflection or TOL.angulardeflection
+
         BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
         bt = BRep.BRep_Tool()
         mesh = Mesh()
@@ -1156,6 +1231,7 @@ class OCCBrep(Brep):
                         node = nodes.Value(i)
                         points.append(vertices[node - 1])
                     polylines.append(Polyline(points))
+        # This might not be necssary
         lines = []
         for edge in self.edges:
             if any(edge.is_same(e) for e in seen):
@@ -1954,3 +2030,20 @@ class OCCBrep(Brep):
         brep = self.copy()
         brep.trim(plane)
         return brep
+
+    def offset(self, distance: float) -> "OCCBrep":
+        """Construct a thickened copy of the brep.
+
+        Parameters
+        ----------
+        distance : float
+            The thickness in the form of an offset distance.
+
+        Returns
+        -------
+        :class:`OCCBrep`
+
+        """
+        offset = BRepOffsetAPI.BRepOffsetAPI_MakeThickSolid()
+        offset.MakeThickSolidBySimple(self.native_brep, distance)
+        return Brep.from_native(offset.Shape())

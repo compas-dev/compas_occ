@@ -27,11 +27,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added implementation of `compas_occ.brep.OCCBrepFace.__data__`.
 * Added implementation of `compas_occ.brep.OCCBrep.__data__`.
 * Added implementation of `compas_occ.brep.OCCBrep.__from_data__`.
+* Added support for conversion to OCC .brep format with `OCCBrep.to_brep`.
+* Added support for writing author, description, ... meta data to STEP files.
+* Added `OCCBrep.offset`.
 
 ### Changed
 
+* Fixed bug in propagation of linear and angular deflection between discretisation functions `OCCBrep.to_viewmesh` and `OCCBrep.to_tesselation`.
+
 ### Removed
 
+* Removed unnecessay instance/type checks in comparison methods of brep components.
 
 ## [1.3.0] 2025-03-21
 

@@ -81,8 +81,6 @@ class OCCBrepLoop(BrepLoop):
             ``True`` if the loops are the same, ``False`` otherwise.
 
         """
-        if not isinstance(other, OCCBrepLoop):
-            return False
         return self.occ_wire.IsSame(other.occ_wire)
 
     def is_equal(self, other: "OCCBrepLoop") -> bool:

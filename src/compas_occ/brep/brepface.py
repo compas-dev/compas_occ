@@ -183,8 +183,6 @@ class OCCBrepFace(BrepFace):
             ``True`` if the faces are the same, ``False`` otherwise.
 
         """
-        if not isinstance(other, OCCBrepFace):
-            return False
         return self.occ_face.IsSame(other.occ_face)
 
     def is_equal(self, other: "OCCBrepFace") -> bool:

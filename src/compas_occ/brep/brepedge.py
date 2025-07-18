@@ -91,7 +91,7 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def __data__(self) -> dict:
-        raise NotImplementedError
+        return {"vertices": [self.first_vertex.__data__, self.last_vertex.__data__]}
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrepEdge":
@@ -122,8 +122,6 @@ class OCCBrepEdge(BrepEdge):
             ``True`` if the edges are the same, ``False`` otherwise.
 
         """
-        if not isinstance(other, OCCBrepEdge):
-            return False
         return self.occ_edge.IsSame(other.occ_edge)
 
     def is_equal(self, other: "OCCBrepEdge") -> bool:
