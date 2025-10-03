@@ -702,6 +702,17 @@ class OCCBrep(Brep):
         """
         Construct a BRep by extruding a closed curve along a direction vector.
 
+        Parameters
+        ----------
+        profile : :class:`OCCBrepEdge` | :class:`OCCBrepFace`
+            The base profile of the extrusion.
+        vector : :class:`Vector`
+            The extrusion vector.
+            The extrusion has the same height as the length vector.
+        cap_ends : bool, optional
+            Flag indicating that the ends of the brep should be capped.
+            Currently this flag is not supported.
+
         Returns
         -------
         :class:`OCCBrep`
@@ -1173,7 +1184,11 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    def to_tesselation(self, linear_deflection: Optional[float] = None, angular_deflection: Optional[float] = None) -> tuple[Mesh, list[Polyline]]:
+    def to_tesselation(
+        self,
+        linear_deflection: Optional[float] = None,
+        angular_deflection: Optional[float] = None,
+    ) -> tuple[Mesh, list[Polyline]]:
         """
         Create a tesselation of the shape for visualisation.
 
@@ -1192,11 +1207,13 @@ class OCCBrep(Brep):
         linear_deflection = linear_deflection or TOL.lineardeflection
         angular_deflection = angular_deflection or TOL.angulardeflection
 
-        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
-        bt = BRep.BRep_Tool()
         mesh = Mesh()
         polylines = []
         seen = []
+
+        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
+        bt = BRep.BRep_Tool()
+
         for face in self.faces:
             location = TopLoc.TopLoc_Location()
             triangulation = bt.Triangulation(face.occ_face, location)
@@ -1231,6 +1248,7 @@ class OCCBrep(Brep):
                         node = nodes.Value(i)
                         points.append(vertices[node - 1])
                     polylines.append(Polyline(points))
+
         # This might not be necssary
         lines = []
         for edge in self.edges:
@@ -1244,6 +1262,7 @@ class OCCBrep(Brep):
                 lines.append(edge.curve.to_polyline())
             elif edge.is_bspline:
                 lines.append(edge.curve.to_polyline())
+
         polylines += lines
         return mesh, polylines
 
@@ -1289,21 +1308,27 @@ class OCCBrep(Brep):
             polygons.append(Polygon(points))
         return polygons
 
-    def to_viewmesh(self, linear_deflection: float = 0.001) -> tuple[compas.datastructures.Mesh, list[compas.geometry.Polyline]]:
+    def to_viewmesh(
+        self,
+        linear_deflection: Optional[float] = None,
+        angular_deflection: Optional[float] = None,
+    ) -> tuple[compas.datastructures.Mesh, list[compas.geometry.Polyline]]:
         """
         Convert the BRep to a view mesh.
 
         Parameters
         ----------
         linear_deflection : float, optional
-            The maximum linear deflection between the geometry and its discrete representation.
+            Allowable "distance" deviation between curved geometry and mesh discretisation.
+        angular_deflection : float, optional
+            Allowable "curvature" deviation between curved geometry and mesh discretisation.
 
         Returns
         -------
         tuple[:class:`compas.datastructures.Mesh`, list[:class:`compas.geometry.Polyline`]]
 
         """
-        return self.to_tesselation(linear_deflection=linear_deflection)
+        return self.to_tesselation(linear_deflection=linear_deflection, angular_deflection=angular_deflection)
 
     # ==============================================================================
     # Relationships
@@ -1735,7 +1760,6 @@ class OCCBrep(Brep):
         """
         self.sew()
         self.fix()
-        self.make_positive()
 
     def intersect(self, other: "OCCBrep") -> Union["OCCBrep", None]:
         """Intersect this Brep with another.

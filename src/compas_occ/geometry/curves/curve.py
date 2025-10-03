@@ -41,6 +41,8 @@ class OCCCurve(Curve):
 
     Parameters
     ----------
+    native_curve : Geom_Curve
+        An existing OCC curve.
     name : str, optional
         The name of the curve.
 
