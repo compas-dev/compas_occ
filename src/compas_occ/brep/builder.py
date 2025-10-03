@@ -111,7 +111,7 @@ class OCCBrepBuilder:
 
         if edgedata["type"] == CurveType.LINE:
             curve = Geom2d.Geom2d_Line(conversions.line_to_occ2d(edgedata["curve"]))
-            params = [start, end]
+            params = [start, end, u, v]
 
         elif edgedata["type"] == CurveType.CIRCLE:
             curve = Geom2d.Geom2d_Circle(conversions.circle_to_occ2d(edgedata["curve"]))
