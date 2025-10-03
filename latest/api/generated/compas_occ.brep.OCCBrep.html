@@ -806,20 +806,26 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.make_solid.html#compas_occ.brep.OCCBrep.make_solid" title="compas_occ.brep.OCCBrep.make_solid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_solid</span></code></a></p></td>
 <td><p>Convert the current shape to a solid if it is a shell.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.overlap.html#compas_occ.brep.OCCBrep.overlap" title="compas_occ.brep.OCCBrep.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.offset.html#compas_occ.brep.OCCBrep.offset" title="compas_occ.brep.OCCBrep.offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offset</span></code></a></p></td>
+<td><p>Construct a thickened copy of the brep.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.overlap.html#compas_occ.brep.OCCBrep.overlap" title="compas_occ.brep.OCCBrep.overlap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">overlap</span></code></a></p></td>
 <td><p>Compute the overlap between this BRep and another.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.sew.html#compas_occ.brep.OCCBrep.sew" title="compas_occ.brep.OCCBrep.sew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sew</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.sew.html#compas_occ.brep.OCCBrep.sew" title="compas_occ.brep.OCCBrep.sew"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sew</span></code></a></p></td>
 <td><p>Sew together the individual parts of the shape.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.simplify.html#compas_occ.brep.OCCBrep.simplify" title="compas_occ.brep.OCCBrep.simplify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simplify</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.simplify.html#compas_occ.brep.OCCBrep.simplify" title="compas_occ.brep.OCCBrep.simplify"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simplify</span></code></a></p></td>
 <td><p>Simplify the shape by merging colinear edges and coplanar faces.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.slice.html#compas_occ.brep.OCCBrep.slice" title="compas_occ.brep.OCCBrep.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.slice.html#compas_occ.brep.OCCBrep.slice" title="compas_occ.brep.OCCBrep.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a></p></td>
 <td><p>Slice a BRep with a plane.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.split.html#compas_occ.brep.OCCBrep.split" title="compas_occ.brep.OCCBrep.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.split.html#compas_occ.brep.OCCBrep.split" title="compas_occ.brep.OCCBrep.split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split</span></code></a></p></td>
 <td><p>Split a BRep using another BRep as splitter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.to_brep.html#compas_occ.brep.OCCBrep.to_brep" title="compas_occ.brep.OCCBrep.to_brep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_brep</span></code></a></p></td>
+<td><p>Write the BRep shape to a BREP file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.to_iges.html#compas_occ.brep.OCCBrep.to_iges" title="compas_occ.brep.OCCBrep.to_iges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_iges</span></code></a></p></td>
 <td><p>Write the BRep shape to a IGES file.</p></td>
@@ -896,7 +902,7 @@ document.write(`
 <td><p>Construct an object of this type from a JSON string.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.from_pipe.html#compas_occ.brep.OCCBrep.from_pipe" title="compas_occ.brep.OCCBrep.from_pipe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_pipe</span></code></a></p></td>
-<td><p>Construct a Brep by extruding a closed curve along a path curve.</p></td>
+<td><p>Construct a Brep by extruding a circle curve along the path curve.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_occ.brep.OCCBrep.rotate.html#compas_occ.brep.OCCBrep.rotate" title="compas_occ.brep.OCCBrep.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a></p></td>
 <td><p>Rotate the geometry.</p></td>

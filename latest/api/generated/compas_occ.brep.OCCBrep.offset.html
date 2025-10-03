@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="../../_static/compas.ico" type="image/x-icon">
-    <title>OCCBrep.from_extrusion &#8212; COMPAS OCC</title>
+    <title>OCCBrep.offset &#8212; COMPAS OCC</title>
   
   
   
@@ -52,15 +52,15 @@
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.brep.OCCBrep.from_extrusion';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_occ.brep.OCCBrep.offset';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_occ/gh-pages/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="OCCBrep.from_iges" href="compas_occ.brep.OCCBrep.from_iges.html" />
-    <link rel="prev" title="OCCBrep.from_cylinder" href="compas_occ.brep.OCCBrep.from_cylinder.html" />
+    <link rel="next" title="OCCBrep.overlap" href="compas_occ.brep.OCCBrep.overlap.html" />
+    <link rel="prev" title="OCCBrep.make_solid" href="compas_occ.brep.OCCBrep.make_solid.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -638,7 +638,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="compas_occ.brep.OCCBrep.html" class="nav-link">OCCBrep</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">OCCBrep.from_extrusion</li>
+    <li class="breadcrumb-item active" aria-current="page">OCCBrep.offset</li>
   </ul>
 </nav>
 </div>
@@ -655,22 +655,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="occbrep-from-extrusion">
-<h1>OCCBrep.from_extrusion</h1>
+  <section id="occbrep-offset">
+<h1>OCCBrep.offset</h1>
 <dl class="py method">
-<dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.from_extrusion">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">from_extrusion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cap_ends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span></dt>
-<dd><p>Construct a BRep by extruding a closed curve along a direction vector.</p>
-<dl class="field-list">
+<dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.offset">
+<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Construct a thickened copy of the brep.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>profile</strong><span class="classifier"><a class="reference internal" href="compas_occ.brep.OCCBrepEdge.html#compas_occ.brep.OCCBrepEdge" title="compas_occ.brep.OCCBrepEdge"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCBrepEdge</span></code></a> | <a class="reference internal" href="compas_occ.brep.OCCBrepFace.html#compas_occ.brep.OCCBrepFace" title="compas_occ.brep.OCCBrepFace"><code class="xref py py-class docutils literal notranslate"><span class="pre">OCCBrepFace</span></code></a></span></dt><dd><p>The base profile of the extrusion.</p>
-</dd>
-<dt><strong>vector</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></span></dt><dd><p>The extrusion vector.
-The extrusion has the same height as the length vector.</p>
-</dd>
-<dt><strong>cap_ends</strong><span class="classifier">bool, optional</span></dt><dd><p>Flag indicating that the ends of the brep should be capped.
-Currently this flag is not supported.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>distance</strong><span class="classifier">float</span></dt><dd><p>The thickness in the form of an offset distance.</p>
 </dd>
 </dl>
 </dd>
@@ -705,7 +699,7 @@ Currently this flag is not supported.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_occ.brep.OCCBrep.from_extrusion"><code class="docutils literal notranslate"><span class="pre">OCCBrep.from_extrusion()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compas_occ.brep.OCCBrep.offset"><code class="docutils literal notranslate"><span class="pre">OCCBrep.offset()</span></code></a></li>
 </ul>
   </nav></div>
 

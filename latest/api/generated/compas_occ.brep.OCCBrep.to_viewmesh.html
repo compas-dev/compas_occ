@@ -659,12 +659,14 @@ document.write(`
 <h1>OCCBrep.to_viewmesh</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_occ.brep.OCCBrep.to_viewmesh">
-<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">to_viewmesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear_deflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span></dt>
+<span class="sig-prename descclassname"><span class="pre">OCCBrep.</span></span><span class="sig-name descname"><span class="pre">to_viewmesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear_deflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angular_deflection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Convert the BRep to a view mesh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>linear_deflection</strong><span class="classifier">float, optional</span></dt><dd><p>The maximum linear deflection between the geometry and its discrete representation.</p>
+<dt><strong>linear_deflection</strong><span class="classifier">float, optional</span></dt><dd><p>Allowable “distance” deviation between curved geometry and mesh discretisation.</p>
+</dd>
+<dt><strong>angular_deflection</strong><span class="classifier">float, optional</span></dt><dd><p>Allowable “curvature” deviation between curved geometry and mesh discretisation.</p>
 </dd>
 </dl>
 </dd>
