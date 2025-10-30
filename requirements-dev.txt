@@ -1,5 +1,3 @@
-attrs >=17.4
-black >=22.12.0
 bump-my-version
 compas_invocations2
 compas_viewer

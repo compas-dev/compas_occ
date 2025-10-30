@@ -24,9 +24,9 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 
 [project.urls]
@@ -111,10 +111,7 @@ select = ["E", "F", "I"]
 
 [tool.ruff.lint.isort]
 force-single-line = true
-known-first-party = [
-    "compas",
-    "compas_occ",
-]
+known-first-party = ["compas", "compas_occ"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
