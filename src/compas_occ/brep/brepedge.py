@@ -122,6 +122,8 @@ class OCCBrepEdge(BrepEdge):
             ``True`` if the edges are the same, ``False`` otherwise.
 
         """
+        if not isinstance(other, OCCBrepEdge):
+            return False
         return self.occ_edge.IsSame(other.occ_edge)
 
     def is_equal(self, other: "OCCBrepEdge") -> bool:

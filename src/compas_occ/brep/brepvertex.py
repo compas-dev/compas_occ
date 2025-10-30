@@ -55,6 +55,8 @@ class OCCBrepVertex(BrepVertex):
             ``True`` if the vertices are the same, ``False`` otherwise.
 
         """
+        if not isinstance(other, OCCBrepVertex):
+            return False
         return self.occ_vertex.IsSame(other.occ_vertex)
 
     def is_equal(self, other: "OCCBrepVertex") -> bool:

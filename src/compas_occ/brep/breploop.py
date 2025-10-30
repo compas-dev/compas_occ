@@ -81,6 +81,8 @@ class OCCBrepLoop(BrepLoop):
             ``True`` if the loops are the same, ``False`` otherwise.
 
         """
+        if not isinstance(other, OCCBrepLoop):
+            return False
         return self.occ_wire.IsSame(other.occ_wire)
 
     def is_equal(self, other: "OCCBrepLoop") -> bool:
@@ -206,7 +208,7 @@ class OCCBrepLoop(BrepLoop):
 
         """
         edges = []
-        for a, b in pairwise(polygon.points):
+        for a, b in pairwise(polygon.points + polygon.points[:1]):
             edge = OCCBrepEdge.from_point_point(a, b)
             edges.append(edge)
         return cls(wire_from_edges(edges))
