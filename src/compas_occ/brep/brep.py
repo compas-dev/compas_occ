@@ -344,6 +344,13 @@ class OCCBrep(Brep):
             self._solids = solids
         return self._solids
 
+    @property
+    def naked_edges(self) -> list[OCCBrepEdge]:
+        naked_edges = []
+        # see ShapeAnalysis_FreeBounds.GetOpenWires()
+        # see ShapeAnalysis_FreeBounds.GetClosedWires()
+        return naked_edges
+
     # ==============================================================================
     # Geometric Properties
     # ==============================================================================
@@ -1804,7 +1811,9 @@ class OCCBrep(Brep):
 
         """
         if self.type == TopAbs.TopAbs_SHELL:
-            self.occ_shape = BRepBuilderAPI.BRepBuilderAPI_MakeSolid(self.occ_shape).Shape()  # type: ignore
+            # self.occ_shape = BRepBuilderAPI.BRepBuilderAPI_MakeSolid(self.occ_shape).Shape()  # type: ignore
+            fixer = ShapeFix.ShapeFix_Solid()
+            self.occ_shape = fixer.SolidFromShell(self.occ_shape)  # type: ignore
 
     def overlap(
         self,
