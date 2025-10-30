@@ -13,12 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+* Removed `schema` parameter from `OCCBrep.to_step` since it is not properly supported.
+
 
 ## [1.4.1] 2025-10-30
 
 ### Added
 
 ### Changed
+
+* Fixed potential causes of segmentation fault (`OCCBrepVertex.is_same`, `OCCBrepEdge.is_same`, `OCCBrepLoop.is_same`, `OCCBrepFace.is_same`).
 
 ### Removed
 
@@ -52,7 +56,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Fixed bug in propagation of linear and angular deflection between discretisation functions `OCCBrep.to_viewmesh` and `OCCBrep.to_tesselation`.
-* Fixed potential causes of segmentation fault (`OCCBrepVertex.is_same`, `OCCBrepEdge.is_same`, `OCCBrepLoop.is_same`, `OCCBrepFace.is_same`).
 
 ### Removed
 

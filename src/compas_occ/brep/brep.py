@@ -469,7 +469,6 @@ class OCCBrep(Brep):
     def to_step(
         self,
         filepath: Union[str, pathlib.Path],
-        schema: str = "AP203",
         unit: str = "MM",
         author: Optional[str] = None,
         name: Optional[str] = None,
@@ -483,8 +482,6 @@ class OCCBrep(Brep):
         ----------
         filepath : str | pathlib.Path
             Location of the file.
-        schema : str, optional
-            STEP file format schema.
         unit : str, optional
             Base units for the geometry in the file.
 
@@ -494,7 +491,7 @@ class OCCBrep(Brep):
 
         """
         writer = STEPControl.STEPControl_Writer()
-        Interface.Interface_Static.SetCVal("write.step.schema", schema)
+
         Interface.Interface_Static.SetCVal("write.step.unit", unit)
         Interface.Interface_Static.SetCVal("write.step.product.name", name or self.name)
 
