@@ -344,13 +344,6 @@ class OCCBrep(Brep):
             self._solids = solids
         return self._solids
 
-    @property
-    def naked_edges(self) -> list[OCCBrepEdge]:
-        naked_edges = []
-        # see ShapeAnalysis_FreeBounds.GetOpenWires()
-        # see ShapeAnalysis_FreeBounds.GetClosedWires()
-        return naked_edges
-
     # ==============================================================================
     # Geometric Properties
     # ==============================================================================
