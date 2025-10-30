@@ -4,7 +4,6 @@ from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
-from OCC.Core import GeomAbs
 from OCC.Core import GProp
 from OCC.Core import TopAbs
 from OCC.Core import TopExp

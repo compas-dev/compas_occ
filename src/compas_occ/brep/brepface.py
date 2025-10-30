@@ -5,8 +5,6 @@ from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
 from OCC.Core import BRepTools
-from OCC.Core import Geom
-from OCC.Core import Geom2d
 from OCC.Core import GeomAbs
 from OCC.Core import GeomConvert
 from OCC.Core import GProp
@@ -18,19 +16,11 @@ from OCC.Core import gp
 
 import compas.geometry
 import compas_occ.conversions
-from compas.geometry import Bezier
-from compas.geometry import BrepEdge
 from compas.geometry import BrepFace
-from compas.geometry import Circle
 from compas.geometry import Cone
 from compas.geometry import Cylinder
-from compas.geometry import Ellipse
 from compas.geometry import Frame
-from compas.geometry import Hyperbola
-from compas.geometry import Line
-from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
-from compas.geometry import Parabola
 from compas.geometry import Plane
 from compas.geometry import Polygon
 from compas.geometry import Sphere
@@ -49,7 +39,6 @@ from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import sphere_to_compas
 from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
-from compas_occ.geometry import OCCCurve2d
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
 
