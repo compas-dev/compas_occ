@@ -214,6 +214,36 @@ class OCCBrepLoop(BrepLoop):
         return cls(wire_from_edges(edges))
 
     # ==============================================================================
+    # Conversions
+    # ==============================================================================
+
+    def to_polyline(self) -> Polyline:
+        """Convert the loop to a polyline.
+
+        Returns
+        -------
+        :class:`compas.geometry.Polyline`
+
+        """
+        points = []
+        for vertex in self.vertices:
+            points.append(vertex.point)
+        return Polyline(points)
+
+    def to_polygon(self) -> Polygon:
+        """Convert the loop to a simple polygon without underlying geometry.
+
+        Returns
+        -------
+        :class:`compas.geometry.Polygon`
+
+        """
+        points = []
+        for vertex in self.vertices:
+            points.append(vertex.point)
+        return Polygon(points)
+
+    # ==============================================================================
     # Methods
     # ==============================================================================
 

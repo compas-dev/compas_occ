@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `compas_occ.brep.OCCBrepFace.to_polygons` to include also the inner loops.
+* Added `compas_occ.brep.OCCBrepLoop.to_polyline` for simplified loop conversion.
+* Added `compas_occ.brep.OCCBrepLoop.to_polygon` for simplified loop conversion.
+* Added `compas_occ.brep.OCCBrepVertex.to_point` for consistency.
+
 ### Changed
 
 ### Removed

@@ -125,3 +125,17 @@ class OCCBrepVertex(BrepVertex):
         """
         builder = BRepBuilderAPI.BRepBuilderAPI_MakeVertex(point_to_occ(point))
         return cls(builder.Vertex())
+
+    # ==============================================================================
+    # Conversions
+    # ==============================================================================
+
+    def to_point(self) -> Point:
+        """Convert the vertex to a point.
+
+        Returns
+        -------
+        :class:`compas.geometry.Point`
+
+        """
+        return self.point

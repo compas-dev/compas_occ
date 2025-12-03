@@ -609,10 +609,18 @@ class OCCBrepFace(BrepFace):
         :class:`Polygon`
 
         """
-        points = []
-        for vertex in self.loops[0].vertices:
-            points.append(vertex.point)
-        return Polygon(points)
+        return self.outerloop.to_polygon()
+
+    def to_polygons(self) -> list[Polygon]:
+        """
+        Convert the face to polygons without underlying geometry.
+
+        Returns
+        -------
+        list[:class:`Polygon`]
+
+        """
+        return [loop.to_polygon() for loop in self.loops]
 
     def to_plane(self) -> Plane:
         """
