@@ -49,18 +49,18 @@ class OCCBrepFace(BrepFace):
 
     Parameters
     ----------
-    occ_face : ``TopoDS.TopoDS_Face``
+    occ_face
         An OCC BRep face.
 
     Attributes
     ----------
-    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
+    vertices
         List of BRep vertices.
-    edges : list[:class:`~compas_occ.brep.BrepEdge`], read-only
+    edges
         List of BRep edges.
-    loops : list[:class:`~compas_occ.brep.BrepLoop`], read-only
+    loops
         List of BRep loops.
-    surface : ``GeomAdaptor_Surface``
+    surface
         Surface geometry from the adaptor.
 
     """
@@ -134,12 +134,12 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        data : dict
+        data
             The data dictionary.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
             An instance of this object type if the data contained in the dict has the correct schema.
 
         """
@@ -163,7 +163,7 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        other : :class:`OCCBrepFace`
+        other
             The other face.
 
         Returns
@@ -183,7 +183,7 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        other : :class:`OCCBrepFace`
+        other
             The other face.
 
         Returns
@@ -368,11 +368,11 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        polygon : :class:`compas.geometry.Polygon`
+        polygon
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         polygon = BRepBuilderAPI.BRepBuilderAPI_MakePolygon()
@@ -396,20 +396,20 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
+        plane
             The plane.
         domain_u : tuple[float, float], optional
             U parameter minimum and maximum.
         domain_v : tuple[float, float], optional
             V parameter minimum and maximum.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         occ_plane: gp.gp_Pln = plane_to_occ(plane)
@@ -435,16 +435,16 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        cylinder : :class:`compas.geometry.Cylinder`
+        cylinder
             The cylinder.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         if loop:
@@ -469,16 +469,16 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        cone : :class:`compas.geometry.Cone`
+        cone
             The cone.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         if loop:
@@ -503,16 +503,16 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        sphere : :class:`compas.geometry.Sphere`
+        sphere
             The sphere.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         if loop:
@@ -533,16 +533,16 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        torus : :class:`compas.geometry.Torus`
+        torus
             The torus.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         if loop:
@@ -566,22 +566,22 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        surface : :class:`compas_occ.geometry.OCCSurface`
+        surface
             The torus.
-        domain_u : tuple[float, float], optional
+        domain_u
             U parameter minimum and maximum.
-        domain_v : tuple[float, float], optional
+        domain_v
             V parameter minimum and maximum.
-        precision : float, optional
+        precision
             Precision for face construction.
-        loop : :class:`compas_occ.brep.OCCBrepLoop`, optional
+        loop
             A boundary loop.
-        inside : bool, optional
+        inside
             If True, the face is inside the boundary loop.
 
         Returns
         -------
-        :class:`OCCBrepFace`
+        OCCBrepFace
 
         """
         if domain_u and domain_v:
@@ -606,7 +606,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`Polygon`
+        Polygon
 
         """
         return self.outerloop.to_polygon()
@@ -617,7 +617,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        list[:class:`Polygon`]
+        list[Polygon]
 
         """
         return [loop.to_polygon() for loop in self.loops]
@@ -628,7 +628,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.Plane`
+        Plane
 
         """
         if not self.is_plane:
@@ -643,7 +643,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.Cylinder`
+        Cylinder
 
         """
         if not self.is_cylinder:
@@ -658,7 +658,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.Cone`
+        Cone
 
         """
         raise NotImplementedError
@@ -669,7 +669,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.Sphere`
+        Sphere
 
         """
         if not self.is_sphere:
@@ -684,7 +684,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.Torus`
+        Torus
 
         """
         raise NotImplementedError
@@ -695,7 +695,7 @@ class OCCBrepFace(BrepFace):
 
         Returns
         -------
-        :class:`compas.geometry.NurbsSurface`
+        NurbsSurface
 
         """
         if not self.is_bspline:
@@ -768,7 +768,7 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        loop : :class:`compas_occ.brep.OCCBrepLoop`
+        loop
             The additional loop.
 
         Returns
@@ -791,7 +791,7 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        loops : list[:class:`compas_occ.brep.OCCBrepLoop`]
+        loops
             The additional loops.
 
         Returns

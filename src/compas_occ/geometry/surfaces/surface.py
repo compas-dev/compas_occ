@@ -42,24 +42,26 @@ class OCCSurface(Surface):
 
     Parameters
     ----------
-    name : str, optional
+    native_surface
+        The native OCC surface.
+    name
         The name of the surface.
 
     Attributes
     ----------
-    continuity : int, read-only
+    continuity
         The degree of continuity of the surface.
-    degree_u : list[int], read-only
+    degree_u
         The degree of the surface in the U direction.
-    degree_v : list[int], read-only
+    degree_v
         The degree of the surface in the V direction.
-    domain_u : tuple[float, float], read-only
+    domain_u
         The parameter domain of the surface in the U direction.
-    domain_v : tuple[float, float], read-only
+    domain_v
         The parameter domain of the surface in the V direction.
-    is_periodic_u : bool, read-only
+    is_periodic_u
         Flag indicating if the surface is periodic in the U direction.
-    is_periodic_v : bool, read-only
+    is_periodic_v
         Flag indicating if the surface is periodic in the V direction.
 
     """
@@ -126,12 +128,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        face : TopoDS_Face
+        face
             An OCC face in wich the surface is embedded.
 
         Returns
         -------
-        :class:`OCCSurface`
+        OCCSurface
 
         """
         srf = BRep_Tool.Surface(face)
@@ -143,12 +145,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        native_surface : Geom_Surface
+        native_surface
             An OCC surface.
 
         Returns
         -------
-        :class:`OCCSurface`
+        OCCSurface
             The constructed surface.
 
         """
@@ -160,12 +162,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        native_surface : Geom_Surface
+        native_surface
             An OCC surface.
 
         Returns
         -------
-        :class:`OCCSurface`
+        OCCSurface
             The constructed surface.
 
         Warnings
@@ -185,8 +187,10 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        filepath : str
-        schema : str, optional
+        filepath
+            The path to the output file.
+        schema
+            The STEP schema to use.
 
         Returns
         -------
@@ -210,7 +214,8 @@ class OCCSurface(Surface):
 
         Returns
         -------
-        :class:`~compas.datastructures.Mesh`
+        Mesh
+            The tesselated surface as a triangle mesh.
 
         """
         from OCC.Core.Tesselator import ShapeTesselator
@@ -234,7 +239,7 @@ class OCCSurface(Surface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCSurface`
+        OCCSurface
 
         """
         cls = type(self)
@@ -246,7 +251,8 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        T : :class:`~compas.geometry.Transformation`
+        T
+            A transformation.
 
         Returns
         -------
@@ -262,11 +268,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        u : float
+        u
+            The parameter value.
 
         Returns
         -------
-        :class:`~compas_occ.geometry.OCCCurve`
+        OCCCurve
 
         """
         occ_curve = self.native_surface.UIso(u)
@@ -277,11 +284,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        v : float
+        v
+            The parameter value.
 
         Returns
         -------
-        :class:`~compas_occ.geometry.OCCCurve`
+        OCCCurve
 
         """
         occ_curve = self.native_surface.VIso(v)
@@ -292,7 +300,7 @@ class OCCSurface(Surface):
 
         Returns
         -------
-        list[:class:`~compas_occ.geometry.OCCCurve`]
+        list[OCCCurve]
 
         """
         umin, umax, vmin, vmax = self.native_surface.Bounds()
@@ -316,7 +324,7 @@ class OCCSurface(Surface):
 
         Returns
         -------
-        :class:`~compas.geometry.Point`
+        Point
 
         """
         point = self.native_surface.Value(u, v)
@@ -327,12 +335,14 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        u : float
-        v : float
+        u
+            The U parameter.
+        v
+            The V parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Vector`
+        Vector
 
         """
         props = GeomLProp_SLProps(self.native_surface, u, v, 2, 1e-6)
@@ -344,8 +354,10 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        u : float
-        v : float
+        u
+            The U parameter.
+        v
+            The V parameter.
 
         Returns
         -------
@@ -360,8 +372,10 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        u : float
-        v : float
+        u
+            The U parameter.
+        v
+            The V parameter.
 
         Returns
         -------
@@ -376,12 +390,14 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        u : float
-        v : float
+        u
+            The U parameter.
+        v
+            The V parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Frame`
+        Frame
 
         """
         point = gp_Pnt()
@@ -399,12 +415,14 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        precision : float, optional
-        optimal : bool, optional
+        precision
+            The precision for the bounding box computation.
+        optimal
+            Whether to compute an optimal bounding box.
 
         Returns
         -------
-        :class:`~compas.geometry.Box`
+        Box
 
         """
         box = Bnd_Box()
@@ -429,14 +447,14 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        point : Point
+        point
             The point to project to the surface.
-        return_parameters : bool, optional
+        return_parameters
             If True, return the surface UV parameters in addition to the closest point.
 
         Returns
         -------
-        :class:`~compas.geometry.Point` | tuple[:class:`~compas.geometry.Point`, tuple[float, float]]
+        Point | tuple[Point, tuple[float, float]]
             If `return_parameters` is False, the nearest point on the surface.
             If `return_parameters` is True, the UV parameters in addition to the nearest point on the surface.
 
@@ -455,11 +473,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        precision : float, optional
+        precision
+            The precision for the bounding box computation.
 
         Returns
         -------
-        :class:`~compas.geometry.Box`
+        Box
 
         """
         box = Bnd_OBB()
@@ -476,11 +495,12 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        line : :class:`~compas.geometry.Line`
+        line
+            The intersecting line.
 
         Returns
         -------
-        list[:class:`~compas.geometry.Point`]
+        list[Point]
 
         """
         intersection = GeomAPI_IntCS(Geom_Line(line_to_occ(line)), self.native_surface)
@@ -496,11 +516,13 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.OCCCurve`
+        curve
+            The intersecting curve.
+
 
         Returns
         -------
-        list[:class:`compas.geometry.Point`]
+        list[Point]
 
         """
         intersection = GeomAPI_IntCS(curve.occ_curve, self.native_surface)

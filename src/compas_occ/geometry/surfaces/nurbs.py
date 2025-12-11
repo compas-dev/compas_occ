@@ -68,77 +68,77 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
     Parameters
     ----------
-    name : str, optional
+    name
         The name of the curve
 
     Attributes
     ----------
-    points : list[list[:class:`~compas.geometry.Point`]], read-only
+    points
         The control points of the surface.
-    weights : list[list[float]], read-only
+    weights
         The weights of the control points of the surface.
-    knots_u : list[float], read-only
+    knots_u
         The knots of the surface in the U direction, without multiplicities.
-    knots_v : list[float], read-only
+    knots_v
         The knots of the surface in the V direction, without multiplicities.
-    mults_u : list[int], read-only
+    mults_u
         The multiplicities of the knots of the surface in the U direction.
-    mults_v : list[int], read-only
+    mults_v
         The multiplicities of the knots of the surface in the V direction.
 
     Examples
     --------
     Construct a surface from points...
 
-    .. code-block:: python
+    ```python
+    from compas.geometry import Point
+    from compas_occ.geometry import OCCNurbsSurface
 
-        from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsSurface
+    points = [
+        [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
+        [Point(0, 1, 0), Point(1, 1, 2), Point(2, 1, 2), Point(3, 1, 0)],
+        [Point(0, 2, 0), Point(1, 2, 2), Point(2, 2, 2), Point(3, 2, 0)],
+        [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
+    ]
 
-        points = [
-            [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
-            [Point(0, 1, 0), Point(1, 1, 2), Point(2, 1, 2), Point(3, 1, 0)],
-            [Point(0, 2, 0), Point(1, 2, 2), Point(2, 2, 2), Point(3, 2, 0)],
-            [Point(0, 3, 0), Point(1, 3, 0), Point(2, 3, 0), Point(3, 3, 0)],
-        ]
-
-        surface = OCCNurbsSurface.from_points(points=points)
+    surface = OCCNurbsSurface.from_points(points=points)
+    ```
 
     Construct a surface from points...
 
-    .. code-block:: python
+    ```python
+    from compas.geometry import Point
+    from compas_occ.geometry import OCCNurbsSurface
 
-        from compas.geometry import Point
-        from compas_occ.geometry import OCCNurbsSurface
+    points = [
+        [Point(0, 0, 0), Point(1, 0, +0), Point(2, 0, +0), Point(3, 0, +0), Point(4, 0, +0), Point(5, 0, 0)],
+        [Point(0, 1, 0), Point(1, 1, -1), Point(2, 1, -1), Point(3, 1, -1), Point(4, 1, -1), Point(5, 1, 0)],
+        [Point(0, 2, 0), Point(1, 2, -1), Point(2, 2, +2), Point(3, 2, +2), Point(4, 2, -1), Point(5, 2, 0)],
+        [Point(0, 3, 0), Point(1, 3, -1), Point(2, 3, +2), Point(3, 3, +2), Point(4, 3, -1), Point(5, 3, 0)],
+        [Point(0, 4, 0), Point(1, 4, -1), Point(2, 4, -1), Point(3, 4, -1), Point(4, 4, -1), Point(5, 4, 0)],
+        [Point(0, 5, 0), Point(1, 5, +0), Point(2, 5, +0), Point(3, 5, +0), Point(4, 5, +0), Point(5, 5, 0)],
+    ]
 
-        points = [
-            [Point(0, 0, 0), Point(1, 0, +0), Point(2, 0, +0), Point(3, 0, +0), Point(4, 0, +0), Point(5, 0, 0)],
-            [Point(0, 1, 0), Point(1, 1, -1), Point(2, 1, -1), Point(3, 1, -1), Point(4, 1, -1), Point(5, 1, 0)],
-            [Point(0, 2, 0), Point(1, 2, -1), Point(2, 2, +2), Point(3, 2, +2), Point(4, 2, -1), Point(5, 2, 0)],
-            [Point(0, 3, 0), Point(1, 3, -1), Point(2, 3, +2), Point(3, 3, +2), Point(4, 3, -1), Point(5, 3, 0)],
-            [Point(0, 4, 0), Point(1, 4, -1), Point(2, 4, -1), Point(3, 4, -1), Point(4, 4, -1), Point(5, 4, 0)],
-            [Point(0, 5, 0), Point(1, 5, +0), Point(2, 5, +0), Point(3, 5, +0), Point(4, 5, +0), Point(5, 5, 0)],
-        ]
+    weights = [
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+    ]
 
-        weights = [
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-        ]
-
-        surface = OCCNurbsSurface.from_parameters(
-            points=points,
-            weights=weights,
-            knots_u=[1.0, 1 + 1 / 9, 1 + 2 / 9, 1 + 3 / 9, 1 + 4 / 9, 1 + 5 / 9, 1 + 6 / 9, 1 + 7 / 9, 1 + 8 / 9, 2.0],
-            knots_v=[0.0, 1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9, 1.0],
-            mults_u=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            mults_v=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            degree_u=3,
-            degree_v=3,
-        )
+    surface = OCCNurbsSurface.from_parameters(
+        points=points,
+        weights=weights,
+        knots_u=[1.0, 1 + 1 / 9, 1 + 2 / 9, 1 + 3 / 9, 1 + 4 / 9, 1 + 5 / 9, 1 + 6 / 9, 1 + 7 / 9, 1 + 8 / 9, 2.0],
+        knots_v=[0.0, 1 / 9, 2 / 9, 3 / 9, 4 / 9, 5 / 9, 6 / 9, 7 / 9, 8 / 9, 1.0],
+        mults_u=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        mults_v=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        degree_u=3,
+        degree_v=3,
+    )
+    ```
 
     """
 
@@ -262,14 +262,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        curve : :class:`compas_occ.geometry.Curve`
+        curve
             The basis curve for the extrusion.
-        vector : :class:`compas.geometry.Vector`
+        vector
             The extrusion vector, which serves as a translation vector for the basis curve.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         other = curve.transformed(Translation.from_vector(vector))
@@ -288,11 +288,16 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        curve1 : :class:`~compas_occ.geometry.OCCNurbsCurve`
-        curve2 : :class:`~compas_occ.geometry.OCCNurbsCurve`
-        curve3 : :class:`~compas_occ.geometry.OCCNurbsCurve`, optional.
-        curve4 : :class:`~compas_occ.geometry.OCCNurbsCurve`, optional.
-        style : Literal['stretch', 'coons', 'curved'], optional.
+        curve1
+            The first boundary curve.
+        curve2
+            The second boundary curve.
+        curve3
+            The third boundary curve.
+        curve4
+            The fourth boundary curve.
+        style
+            The fill style. Options are:
 
             * ``'stretch'`` produces the flattest patch.
             * ``'curved'`` produces a rounded patch.
@@ -305,7 +310,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
 
@@ -349,14 +354,14 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        points : [list[:class:`compas.geometry.Point`], list[:class:`compas.geometry.Point`]]
+        points
             The 2D collection of points.
-        precision : float, optional
+        precision
             The fitting precision.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         native_surface = GeomAPI_PointsToBSplineSurface(
@@ -374,12 +379,12 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        native_surface : Geom_BSplineSurface
+        native_surface
             An OCC surface.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
             The constructed surface.
 
         """
@@ -403,30 +408,30 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        points : list[list[:class:`~compas.geometry.Point`]]
+        points
             The control points of the surface.
-        weights : list[list[float]]
+        weights
             The weights of the control points.
-        knots_u : list[float]
+        knots_u
             The knots in the U direction, without multiplicities.
-        knots_v : list[float]
+        knots_v
             The knots in the V direction, without multiplicities.
-        mults_u : list[int]
+        mults_u
             The multiplicities of the knots in the U direction.
-        mults_v : list[int]
+        mults_v
             The multiplicities of the knots in the V direction.
-        u_dergee : int
+        u_dergee
             Degree in the U direction.
-        degree_v : int
+        degree_v
             Degree in the V direction.
-        is_periodic_u : bool, optional
+        is_periodic_u
             Flag indicating that the surface is periodic in the U direction.
-        is_periodic_v : bool, optional
+        is_periodic_v
             Flag indicating that the surface is periodic in the V direction.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         native_surface = Geom_BSplineSurface(
@@ -449,11 +454,12 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
+        plane
+            The plane to construct the surface from.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         occ_plane = plane_to_occ(plane)
@@ -471,14 +477,16 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Parameters
         ----------
-        points : list[list[:class:`~compas.geometry.Point`]]
+        points
             The control points.
-        degree_u : int, optional
-        degree_v : int, optional
+        degree_u
+            Degree in the U direction.
+        degree_v
+            Degree in the V direction.
 
         Returns
         -------
-        :class:`OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         u = len(points[0])
@@ -528,7 +536,7 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCNurbsSurface`
+        OCCNurbsSurface
 
         """
         cls = type(self)

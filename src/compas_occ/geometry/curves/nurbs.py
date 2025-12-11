@@ -11,6 +11,7 @@ from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.TColStd import TColStd_Array1OfReal
 
+from compas.geometry import Arc
 from compas.geometry import Circle
 from compas.geometry import Ellipse
 from compas.geometry import Frame
@@ -50,28 +51,28 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
     Parameters
     ----------
-    name : str, optional
+    name
         The name of the curve.
 
     Attributes
     ----------
-    continuity : int, read-only
+    continuity
         The degree of continuity of the curve.
-    degree : int, read-only
+    degree
         The degree of the curve.
-    is_rational : bool, read-only
+    is_rational
         Flag indicating that the curve is rational.
-    knots : list[float], read-only
+    knots
         The knots of the curve, without multiplicities.
-    knotsequence : list[float], read-only
+    knotsequence
         The full vector of knots of the curve.
-    multiplicities : list[int], read-only
+    multiplicities
         The multiplicities of the knots of the curve.
-    order : int, read-only
+    order
         The order of the curve (= degree + 1).
-    points : list[:class:`~compas.geometry.Point`], read-only
+    points
         The control points of the curve.
-    weights : list[float], read-only
+    weights
         The weights of the control points of the curve.
 
     Examples
@@ -212,21 +213,21 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
     # ==============================================================================
 
     @classmethod
-    def from_arc(cls, arc, degree, pointcount=None) -> "OCCNurbsCurve":
+    def from_arc(cls, arc: Arc, degree: int, pointcount: int | None = None) -> "OCCNurbsCurve":
         """Construct a NURBS curve from an arc.
 
         Parameters
         ----------
-        arc : :class:`~compas.geometry.Arc`
+        arc
             The arc geometry.
-        degree : int
+        degree
             The degree of the resulting NURBS curve.
-        pointcount : int, optional
+        pointcount
             The number of control points in the resulting NURBS curve.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         raise NotImplementedError
@@ -237,12 +238,12 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        circle : :class:`~compas.geometry.Circle`
+        circle
             The circle geometry.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         frame = Frame.from_plane(circle.plane)
@@ -277,12 +278,12 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        ellipse : :class:`~compas.geometry.Ellipse`
+        ellipse
             The ellipse geometry.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         frame = Frame.from_plane(ellipse.plane)
@@ -322,14 +323,14 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`~compas.geometry.Point`]
+        points
             The control points of the curve.
-        precision : float, optional
+        precision
             The precision of the interpolation.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         interp = GeomAPI_Interpolate(harray1_from_points1(points), False, precision)
@@ -343,12 +344,12 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        line : :class:`~compas.geometry.Line`
+        line
             The line geometry.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         return cls.from_parameters(
@@ -365,11 +366,12 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        native_curve : Geom_BSplineCurve
+        native_curve
+
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCNurbsCurve
 
         """
         return cls(native_curve)
@@ -388,22 +390,22 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`~compas.geometry.Point`]
+        points
             The control points.
-        weights : list[float]
+        weights
             The weights of the control points.
-        knots : list[float]
+        knots
             The knots of the curve, without multiplicities.
-        multiplicities : list[int]
+        multiplicities
             The multiplicities of the knots.
-        degree : int
+        degree
             The degree of the curve.
-        is_periodic : bool, optional
+        is_periodic
             Flag indicating that the curve is periodic.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         native_curve = native_curve_from_parameters(
@@ -422,14 +424,14 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        points : list[:class:`~compas.geometry.Point`]
+        points
             The control points of the curve.
-        degree : int, optional
+        degree
             The degree of the curve.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         p = len(points)
@@ -466,7 +468,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         cls = type(self)
@@ -477,11 +479,12 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        u : float
+        u
             Start parameter of the segment.
-        v : float
+        v
             End parameter of the segment.
-        precision : float, optional
+        precision
+            The precision for the segmentation.
 
         Returns
         -------
@@ -502,15 +505,16 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        u : float
+        u
             Start parameter of the segment.
-        v : float
+        v
             End parameter of the segment.
-        precision : float, optional
+        precision
+            The precision for the segmentation.
 
         Returns
         -------
-        :class:`OCCNurbsCurve`
+        OCCNurbsCurve
 
         """
         copy = self.copy()
@@ -522,9 +526,9 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`OCCNurbsCurve`
+        curve
             The curve to join.
-        precision : float, optional
+        precision
             Tolerance for continuity and multiplicity.
 
         Returns
@@ -546,14 +550,14 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
 
         Parameters
         ----------
-        curve : :class:`OCCNurbsCurve`
+        curve
             The curve to join.
-        precision : float, optional
+        precision
             Tolerance for continuity and multiplicity.
 
         Returns
         -------
-        :class:`OCCNurbsCurve` | None
+        OCCNurbsCurve | None
 
         """
         copy = self.copy()

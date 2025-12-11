@@ -12,12 +12,12 @@ class OCCBrepVertex(BrepVertex):
 
     Parameters
     ----------
-    occ_vertex : ``TopoDS.TopoDS_Vertex``
+    occ_vertex
         An OCC topological vertex data structure.
 
     Attributes
     ----------
-    point : :class:`~compas.geometry.Point`, read-only
+    point : Point
         The geometric point underlying the topological vertex.
 
     """
@@ -46,7 +46,7 @@ class OCCBrepVertex(BrepVertex):
 
         Parameters
         ----------
-        other : :class:`OCCBrepVertex`
+        other
             The other vertex.
 
         Returns
@@ -66,7 +66,7 @@ class OCCBrepVertex(BrepVertex):
 
         Parameters
         ----------
-        other : :class:`OCCBrepVertex`
+        other
             The other vertex.
 
         Returns
@@ -115,12 +115,13 @@ class OCCBrepVertex(BrepVertex):
 
         Parameters
         ----------
-        point : :class:`compas.geometry.Point`
+        point
             The point.
 
         Returns
         -------
-        :class:`BrepVertex`
+        BrepVertex
+            The vertex.
 
         """
         builder = BRepBuilderAPI.BRepBuilderAPI_MakeVertex(point_to_occ(point))
@@ -135,7 +136,8 @@ class OCCBrepVertex(BrepVertex):
 
         Returns
         -------
-        :class:`compas.geometry.Point`
+        Point
+            The point.
 
         """
         return self.point

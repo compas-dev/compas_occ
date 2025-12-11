@@ -78,19 +78,19 @@ class OCCBrep(Brep):
 
     Attributes
     ----------
-    vertices : list[:class:`compas_occ.brep.OCCBrepVertex`], read-only
+    vertices
         The vertices of the Brep.
-    edges : list[:class:`compas_occ.brep.OCCBrepEdge`], read-only
+    edges
         The edges of the Brep.
-    loops : list[:class:`compas_occ.brep.OCCBrepLoop`], read-only
+    loops
         The loops of the Brep.
-    faces : list[:class:`compas_occ.brep.OCCBrepFace`], read-only
+    faces
         The faces of the Brep.
-    frame : :class:`compas.geometry.Frame`, read-only
+    frame
         The local coordinate system of the Brep.
-    area : float, read-only
+    area
         The surface area of the Brep.
-    volume : float, read-only
+    volume
         The volume of the regions contained by the Brep.
 
     """
@@ -111,12 +111,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        data : :obj:`dict`
+        data
             The data dictionary.
 
         Returns
         -------
-        :class:`compas_occ.geometry.OCCBrep`
+        OCCBrep
 
         """
         from .builder import OCCBrepBuilder
@@ -145,7 +145,7 @@ class OCCBrep(Brep):
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         builder = BRepBuilderAPI.BRepBuilderAPI_Copy(self.occ_shape)
@@ -399,20 +399,25 @@ class OCCBrep(Brep):
     # ==============================================================================
 
     @classmethod
-    def from_step(cls, filename: Union[str, pathlib.Path], heal: bool = False, solid: bool = False) -> "OCCBrep":
+    def from_step(
+        cls,
+        filename: Union[str, pathlib.Path],
+        heal: bool = False,
+        solid: bool = False,
+    ) -> "OCCBrep":
         """
         Conctruct a BRep from the data contained in a STEP file.
 
         Parameters
         ----------
-        filename : str | pathlib.Path
+        filename
             The file.
-        solid : bool, optional
+        solid
             If True, convert shells to solids when possible.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         shape = DataExchange.read_step_file(str(filename), verbosity=False)
@@ -430,14 +435,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        filename : str | pathlib.Path
+        filename
             The file.
-        solid : bool, optional
+        solid
             If True, convert shells to solids when possible.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         shape = DataExchange.read_iges_file(str(filename))
@@ -456,7 +461,7 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        filepath : str | pathlib.Path
+        filepath
             Location of the file.
 
         Returns
@@ -480,9 +485,9 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        filepath : str | pathlib.Path
+        filepath
             Location of the file.
-        unit : str, optional
+        unit
             Base units for the geometry in the file.
 
         Returns
@@ -530,11 +535,11 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        filepath : str | pathlib.Path
+        filepath
             Location of the file.
-        linear_deflection : float, optional
+        linear_deflection
             Allowable deviation between curved geometry and mesh discretisation.
-        angular_deflection : float, optional
+        angular_deflection
             Maximum angle between two adjacent facets.
 
         Returns
@@ -553,7 +558,7 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        filepath : str | pathlib.Path
+        filepath
             Location of the file.
 
         Returns
@@ -578,11 +583,11 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        box : :class:`compas.geometry.Box`
+        box
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         xaxis = box.frame.xaxis.scaled(-0.5 * box.xsize)
@@ -600,14 +605,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        faces : list[:class:`OCCBrepFace`]
+        faces
             The input faces.
-        solid : bool, optional
+        solid
             Flag indicating that if the resulting shape should be converted to a solid, if possible.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         shell = TopoDS.TopoDS_Shell()
@@ -642,11 +647,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        cone : :class:`compas.geometry.Cone`
+        cone
+            A COMPAS cone.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         raise NotImplementedError
@@ -658,11 +664,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        curves : list[:class:`compas.geometry.NurbsCurve`]
+        curves
+            The input curves.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
+            The resulting BRep.
 
         """
         raise NotImplementedError
@@ -674,11 +682,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        cylinder : :class:`compas.geometry.Cylinder`
+        cylinder
+            A COMPAS cylinder.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         height = cylinder.height
@@ -701,18 +710,18 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        profile : :class:`OCCBrepEdge` | :class:`OCCBrepFace`
+        profile
             The base profile of the extrusion.
-        vector : :class:`Vector`
+        vector
             The extrusion vector.
             The extrusion has the same height as the length vector.
-        cap_ends : bool, optional
+        cap_ends
             Flag indicating that the ends of the brep should be capped.
             Currently this flag is not supported.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         if cap_ends:
@@ -736,16 +745,16 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        curves : list[:class:`OCCCurve`]
+        curves
             The loft curves.
-        start : :class:`Point`, optional
+        start
             The start point of the loft.
-        end : :class:`Point`, optional
+        end
             The end point of the loft.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         thru = BRepOffsetAPI.BRepOffsetAPI_ThruSections(False, False)
@@ -765,14 +774,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        mesh : :class:`compas.datastructures.Mesh`
+        mesh
             The input mesh.
-        solid : bool, optional
+        solid
             Flag indicating that if the resulting shape should be converted to a solid, if possible.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         shell = TopoDS.TopoDS_Shell()
@@ -799,12 +808,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        shape : ``TopoDS_Shape``
+        shape
             The OCC shape.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         return cls.from_shape(shape)
@@ -816,14 +825,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        polygons : list[:class:`compas.geometry.Polygon`]
+        polygons
             The input polygons.
-        solid : bool, optional
+        solid
             Flag indicating that if the resulting shape should be converted to a solid, if possible.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         shell = TopoDS.TopoDS_Shell()
@@ -858,13 +867,16 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
-        domain_u : tuple[float, float], optional
-        domain_v : tuple[float, float], optional
+        plane
+            A COMPAS plane.
+        domain_u
+            The domain of the plane in the U direction.
+        domain_v
+            The domain of the plane in the V direction.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         return cls.from_brepfaces([OCCBrepFace.from_plane(plane, domain_u=domain_u, domain_v=domain_v)])
@@ -876,14 +888,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        planes : list[:class:`compas.geometry.Plane`]
+        planes
             The input planes.
-        solid : bool, optional
+        solid
             Flag indicating that if the resulting shape should be converted to a solid, if possible.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         faces = []
@@ -898,12 +910,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        shape : ``TopoDS_Shape``
+        shape
             The OCC shape.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         brep = cls()
@@ -917,11 +929,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        sphere : :class:`compas.geometry.Sphere`
+        sphere
+            A COMPAS sphere.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         shape = BRepPrimAPI.BRepPrimAPI_MakeSphere(gp.gp_Pnt(*sphere.frame.point), sphere.radius).Shape()
@@ -942,21 +955,22 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        surface : :class:`compas.geometry.Surface`
-        domain_u : tuple, optional
+        surface
+            The input surface.
+        domain_u
             The domain of the surface in the U direction.
-        domain_v : tuple, optional
+        domain_v
             The domain of the surface in the V direction.
-        precision : float, optional
+        precision
             The precision of the discretisation of the surface.
-        loop : :class:`OCCBrepLoop`, optional
+        loop
             The loop to trim the surface with.
-        inside : bool, optional
+        inside
             Whether to keep the inside or outside of the loop.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         face = OCCBrepFace.from_surface(
@@ -999,11 +1013,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        torus : :class:`compas.geometry.Torus`
+        torus
+            A COMPAS torus.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         frame = torus.frame
@@ -1030,12 +1045,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
-        B : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
+        A
+            A OCCBrep or list of OCCBreps to subtract from.
+        B
+            A OCCBrep or list of OCCBreps to subtract.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         """
         tol = tol or TOL.absolute
@@ -1079,12 +1096,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
-        B : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
+        A
+            A OCCBrep or list of OCCBreps.
+        B
+            A OCCBrep or list of OCCBreps.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         Raises
         ------
@@ -1134,12 +1153,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        A : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
-        B : :class:`compas_occ.brep.OCCBrep` | list[:class:`compas_occ.brep.OCCBrep`]
+        A
+            A OCCBrep or list of OCCBreps.
+        B
+            A OCCBrep or list of OCCBreps.
 
         Returns
         -------
-        :class:`compas_occ.brep.OCCBrep`
+        OCCBrep
 
         Raises
         ------
@@ -1191,14 +1212,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        linear_deflection : float, optional
+        linear_deflection
             Allowable "distance" deviation between curved geometry and mesh discretisation.
-        angular_deflection : float, optional
+        angular_deflection
             Allowable "curvature" deviation between curved geometry and mesh discretisation.
 
         Returns
         -------
-        tuple[:class:`compas.datastructures.Mesh`, list[:class:`compas.geometry.Polyline`]]
+        tuple[Mesh, list[Polyline]]
 
         """
         linear_deflection = linear_deflection or TOL.lineardeflection
@@ -1269,14 +1290,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        u : int, optional
+        u
             The number of mesh faces in the U direction of the underlying surface geometry of every face of the Brep.
-        v : int, optional
+        v
             The number of mesh faces in the V direction of the underlying surface geometry of every face of the Brep.
 
         Returns
         -------
-        list[:class:`compas.datastructures.Mesh`]
+        list[Mesh]
 
         """
         converter = BRepBuilderAPI.BRepBuilderAPI_NurbsConvert(self.occ_shape, False)
@@ -1294,7 +1315,7 @@ class OCCBrep(Brep):
 
         Returns
         -------
-        list[:class:`compas.geometry.Polygon`]
+        list[Polygon]
 
         """
         polygons = []
@@ -1315,15 +1336,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        linear_deflection : float, optional
+        linear_deflection
             Allowable "distance" deviation between curved geometry and mesh discretisation.
-        angular_deflection : float, optional
+        angular_deflection
             Allowable "curvature" deviation between curved geometry and mesh discretisation.
 
         Returns
         -------
-        tuple[:class:`compas.datastructures.Mesh`, list[:class:`compas.geometry.Polyline`]]
-
+        tuple[Mesh, list[Polyline]]
         """
         return self.to_tesselation(linear_deflection=linear_deflection, angular_deflection=angular_deflection)
 
@@ -1337,11 +1357,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        vertex : :class:`OCCBrepVertex`
+        vertex
+            A vertex of the Brep.
 
         Returns
         -------
-        list[:class:`OCCBrepVertex`]
+        list[OCCBrepVertex]
+            The neighbouring vertices of the given vertex.
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
@@ -1365,11 +1387,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        vertex : :class:`OCCBrepVertex`
+        vertex
+            A vertex of the Brep
 
         Returns
         -------
-        list[:class:`OCCBrepEdge`]
+        list[OCCBrepEdge]
+            The edges connected to the given vertex.
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
@@ -1389,11 +1413,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        vertex : :class:`OCCBrepVertex`
+        vertex
+            A vertex of the Brep.
 
         Returns
         -------
-        list[:class:`OCCBrepFace`]
+        list[OCCBrepFace]
+            The faces connected to the given vertex.
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
@@ -1413,11 +1439,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        edge : :class:`OCCBrepEdge`
+        edge
+            An edge of the Brep.
 
         Returns
         -------
-        list[:class:`OCCBrepFace`]
+        list[OCCBrepFace]
+            The faces connected to the given edge.
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
@@ -1436,13 +1464,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        edge : :class:`OCCBrepEdge`
-            The edge.
+        edge
+            An edge of the Brep.
 
         Returns
         -------
-        list[:class:`OCCBrepLoop`]
-            The loops.
+        list[OCCBrepLoop]
+            The loops containing the given edge.
 
         """
 
@@ -1481,11 +1509,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        others : list[:class:`OCCBrep`]
+        others
+            A collection of other BRep shapes to subtract from the current shape.
 
         Results
         -------
-        :class:`OCCBrep`
+        OCCBrep
             The difference between the current shape and the other shapes.
 
         Raises
@@ -1523,11 +1552,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        others : list[:class:`OCCBrep`]
+        others
+            A collection of other BRep shapes to intersect with the current shape.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
             The intersection between the current shape and the others.
 
         Raises
@@ -1565,11 +1595,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        others : list[:class:`OCCBrep`]
+        others
+            A collection of other BRep shapes to unite with the current shape.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
             The union between the current shape and the others.
 
         Raises
@@ -1622,12 +1653,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        planes : list[:class:`compas.geometry.Plane`]
+        planes
             The slicing planes.
 
         Returns
         -------
-        list[list[:class:`compas.geometry.Polyline`]]
+        list[list[compas.geometry.Polyline]]
             A list of polylines per plane.
 
         """
@@ -1686,9 +1717,9 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        radius : float
+        radius
             The radius of the fillet.
-        exclude : list[:class:`OCCBrepEdge`], optional
+        exclude
             A list of edges to exclude from the fillet operation.
 
         Raises
@@ -1718,14 +1749,14 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        radius : float
+        radius
             The radius of the fillet.
-        exclude : list[:class:`OCCBrepEdge`], optional
+        exclude
             A list of edges to exclude from the fillet operation.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         brep = self.copy()
@@ -1763,12 +1794,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        other : :class:`OCCBrep`
+        other
             The other brep.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
             If it exists, the intersection is a curve
             that can be accessed via the edges of the returned brep.
 
@@ -1818,23 +1849,23 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        other : :class:`OCCBrep`
+        other
             The other brep.
-        linear_deflection : float, optional
+        linear_deflection
             Maximum linear deflection for shape approximation.
-        angular_deflection : float, optional
+        angular_deflection
             Maximum angular deflection for shape approximation.
-        tolerance : float, optional
+        tolerance
             Allowable deviation between shapes.
 
         Other Parameters
         ----------------
-        relative : bool, optional
+        relative
             If True, linear deflection used for faces is the maximum linear deflection of their edges.
 
         Returns
         -------
-        tuple[list[:class:`OCCBrepFace`], list[:class:`OCCBrepFace`]]
+        tuple[list[OCCBrepFace], list[OCCBrepFace]]
 
         """
         linear_deflection = linear_deflection or TOL.lineardeflection
@@ -1890,13 +1921,13 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        merge_edges : bool, optional
+        merge_edges
             Merge edges with the same underlying geometry.
-        merge_faces : bool, optional
+        merge_faces
             Merge faces with the same underlying geometry.
-        lineardeflection : float, optional
+        lineardeflection
             Default is `compas.tolerance.Tolerance.lineardeflection`.
-        angulardeflection : float, optional
+        angulardeflection
             Default is `compas.tolerance.Tolerance.angulardeflection`.
 
         Returns
@@ -1923,12 +1954,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
+        plane
             The slicing plane.
 
         Returns
         -------
-        :class:`OCCBrep` | None
+        OCCBrep | None
             The resulting Brep slice or None if the plane does not intersect the Brep.
 
         """
@@ -1947,12 +1978,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        other : :class:`OCCBrep`
-            Another b-rep.
+        other
+            Another brep.
 
         Returns
         -------
-        list[:class:`compas_occ.brep.OCCBrep`]
+        list[OCCBrep]
 
         """
         splitter = BOPAlgo.BOPAlgo_Splitter()
@@ -1976,7 +2007,7 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        matrix : :class:`compas.geometry.Transformation`
+        matrix
             A transformation matrix.
 
         Returns
@@ -1995,12 +2026,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        matrix : :class:`compas.geometry.Transformation`
+        matrix
             A transformation matrix.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         trsf = compas_transformation_to_trsf(matrix)
@@ -2013,7 +2044,7 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
+        plane
             The slicing plane.
 
         Returns
@@ -2042,12 +2073,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        plane : :class:`compas.geometry.Plane`
+        plane
             The slicing plane.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         brep = self.copy()
@@ -2059,12 +2090,12 @@ class OCCBrep(Brep):
 
         Parameters
         ----------
-        distance : float
+        distance
             The thickness in the form of an offset distance.
 
         Returns
         -------
-        :class:`OCCBrep`
+        OCCBrep
 
         """
         offset = BRepOffsetAPI.BRepOffsetAPI_MakeThickSolid()

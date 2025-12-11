@@ -28,15 +28,6 @@ NGon = Union[Polygon, list[Union[Annotated[list[float], 3], compas.geometry.Poin
 def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
     """Convert a triangle to a BRep face.
 
-    Parameters
-    ----------
-    triangle : [point, point, point]
-        Three points defining a triangle.
-
-    Returns
-    -------
-    TopoDS_Face
-
     Raises
     ------
     ValueError
@@ -44,8 +35,8 @@ def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
 
     See Also
     --------
-    :func:`quad_to_face`
-    :func:`ngon_to_face`
+    * [`quad_to_face`][quad_to_face]
+    * [`ngon_to_face`][ngon_to_face]
 
     Examples
     --------
@@ -68,15 +59,6 @@ def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
 def quad_to_face(quad: Quad) -> TopoDS_Face:
     """Convert a quad to a BRep face with an underlying ruled surface.
 
-    Parameters
-    ----------
-    quad : [point, point, point, point]
-        Four points defining a quad.
-
-    Returns
-    -------
-    TopoDS_Face
-
     Raises
     ------
     ValueError
@@ -84,8 +66,8 @@ def quad_to_face(quad: Quad) -> TopoDS_Face:
 
     See Also
     --------
-    :func:`triangle_to_face`
-    :func:`ngon_to_face`
+    * [`triangle_to_face`][triangle_to_face]
+    * [`ngon_to_face`][ngon_to_face]
 
     Examples
     --------
@@ -107,19 +89,10 @@ def quad_to_face(quad: Quad) -> TopoDS_Face:
 def ngon_to_face(ngon: NGon) -> TopoDS_Face:
     """Convert a Ngon to a BRep face with an underlying best-fit surface.
 
-    Parameters
-    ----------
-    ngon : sequence[point]
-        Points defining a polygon.
-
-    Returns
-    -------
-    TopoDS_Face
-
     See Also
     --------
-    :func:`triangle_to_face`
-    :func:`quad_to_face`
+    * [`triangle_to_face`][triangle_to_face]
+    * [`quad_to_face`][quad_to_face]
 
     """
     points = [gp_Pnt(*point) for point in ngon]
@@ -139,15 +112,6 @@ def ngon_to_face(ngon: NGon) -> TopoDS_Face:
 def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
     """Convert a COMPAS triangle mesh to an OCC shell.
 
-    Parameters
-    ----------
-    mesh : :class:`~compas.datastructures.Mesh`
-        A COMPAS mesh data structure with triangle faces.
-
-    Returns
-    -------
-    TopoDS_Shell
-
     Raises
     ------
     ValueError
@@ -155,8 +119,8 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     See Also
     --------
-    :func:`compas_quadmesh_to_occ_shell`
-    :func:`compas_mesh_to_occ_shell`
+    * [`compas_quadmesh_to_occ_shell`][compas_quadmesh_to_occ_shell]
+    * [`compas_mesh_to_occ_shell`][compas_mesh_to_occ_shell]
 
     """
     if not mesh.is_trimesh():
@@ -176,15 +140,6 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
     """Convert a COMPAS quad mesh to an OCC shell.
 
-    Parameters
-    ----------
-    mesh : :class:`~compas.datastructures.Mesh`
-        A COMPAS mesh data structure with quad faces.
-
-    Returns
-    -------
-    TopoDS_Shell
-
     Raises
     ------
     ValueError
@@ -192,8 +147,8 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     See Also
     --------
-    :func:`compas_trimesh_to_occ_shell`
-    :func:`compas_mesh_to_occ_shell`
+    * [`compas_trimesh_to_occ_shell`][compas_trimesh_to_occ_shell]
+    * [`compas_mesh_to_occ_shell`][compas_mesh_to_occ_shell]
 
     """
     if not mesh.is_quadmesh():
@@ -213,19 +168,10 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
     """Convert a general COMPAS mesh to an OCC shell.
 
-    Parameters
-    ----------
-    mesh : :class:`~compas.datastructures.Mesh`
-        A COMPAS mesh data structure.
-
-    Returns
-    -------
-    TopoDS_Shell
-
     See Also
     --------
-    :func:`compas_trimesh_to_occ_shell`
-    :func:`compas_quadmesh_to_occ_shell`
+    * [`compas_trimesh_to_occ_shell`][compas_trimesh_to_occ_shell]
+    * [`compas_quadmesh_to_occ_shell`][compas_quadmesh_to_occ_shell]
 
     """
     shell = TopoDS_Shell()

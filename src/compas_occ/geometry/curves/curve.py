@@ -48,17 +48,17 @@ class OCCCurve(Curve):
 
     Attributes
     ----------
-    dimension : int, read-only
+    dimension
         The dimension of the curve.
-    domain : tuple[float, float], read-only
+    domain
         The domain of the parameter space of the curve.
-    end : :class:`~compas.geometry.Point`, read-only
+    end
         The end point of the curve.
-    is_closed : bool, read-only
+    is_closed
         Flag indicating that the curve is closed.
-    is_periodic : bool, read-only
+    is_periodic
         Flag indicating that the curve is periodic.
-    start : :class:`~compas.geometry.Point`, read-only
+    start
         The start point of the curve.
 
     """
@@ -139,11 +139,11 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        native_curve : Geom_Curve
+        native_curve
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCCurve
 
         """
         return cls(native_curve)
@@ -154,11 +154,11 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        native_curve : Geom_Curve
+        native_curve
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCCurve
 
         Warnings
         --------
@@ -177,8 +177,10 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        filepath : str
-        schema : str, optional
+        filepath
+            The path to the file.
+        schema
+            The STEP schema.
 
         Returns
         -------
@@ -197,7 +199,7 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        n : int, optional
+        n
             The number of polyline points.
 
         Returns
@@ -216,7 +218,7 @@ class OCCCurve(Curve):
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCCurve
 
         """
         cls = type(self)
@@ -228,7 +230,8 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        T : :class:`~compas.geometry.Transformation`
+        T
+            A transformation matrix.
 
         Returns
         -------
@@ -252,12 +255,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Point`
+        Point
 
         Raises
         ------
@@ -277,12 +280,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Vector`
+        Vector
 
         Raises
         ------
@@ -305,12 +308,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Vector`
+        Vector
 
         Raises
         ------
@@ -334,12 +337,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Frame`
+        Frame
 
         Raises
         ------
@@ -374,11 +377,11 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The parameter of the starting point.
-        distance : float
+        distance
             The distance along the curve from the point at the given parameter.
-        precision : float, optional
+        precision
             The required precision of the result.
 
         Returns
@@ -395,11 +398,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        precision : float, optional
+        precision
+            The precision.
 
         Returns
         -------
-        :class:`~compas.geometry.Box`
+        Box
 
         """
         box = Bnd_Box()
@@ -416,7 +420,8 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        precision : float, optional
+        precision
+            The precision used for calculating the length.
 
         Returns
         -------
@@ -436,14 +441,14 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        point : :class:`~compas.geometry.Point`
+        point
             The point to project to the curve.
-        return_parameter : bool, optional
+        return_parameter
             If True, return the curve parameter in addition to the closest point.
 
         Returns
         -------
-        :class:`~compas.geometry.Point` | tuple[:class:`~compas.geometry.Point`, float]
+        Point | tuple[Point, float]
             If `return_parameter` is False, the nearest point on the curve.
             If `return_parameter` is True, the nearest point on the curve and the corresponding parameter.
 
@@ -487,9 +492,9 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
+        curve
             The curve to find the closest distance to.
-        return_distance : bool, optional
+        return_distance
             If True, return the minimum distance between the two curves in addition to the curve parameters.
 
         Returns
@@ -513,14 +518,14 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.OCCNurbsCurve`
+        curve
             The curve to find the closest distance to.
-        return_distance : bool, optional
+        return_distance
             If True, return the minimum distance between the curves in addition to the closest points.
 
         Returns
         -------
-        tuple[:class:`Point`, :class:`Point`] | tuple[tuple[:class:`Point`, :class:`Point`], float]
+        tuple[Point, Point] | tuple[tuple[Point, Point], float]
             If `return_distance` is False, the closest points.
             If `return_distance` is True, the distance in addition to the closest points.
 
@@ -543,18 +548,18 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        count : int
+        count
             The number of segments.
-        return_points : bool, optional
+        return_points
             If True, return the list of division parameters,
             and the points corresponding to those parameters.
             If False, return only the list of parameters.
-        precision : float, optional
+        precision
             The precision used for calculating the segments.
 
         Returns
         -------
-        list[float] | tuple[list[float], list[:class:`~compas.geometry.Point`]]
+        list[float] | tuple[list[float], list[Point]]
             If `return_points` is False, the parameters of the discretisation.
             If `return_points` is True, a list of points in addition to the parameters of the discretisation.
 
@@ -590,18 +595,18 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        length : float
+        length
             The length of the segments.
-        return_points : bool, optional
+        return_points
             If True, return the list of division parameters,
             and the points corresponding to those parameters.
             If False, return only the list of parameters.
-        precision : float, optional
+        precision
             The precision used for calculating the segments.
 
         Returns
         -------
-        list[float] | tuple[list[float], list[:class:`~compas.geometry.Point`]]
+        list[float] | tuple[list[float], list[Point]]
             If `return_points` is False, the parameters of the discretisation.
             If `return_points` is True, a list of points in addition to the parameters of the discretisation.
 
@@ -627,12 +632,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        surface : :class:`compas_occ.geometry.OCCSurface`
+        surface
             The projection surface.
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCCurve
 
         """
         result = geomprojlib.Project(self.native_curve, surface.occ_surface)
@@ -644,12 +649,12 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        surface : :class:`compas_occ.geometry.OCCSurface`
+        surface
             The embedding surface.
 
         Returns
         -------
-        :class:`OCCCurve2d`
+        OCCCurve2d
 
         """
         result = geomprojlib.Curve2d(self.native_curve, surface.occ_surface)
@@ -661,9 +666,9 @@ class OCCCurve(Curve):
 
         Parameters
         ----------
-        distance : float
+        distance
             The offset distance.
-        direction : :class:`compas.geometry.Vector`
+        direction
             The offset direction.
             Note that this direction defines the normal of the offset plane.
             At every point of the curve, a positive offset ditance
@@ -672,7 +677,7 @@ class OCCCurve(Curve):
 
         Returns
         -------
-        :class:`OCCCurve`
+        OCCCurve
 
         """
         native_curve = Geom_OffsetCurve(

@@ -1,0 +1,169 @@
+site_name: COMPAS Model
+site_url: https://github.com/compas-dev/compas_occ/
+
+repo_name: compas-dev/compas_occ
+repo_url: https://github.com/compas-dev/compas_occ/
+
+copyright: Copyright &copy; ETH Zurich - Block Research Group
+
+extra:
+  homepage: https://compas-dev.github.io/compas_occ/
+  version:
+    provider: mike
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  logo: assets/logos/compas_icon_white.png
+  favicon: public/favicon.ico
+  features:
+    - content.code.copy
+    - content.footnote.tooltips
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - toc.follow
+
+markdown_extensions:
+  - abbr
+  - attr_list
+  - admonition
+  - callouts:
+      strip_period: no
+  - footnotes
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.caret
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - toc:
+      permalink: "¤"
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [src] # search packages in the src folder
+          inventories:
+            - https://docs.python.org/3/objects.inv
+            - https://compas.dev/compas/latest/objects.inv
+          options:
+            allow_inspection: true
+            backlinks: tree
+            docstring_options:
+              ignore_init_summary: true
+              trim_doctest_flags: true
+            docstring_style: numpy
+            docstring_section_style: list
+            filters: public
+            group_by_category: true
+            heading_level: 1
+            inheritance_diagram_direction: TD
+            inherited_members: false
+            line_length: 88
+            merge_init_into_class: true
+            modernize_annotations: true
+            parameter_headings: false
+            preload_modules: [mkdocstrings, compas]
+            relative_crossrefs: true
+            scoped_crossrefs: true
+            separate_signature: true
+            show_bases: false
+            show_category_heading: true
+            show_docstring_attributes: true
+            show_docstring_functions: true
+            show_docstring_modules: false
+            show_if_no_docstring: false
+            show_inheritance_diagram: false
+            show_root_heading: true
+            show_root_full_path: true
+            show_signature: true
+            show_signature_annotations: true
+            show_signature_type_parameters: true
+            show_source: false
+            show_submodules: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+            summary:
+              modules: false
+            type_parameter_headings: true
+            unwrap_annotated: true
+
+nav:
+  - Home: index.md
+  - Get Started:
+      - Introduction: introduction.md
+      - Installation: installation.md
+      - Tutorial: tutorial.md
+  - Examples:
+      - Breps:
+          - Brep Explorer: examples/breps/brep_explorer.md
+          - Brep Fillet: examples/breps/brep_fillet.md
+          - Brep From Booleans: examples/breps/brep_from_booleans.md
+          - Brep From Mesh: examples/breps/brep_from_mesh.md
+          - Brep Overlaps: examples/breps/brep_overlap.md
+          - Brep Slice: examples/breps/brep_slice.md
+          - Brep Split: examples/breps/brep_split.md
+          - Brep Trim: examples/breps/brep_trim.md
+          - Brep with Hole: examples/breps/brep_with_hole.md
+          - Brep with Holes: examples/breps/brep_with_holes.md
+  - API:
+      - Geometry:
+          - OCCCurve: api/compas_occ.geometry.OCCCurve.md
+          - OCCCurve2d: api/compas_occ.geometry.OCCCurve2d.md
+          - OCCNurbsCurve: api/compas_occ.geometry.OCCNurbsCurve.md
+          - OCCSurface: api/compas_occ.geometry.OCCSurface.md
+          - OCCNurbsSurface: api/compas_occ.geometry.OCCNurbsSurface.md
+      - Brep:
+          - OCCBrepVertex: api/compas_occ.brep.OCCBrepVertex.md
+          - OCCBrepEdge: api/compas_occ.brep.OCCBrepEdge.md
+          - OCCBrepLoop: api/compas_occ.brep.OCCBrepLoop.md
+          - OCCBrepFace: api/compas_occ.brep.OCCBrepFace.md
+          - OCCBrep: api/compas_occ.brep.OCCBrep.md
+      - Conversions: api/compas_occ.conversions.md
+  - Other:
+      - License: license.md
+      - Acknowledgements: acknowledgements.md
+      - changelog.md

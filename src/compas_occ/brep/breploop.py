@@ -17,12 +17,12 @@ def wire_from_edges(edges: list[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
 
     Parameters
     ----------
-    edges : list[:class:`compas_occ.brep.OCCBrepEdge`]
+    edges
         The edges.
 
     Returns
     -------
-    ``TopoDS.TopoDS_Wire``
+    TopoDS.TopoDS_Wire
 
     """
     builder = BRepBuilderAPI.BRepBuilderAPI_MakeWire()
@@ -36,14 +36,14 @@ class OCCBrepLoop(BrepLoop):
 
     Parameters
     ----------
-    occ_wire : ``TopoDS.TopoDS_Wire``
+    occ_wire
         An OCC BRep wire.
 
     Attributes
     ----------
-    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
+    vertices
         List of BRep vertices.
-    edges : list[:class:`~compas_occ.brep.BrepEdge`], read-only
+    edges
         List of BRep edges.
 
     """
@@ -72,7 +72,7 @@ class OCCBrepLoop(BrepLoop):
 
         Parameters
         ----------
-        other : :class:`OCCBrepLoop`
+        other
             The other loop.
 
         Returns
@@ -92,7 +92,7 @@ class OCCBrepLoop(BrepLoop):
 
         Parameters
         ----------
-        other : :class:`OCCBrepLoop`
+        other
             The other loop.
 
         Returns
@@ -163,12 +163,12 @@ class OCCBrepLoop(BrepLoop):
 
         Parameters
         ----------
-        edges : list[:class:`compas_occ.brep.BrepEdge`]
+        edges
             The edges.
 
         Returns
         -------
-        :class:`OCCBrepLoop`
+        OCCBrepLoop
 
         """
         return cls(wire_from_edges(edges))
@@ -179,12 +179,12 @@ class OCCBrepLoop(BrepLoop):
 
         Parameters
         ----------
-        polyline : :class:`compas.geometry.Polyline`
+        polyline
             The polyline.
 
         Returns
         -------
-        :class:`OCCBrepLoop`
+        OCCBrepLoop
 
         """
         edges = []
@@ -199,12 +199,12 @@ class OCCBrepLoop(BrepLoop):
 
         Parameters
         ----------
-        polygon : :class:`compas.geometry.Polygon`
+        polygon
             The polygon.
 
         Returns
         -------
-        :class:`OCCBrepLoop`
+        OCCBrepLoop
 
         """
         edges = []
@@ -222,7 +222,7 @@ class OCCBrepLoop(BrepLoop):
 
         Returns
         -------
-        :class:`compas.geometry.Polyline`
+        Polyline
 
         """
         points = []
@@ -235,7 +235,7 @@ class OCCBrepLoop(BrepLoop):
 
         Returns
         -------
-        :class:`compas.geometry.Polygon`
+        Polygon
 
         """
         points = []

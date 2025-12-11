@@ -59,15 +59,6 @@ from compas.geometry import Vector
 def point_to_occ(point: Point) -> gp_Pnt:
     """Convert a COMPAS point to an OCC point.
 
-    Parameters
-    ----------
-    point : :class:`~compas.geometry.Point`
-        The COMPAS point to convert.
-
-    Returns
-    -------
-    ``gp_Pnt``
-
     Examples
     --------
     >>> from compas.geometry import Point
@@ -82,15 +73,6 @@ def point_to_occ(point: Point) -> gp_Pnt:
 
 def point_to_occ2d(point: Point) -> gp_Pnt2d:
     """Convert a COMPAS point to a 2D OCC point.
-
-    Parameters
-    ----------
-    point : :class:`~compas.geometry.Point`
-        The COMPAS point to convert.
-
-    Returns
-    -------
-    ``gp_Pnt2d``
 
     Examples
     --------
@@ -107,18 +89,9 @@ def point_to_occ2d(point: Point) -> gp_Pnt2d:
 def vector_to_occ(vector: Vector) -> gp_Vec:
     """Convert a COMPAS vector to an OCC vector.
 
-    Parameters
-    ----------
-    vector : :class:`~compas.geometry.Vector`
-        The COMPAS vector to convert.
-
-    Returns
-    -------
-    ``gp_Vec``
-
     See Also
     --------
-    :func:`direction_to_occ`
+    * [`direction_to_occ`][direction_to_occ]
 
     Examples
     --------
@@ -135,18 +108,9 @@ def vector_to_occ(vector: Vector) -> gp_Vec:
 def vector_to_occ2d(vector: Vector) -> gp_Vec2d:
     """Convert a COMPAS vector to a 2D OCC vector.
 
-    Parameters
-    ----------
-    vector : :class:`~compas.geometry.Vector`
-        The COMPAS vector to convert.
-
-    Returns
-    -------
-    ``gp_Vec``
-
     See Also
     --------
-    :func:`direction_to_occ2d`
+    * [`direction_to_occ2d`][direction_to_occ2d]
 
     Examples
     --------
@@ -163,18 +127,9 @@ def vector_to_occ2d(vector: Vector) -> gp_Vec2d:
 def direction_to_occ(vector: Vector) -> gp_Dir:
     """Convert a COMPAS vector to an OCC direction.
 
-    Parameters
-    ----------
-    vector : :class:`~compas.geometry.Vector`
-        The COMPAS vector to convert.
-
-    Returns
-    -------
-    ``gp_Dir``
-
     See Also
     --------
-    :func:`vector_to_occ`
+    * [`vector_to_occ`][vector_to_occ]
 
     Examples
     --------
@@ -191,18 +146,9 @@ def direction_to_occ(vector: Vector) -> gp_Dir:
 def direction_to_occ2d(vector: Vector) -> gp_Dir2d:
     """Convert a COMPAS vector to a 2D OCC direction.
 
-    Parameters
-    ----------
-    vector : :class:`~compas.geometry.Vector`
-        The COMPAS vector to convert.
-
-    Returns
-    -------
-    ``gp_Dir2d``
-
     See Also
     --------
-    :func:`vector_to_occ2d`
+    * [`vector_to_occ2d`][vector_to_occ2d]
 
     Examples
     --------
@@ -219,18 +165,9 @@ def direction_to_occ2d(vector: Vector) -> gp_Dir2d:
 def axis_to_occ(axis: tuple[Point, Vector]) -> gp_Ax1:
     """Convert a COMPAS point and vector to an OCC axis.
 
-    Parameters
-    ----------
-    axis : tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
-        A point and vector representing an axis.
-
-    Returns
-    -------
-    ``gp_Ax1``
-
     See Also
     --------
-    :func:`line_to_occ`
+    * [`line_to_occ`][line_to_occ]
 
     Examples
     --------
@@ -251,18 +188,9 @@ def axis_to_occ(axis: tuple[Point, Vector]) -> gp_Ax1:
 def line_to_occ(line: Line) -> gp_Lin:
     """Convert a COMPAS line to an OCC line.
 
-    Parameters
-    ----------
-    line : :class:`~compas.geometry.Line`
-        The COMPAS line to convert.
-
-    Returns
-    -------
-    ``gp_Lin``
-
     See Also
     --------
-    :func:`axis_to_occ`
+    * [`axis_to_occ`][axis_to_occ]
 
     Examples
     --------
@@ -282,18 +210,9 @@ def line_to_occ(line: Line) -> gp_Lin:
 def line_to_occ2d(line: Line) -> gp_Lin2d:
     """Convert a COMPAS line to a 2D OCC line.
 
-    Parameters
-    ----------
-    line : :class:`~compas.geometry.Line`
-        The COMPAS line to convert.
-
-    Returns
-    -------
-    ``gp_Lin2d``
-
     See Also
     --------
-    :func:`axis_to_occ2d`
+    * [`axis_to_occ2d`][axis_to_occ2d]
 
     Examples
     --------
@@ -313,19 +232,10 @@ def line_to_occ2d(line: Line) -> gp_Lin2d:
 def plane_to_occ(plane: Plane) -> gp_Pln:
     """Convert a COMPAS plane to an OCC plane.
 
-    Parameters
-    ----------
-    plane : :class:`compas.geometry.Plane`
-        The COMPAS plane.
-
-    Returns
-    -------
-    ``gp_Pln``
-
     See Also
     --------
-    :func:`plane_to_occ_ax2`
-    :func:`plane_to_occ_ax3`
+    * [`plane_to_occ_ax2`][plane_to_occ_ax2]
+    * [`plane_to_occ_ax3`][plane_to_occ_ax3]
 
     Examples
     --------
@@ -345,19 +255,10 @@ def plane_to_occ(plane: Plane) -> gp_Pln:
 def plane_to_occ_ax2(plane: Plane) -> gp_Ax2:
     """Convert a COMPAS plane to a right-handed OCC coordinate system.
 
-    Parameters
-    ----------
-    plane : :class:`compas.geometry.Plane`
-        The COMPAS plane.
-
-    Returns
-    -------
-    ``gp_Ax2``
-
     See Also
     --------
-    :func:`plane_to_occ`
-    :func:`plane_to_occ_ax3`
+    * [`plane_to_occ`][plane_to_occ]
+    * [`plane_to_occ_ax3`][plane_to_occ_ax3]
 
     Examples
     --------
@@ -377,19 +278,10 @@ def plane_to_occ_ax2(plane: Plane) -> gp_Ax2:
 def plane_to_occ_ax3(plane: Plane) -> gp_Ax3:
     """Convert a COMPAS plane to a right-handed OCC coordinate system.
 
-    Parameters
-    ----------
-    plane : :class:`compas.geometry.Plane`
-        The COMPAS plane.
-
-    Returns
-    -------
-    ``gp_Ax3``
-
     See Also
     --------
-    :func:`plane_to_occ`
-    :func:`plane_to_occ_ax2`
+    * [`plane_to_occ`][plane_to_occ]
+    * [`plane_to_occ_ax2`][plane_to_occ_ax2]
 
     Examples
     --------
@@ -409,18 +301,9 @@ def plane_to_occ_ax3(plane: Plane) -> gp_Ax3:
 def frame_to_occ_ax2(frame: Frame) -> gp_Ax2:
     """Convert a COMPAS frame to a right-handed OCC coordinate system.
 
-    Parameters
-    ----------
-    frame : :class:`compas.geometry.Frame`
-        The COMPAS frame.
-
-    Returns
-    -------
-    ``gp_Ax2``
-
     See Also
     --------
-    :func:`frame_to_occ_ax3`
+    * [`frame_to_occ_ax3`][frame_to_occ_ax3]
 
     Examples
     --------
@@ -441,15 +324,6 @@ def frame_to_occ_ax2(frame: Frame) -> gp_Ax2:
 def frame_to_occ_ax22d(frame: Frame) -> gp_Ax22d:
     """Convert a COMPAS frame to a 2D right-handed OCC coordinate system.
 
-    Parameters
-    ----------
-    frame : :class:`compas.geometry.Frame`
-        The COMPAS frame.
-
-    Returns
-    -------
-    ``gp_Ax22d``
-
     Examples
     --------
     >>> from compas.geometry import Frame
@@ -469,18 +343,9 @@ def frame_to_occ_ax22d(frame: Frame) -> gp_Ax22d:
 def frame_to_occ_ax3(frame: Frame) -> gp_Ax3:
     """Convert a COMPAS frame to a right-handed OCC coordinate system.
 
-    Parameters
-    ----------
-    frame : :class:`compas.geometry.Frame`
-        The COMPAS frame.
-
-    Returns
-    -------
-    ``gp_Ax3``
-
     See Also
     --------
-    :func:`frame_to_occ_ax2`
+    * [`frame_to_occ_ax2`][frame_to_occ_ax2]
 
     Examples
     --------
@@ -501,18 +366,9 @@ def frame_to_occ_ax3(frame: Frame) -> gp_Ax3:
 def circle_to_occ(circle: Circle) -> gp_Circ:
     """Construct an OCC circle from a COMPAS circle.
 
-    Parameters
-    ----------
-    circle : :class:`compas.geometry.Cicrle`
-        The COMPAS circle.
-
-    Returns
-    -------
-    ``gp_Circ``
-
     See Also
     --------
-    :func:`ellipse_to_occ`
+    * [`ellipse_to_occ`][ellipse_to_occ]
 
     Examples
     --------
@@ -532,18 +388,9 @@ def circle_to_occ(circle: Circle) -> gp_Circ:
 def circle_to_occ2d(circle: Circle) -> gp_Circ2d:
     """Convert a COMPAS circle to a 2D OCC circle.
 
-    Parameters
-    ----------
-    circle : :class:`compas.geometry.Circle`
-        The COMPAS circle.
-
-    Returns
-    -------
-    ``gp_Circ2d``
-
     See Also
     --------
-    :func:`ellipse_to_occ2d`
+    * [`ellipse_to_occ2d`][ellipse_to_occ2d]
 
     Examples
     --------
@@ -563,18 +410,9 @@ def circle_to_occ2d(circle: Circle) -> gp_Circ2d:
 def ellipse_to_occ(ellipse: Ellipse) -> gp_Elips:
     """Construct an OCC ellipse from a COMPAS ellipse.
 
-    Parameters
-    ----------
-    ellipse : :class:`compas.geometry.Ellipse`
-        The COMPAS ellipse.
-
-    Returns
-    -------
-    ``gp_Elips``
-
     See Also
     --------
-    :func:`circle_to_occ`
+    * [`circle_to_occ`][circle_to_occ]
 
     Examples
     --------
@@ -595,18 +433,9 @@ def ellipse_to_occ(ellipse: Ellipse) -> gp_Elips:
 def ellipse_to_occ2d(ellipse: Ellipse) -> gp_Elips2d:
     """Convert a COMPAS ellipse to a 2D OCC ellipse.
 
-    Parameters
-    ----------
-    ellipse : :class:`compas.geometry.Ellipse`
-        The COMPAS ellipse.
-
-    Returns
-    -------
-    ``gp_Elips2d``
-
     See Also
     --------
-    :func:`circle_to_occ2d`
+    * [`circle_to_occ2d`][circle_to_occ2d]
 
     Examples
     --------
@@ -627,20 +456,11 @@ def ellipse_to_occ2d(ellipse: Ellipse) -> gp_Elips2d:
 def sphere_to_occ(sphere: Sphere) -> gp_Sphere:
     """Convert a COMPAS sphere to an OCC sphere.
 
-    Parameters
-    ----------
-    sphere : :class:`compas.geometry.Sphere`
-        The COMPAS sphere.
-
-    Returns
-    -------
-    ``gp_Sphere``
-
     See Also
     --------
-    :func:`cylinder_to_occ`
-    :func:`cone_to_occ`
-    :func:`torus_to_occ`
+    * [`cylinder_to_occ`][cylinder_to_occ]
+    * [`cone_to_occ`][cone_to_occ]
+    * [`torus_to_occ`][torus_to_occ]
 
     Examples
     --------
@@ -660,20 +480,11 @@ def sphere_to_occ(sphere: Sphere) -> gp_Sphere:
 def cylinder_to_occ(cylinder: Cylinder) -> gp_Cylinder:
     """Convert a COMPAS cylinder to an OCC cylinder.
 
-    Parameters
-    ----------
-    cylinder : :class:`compas.geometry.Cylinder`
-        The COMPAS cylinder.
-
-    Returns
-    -------
-    ``gp_Cylinder``
-
     See Also
     --------
-    :func:`sphere_to_occ`
-    :func:`cone_to_occ`
-    :func:`torus_to_occ`
+    * [`sphere_to_occ`][sphere_to_occ]
+    * [`cone_to_occ`][cone_to_occ]
+    * [`torus_to_occ`][torus_to_occ]
 
     Examples
     --------
@@ -693,20 +504,11 @@ def cylinder_to_occ(cylinder: Cylinder) -> gp_Cylinder:
 def cone_to_occ(cone: Cone) -> gp_Cone:
     """Convert a COMPAS cone to an OCC cone.
 
-    Parameters
-    ----------
-    cone : :class:`compas.geometry.Cone`
-        The COMPAS cone.
-
-    Returns
-    -------
-    ``gp_Cone``
-
     See Also
     --------
-    :func:`sphere_to_occ`
-    :func:`cylinder_to_occ`
-    :func:`torus_to_occ`
+    * [`sphere_to_occ`][sphere_to_occ]
+    * [`cylinder_to_occ`][cylinder_to_occ]
+    * [`torus_to_occ`][torus_to_occ]
 
     Examples
     --------
@@ -727,20 +529,11 @@ def cone_to_occ(cone: Cone) -> gp_Cone:
 def torus_to_occ(torus: Torus) -> gp_Torus:
     """Convert a COMPAS torus to an OCC torus.
 
-    Parameters
-    ----------
-    torus : :class:`compas.geometry.Torus`
-        The COMPAS torus.
-
-    Returns
-    -------
-    ``gp_Torus``
-
     See Also
     --------
-    :func:`sphere_to_occ`
-    :func:`cylinder_to_occ`
-    :func:`cone_to_occ`
+    * [`sphere_to_occ`][sphere_to_occ]
+    * [`cylinder_to_occ`][cylinder_to_occ]
+    * [`cone_to_occ`][cone_to_occ]
 
     Examples
     --------
@@ -769,20 +562,9 @@ def point_to_compas(
 ) -> Point:
     """Construct a COMPAS point from an OCC point.
 
-    Parameters
-    ----------
-    point : ``gp_Pnt``
-        The OCC point.
-    cls : Type[:class:`~compas.geometry.Point`], optional
-        The type of COMPAS point.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Point`
-
     See Also
     --------
-    :func:`point2d_to_compas`
+    * [`point2d_to_compas`][point2d_to_compas]
 
     Examples
     --------
@@ -803,20 +585,9 @@ def point2d_to_compas(
 ) -> Point:
     """Construct a COMPAS point from an OCC 2D point.
 
-    Parameters
-    ----------
-    point : ``gp_Pnt2d``
-        The OCC point.
-    cls : Type[:class:`~compas.geometry.Point`], optional
-        The type of COMPAS point.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Point`
-
     See Also
     --------
-    :func:`point_to_compas`
+    * [`point_to_compas`][point_to_compas]
 
     Examples
     --------
@@ -837,22 +608,11 @@ def vector_to_compas(
 ) -> Vector:
     """Construct a COMPAS vector from an OCC vector.
 
-    Parameters
-    ----------
-    vector : ``gp_Vec``
-        The OCC vector.
-    cls : Type[:class:`~compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`vector2d_to_compas`
-    :func:`direction_to_compas`
-    :func:`axis_to_compas_vector`
+    * [`vector2d_to_compas`][vector2d_to_compas]
+    * [`direction_to_compas`][direction_to_compas]
+    * [`axis_to_compas_vector`][axis_to_compas_vector]
 
     Examples
     --------
@@ -873,22 +633,11 @@ def vector2d_to_compas(
 ) -> Vector:
     """Construct a COMPAS vector from an OCC 2D vector.
 
-    Parameters
-    ----------
-    vector : ``gp_Vec2d``
-        The OCC vector.
-    cls : Type[:class:`~compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`vector_to_compas`
-    :func:`direction_to_compas`
-    :func:`axis_to_compas_vector`
+    * [`vector_to_compas`][vector_to_compas]
+    * [`direction_to_compas`][direction_to_compas]
+    * [`axis_to_compas_vector`][axis_to_compas_vector]
 
     Examples
     --------
@@ -909,22 +658,11 @@ def direction_to_compas(
 ) -> Vector:
     """Construct a COMPAS vector from an OCC direction.
 
-    Parameters
-    ----------
-    vector : ``gp_Dir``
-        The OCC direction.
-    cls : Type[:class:`~compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`vector_to_compas`
-    :func:`vector2d_to_compas`
-    :func:`axis_to_compas_vector`
+    * [`vector_to_compas`][vector_to_compas]
+    * [`vector2d_to_compas`][vector2d_to_compas]
+    * [`axis_to_compas_vector`][axis_to_compas_vector]
 
     Examples
     --------
@@ -945,22 +683,11 @@ def direction2d_to_compas(
 ) -> Vector:
     """Construct a COMPAS vector from a 2D OCC direction.
 
-    Parameters
-    ----------
-    direction : ``gp_Dir2d``
-        The OCC direction.
-    cls : Type[:class:`~compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`vector_to_compas`
-    :func:`vector2d_to_compas`
-    :func:`axis_to_compas_vector`
+    * [`vector_to_compas`][vector_to_compas]
+    * [`vector2d_to_compas`][vector2d_to_compas]
+    * [`axis_to_compas_vector`][axis_to_compas_vector]
 
     Examples
     --------
@@ -981,22 +708,11 @@ def axis_to_compas_vector(
 ) -> Vector:
     """Convert an OCC axis to a COMPAS vector.
 
-    Parameters
-    ----------
-    axis : ``gp_Ax1``
-        The OCC axis.
-    cls : Type[:class:`compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`direction_to_compas`
-    :func:`vector_to_compas`
-    :func:`vector2d_to_compas`
+    * [direction_to_compas][direction_to_compas]
+    * [vector_to_compas][vector_to_compas]
+    * [vector2d_to_compas][vector2d_to_compas]
 
     Examples
     --------
@@ -1016,22 +732,11 @@ def axis2d_to_compas_vector(
 ) -> Vector:
     """Convert a 2D OCC axis to a COMPAS vector.
 
-    Parameters
-    ----------
-    axis : ``gp_Ax1``
-        The OCC axis.
-    cls : Type[:class:`compas.geometry.Vector`], optional
-        The type of COMPAS vector.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Vector`
-
     See Also
     --------
-    :func:`direction_to_compas`
-    :func:`vector_to_compas`
-    :func:`vector2d_to_compas`
+    * [direction_to_compas][direction_to_compas]
+    * [vector_to_compas][vector_to_compas]
+    * [vector2d_to_compas][vector2d_to_compas]
 
     Examples
     --------
@@ -1048,18 +753,9 @@ def axis2d_to_compas_vector(
 def axis_to_compas(axis: gp_Ax1) -> tuple[Point, Vector]:
     """Convert an OCC axis to a tuple of COMPAS point and vector.
 
-    Parameters
-    ----------
-    axis : ``gp_Ax1``
-        The OCC axis.
-
-    Returns
-    -------
-    tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
-
     See Also
     --------
-    :func:`axis_to_compas_vector`
+    * [axis_to_compas_vector][axis_to_compas_vector]
 
     Examples
     --------
@@ -1078,18 +774,9 @@ def axis_to_compas(axis: gp_Ax1) -> tuple[Point, Vector]:
 def axis2d_to_compas(axis: gp_Ax2d) -> tuple[Point, Vector]:
     """Convert a 2D OCC axis to a tuple of COMPAS point and vector.
 
-    Parameters
-    ----------
-    axis : ``gp_Ax2d``
-        The OCC axis.
-
-    Returns
-    -------
-    tuple[:class:`~compas.geometry.Point`, :class:`~compas.geometry.Vector`]
-
     See Also
     --------
-    :func:`axis_to_compas_vector`
+    * [axis_to_compas_vector][axis_to_compas_vector]
 
     Examples
     --------
@@ -1111,20 +798,9 @@ def line_to_compas(
 ) -> Line:
     """Convert an OCC line to a COMPAS line.
 
-    Parameters
-    ----------
-    lin : ``gp_Lin``
-        The OCC line.
-    cls : Type[:class:`~compas.geometry.Line`], optional
-        The type of COMPAS line.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Line`
-
     See Also
     --------
-    :func:`line_to_occ`
+    * [`line_to_occ`][line_to_occ]
 
     Examples
     --------
@@ -1147,20 +823,9 @@ def line2d_to_compas(
 ) -> Line:
     """Convert a 2D OCC line to a COMPAS line.
 
-    Parameters
-    ----------
-    lin : ``gp_Lin``
-        The OCC line.
-    cls : Type[:class:`~compas.geometry.Line`], optional
-        The type of COMPAS line.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Line`
-
     See Also
     --------
-    :func:`line_to_occ2d`
+    [`line_to_occ2d`][line_to_occ2d]
 
     Examples
     --------
@@ -1183,20 +848,9 @@ def plane_to_compas(
 ) -> Plane:
     """Convert an OCC plane to a COMPAS plane.
 
-    Parameters
-    ----------
-    pln : ``gp_Pln``
-        The OCC plane.
-    cls : Type[:class:`~compas.geometry.Plane`], optional
-        The type of COMPAS plane.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Plane`
-
     See Also
     --------
-    :func:`plane_to_occ`
+    * [`plane_to_occ`][plane_to_occ]
 
     Examples
     --------
@@ -1220,20 +874,9 @@ def ax2_to_compas(
 ) -> Frame:
     """Construct a COMPAS frame from an OCC position.
 
-    Parameters
-    ----------
-    position : ``gp_Ax2``
-        The OCC position.
-    cls : Type[:class:`~compas.geometry.Frame`], optional
-        The type of COMPAS frame.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Frame`
-
     See Also
     --------
-    :func:`ax3_to_compas`
+    * [ax3_to_compas][ax3_to_compas]
 
     Examples
     --------
@@ -1258,20 +901,9 @@ def ax22d_to_compas(
 ) -> Frame:
     """Construct a COMPAS frame from a 2D OCC position.
 
-    Parameters
-    ----------
-    position : ``gp_Ax22d``
-        The OCC position.
-    cls : Type[:class:`~compas.geometry.Frame`], optional
-        The type of COMPAS frame.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Frame`
-
     See Also
     --------
-    :func:`ax3_to_compas`
+    * [ax3_to_compas][ax3_to_compas]
 
     Examples
     --------
@@ -1296,20 +928,9 @@ def ax3_to_compas(
 ) -> Frame:
     """Construct a COMPAS frame from an OCC position.
 
-    Parameters
-    ----------
-    position : ``gp_Ax3``
-        The OCC position.
-    cls : Type[:class:`~compas.geometry.Frame`], optional
-        The type of COMPAS frame.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Frame`
-
     See Also
     --------
-    :func:`ax2_to_compas`
+    * [`ax2_to_compas`][ax2_to_compas]
 
     Examples
     --------
@@ -1330,15 +951,6 @@ def ax3_to_compas(
 
 def location_to_compas(location: TopLoc_Location) -> Frame:
     """Construct a COMPAS frame from an OCC location.
-
-    Parameters
-    ----------
-    location : ``TopLoc_Location``
-        The OCC location.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Frame`
 
     Examples
     --------
@@ -1364,20 +976,9 @@ def circle_to_compas(
 ) -> Circle:
     """Construct a COMPAS circle from an OCC circle.
 
-    Parameters
-    ----------
-    circ : ``gp_Circ``
-        The OCC circle.
-    cls : Type[:class:`~compas.geometry.Circle`], optional
-        The type of COMPAS circle.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Circle`
-
     See Also
     --------
-    :func:`ellipse_to_compas`
+    * [`ellipse_to_compas`][ellipse_to_compas]
 
     Examples
     --------
@@ -1403,20 +1004,9 @@ def circle2d_to_compas(
 ) -> Circle:
     """Construct a COMPAS circle from a 2D OCC circle.
 
-    Parameters
-    ----------
-    circ : ``gp_Circ2d``
-        The OCC circle.
-    cls : Type[:class:`~compas.geometry.Circle`], optional
-        The type of COMPAS circle.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Circle`
-
     See Also
     --------
-    :func:`ellipse2d_to_compas`
+    * [`ellipse2d_to_compas`][ellipse2d_to_compas]
 
     Examples
     --------
@@ -1442,20 +1032,9 @@ def ellipse_to_compas(
 ) -> Ellipse:
     """Construc a COMPAS ellipse from an OCC ellipse.
 
-    Parameters
-    ----------
-    elips : ``gp_Elips``
-        The OCC ellipse.
-    cls : Type[:class:`~compas.geometry.Ellipse`], optional
-        The type of COMPAS ellipse.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Ellipse`
-
     See Also
     --------
-    :func:`circle_to_compas`
+    * [`circle_to_compas`][circle_to_compas]
 
     Examples
     --------
@@ -1482,20 +1061,9 @@ def ellipse2d_to_compas(
 ) -> Ellipse:
     """Construc a COMPAS ellipse from a 2D OCC ellipse.
 
-    Parameters
-    ----------
-    elips : ``gp_Elips2d``
-        The OCC ellipse.
-    cls : Type[:class:`~compas.geometry.Ellipse`], optional
-        The type of COMPAS ellipse.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Ellipse`
-
     See Also
     --------
-    :func:`circle2d_to_compas`
+    * [`circle2d_to_compas`][circle2d_to_compas]
 
     Examples
     --------
@@ -1519,15 +1087,6 @@ def ellipse2d_to_compas(
 def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
     """Construct a COMPAS hyperbola from an OCC hyperbola.
 
-    Parameters
-    ----------
-    hypr : ``gp_Hypr``
-        The OCC hyperbola.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Hyperbola`
-
     Examples
     --------
     >>> from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Ax2, gp_Hypr
@@ -1548,15 +1107,6 @@ def hyperbola_to_compas(hypr: gp_Hypr) -> Hyperbola:
 
 def hyperbola2d_to_compas(hypr: gp_Hypr2d) -> Hyperbola:
     """Construct a COMPAS hyperbola from a 2D OCC hyperbola.
-
-    Parameters
-    ----------
-    hypr : ``gp_Hypr2d``
-        The OCC hyperbola.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Hyperbola`
 
     Examples
     --------
@@ -1579,15 +1129,6 @@ def hyperbola2d_to_compas(hypr: gp_Hypr2d) -> Hyperbola:
 def parabola_to_compas(parab: gp_Parab) -> Parabola:
     """Construct a COMPAS parabola from an OCC parabola.
 
-    Parameters
-    ----------
-    parab : ``gp_Parab``
-        The OCC parabola.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Parabola`
-
     Examples
     --------
     >>> from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Ax2, gp_Parab
@@ -1608,15 +1149,6 @@ def parabola_to_compas(parab: gp_Parab) -> Parabola:
 def parabola2d_to_compas(parab: gp_Parab2d) -> Parabola:
     """Construct a COMPAS parabola from a 2D OCC parabola.
 
-    Parameters
-    ----------
-    parab : ``gp_Parab2d``
-        The OCC parabola.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Parabola`
-
     Examples
     --------
     >>> from OCC.Core.gp import gp_Pnt2d, gp_Dir2d, gp_Ax22d, gp_Parab2d
@@ -1636,15 +1168,6 @@ def parabola2d_to_compas(parab: gp_Parab2d) -> Parabola:
 
 def bezier_to_compas(bezier: Geom_BezierCurve) -> Bezier:
     """Construct a COMPAS Bezier curve from an OCC Bezier curve.
-
-    Parameters
-    ----------
-    bezier : ``Geom_BezierCurve``
-        The OCC Bezier curve.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Bezier`
 
     Examples
     --------
@@ -1669,16 +1192,6 @@ def bezier_to_compas(bezier: Geom_BezierCurve) -> Bezier:
 
 def bspline_to_compas(bspline: Geom_BSplineCurve) -> NurbsCurve:
     """Construct a COMPAS NURBS curve from an OCC B-spline curve.
-
-    Parameters
-    ----------
-    bspline : ``Geom_BSplineCurve``
-        The OCC B-spline curve.
-
-    Returns
-    -------
-    :class:`~compas.geometry.NurbsCurve`
-
     """
     return NurbsCurve.from_native(bspline)
 
@@ -1689,20 +1202,9 @@ def cylinder_to_compas(
 ) -> Cylinder:
     """Convert an OCC cylinder to a COMPAS cylinder.
 
-    Parameters
-    ----------
-    cylinder : ``gp_Cylinder``
-        The OCC cylinder.
-    cls : Type[:class:`~compas.geometry.Cylinder`], optional
-        The type of COMPAS cylinder.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Cylinder`
-
     See Also
     --------
-    :func:`compas_sphere_from_occ_sphere`
+    * [`compas_sphere_from_occ_sphere`][compas_sphere_from_occ_sphere]
 
     Examples
     --------
@@ -1727,20 +1229,9 @@ def sphere_to_compas(
 ) -> Sphere:
     """Convert an OCC sphere to a COMPAS sphere.
 
-    Parameters
-    ----------
-    sphere : ``gp_Sphere``
-        The OCC sphere.
-    cls : Type[:class:`~compas.geometry.Sphere`], optional
-        The type of COMPAS sphere.
-
-    Returns
-    -------
-    :class:`~compas.geometry.Sphere`
-
     See Also
     --------
-    :func:`cylinder_to_compas`
+    * [`cylinder_to_compas`][cylinder_to_compas]
 
     Examples
     --------
@@ -1760,16 +1251,6 @@ def sphere_to_compas(
 
 def obb_to_compas(obb: Bnd_OBB) -> Box:
     """Convert an OCC oriented bounding box to a COMPAS box.
-
-    Parameters
-    ----------
-    obb : ``Bnd_OBB``
-        The oriented bounding box.
-
-    Returns
-    -------
-    :class:`Box`
-
     """
     frame = ax3_to_compas(obb.Position())
     xsize = 2 * obb.XHSize()
@@ -1780,15 +1261,5 @@ def obb_to_compas(obb: Bnd_OBB) -> Box:
 
 def aabb_to_compas(aabb: Bnd_Box) -> Box:
     """Convert an OCC oriented bounding box to a COMPAS box.
-
-    Parameters
-    ----------
-    aabb : ``Bnd_Box``
-        The axis-aligned bounding box.
-
-    Returns
-    -------
-    :class:`Box`
-
     """
     return Box.from_diagonal([point_to_compas(aabb.CornerMin()), point_to_compas(aabb.CornerMax())])

@@ -20,22 +20,22 @@ class OCCCurve2d(Curve):
 
     Parameters
     ----------
-    name : str, optional
+    name
         The name of the curve.
 
     Attributes
     ----------
-    dimension : int, read-only
+    dimension
         The dimension of the curve is always 2.
-    domain : tuple[float, float], read-only
+    domain
         The domain of the parameter space of the curve.
-    end : :class:`~compas.geometry.Point`, read-only
+    end
         The end point of the curve.
-    is_closed : bool, read-only
+    is_closed
         Flag indicating that the curve is closed.
-    is_periodic : bool, read-only
+    is_periodic
         Flag indicating that the curve is periodic.
-    start : :class:`~compas.geometry.Point`, read-only
+    start
         The start point of the curve.
 
     """
@@ -109,11 +109,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        native_curve : Geom2d_Curve
+        native_curve
+            An OCC Geom2d_Curve object.
 
         Returns
         -------
-        :class:`OCCCurve2d`
+        OCCCurve2d
 
         """
         return cls(native_curve)
@@ -124,11 +125,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        native_curve : Geom2d_Curve
+        native_curve
+            An OCC Geom2d_Curve object.
 
         Returns
         -------
-        :class:`OCCCurve2d`
+        OCCCurve2d
 
         Warnings
         --------
@@ -147,8 +149,10 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        filepath : str
-        schema : str, optional
+        filepath
+            The path to the file.
+        schema
+            The STEP schema to use.
 
         Returns
         -------
@@ -167,12 +171,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        n : int, optional
+        n
             The number of polyline points.
 
         Returns
         -------
-        :class:`compas.geometry.Polyline`
+        Polyline
 
         """
         return Polyline(self.to_points(n=n))
@@ -186,7 +190,7 @@ class OCCCurve2d(Curve):
 
         Returns
         -------
-        :class:`OCCCurve2d`
+        OCCCurve2d
 
         """
         cls = type(self)
@@ -198,12 +202,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Point`
+        Point
 
         Raises
         ------
@@ -223,12 +227,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Vector`
+        Vector
 
         Raises
         ------
@@ -250,12 +254,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Vector`
+        Vector
 
         Raises
         ------
@@ -278,12 +282,12 @@ class OCCCurve2d(Curve):
 
         Parameters
         ----------
-        t : float
+        t
             The curve parameter.
 
         Returns
         -------
-        :class:`~compas.geometry.Frame`
+        Frame
 
         Raises
         ------

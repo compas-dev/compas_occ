@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from OCC.Core.gp import gp_Pnt
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColgp import TColgp_Array2OfPnt
@@ -12,19 +14,11 @@ from compas.geometry import Point
 def array1_from_points1(points: list[Point]) -> TColgp_Array1OfPnt:
     """Construct a one-dimensional point array from a list of points.
 
-    Parameters
-    ----------
-    points : list[:class:`~compas.geometry.Point`]
-
-    Returns
-    -------
-    TColgp_Array1OfPnt
-
     See Also
     --------
-    :func:`harray1_from_points1`
-    :func:`points1_from_array1`
-    :func:`compas_occ.conversions.point_to_compas`
+    * [`harray1_from_points1`][harray1_from_points1]
+    * [`points1_from_array1`][points1_from_array1]
+    * [`compas_occ.conversions.point_to_occ`][compas_occ.conversions.point_to_occ]
 
     Examples
     --------
@@ -58,18 +52,10 @@ def array1_from_points1(points: list[Point]) -> TColgp_Array1OfPnt:
 def harray1_from_points1(points: list[Point]) -> TColgp_HArray1OfPnt:
     """Construct a horizontal one-dimensional point array from a list of points.
 
-    Parameters
-    ----------
-    points : list[:class:`~compas.geometry.Point`]
-
-    Returns
-    -------
-    TColgp_HArray1OfPnt
-
     See Also
     --------
-    :func:`array1_from_points1`
-    :func:`compas_occ.conversions.point_to_occ`
+    * [`array1_from_points1`][array1_from_points1]
+    * [`compas_occ.conversions.point_to_occ`][compas_occ.conversions.point_to_occ]
 
     Examples
     --------
@@ -103,18 +89,10 @@ def harray1_from_points1(points: list[Point]) -> TColgp_HArray1OfPnt:
 def points1_from_array1(array: TColgp_Array1OfPnt) -> list[Point]:
     """Construct a list of points from a one-dimensional point array.
 
-    Parameters
-    ----------
-    array : TColgp_Array1OfPnt
-
-    Returns
-    -------
-    list[:class:`~compas.geometry.Point`]
-
     See Also
     --------
-    :func:`array1_from_points1`
-    :func:`compas_occ.conversions.point_to_compas`
+    * [`array1_from_points1`][array1_from_points1]
+    * [`compas_occ.conversions.point_to_compas`][compas_occ.conversions.point_to_compas]
 
     Examples
     --------
@@ -141,18 +119,10 @@ def points1_from_array1(array: TColgp_Array1OfPnt) -> list[Point]:
 def array2_from_points2(points: list[list[Point]]) -> TColgp_Array2OfPnt:
     """Construct a two-dimensional point array from a list of lists of points.
 
-    Parameters
-    ----------
-    points : list[list[:class:`~compas.geometry.Point`]]
-
-    Returns
-    -------
-    TColgp_Array2OfPnt
-
     See Also
     --------
-    :func:`points2_from_array2`
-    :func:`compas_occ.conversions.point_to_occ`
+    * [`points2_from_array2`][points2_from_array2]
+    * [`compas_occ.conversions.point_to_occ`][compas_occ.conversions.point_to_occ]
 
     Examples
     --------
@@ -184,11 +154,11 @@ def array2_from_points2(points: list[list[Point]]) -> TColgp_Array2OfPnt:
     2.0 1.0 0.0
 
     """
-    points = list(zip(*points))
-    rows = len(points)
-    cols = len(points[0])
+    points_as_columns = list(zip(*points))
+    rows = len(points_as_columns)
+    cols = len(points_as_columns[0])
     array = TColgp_Array2OfPnt(1, rows, 1, cols)
-    for i, row in enumerate(points):
+    for i, row in enumerate(points_as_columns):
         for j, point in enumerate(row):
             array.SetValue(i + 1, j + 1, gp_Pnt(*point))
     return array
@@ -197,18 +167,10 @@ def array2_from_points2(points: list[list[Point]]) -> TColgp_Array2OfPnt:
 def points2_from_array2(array: TColgp_Array2OfPnt) -> list[list[Point]]:
     """Construct a list of lists of points from two-dimensional point array.
 
-    Parameters
-    ----------
-    array : TColgp_Array2OfPnt
-
-    Returns
-    -------
-    list[list[:class:`~compas.geometry.Point`]]
-
     See Also
     --------
-    :func:`array2_from_points2`
-    :func:`compas_occ.conversions.point_to_compas`
+    * [`array2_from_points2`][array2_from_points2]
+    * [`compas_occ.conversions.point_to_compas`][compas_occ.conversions.point_to_compas]
 
     Examples
     --------
@@ -248,17 +210,9 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> list[list[Point]]:
 def array1_from_integers1(numbers: list[int]) -> TColStd_Array1OfInteger:
     """Construct a one-dimensional integer array from a list of integers.
 
-    Parameters
-    ----------
-    numbers : list[int]
-
-    Returns
-    -------
-    TColStd_Array1OfInteger
-
     See Also
     --------
-    :func:`array1_from_floats1`
+    * [`array1_from_floats1`][array1_from_floats1]
 
     Examples
     --------
@@ -278,18 +232,10 @@ def array1_from_integers1(numbers: list[int]) -> TColStd_Array1OfInteger:
 def array1_from_floats1(numbers: list[float]) -> TColStd_Array1OfReal:
     """Construct a one-dimensional float array from a list of floats.
 
-    Parameters
-    ----------
-    numbers : list[float]
-
-    Returns
-    -------
-    TColStd_Array1OfReal
-
     See Also
     --------
-    :func:`array1_from_integers1`
-    :func:`array2_from_floats2`
+    * [`array1_from_integers1`][array1_from_integers1]
+    * [`array2_from_floats2`][array2_from_floats2]
 
     Examples
     --------
@@ -309,17 +255,9 @@ def array1_from_floats1(numbers: list[float]) -> TColStd_Array1OfReal:
 def array2_from_floats2(numbers: list[list[float]]) -> TColStd_Array2OfReal:
     """Construct a two-dimensional real array from a list of lists of floats.
 
-    Parameters
-    ----------
-    numbers : list[list[float]]
-
-    Returns
-    -------
-    TColStd_Array2OfReal
-
     See Also
     --------
-    :func:`array1_from_floats1`
+    * [`array1_from_floats1`][array1_from_floats1]
 
     Examples
     --------
@@ -334,30 +272,22 @@ def array2_from_floats2(numbers: list[list[float]]) -> TColStd_Array2OfReal:
     <OCC.Core.TColStd.TColStd_Array2OfReal; ... >
 
     """
-    numbers = list(zip(*numbers))
-    rows = len(numbers)
-    cols = len(numbers[0])
+    numberlists_as_columns = list(zip(*numbers))
+    rows = len(numberlists_as_columns)
+    cols = len(numberlists_as_columns[0])
     array = TColStd_Array2OfReal(1, rows, 1, cols)
-    for i, row in enumerate(numbers):
+    for i, row in enumerate(numberlists_as_columns):
         for j, number in enumerate(row):
             array.SetValue(i + 1, j + 1, number)
     return array
 
 
-def floats2_from_array2(array: TColStd_Array2OfReal) -> list[list[Point]]:
-    """Construct a list of lists of floats from two-dimensional real array.
-
-    Parameters
-    ----------
-    array : TColStd_Array2OfReal
-
-    Returns
-    -------
-    list[list[float]]
+def floats2_from_array2(array: TColStd_Array2OfReal) -> list[Sequence[float]]:
+    """Construct a list of lists of floats from a two-dimensional array of real numbers.
 
     See Also
     --------
-    :func:`array2_from_floats2`
+    * [`array2_from_floats2`][array2_from_floats2]
 
     Examples
     --------

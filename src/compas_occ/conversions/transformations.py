@@ -3,12 +3,12 @@ from OCC.Core.gp import gp_Trsf
 import compas.geometry
 
 
-def compas_transformation_to_trsf(matrix: compas.geometry.Transformation):
+def compas_transformation_to_trsf(matrix: compas.geometry.Transformation) -> gp_Trsf:
     """Convert a COMPAS transformation to a OCC transformation.
 
     Parameters
     ----------
-    matrix : :class:`~compas.geometry.Transformation`
+    matrix
         A COMPAS transformation.
 
     Returns

@@ -57,31 +57,31 @@ class OCCBrepEdge(BrepEdge):
 
     Attributes
     ----------
-    curve : :class:`~compas_occ.geometry.OCCCurve`
+    curve
         Curve geometry from the edge adaptor.
-    first_vertex : :class:`~compas_occ.brep.BrepVertex`, read-only
+    first_vertex
         The first vertex with forward orientation.
-    is_line : bool, read-only
+    is_line
         True if the underlying curve is a line.
-    is_circle : bool, read-only
+    is_circle
         True if the underlying curve is a circle.
-    is_ellipse : bool, read-only
+    is_ellipse
         True if the underlying curve is an ellipse.
-    is_hyperbola : bool, read-only
+    is_hyperbola
         True if the underlying curve is a hyperbola.
-    is_parabola : bool, read-only
+    is_parabola
         True if the underlying curve is a parabola.
-    is_bezier : bool, read-only
+    is_bezier
         True if the underlying curve is a bezier curve.
-    is_bspline : bool, read-only
+    is_bspline
         True if the underlying curve is a bspline curve.
-    is_other : bool, read-only
+    is_other
         True if the underlying curve is an other type of curve.
-    last_vertex : :class:`~compas_occ.brep.BrepVertex`, read-only
+    last_vertex
         The first vertex with reversed orientation.
-    vertices : list[:class:`~compas_occ.brep.BrepVertex`], read-only
+    vertices
         The topological vertices of the edge.
-    type : :class:`BrepEdge.CurveType`, read-only
+    type
         The type of the geometric curve underlying the topological edge.
 
     """
@@ -112,7 +112,7 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        other : :class:`OCCBrepEdge`
+        other
             The other edge.
 
         Returns
@@ -132,7 +132,7 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        other : :class:`OCCBrepEdge`
+        other
             The other edge.
 
         Returns
@@ -295,14 +295,14 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        a : :class:`~compas_occ.brep.BrepVertex`
+        a
             The first vertex.
-        b : :class:`~compas_occ.brep.BrepVertex`
+        b
             The second vertex.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -315,14 +315,14 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        a : :class:`compas.geometry.Point`
+        a
             The first point.
-        b : :class:`compas.geometry.Point`
+        b
             The second point.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -341,18 +341,18 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        line : :class:`compas.geometry.Line`
+        line
             The line.
-        params : tuple of float, optional
+        params
             The parameters of the line.
-        points : tuple of :class:`compas.geometry.Point`, optional
+        points
             The start and end points of the line.
-        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+        vertices
             The start and end vertices of the line.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -386,18 +386,18 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        circle : :class:`compas.geometry.Circle`
+        circle
             The circle.
-        params : tuple of float, optional
+        params
             The parameters of the circle.
-        points : tuple of :class:`compas.geometry.Point`, optional
+        points
             The start and end points of the circle.
-        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+        vertices
             The start and end vertices of the circle.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -425,12 +425,12 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        ellipse : :class:`compas.geometry.Ellipse`
+        ellipse
             The ellipse.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -448,18 +448,18 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.OCCCurve`, optional
+        curve
             The curve.
-        params : tuple of float, optional
+        params
             The parameters of the curve.
-        points : tuple of :class:`compas.geometry.Point`, optional
+        points
             The start and end points of the curve.
-        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+        vertices
             The start and end vertices of the curve.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -500,20 +500,20 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        curve : :class:`~compas_occ.geometry.OCCCurve`
+        curve
             The curve.
-        surface : :class:`~compas_occ.geometry.OCCSurface`
+        surface
             The surface.
-        params : tuple of float, optional
+        params
             The parameters of the curve.
-        points : tuple of :class:`compas.geometry.Point`, optional
+        points
             The start and end points of the curve.
-        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+        vertices
             The start and end vertices of the curve.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -533,20 +533,20 @@ class OCCBrepEdge(BrepEdge):
 
         Parameters
         ----------
-        curve2d : :class:`~compas_occ.geometry.OCCCurve2d`
+        curve2d
             The 2D curve.
-        surface : :class:`~compas_occ.geometry.OCCSurface`
+        surface
             The surface.
-        params : tuple of float, optional
+        params
             The parameters of the curve.
-        points : tuple of :class:`compas.geometry.Point`, optional
+        points
             The start and end points of the curve.
-        vertices : tuple of :class:`~compas_occ.brep.BrepVertex`, optional
+        vertices
             The start and end vertices of the curve.
 
         Returns
         -------
-        :class:`~compas_occ.brep.BrepEdge`
+        BrepEdge
             The constructed edge.
 
         """
@@ -581,7 +581,7 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        :class:`~compas.geometry.Line`
+        Line
             A COMPAS line.
 
         Raises
@@ -599,7 +599,7 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        :class:`~compas.geometry.Circle`
+        Circle
             A COMPAS circle.
 
         Raises
@@ -619,7 +619,7 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        :class:`~compas.geometry.Ellipse`
+        Ellipse
             A COMPAS ellipse.
 
         Raises
@@ -639,7 +639,8 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        None
+        Hyperbola
+            A COMPAS hyperbola.
 
         Raises
         ------
@@ -658,7 +659,8 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        None
+        Parabola
+            A COMPAS parabola.
 
         Raises
         ------
@@ -677,7 +679,8 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        None
+        Bezier
+            A COMPAS bezier curve.
 
         Raises
         ------
@@ -696,7 +699,8 @@ class OCCBrepEdge(BrepEdge):
 
         Returns
         -------
-        None
+        NursbCurve
+            A COMPAS bspline curve.
 
         Raises
         ------
