@@ -132,11 +132,9 @@ plugins:
             unwrap_annotated: true
 
 nav:
-  - Home: index.md
-  - Get Started:
-      - Introduction: introduction.md
-      - Installation: installation.md
-      - Tutorial: tutorial.md
+  - Introduction: index.md
+  - Installation: installation.md
+  - Tutorial: tutorial.md
   - Examples:
       - Breps:
           - Brep Explorer: examples/breps/brep_explorer.md

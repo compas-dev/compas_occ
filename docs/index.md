@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
 # COMPAS OCC
 
 ![COMPAS OCC](assets/images/compas_occ.png)
