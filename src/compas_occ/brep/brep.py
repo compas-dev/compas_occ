@@ -655,6 +655,13 @@ class OCCBrep(Brep):
         OCCBrep
 
         """
+        # height = cone.height
+        # radius = cone.
+        # frame = cone.frame
+        # ax2 = frame_to_occ_ax2(frame)
+        # ax2.Translate(vector_to_occ(frame.zaxis * (-0.5 * height)))
+        # shape = BRepPrimAPI.BRepPrimAPI_MakeCone(ax2, radius, height).Shape()
+        # return cls.from_native(shape)
         raise NotImplementedError
 
     @classmethod
@@ -1229,7 +1236,7 @@ class OCCBrep(Brep):
         polylines = []
         seen = []
 
-        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, True)
+        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, False)
         bt = BRep.BRep_Tool()
 
         for face in self.faces:

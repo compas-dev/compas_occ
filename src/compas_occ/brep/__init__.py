@@ -34,6 +34,11 @@ def from_brepfaces(*args, **kwargs):
 
 
 @plugin(category="factories", requires=["compas_occ"])
+def from_breps(*args, **kwargs):
+    return OCCBrep.from_breps(*args, **kwargs)
+
+
+@plugin(category="factories", requires=["compas_occ"])
 def from_cone(*args, **kwargs):
     return OCCBrep.from_cone(*args, **kwargs)
 
