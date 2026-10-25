@@ -64,6 +64,12 @@ viz = ["compas_viewer"]
 Homepage = "https://compas-dev.github.io/compas_occ"
 Repository = "https://github.com/compas-dev/compas_occ"
 
+[project.entry-points."compas.plugins"]
+compas_occ_brep = "compas_occ.plugins.brep"
+compas_occ_curves = "compas_occ.plugins.curves"
+compas_occ_intersections = "compas_occ.plugins.intersections"
+compas_occ_surfaces = "compas_occ.plugins.surfaces"
+
 # ============================================================================
 # setuptools config
 # ============================================================================
@@ -89,7 +95,7 @@ where = ["src"]
 minversion = "6.0"
 testpaths = ["tests", "src/compas_occ"]
 python_files = ["test_*.py", "*_test.py", "test.py"]
-addopts = ["-ra", "--strict-markers", "--doctest-glob=*.rst", "--tb=short"]
+addopts = ["-ra", "--strict-markers", "--tb=short"]
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "IGNORE_EXCEPTION_DETAIL",

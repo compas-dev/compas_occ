@@ -9,7 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added a versioned, backend-neutral BRep JSON schema with optional Base64-encoded native OCC payloads and legacy-data loading.
+* Added OCC providers for line, plane, curve, surface, and BRep intersection pluggables.
+* Added STEP document, reader, and writer APIs for exchanging multiple geometries.
+* Added IGES document, reader, and writer APIs for exchanging multiple geometries.
+* Added native Open CASCADE BREP document, reader, and writer APIs.
+* Added construction of embedded BRep loops from curves and a surface.
+
 ### Changed
+
+* Added optional end caps to BRep extrusions and aligned the default with COMPAS.
+* Redesigned BRep face boundaries with outer-first ordering, automatic hole orientation, atomic validation, and constructor-level `holes` support.
+* Aligned OCC BRep and surface tessellation with `compas.geometry.Tessellation`, including edge polylines, surface normals, texture coordinates, and cache invalidation.
+* Decoupled `OCCBrep` from the stable `compas.geometry.Brep` wrapper; Brep integration now happens exclusively through plugins and native-payload composition.
+
+* Registered COMPAS plugins through separate Brep, curve, and surface entry-point modules and deferred OCC imports until plugin invocation.
+* Migrated supported NURBS curve factories and operations to the stable `compas.geometry.NurbsCurve` wrapper.
+* Migrated supported NURBS surface and BRep factories and operations to stable COMPAS wrappers.
+
+### Fixed
+
+* Normalized shape sequences returned by `pythonocc-core` when reading IGES files.
+* Restored curve-on-surface edge construction for stable COMPAS geometry wrappers.
 
 ### Removed
 

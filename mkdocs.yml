@@ -136,7 +136,39 @@ nav:
   - Installation: installation.md
   - Tutorial: tutorial.md
   - Examples:
+      - Overview: examples.md
+      - Curves:
+          - Overview: examples/curves/index.md
+          - Closest Parameters Between Curves: examples/curves/curve_closest_parameters_curve.md
+          - Closest Point: examples/curves/curve_closest_point.md
+          - Curve Comparison 1: examples/curves/curve_comparison1.md
+          - Curve Comparison 2: examples/curves/curve_comparison2.md
+          - Divide a Curve: examples/curves/curve_divide.md
+          - Curve From Circle: examples/curves/curve_from_circle.md
+          - Curve From Ellipse: examples/curves/curve_from_ellipse.md
+          - Curve From Interpolation: examples/curves/curve_from_interpolation.md
+          - Curve From Line: examples/curves/curve_from_line.md
+          - Curve From Parameters: examples/curves/curve_from_parameters.md
+          - Curve From Control Points: examples/curves/curve_from_points.md
+          - Join Curves: examples/curves/curve_joining.md
+          - Segment a Curve: examples/curves/curve_segmentation.md
+      - Surfaces:
+          - Overview: examples/surfaces/index.md
+          - Axis-Aligned Bounding Box: examples/surfaces/surface_aabb.md
+          - Surface Frames: examples/surfaces/surface_frames.md
+          - Surface From Fill: examples/surfaces/surface_from_fill.md
+          - Surface From Extrusion 1: examples/surfaces/__temp/surface_from_extrusion-1.md
+          - Surface From Extrusion 2: examples/surfaces/__temp/surface_from_extrusion-2.md
+          - Surface From Meshgrid: examples/surfaces/surface_from_meshgrid.md
+          - Surface From Parameters: examples/surfaces/surface_from_parameters.md
+          - Surface From Points: examples/surfaces/surface_from_points.md
+          - Intersections With Line: examples/surfaces/surface_intersections_with_line.md
+          - Surface Isocurves: examples/surfaces/surface_isocurves.md
+          - Surface JSON Data: examples/surfaces/surface_jsondata.md
+          - Random Control Points: examples/surfaces/surface_random.md
+          - Points Over UV Space: examples/surfaces/surface_spacepoints.md
       - Breps:
+          - Overview: examples/breps/index.md
           - Brep Explorer: examples/breps/brep_explorer.md
           - Brep Fillet: examples/breps/brep_fillet.md
           - Brep From Booleans: examples/breps/brep_from_booleans.md
