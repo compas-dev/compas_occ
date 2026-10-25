@@ -24,11 +24,12 @@ class OCCBrepBuilder:
     make_solid : bool, optional
     """
 
-    def __init__(self, make_solid: Optional[bool] = True):
+    def __init__(self, make_solid: Optional[bool] = True, heal: bool = False):
         self.shell = TopoDS.TopoDS_Shell()
         self.builder = BRep.BRep_Builder()
         self.builder.MakeShell(self.shell)
         self.make_solid = make_solid
+        self.heal = heal
 
     def build(self, faces: list[dict]) -> OCCBrep:
         """Build a COMPAS OCC brep from list of faces represented by their serialisation data.
@@ -48,7 +49,8 @@ class OCCBrepBuilder:
             self.builder.Add(self.shell, face)
 
         brep = OCCBrep.from_native(self.shell)
-        brep.heal()
+        if self.heal:
+            brep.heal()
         if self.make_solid:
             brep.make_solid()
         return brep
@@ -191,16 +193,21 @@ class OCCBrepBuilder:
         else:
             raise NotImplementedError
 
+        from .brepface import OCCBrepFace
+        from .breploop import OCCBrepLoop
+
         loops = data["loops"]
+        if not loops:
+            raise ValueError("A serialized face requires an external boundary loop.")
         boundary = self.build_wire(loops[0], surface)
         builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface, boundary)
-
-        if len(loops) > 1:
-            for edges in loops[1:]:
-                hole = self.build_wire(edges, surface)
-                builder.Add(hole)
-
+        if not builder.IsDone():
+            raise ValueError("The serialized external boundary does not define a face on the surface.")
         face = builder.Face()
+
+        for edges in loops[1:]:
+            hole = OCCBrepLoop(self.build_wire(edges, surface))
+            face = OCCBrepFace._face_with_inner_loop(face, hole, reverse=None)
 
         if data["orientation"] != face.Orientation():
             face.Orientation(TopAbs.TopAbs_Orientation(data["orientation"]))

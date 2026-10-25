@@ -16,7 +16,6 @@ from compas.geometry import Circle
 from compas.geometry import Ellipse
 from compas.geometry import Frame
 from compas.geometry import Line
-from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
@@ -46,8 +45,11 @@ def native_curve_from_parameters(
     )
 
 
-class OCCNurbsCurve(OCCCurve, NurbsCurve):
-    """Class representing a NURBS curve based on the BSplineCurve of the OCC geometry kernel.
+class OCCNurbsCurve(OCCCurve):
+    """OCC-native NURBS curve adapter.
+
+    This class exposes OCC behavior directly for standalone use. The COMPAS
+    plugin layer wraps its native curve in `compas.geometry.NurbsCurve`.
 
     Parameters
     ----------
@@ -419,7 +421,7 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         return cls.from_native(native_curve)
 
     @classmethod
-    def from_points(cls, points: list[Point], degree: int = 3) -> "OCCNurbsCurve":
+    def from_points(cls, points: list[Point], degree: int = 3, is_periodic: bool = False) -> "OCCNurbsCurve":
         """Construct a NURBS curve from control points.
 
         Parameters
@@ -428,6 +430,8 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
             The control points of the curve.
         degree
             The degree of the curve.
+        is_periodic
+            Whether the curve is periodic.
 
         Returns
         -------
@@ -444,7 +448,6 @@ class OCCNurbsCurve(OCCCurve, NurbsCurve):
         for _ in range(x):
             multiplicities.append(1)
         multiplicities.append(order)
-        is_periodic = False
         native_curve = native_curve_from_parameters(
             points,
             weights,

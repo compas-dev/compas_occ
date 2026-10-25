@@ -1,8 +1,7 @@
-import pathlib
+from os import PathLike
 from typing import Optional
 from typing import Union
 
-from OCC.Core import APIHeaderSection
 from OCC.Core import Bnd
 from OCC.Core import BOPAlgo
 from OCC.Core import BRep
@@ -16,34 +15,29 @@ from OCC.Core import BRepGProp
 from OCC.Core import BRepMesh
 from OCC.Core import BRepOffsetAPI
 from OCC.Core import BRepPrimAPI
-from OCC.Core import BRepTools
 from OCC.Core import GProp
-from OCC.Core import IFSelect
-from OCC.Core import IGESControl
-from OCC.Core import Interface
 from OCC.Core import ShapeFix
 from OCC.Core import ShapeUpgrade
-from OCC.Core import STEPControl
 from OCC.Core import StlAPI
-from OCC.Core import TCollection
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopLoc
 from OCC.Core import TopoDS
 from OCC.Core import TopTools
 from OCC.Core import gp
-from OCC.Extend import DataExchange
 
 import compas.datastructures
 import compas.geometry
+from compas.data import Data
 from compas.datastructures import Mesh
 from compas.geometry import Box
-from compas.geometry import Brep
+from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Polygon
 from compas.geometry import Polyline
+from compas.geometry import Tessellation
 from compas.geometry import Translation
 from compas.geometry import Vector
 from compas.geometry import is_point_behind_plane
@@ -71,8 +65,10 @@ from .brepvertex import OCCBrepVertex
 from .errors import BrepBooleanError
 from .errors import BrepFilletError
 
+FilePath = Union[str, PathLike[str]]
 
-class OCCBrep(Brep):
+
+class OCCBrep(Data):
     """
     Class for Boundary Representation of geometric entities.
 
@@ -99,11 +95,7 @@ class OCCBrep(Brep):
 
     @property
     def __data__(self) -> dict:
-        return {
-            "vertices": [vertex.__data__ for vertex in self.vertices],
-            "edges": [edge.__data__ for edge in self.edges],
-            "faces": [face.__data__ for face in self.faces],
-        }
+        return self.to_data(include_native=True)
 
     @classmethod
     def __from_data__(cls, data: dict) -> "OCCBrep":
@@ -119,11 +111,7 @@ class OCCBrep(Brep):
         OCCBrep
 
         """
-        from .builder import OCCBrepBuilder
-
-        builder = OCCBrepBuilder()
-        brep = builder.build(data["faces"])
-        return brep
+        return cls.from_data(data)
 
     def __init__(self) -> None:
         super().__init__()
@@ -139,9 +127,17 @@ class OCCBrep(Brep):
         self._area = None
         self._volume = None
         self._centroid = None
+        self._tessellation_cache = None
 
-    def copy(self) -> "OCCBrep":
+    def copy(self, cls: Optional[type] = None, copy_guid: bool = False) -> "OCCBrep":
         """Deep-copy this BRep using the native OCC copying mechanism.
+
+        Parameters
+        ----------
+        cls
+            The type of BRep implementation to return.
+        copy_guid
+            If `True`, copy the data object identifier.
 
         Returns
         -------
@@ -150,7 +146,12 @@ class OCCBrep(Brep):
         """
         builder = BRepBuilderAPI.BRepBuilderAPI_Copy(self.occ_shape)
         builder.Perform(self.occ_shape)
-        return OCCBrep.from_native(builder.Shape())
+        target_cls = cls or type(self)
+        brep = target_cls.from_native(builder.Shape())
+        brep.name = self.name
+        if copy_guid:
+            brep._guid = self.guid
+        return brep
 
     # ==============================================================================
     # Customization
@@ -173,6 +174,7 @@ class OCCBrep(Brep):
         self._faces = None
         self._shells = None
         self._solids = None
+        self._tessellation_cache = None
 
     @property
     def native_brep(self) -> TopoDS.TopoDS_Shape:
@@ -209,6 +211,10 @@ class OCCBrep(Brep):
     @property
     def is_compoundsolid(self):
         return self.type == TopAbs.TopAbs_COMPSOLID
+
+    @property
+    def is_valid(self) -> bool:
+        return BRepCheck.BRepCheck_Analyzer(self.occ_shape).IsValid()
 
     @property
     def is_orientable(self) -> bool:
@@ -398,10 +404,88 @@ class OCCBrep(Brep):
     # Read/Write
     # ==============================================================================
 
+    def to_data(self, include_native: bool = False, units: Optional[str] = None) -> dict:
+        """Convert the BRep to versioned JSON-compatible data.
+
+        Parameters
+        ----------
+        include_native
+            If `True`, include an exact Base64-encoded OCC BREP payload.
+        units
+            The unit identifier associated with the coordinates.
+
+        Returns
+        -------
+        dict
+            The versioned neutral schema and optional native payload.
+
+        """
+        from .serialization import brep_to_data
+
+        return brep_to_data(self, include_native=include_native, units=units)
+
+    @classmethod
+    def from_data(
+        cls,
+        data: dict,
+        prefer_native: bool = True,
+        validate: bool = True,
+        heal: bool = False,
+    ) -> "OCCBrep":
+        """Construct a BRep from versioned or legacy serialization data.
+
+        Parameters
+        ----------
+        data
+            The serialization data.
+        prefer_native
+            If `True`, use a compatible native payload when available.
+        validate
+            If `True`, reject an invalid reconstructed shape.
+        heal
+            If `True`, heal a neutral reconstruction before validation.
+
+        Returns
+        -------
+        OCCBrep
+            The reconstructed BRep.
+
+        """
+        from .serialization import brep_from_data
+
+        brep = brep_from_data(data, prefer_native=prefer_native, validate=validate, heal=heal)
+        if cls is OCCBrep:
+            return brep
+        return cls.from_native(brep.native_brep)
+
+    @classmethod
+    def from_brep(cls, filename: FilePath) -> "OCCBrep":
+        """Construct a BRep from a native Open CASCADE BREP file.
+
+        Parameters
+        ----------
+        filename
+            The file path.
+
+        Returns
+        -------
+        OCCBrep
+            The geometry stored in the file.
+
+        """
+        from compas_occ.files import read_brep
+        from compas_occ.files._geometry import shape_from_geometry
+
+        geometries = read_brep(filename).geometries
+        breps = [cls.from_native(shape_from_geometry(geometry, "BREP")) for geometry in geometries]
+        if not breps:
+            raise ValueError("The BREP file contains no geometries.")
+        return breps[0] if len(breps) == 1 else cls.from_breps(breps)
+
     @classmethod
     def from_step(
         cls,
-        filename: Union[str, pathlib.Path],
+        filename: FilePath,
         heal: bool = False,
         solid: bool = False,
     ) -> "OCCBrep":
@@ -420,8 +504,14 @@ class OCCBrep(Brep):
         OCCBrep
 
         """
-        shape = DataExchange.read_step_file(str(filename), verbosity=False)
-        brep = cls.from_native(shape)  # type: ignore
+        from compas_occ.files import read_step
+        from compas_occ.files._geometry import shape_from_geometry
+
+        geometries = read_step(filename).geometries
+        breps = [cls.from_native(shape_from_geometry(geometry, "STEP")) for geometry in geometries]
+        if not breps:
+            raise ValueError("The STEP file contains no geometries.")
+        brep = breps[0] if len(breps) == 1 else cls.from_breps(breps)
         if heal:
             brep.heal()
         if solid:
@@ -429,7 +519,7 @@ class OCCBrep(Brep):
         return brep
 
     @classmethod
-    def from_iges(cls, filename: Union[str, pathlib.Path], solid: bool = True) -> "OCCBrep":
+    def from_iges(cls, filename: FilePath, solid: bool = True) -> "OCCBrep":
         """
         Conctruct a BRep from the data contained in a IGES file.
 
@@ -445,8 +535,14 @@ class OCCBrep(Brep):
         OCCBrep
 
         """
-        shape = DataExchange.read_iges_file(str(filename))
-        brep = cls.from_native(shape)  # type: ignore
+        from compas_occ.files import read_iges
+        from compas_occ.files._geometry import shape_from_geometry
+
+        geometries = read_iges(filename).geometries
+        breps = [cls.from_native(shape_from_geometry(geometry, "IGES")) for geometry in geometries]
+        if not breps:
+            raise ValueError("The IGES file contains no geometries.")
+        brep = breps[0] if len(breps) == 1 else cls.from_breps(breps)
         brep.heal()
         if solid:
             brep.make_solid()
@@ -454,7 +550,7 @@ class OCCBrep(Brep):
 
     def to_brep(
         self,
-        filepath: Union[str, pathlib.Path],
+        filepath: FilePath,
     ) -> None:
         """
         Write the BRep shape to a BREP file.
@@ -469,11 +565,13 @@ class OCCBrep(Brep):
         None
 
         """
-        BRepTools.breptools.Write(self.native_brep, str(filepath))
+        from compas_occ.files import write_brep
+
+        write_brep(filepath, [self])
 
     def to_step(
         self,
-        filepath: Union[str, pathlib.Path],
+        filepath: FilePath,
         unit: str = "MM",
         author: Optional[str] = None,
         name: Optional[str] = None,
@@ -495,38 +593,21 @@ class OCCBrep(Brep):
         None
 
         """
-        writer = STEPControl.STEPControl_Writer()
+        from compas_occ.files import write_step
 
-        Interface.Interface_Static.SetCVal("write.step.unit", unit)
-        Interface.Interface_Static.SetCVal("write.step.product.name", name or self.name)
-
-        writer.Transfer(self.occ_shape, STEPControl.STEPControl_StepModelType.STEPControl_AsIs)  # type: ignore
-
-        if author or description or organization:
-            model = writer.Model()
-            model.ClearHeader()
-
-            header = APIHeaderSection.APIHeaderSection_MakeHeader()
-
-            if author:
-                header.SetAuthorValue(1, TCollection.TCollection_HAsciiString(author))
-            if organization:
-                org = Interface.Interface_HArray1OfHAsciiString(1, 1)
-                org.SetValue(1, TCollection.TCollection_HAsciiString(organization))
-            if description:
-                desc = Interface.Interface_HArray1OfHAsciiString(1, 1)
-                desc.SetValue(1, TCollection.TCollection_HAsciiString(description))
-
-            model.AddHeaderEntity(header.FnValue())
-            model.AddHeaderEntity(header.FsValue())
-            model.AddHeaderEntity(header.FdValue())
-
-        status = writer.Write(str(filepath))
-        assert status == IFSelect.IFSelect_RetDone, status
+        write_step(
+            filepath,
+            [self],
+            unit=unit,
+            author=author,
+            name=name or self.name,
+            description=description,
+            organization=organization,
+        )
 
     def to_stl(
         self,
-        filepath: Union[str, pathlib.Path],
+        filepath: FilePath,
         linear_deflection: float = 1e-3,
         angular_deflection: float = 0.5,
     ) -> bool:
@@ -552,7 +633,12 @@ class OCCBrep(Brep):
         stl_writer.SetASCIIMode(True)
         return stl_writer.Write(self.occ_shape, str(filepath))
 
-    def to_iges(self, filepath: Union[str, pathlib.Path]) -> bool:
+    def to_iges(
+        self,
+        filepath: FilePath,
+        unit: str = "MM",
+        mode: int = 0,
+    ) -> bool:
         """
         Write the BRep shape to a IGES file.
 
@@ -560,17 +646,20 @@ class OCCBrep(Brep):
         ----------
         filepath
             Location of the file.
+        unit
+            Base unit for the geometry.
+        mode
+            IGES write mode: `0` writes faces and `1` writes BReps.
 
         Returns
         -------
         None
 
         """
-        iges_writer = IGESControl.IGESControl_Writer()
-        if not iges_writer.AddShape(self.occ_shape):
-            raise Exception("Failed to add shape to IGES writer.")
-        iges_writer.ComputeModel()
-        return iges_writer.Write(str(filepath))
+        from compas_occ.files import write_iges
+
+        write_iges(filepath, [self], unit=unit, mode=mode)
+        return True
 
     # ==============================================================================
     # Constructors
@@ -708,9 +797,9 @@ class OCCBrep(Brep):
     @classmethod
     def from_extrusion(
         cls,
-        profile: Union[OCCBrepEdge, OCCBrepFace],
+        profile: Union[Curve, Polyline, OCCBrepEdge, OCCBrepFace],
         vector: Vector,
-        cap_ends: bool = False,
+        cap_ends: bool = True,
     ) -> "OCCBrep":
         """
         Construct a BRep by extruding a closed curve along a direction vector.
@@ -723,20 +812,50 @@ class OCCBrep(Brep):
             The extrusion vector.
             The extrusion has the same height as the length vector.
         cap_ends
-            Flag indicating that the ends of the brep should be capped.
-            Currently this flag is not supported.
+            If ``True``, cap the planar ends of the extrusion when possible.
 
         Returns
         -------
         OCCBrep
 
         """
-        if cap_ends:
-            raise NotImplementedError
+        if isinstance(profile, OCCBrepFace):
+            if cap_ends:
+                shape = profile.occ_face
+            else:
+                shape = TopoDS.TopoDS_Compound()
+                builder = BRep.BRep_Builder()
+                builder.MakeCompound(shape)
+                for loop in profile.loops:
+                    builder.Add(shape, loop.occ_wire)
+        else:
+            if isinstance(profile, Polyline):
+                wire = OCCBrepLoop.from_polyline(profile).occ_wire
+                shape = wire
+            else:
+                if isinstance(profile, OCCBrepEdge):
+                    edge = profile.occ_edge
+                elif isinstance(profile, OCCCurve):
+                    edge = OCCBrepEdge.from_curve(profile).occ_edge
+                else:
+                    native_curve = getattr(profile, "native_curve", None)
+                    if native_curve is None:
+                        raise TypeError("The extrusion profile should be a curve, polyline, BRep edge, or BRep face.")
+                    edge = OCCBrepEdge.from_curve(OCCCurve.from_native(native_curve)).occ_edge
+                shape = edge
+                wire_builder = BRepBuilderAPI.BRepBuilderAPI_MakeWire(edge)
+                if not wire_builder.IsDone():
+                    raise ValueError("The extrusion profile could not be converted to a wire.")
+                wire = wire_builder.Wire()
+            if cap_ends:
+                face_builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire)
+                if not face_builder.IsDone():
+                    raise ValueError("Capped extrusions require a closed planar profile.")
+                shape = face_builder.Face()
 
         brep = cls()
         brep.native_brep = BRepPrimAPI.BRepPrimAPI_MakePrism(
-            profile.occ_shape,
+            shape,
             vector_to_occ(vector),
         ).Shape()
         return brep
@@ -772,7 +891,7 @@ class OCCBrep(Brep):
         if end:
             thru.AddVertex(OCCBrepVertex.from_point(end).native_vertex)
         thru.Build()
-        return Brep.from_native(thru.Shape())
+        return OCCBrep.from_native(thru.Shape())
 
     @classmethod
     def from_mesh(cls, mesh: compas.datastructures.Mesh, solid: bool = True) -> "OCCBrep":
@@ -956,6 +1075,8 @@ class OCCBrep(Brep):
         precision: float = 1e-6,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrep":
         """
         Construct a BRep from a COMPAS surface.
@@ -974,6 +1095,11 @@ class OCCBrep(Brep):
             The loop to trim the surface with.
         inside
             Whether to keep the inside or outside of the loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
@@ -987,6 +1113,8 @@ class OCCBrep(Brep):
             precision=precision,
             loop=loop,
             inside=inside,
+            holes=holes,
+            boundary=boundary,
         )
         return cls.from_brepfaces([face])
 
@@ -1209,13 +1337,19 @@ class OCCBrep(Brep):
     # Converters
     # ==============================================================================
 
-    def to_tesselation(
+    @property
+    def tessellation(self) -> Tessellation:
+        """The cached triangular representation for visualization."""
+        if self._tessellation_cache is None:
+            self._tessellation_cache = self.compute_tessellation()
+        return self._tessellation_cache
+
+    def compute_tessellation(
         self,
         linear_deflection: Optional[float] = None,
         angular_deflection: Optional[float] = None,
-    ) -> tuple[Mesh, list[Polyline]]:
-        """
-        Create a tesselation of the shape for visualisation.
+    ) -> Tessellation:
+        """Compute a triangular tessellation of the BRep boundary.
 
         Parameters
         ----------
@@ -1226,13 +1360,15 @@ class OCCBrep(Brep):
 
         Returns
         -------
-        tuple[Mesh, list[Polyline]]
+        Tessellation
+            The indexed triangles and discretized BRep edges.
 
         """
         linear_deflection = linear_deflection or TOL.lineardeflection
         angular_deflection = angular_deflection or TOL.angulardeflection
 
-        mesh = Mesh()
+        vertices = []
+        triangles = []
         polylines = []
         seen = []
 
@@ -1248,16 +1384,16 @@ class OCCBrep(Brep):
             trsf = location.Transformation()
             for i in range(1, triangulation.NbNodes() + 1):
                 nodes.append(triangulation.Node(i).Transformed(trsf))
-            vertices = [point_to_compas(node) for node in nodes]
-            faces = []
-            triangles = triangulation.Triangles()
+            face_vertices = [point_to_compas(node) for node in nodes]
+            offset = len(vertices)
+            vertices.extend(face_vertices)
+            face_triangles = triangulation.Triangles()
             for i in range(1, triangulation.NbTriangles() + 1):
-                triangle = triangles.Value(i)
+                triangle = face_triangles.Value(i)
                 u, v, w = triangle.Get()
-                faces.append([u - 1, v - 1, w - 1])
-            # this can be done much more efficiently
-            other = Mesh.from_vertices_and_faces(vertices, faces)
-            mesh.join(other)
+                if face.orientation == TopAbs.TopAbs_REVERSED:
+                    v, w = w, v
+                triangles.append([offset + u - 1, offset + v - 1, offset + w - 1])
             # process the face loops to produce edges with the same discretisation as the faces
             for loop in face.loops:
                 for edge in loop.edges:
@@ -1271,8 +1407,8 @@ class OCCBrep(Brep):
                     nodes = pot.Nodes()
                     for i in range(1, pot.NbNodes() + 1):
                         node = nodes.Value(i)
-                        points.append(vertices[node - 1])
-                    polylines.append(Polyline(points))
+                        points.append(face_vertices[node - 1])
+                    polylines.append(points)
 
         # This might not be necssary
         lines = []
@@ -1280,16 +1416,34 @@ class OCCBrep(Brep):
             if any(edge.is_same(e) for e in seen):
                 continue
             if edge.is_line:
-                lines.append(Polyline([edge.vertices[0].point, edge.vertices[-1].point]))
+                lines.append([edge.vertices[0].point, edge.vertices[-1].point])
             elif edge.is_circle:
-                lines.append(edge.curve.to_polyline())
+                lines.append(edge.curve.to_polyline().points)
             elif edge.is_ellipse:
-                lines.append(edge.curve.to_polyline())
+                lines.append(edge.curve.to_polyline().points)
             elif edge.is_bspline:
-                lines.append(edge.curve.to_polyline())
+                lines.append(edge.curve.to_polyline().points)
 
         polylines += lines
-        return mesh, polylines
+        return Tessellation(vertices, triangles, polylines=polylines)
+
+    def to_tessellation(
+        self,
+        linear_deflection: Optional[float] = None,
+        angular_deflection: Optional[float] = None,
+    ) -> Tessellation:
+        """Return a triangular tessellation of the BRep boundary."""
+        return self.compute_tessellation(linear_deflection, angular_deflection)
+
+    def to_tesselation(
+        self,
+        linear_deflection: Optional[float] = None,
+        angular_deflection: Optional[float] = None,
+    ) -> tuple[Mesh, list[Polyline]]:
+        """Return the legacy mesh and polyline tessellation representation."""
+        tessellation = self.compute_tessellation(linear_deflection, angular_deflection)
+        polylines = [Polyline(points) for points in tessellation.polylines]
+        return tessellation.to_mesh(), polylines
 
     def to_meshes(self, u: int = 16, v: int = 16) -> list[Mesh]:
         """
@@ -1312,7 +1466,7 @@ class OCCBrep(Brep):
         meshes = []
         for face in brep.faces:
             srf = OCCNurbsSurface.from_face(face.occ_face)
-            mesh = srf.to_tesselation()
+            mesh = srf.compute_mesh(nu=u, nv=v)
             meshes.append(mesh)
         return meshes
 
@@ -2066,14 +2220,21 @@ class OCCBrep(Brep):
         tools = [OCCBrepFace.from_plane(plane).occ_shape]
         results = split_shapes(arguments, tools)  # type: ignore
 
-        occ_shape = None
+        shapes = []
         for test in results:
             point = compute_shape_centreofmass(test)
             if is_point_behind_plane(point, plane):
-                occ_shape = test
-                break
-        if occ_shape:
-            self.occ_shape = occ_shape
+                shapes.append(test)
+        if shapes:
+            if len(shapes) > 1:
+                compound = TopoDS.TopoDS_Compound()
+                builder = BRep.BRep_Builder()
+                builder.MakeCompound(compound)
+                for shape in shapes:
+                    builder.Add(compound, shape)
+                self.occ_shape = compound
+            else:
+                self.occ_shape = shapes[0]
 
     def trimmed(self, plane: compas.geometry.Plane) -> "OCCBrep":
         """Construct a copy of a Brep trimmed with a plane.
@@ -2107,4 +2268,4 @@ class OCCBrep(Brep):
         """
         offset = BRepOffsetAPI.BRepOffsetAPI_MakeThickSolid()
         offset.MakeThickSolidBySimple(self.native_brep, distance)
-        return Brep.from_native(offset.Shape())
+        return OCCBrep.from_native(offset.Shape())

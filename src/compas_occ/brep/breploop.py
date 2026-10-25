@@ -5,8 +5,10 @@ from OCC.Core import ShapeFix
 from OCC.Core import TopoDS
 
 from compas.geometry import BrepLoop
+from compas.geometry import Curve
 from compas.geometry import Polygon
 from compas.geometry import Polyline
+from compas.geometry import Surface
 from compas.itertools import pairwise
 from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepVertex
@@ -172,6 +174,29 @@ class OCCBrepLoop(BrepLoop):
 
         """
         return cls(wire_from_edges(edges))
+
+    @classmethod
+    def from_curves_and_surface(cls, curves: list[Curve], surface: Surface) -> "OCCBrepLoop":
+        """Construct a loop by projecting and embedding curves on a surface.
+
+        Parameters
+        ----------
+        curves
+            The ordered boundary curves.
+        surface
+            The surface on which to project and embed the curves.
+
+        Returns
+        -------
+        OCCBrepLoop
+            The embedded boundary loop.
+
+        """
+        edges = [OCCBrepEdge.from_curve_and_surface(curve, surface) for curve in curves]
+        loop = cls.from_edges(edges)
+        if not loop.is_valid:
+            raise ValueError("The embedded curves do not form a valid loop.")
+        return loop
 
     @classmethod
     def from_polyline(cls, polyline: Polyline) -> "OCCBrepLoop":

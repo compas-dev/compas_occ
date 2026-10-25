@@ -4,6 +4,7 @@ from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
+from OCC.Core import BRepLib
 from OCC.Core import GProp
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
@@ -17,6 +18,7 @@ from compas.geometry import Circle
 from compas.geometry import Ellipse
 from compas.geometry import Hyperbola
 from compas.geometry import Line
+from compas.geometry import LineCurve
 from compas.geometry import NurbsCurve
 from compas.geometry import Parabola
 from compas.geometry import Point
@@ -181,7 +183,7 @@ class OCCBrepEdge(BrepEdge):
             ctype2 = curve2.GetType()
 
             if ctype2 == CurveType.LINE:
-                return compas_occ.conversions.line2d_to_compas(curve2.Line())
+                return LineCurve.from_line(compas_occ.conversions.line2d_to_compas(curve2.Line()))
             if ctype2 == CurveType.CIRCLE:
                 return compas_occ.conversions.circle2d_to_compas(curve2.Circle())
             if ctype2 == CurveType.ELLIPSE:
@@ -193,7 +195,7 @@ class OCCBrepEdge(BrepEdge):
 
         else:
             if self.is_line:
-                return self.to_line()
+                return LineCurve.from_line(self.to_line())
             if self.is_circle:
                 return self.to_circle()
             if self.is_ellipse:
@@ -488,8 +490,8 @@ class OCCBrepEdge(BrepEdge):
     @classmethod
     def from_curve_and_surface(
         cls,
-        curve: OCCCurve,
-        surface: OCCSurface,
+        curve: compas.geometry.Curve,
+        surface: compas.geometry.Surface,
         params: Optional[tuple[float, float]] = None,
         points: Optional[tuple[Point, Point]] = None,
         vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
@@ -517,6 +519,18 @@ class OCCBrepEdge(BrepEdge):
             The constructed edge.
 
         """
+        if not isinstance(curve, OCCCurve):
+            native_curve = getattr(curve, "native_curve", None)
+            if native_curve is None:
+                raise TypeError("The curve should expose OCC geometry through native_curve.")
+            curve = OCCCurve.from_native(native_curve)
+
+        if not isinstance(surface, OCCSurface):
+            native_surface = getattr(surface, "native_surface", None)
+            if native_surface is None:
+                raise TypeError("The surface should expose OCC geometry through native_surface.")
+            surface = OCCSurface.from_native(native_surface)
+
         curve2d = curve.projected(surface).embedded(surface)
         return cls.from_curve2d_and_surface(curve2d, surface, params=params, points=points, vertices=vertices)
 
@@ -570,7 +584,10 @@ class OCCBrepEdge(BrepEdge):
             else:
                 builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve2d.occ_curve, surface.occ_surface)
 
-        return cls(builder.Edge())
+        edge = builder.Edge()
+        BRepLib.breplib.BuildCurves3d(edge)
+        BRepLib.breplib.SameParameter(edge)
+        return cls(edge)
 
     # ==============================================================================
     # Conversions

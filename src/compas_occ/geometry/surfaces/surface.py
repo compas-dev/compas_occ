@@ -20,7 +20,6 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
-from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Frame
 from compas.geometry import Line
@@ -79,6 +78,7 @@ class OCCSurface(Surface):
     @native_surface.setter
     def native_surface(self, surface: Geom_Surface) -> None:
         self._native_surface = surface
+        self._invalidate_discretization()
 
     @property
     def occ_surface(self) -> Geom_Surface:
@@ -209,27 +209,6 @@ class OCCSurface(Surface):
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
-    def to_tesselation(self) -> Mesh:
-        """Convert the surface to a triangle mesh.
-
-        Returns
-        -------
-        Mesh
-            The tesselated surface as a triangle mesh.
-
-        """
-        from OCC.Core.Tesselator import ShapeTesselator
-
-        tess = ShapeTesselator(self.occ_shape)
-        tess.Compute()
-        vertices = []
-        triangles = []
-        for i in range(tess.ObjGetVertexCount()):
-            vertices.append(tess.GetVertex(i))
-        for i in range(tess.ObjGetTriangleCount()):
-            triangles.append(tess.GetTriangleIndex(i))
-        return Mesh.from_vertices_and_faces(vertices, triangles)
-
     # ==============================================================================
     # Methods
     # ==============================================================================
@@ -262,6 +241,7 @@ class OCCSurface(Surface):
         _T = gp_Trsf()
         _T.SetValues(*T.list[:12])
         self.native_surface.Transform(_T)
+        self._invalidate_discretization()
 
     def isocurve_u(self, u: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter u.
@@ -348,6 +328,25 @@ class OCCSurface(Surface):
         props = GeomLProp_SLProps(self.native_surface, u, v, 2, 1e-6)
         normal = props.Normal()
         return direction_to_compas(normal)
+
+    def normal_at(self, u: float, v: float) -> Vector:
+        """Compute the unit normal at surface parameters U and V.
+
+        Parameters
+        ----------
+        u
+            The U parameter.
+        v
+            The V parameter.
+
+        Returns
+        -------
+        Vector
+            The unit surface normal.
+
+        """
+        props = GeomLProp_SLProps(self.native_surface, u, v, 1, 1e-6)
+        return direction_to_compas(props.Normal())
 
     def gaussian_curvature_at(self, u: float, v: float) -> float:
         """Compute the Gaussian curvature at a point on the surface.

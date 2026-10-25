@@ -314,11 +314,14 @@ class OCCBrepFace(BrepFace):
 
     @property
     def loops(self) -> list[OCCBrepLoop]:
-        loops = []
+        outerloop = self.outerloop
+        loops = [outerloop]
         explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)  # type: ignore
         while explorer.More():
             wire = explorer.Current()
-            loops.append(OCCBrepLoop(wire))  # type: ignore
+            loop = OCCBrepLoop(wire)  # type: ignore
+            if not loop.is_same(outerloop):
+                loops.append(loop)
             explorer.Next()
         return loops
 
@@ -362,13 +365,19 @@ class OCCBrepFace(BrepFace):
     # ==============================================================================
 
     @classmethod
-    def from_polygon(cls, points: Polygon) -> "OCCBrepFace":
+    def from_polygon(
+        cls,
+        points: Polygon,
+        holes: Optional[list[OCCBrepLoop]] = None,
+    ) -> "OCCBrepFace":
         """
         Construct a BRep face from a polygon.
 
         Parameters
         ----------
         polygon
+        holes
+            Inner boundary loops.
 
         Returns
         -------
@@ -380,7 +389,7 @@ class OCCBrepFace(BrepFace):
             polygon.Add(gp.gp_Pnt(*point))
         polygon.Close()
         wire = polygon.Wire()
-        return cls(BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire).Face())
+        return cls._from_builder(BRepBuilderAPI.BRepBuilderAPI_MakeFace(wire), holes=holes)
 
     @classmethod
     def from_plane(
@@ -390,6 +399,8 @@ class OCCBrepFace(BrepFace):
         domain_v: Optional[tuple[float, float]] = None,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a plane.
@@ -406,14 +417,21 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
+        loop = cls._select_boundary(loop, boundary)
+        cls._validate_boundary_options(domain_u, domain_v, loop)
         occ_plane: gp.gp_Pln = plane_to_occ(plane)
-        if domain_u and domain_v:
+        if domain_u is not None and domain_v is not None:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(occ_plane, min_u, max_u, min_v, max_v)
@@ -421,7 +439,7 @@ class OCCBrepFace(BrepFace):
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(occ_plane, loop.occ_wire, inside)
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(occ_plane)
-        return cls(builder.Face())
+        return cls._from_builder(builder, holes=holes)
 
     @classmethod
     def from_cylinder(
@@ -429,6 +447,8 @@ class OCCBrepFace(BrepFace):
         cylinder: Cylinder,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a cylinder.
@@ -441,12 +461,18 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
+        loop = cls._select_boundary(loop, boundary)
         if loop:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 cylinder_to_occ(cylinder),
@@ -455,7 +481,7 @@ class OCCBrepFace(BrepFace):
             )
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(cylinder_to_occ(cylinder))
-        return cls(builder.Face())
+        return cls._from_builder(builder, holes=holes)
 
     @classmethod
     def from_cone(
@@ -463,6 +489,8 @@ class OCCBrepFace(BrepFace):
         cone: Cone,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a cone.
@@ -475,12 +503,18 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
+        loop = cls._select_boundary(loop, boundary)
         if loop:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(
                 cone_to_occ(cone),
@@ -489,7 +523,7 @@ class OCCBrepFace(BrepFace):
             )
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(cone_to_occ(cone))
-        return cls(builder.Face())
+        return cls._from_builder(builder, holes=holes)
 
     @classmethod
     def from_sphere(
@@ -497,6 +531,8 @@ class OCCBrepFace(BrepFace):
         sphere: Sphere,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a sphere.
@@ -509,17 +545,23 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
+        loop = cls._select_boundary(loop, boundary)
         if loop:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(sphere_to_occ(sphere), loop.occ_wire, inside)
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(sphere_to_occ(sphere))
-        return cls(builder.Face())
+        return cls._from_builder(builder, holes=holes)
 
     @classmethod
     def from_torus(
@@ -527,6 +569,8 @@ class OCCBrepFace(BrepFace):
         torus: Torus,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a torus.
@@ -539,17 +583,23 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
+        loop = cls._select_boundary(loop, boundary)
         if loop:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(torus_to_occ(torus), loop.occ_wire, inside)
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(torus_to_occ(torus))
-        return cls(builder.Face())
+        return cls._from_builder(builder, holes=holes)
 
     @classmethod
     def from_surface(
@@ -560,6 +610,8 @@ class OCCBrepFace(BrepFace):
         precision: float = 1e-6,
         loop: Optional[OCCBrepLoop] = None,
         inside: bool = True,
+        holes: Optional[list[OCCBrepLoop]] = None,
+        boundary: Optional[OCCBrepLoop] = None,
     ) -> "OCCBrepFace":
         """
         Construct a face from a surface.
@@ -578,13 +630,20 @@ class OCCBrepFace(BrepFace):
             A boundary loop.
         inside
             If True, the face is inside the boundary loop.
+        holes
+            Inner boundary loops.
+        boundary
+            The external boundary loop. This is the preferred name for
+            the legacy `loop` parameter.
 
         Returns
         -------
         OCCBrepFace
 
         """
-        if domain_u and domain_v:
+        loop = cls._select_boundary(loop, boundary)
+        cls._validate_boundary_options(domain_u, domain_v, loop)
+        if domain_u is not None and domain_v is not None:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface.occ_surface, min_u, max_u, min_v, max_v, precision)
@@ -592,7 +651,7 @@ class OCCBrepFace(BrepFace):
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface.occ_surface, loop.occ_wire, inside)
         else:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(surface.occ_surface, precision)
-        face = cls(builder.Face())
+        face = cls._from_builder(builder, holes=holes)
         face.precision = precision
         return face
 
@@ -762,7 +821,7 @@ class OCCBrepFace(BrepFace):
         fixer.Perform()
         self.occ_face = fixer.Face()
 
-    def add_loop(self, loop: OCCBrepLoop, reverse: bool = False) -> None:
+    def add_loop(self, loop: OCCBrepLoop, reverse: Optional[bool] = None) -> None:
         """
         Add an inner loop to the face.
 
@@ -770,22 +829,18 @@ class OCCBrepFace(BrepFace):
         ----------
         loop
             The additional loop.
+        reverse
+            If provided, force the loop orientation. By default, the valid
+            orientation for an inner boundary is selected automatically.
 
         Returns
         -------
         None
 
         """
-        builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(self.occ_face)
-        if reverse:
-            builder.Add(loop.occ_wire.Reversed())  # type: ignore
-        else:
-            builder.Add(loop.occ_wire)
-        if not builder.IsDone():
-            raise Exception(builder.Error())
-        self.occ_face = builder.Face()
+        self.occ_face = self._face_with_inner_loop(self.occ_face, loop, reverse)
 
-    def add_loops(self, loops: list[OCCBrepLoop], reverse: bool = False) -> None:
+    def add_loops(self, loops: list[OCCBrepLoop], reverse: Optional[bool] = None) -> None:
         """
         Add an inner loop to the face.
 
@@ -793,18 +848,68 @@ class OCCBrepFace(BrepFace):
         ----------
         loops
             The additional loops.
+        reverse
+            If provided, force the loop orientation. By default, the valid
+            orientation for every inner boundary is selected automatically.
 
         Returns
         -------
         None
 
         """
-        builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(self.occ_face)
+        face = self.occ_face
         for loop in loops:
-            if reverse:
-                builder.Add(loop.occ_wire.Reversed())  # type: ignore
-            else:
-                builder.Add(loop.occ_wire)
+            face = self._face_with_inner_loop(face, loop, reverse)
+        self.occ_face = face
+
+    @staticmethod
+    def _face_with_inner_loop(
+        face: TopoDS.TopoDS_Face,
+        loop: OCCBrepLoop,
+        reverse: Optional[bool],
+    ) -> TopoDS.TopoDS_Face:
+        orientations = [reverse] if reverse is not None else [False, True]
+        for should_reverse in orientations:
+            builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(face)
+            wire = loop.occ_wire.Reversed() if should_reverse else loop.occ_wire
+            builder.Add(wire)  # type: ignore
+            if builder.IsDone():
+                candidate = builder.Face()
+                if BRepAlgo.brepalgo.IsValid(candidate):
+                    return candidate
+        raise ValueError("The loop cannot be added as a valid inner boundary of this face.")
+
+    @classmethod
+    def _from_builder(
+        cls,
+        builder: BRepBuilderAPI.BRepBuilderAPI_MakeFace,
+        holes: Optional[list[OCCBrepLoop]] = None,
+    ) -> "OCCBrepFace":
         if not builder.IsDone():
-            raise Exception(builder.Error())
-        self.occ_face = builder.Face()
+            raise ValueError("The external boundary does not define a face on the surface.")
+        face = cls(builder.Face())
+        if not face.is_valid():
+            raise ValueError("The external boundary does not define a valid face on the surface.")
+        if holes:
+            face.add_loops(holes)
+        return face
+
+    @staticmethod
+    def _validate_boundary_options(
+        domain_u: Optional[tuple[float, float]],
+        domain_v: Optional[tuple[float, float]],
+        loop: Optional[OCCBrepLoop],
+    ) -> None:
+        if (domain_u is None) != (domain_v is None):
+            raise ValueError("Both domain_u and domain_v are required to bound a face by parameter domains.")
+        if loop is not None and domain_u is not None:
+            raise ValueError("A face cannot be bounded by both parameter domains and an external loop.")
+
+    @staticmethod
+    def _select_boundary(
+        loop: Optional[OCCBrepLoop],
+        boundary: Optional[OCCBrepLoop],
+    ) -> Optional[OCCBrepLoop]:
+        if loop is not None and boundary is not None:
+            raise ValueError("Use either boundary or the legacy loop parameter, not both.")
+        return boundary if boundary is not None else loop

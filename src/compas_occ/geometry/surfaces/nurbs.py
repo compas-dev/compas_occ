@@ -6,7 +6,6 @@ from typing import Optional
 from typing import Union
 
 from OCC.Core.Geom import Geom_BSplineSurface
-from OCC.Core.Geom import Geom_Plane
 from OCC.Core.GeomAbs import GeomAbs_C2
 from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
@@ -15,7 +14,7 @@ from OCC.Core.GeomFill import GeomFill_CurvedStyle
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 
 from compas.geometry import Curve
-from compas.geometry import NurbsSurface
+from compas.geometry import Frame
 from compas.geometry import Plane
 from compas.geometry import Point
 from compas.geometry import Translation
@@ -26,7 +25,6 @@ from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import array2_from_floats2
 from compas_occ.conversions import array2_from_points2
 from compas_occ.conversions import floats2_from_array2
-from compas_occ.conversions import plane_to_occ
 from compas_occ.conversions import point_to_compas
 from compas_occ.conversions import point_to_occ
 from compas_occ.conversions import points2_from_array2
@@ -37,6 +35,7 @@ from .surface import OCCSurface
 
 class ControlPoints:
     def __init__(self, surface: "OCCNurbsSurface") -> None:
+        self.surface = surface
         self.native_surface = surface.native_surface
 
     @property
@@ -55,6 +54,7 @@ class ControlPoints:
     def __setitem__(self, index: tuple[int, int], point: Point) -> None:
         u, v = index
         self.native_surface.SetPole(u + 1, v + 1, point_to_occ(point))
+        self.surface._invalidate_discretization()
 
     def __len__(self) -> int:
         return self.native_surface.NbVPoles()
@@ -63,7 +63,7 @@ class ControlPoints:
         return iter(self.points)
 
 
-class OCCNurbsSurface(OCCSurface, NurbsSurface):
+class OCCNurbsSurface(OCCSurface):
     """Class representing a NURBS surface based on the BSplineSurface of the OCC geometry kernel.
 
     Parameters
@@ -462,9 +462,16 @@ class OCCNurbsSurface(OCCSurface, NurbsSurface):
         OCCNurbsSurface
 
         """
-        occ_plane = plane_to_occ(plane)
-        srf = Geom_Plane(occ_plane)
-        return cls.from_native(srf)  # type: ignore
+        frame = Frame.from_plane(plane)
+        origin = frame.point
+        xpoint = origin + frame.xaxis
+        ypoint = origin + frame.yaxis
+        xypoint = xpoint + frame.yaxis
+        return cls.from_points(
+            [[origin, xpoint], [ypoint, xypoint]],
+            degree_u=1,
+            degree_v=1,
+        )
 
     @classmethod
     def from_points(
