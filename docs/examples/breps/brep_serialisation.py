@@ -34,8 +34,7 @@ def brep_with_hole():
         ),
     )
     curve = NurbsCurve.from_circle(circle)
-    edge = OCCBrepEdge.from_curve_and_surface(curve=curve, surface=surface)
-    loop = OCCBrepLoop.from_edges([edge])
+    loop = OCCBrepLoop.from_curves_and_surface([curve], surface)
     face = OCCBrepFace.from_surface(surface)
     face.add_loop(loop)
     brep = OCCBrep.from_brepfaces([face])
@@ -52,7 +51,7 @@ def brep_with_holes():
     loop3 = OCCBrepLoop.from_edges([OCCBrepEdge.from_circle(circle3)])
 
     face = OCCBrepFace.from_plane(Plane.worldXY(), domain_u=(-5, 5), domain_v=(-5, 5))
-    face.add_loops([loop1, loop2, loop3], reverse=True)
+    face.add_loops([loop1, loop2, loop3])
 
     brep = OCCBrep.from_brepfaces([face])
     return brep

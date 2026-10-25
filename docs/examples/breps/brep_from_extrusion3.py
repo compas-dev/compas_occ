@@ -22,7 +22,7 @@ extrusion = OCCBrep.from_extrusion(brep.faces[0], Vector(0, 0, 5))
 extrusion.heal()
 extrusion.make_solid()
 
-box = Box(10, 1, 3).to_brep()
+box = OCCBrep.from_box(Box(10, 1, 3))
 extrusion = OCCBrep.from_boolean_difference(extrusion, box)
 
 plane = Plane([3, 5, 7.5], [1, 0, 0])

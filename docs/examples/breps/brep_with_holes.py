@@ -17,7 +17,7 @@ loop2 = OCCBrepLoop.from_edges([OCCBrepEdge.from_circle(circle2)])
 loop3 = OCCBrepLoop.from_edges([OCCBrepEdge.from_circle(circle3)])
 
 face = OCCBrepFace.from_plane(Plane.worldXY(), domain_u=(-5, 5), domain_v=(-5, 5))
-face.add_loops([loop1, loop2, loop3], reverse=True)
+face.add_loops([loop1, loop2, loop3])
 
 brep = Brep.from_brepfaces([face])
 

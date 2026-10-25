@@ -9,7 +9,6 @@ from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.geometry import Vector
-from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepFace
 from compas_occ.brep import OCCBrepLoop
 
@@ -36,8 +35,7 @@ circle = Circle(
 # and the 2D curve should keep track of the embedding surface
 curve = NurbsCurve.from_circle(circle)
 
-edge = OCCBrepEdge.from_curve(curve=curve, surface=surface)
-loop = OCCBrepLoop.from_edges([edge])
+loop = OCCBrepLoop.from_curves_and_surface([curve], surface)
 
 # perhaps this should be:
 # face = OCCBrepFace()

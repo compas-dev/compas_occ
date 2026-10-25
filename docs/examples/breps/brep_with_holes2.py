@@ -17,7 +17,7 @@ loop3 = OCCBrepLoop.from_polygon(circle3.to_polygon(4))
 
 polygon = Polygon.from_sides_and_radius_xy(5, 10.0)
 face = OCCBrepFace.from_polygon(polygon)
-face.add_loops([loop1, loop2, loop3], reverse=False)
+face.add_loops([loop1, loop2, loop3])
 
 brep = Brep.from_brepfaces([face])
 

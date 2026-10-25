@@ -2,7 +2,11 @@
 
 ## Curves
 
+- [Curve examples](examples/curves/index.md)
+
 ## Surfaces
+
+- [Surface examples](examples/surfaces/index.md)
 
 ## Breps
 

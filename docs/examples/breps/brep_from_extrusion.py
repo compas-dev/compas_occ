@@ -10,7 +10,7 @@ circle = Circle(radius=0.3)
 curve = OCCNurbsCurve.from_circle(circle)
 edge = OCCBrepEdge.from_curve(curve)
 
-brep = OCCBrep.from_extrusion(edge, Vector(0, 0, 10))
+brep = OCCBrep.from_extrusion(edge, Vector(0, 0, 10), True)
 
 viewer = Viewer()
 viewer.scene.add(brep)

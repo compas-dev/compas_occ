@@ -7,7 +7,7 @@ from compas_occ.brep import OCCBrep
 # Load the brep from a STEP file
 # and extract the individual letters.
 
-filepath = Path(__file__).parent / "FCA.stp"
+filepath = Path(__file__).parent.parent.parent.parent / "data" / "FCA.step"
 brep = OCCBrep.from_step(filepath)
 letters = list(brep.solids)
 
