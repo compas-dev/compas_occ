@@ -123,6 +123,11 @@ def brep_area(brep):
 
 
 @plugin(category="brep-queries", requires=["OCC"])
+def brep_aabb(brep):
+    return _occ(brep).aabb
+
+
+@plugin(category="brep-queries", requires=["OCC"])
 def brep_centroid(brep):
     return _occ(brep).centroid
 
@@ -130,6 +135,11 @@ def brep_centroid(brep):
 @plugin(category="brep-queries", requires=["OCC"])
 def brep_frame(brep):
     return _occ(brep).frame
+
+
+@plugin(category="brep-queries", requires=["OCC"])
+def brep_obb(brep):
+    return _occ(brep).obb
 
 
 @plugin(category="brep-queries", requires=["OCC"])
@@ -193,6 +203,18 @@ def _copy_and_apply(brep, method, *args, **kwargs):
     result = _occ(brep).copy()
     getattr(result, method)(*args, **kwargs)
     return _wrap(result)
+
+
+@plugin(category="brep-operations", requires=["OCC"])
+def brep_copy(brep):
+    return _wrap(_occ(brep).copy())
+
+
+@plugin(category="brep-operations", requires=["OCC"])
+def brep_transform(brep, transformation):
+    transformed = _occ(brep)
+    transformed.transform(transformation)
+    brep._native_brep = transformed.native_brep
 
 
 @plugin(category="brep-operations", requires=["OCC"])

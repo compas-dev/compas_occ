@@ -16,7 +16,7 @@ def test_entry_point_exposes_factory_plugins():
     manager = PluginManager(entry_points_provider=lambda *, group: entry_points)
     occ_modules = {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")}
 
-    assert manager.load_plugins() == 109
+    assert manager.load_plugins() == 113
     assert {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")} == occ_modules
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-factories", "from_box") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "from_boolean_union") in manager.registry
@@ -24,8 +24,12 @@ def test_entry_point_exposes_factory_plugins():
     assert ExtensionPoint("https://plugins.compas.dev/", "nurbssurface-factories", "from_points") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "nurbssurface-queries", "surface_points") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-queries", "brep_area") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-queries", "brep_aabb") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-queries", "brep_obb") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_tessellate") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_polygonize") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_copy") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_transform") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-io", "brep_to_step") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "intersections", "intersection_surface_brep") in manager.registry
 
@@ -60,3 +64,23 @@ def test_brep_plugins_use_stable_wrapper():
     assert type(restored) is Brep
     assert restored.is_valid
     assert restored.volume == pytest.approx(brep.volume)
+
+
+def test_brep_copy_and_transform_plugins():
+    from compas.geometry import Box
+    from compas.geometry import Brep
+    from compas.geometry import Translation
+
+    brep = Brep.from_box(Box(1))
+    copied = brep.copy()
+
+    assert type(copied) is Brep
+    assert copied.native_brep is not brep.native_brep
+    assert copied.volume == pytest.approx(brep.volume)
+    assert copied.aabb.xsize == pytest.approx(1.0)
+    assert copied.obb.xsize == pytest.approx(1.0)
+
+    copied.transform(Translation.from_vector([1.0, 2.0, 3.0]))
+
+    assert copied.centroid == [1.0, 2.0, 3.0]
+    assert brep.centroid == [0.0, 0.0, 0.0]
