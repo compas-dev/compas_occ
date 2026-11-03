@@ -4,6 +4,7 @@ import compas
 from compas.geometry import Frame
 from compas.geometry import NurbsSurface
 from compas.geometry import Tessellation
+from compas.geometry import UVGrid
 from compas.geometry import Translation
 from compas.tolerance import TOL
 from compas_occ.geometry import OCCNurbsSurface
@@ -88,7 +89,7 @@ def test_occ_surface_uses_compas_tessellation_infrastructure():
         degree_v=1,
     )
 
-    tessellation = surface.compute_tessellation(nu=2, nv=3)
+    tessellation = surface.tessellate(UVGrid(2, 3))
 
     assert isinstance(tessellation, Tessellation)
     assert tessellation.number_of_vertices == 12

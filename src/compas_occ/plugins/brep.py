@@ -175,12 +175,13 @@ def brep_topology(brep):
 
 
 @plugin(category="brep-operations", requires=["OCC"])
-def brep_tessellate(brep, linear_deflection=None, angular_deflection=None, **kwargs):
-    from compas.geometry import Polyline
+def brep_tessellate(brep, strategy):
+    return _occ(brep).tessellate(strategy)
 
-    tessellation = _occ(brep).compute_tessellation(linear_deflection, angular_deflection)
-    polylines = [Polyline(points) for points in tessellation.polylines]
-    return tessellation.to_mesh(), polylines
+
+@plugin(category="brep-operations", requires=["OCC"])
+def brep_polygonize(brep, strategy):
+    return _occ(brep).polygonize(strategy)
 
 
 @plugin(category="brep-operations", requires=["OCC"])

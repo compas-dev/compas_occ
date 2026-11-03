@@ -54,7 +54,6 @@ class ControlPoints:
     def __setitem__(self, index: tuple[int, int], point: Point) -> None:
         u, v = index
         self.native_surface.SetPole(u + 1, v + 1, point_to_occ(point))
-        self.surface._invalidate_discretization()
 
     def __len__(self) -> int:
         return self.native_surface.NbVPoles()

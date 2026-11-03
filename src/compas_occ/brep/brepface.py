@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from typing import Optional
 
 from OCC.Core import BRepAdaptor
@@ -41,6 +42,9 @@ from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
+
+if TYPE_CHECKING:
+    from compas_occ.brep import OCCBrep
 
 
 class OCCBrepFace(BrepFace):
@@ -195,6 +199,12 @@ class OCCBrepFace(BrepFace):
         if not isinstance(other, OCCBrepFace):
             return False
         return self.occ_face.IsEqual(other.occ_face)
+
+    def as_brep(self) -> "OCCBrep":
+        """Return an OCC BRep containing only this face."""
+        from compas_occ.brep import OCCBrep
+
+        return OCCBrep.from_brepfaces([self], solid=False)
 
     # ==============================================================================
     # OCC Properties
@@ -604,7 +614,7 @@ class OCCBrepFace(BrepFace):
     @classmethod
     def from_surface(
         cls,
-        surface: OCCSurface,
+        surface: compas.geometry.Surface,
         domain_u: Optional[tuple[float, float]] = None,
         domain_v: Optional[tuple[float, float]] = None,
         precision: float = 1e-6,
@@ -643,6 +653,11 @@ class OCCBrepFace(BrepFace):
         """
         loop = cls._select_boundary(loop, boundary)
         cls._validate_boundary_options(domain_u, domain_v, loop)
+        if not isinstance(surface, OCCSurface):
+            native_surface = getattr(surface, "native_surface", None)
+            if native_surface is None:
+                raise TypeError("The surface should expose OCC geometry through native_surface.")
+            surface = OCCSurface.from_native(native_surface)
         if domain_u is not None and domain_v is not None:
             min_u, max_u = domain_u
             min_v, max_v = domain_v
