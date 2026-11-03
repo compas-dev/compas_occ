@@ -1,3 +1,4 @@
+from math import radians
 from os import PathLike
 from typing import Optional
 from typing import Union
@@ -32,6 +33,7 @@ from compas.data import Data
 from compas.datastructures import Mesh
 from compas.geometry import Box
 from compas.geometry import Curve
+from compas.geometry import Deflection
 from compas.geometry import Frame
 from compas.geometry import Plane
 from compas.geometry import Point
@@ -127,7 +129,6 @@ class OCCBrep(Data):
         self._area = None
         self._volume = None
         self._centroid = None
-        self._tessellation_cache = None
 
     def copy(self, cls: Optional[type] = None, copy_guid: bool = False) -> "OCCBrep":
         """Deep-copy this BRep using the native OCC copying mechanism.
@@ -174,7 +175,6 @@ class OCCBrep(Data):
         self._faces = None
         self._shells = None
         self._solids = None
-        self._tessellation_cache = None
 
     @property
     def native_brep(self) -> TopoDS.TopoDS_Shape:
@@ -1337,26 +1337,14 @@ class OCCBrep(Data):
     # Converters
     # ==============================================================================
 
-    @property
-    def tessellation(self) -> Tessellation:
-        """The cached triangular representation for visualization."""
-        if self._tessellation_cache is None:
-            self._tessellation_cache = self.compute_tessellation()
-        return self._tessellation_cache
-
-    def compute_tessellation(
-        self,
-        linear_deflection: Optional[float] = None,
-        angular_deflection: Optional[float] = None,
-    ) -> Tessellation:
-        """Compute a triangular tessellation of the BRep boundary.
+    def tessellate(self, strategy: Deflection) -> Tessellation:
+        """Create a triangular tessellation of the trimmed BRep boundary.
 
         Parameters
         ----------
-        linear_deflection
-            Allowable "distance" deviation between curved geometry and mesh discretisation.
-        angular_deflection
-            Allowable "curvature" deviation between curved geometry and mesh discretisation.
+        strategy
+            The linear and angular deflection targets. Angular deflection is
+            expressed in public degrees.
 
         Returns
         -------
@@ -1364,8 +1352,11 @@ class OCCBrep(Data):
             The indexed triangles and discretized BRep edges.
 
         """
-        linear_deflection = linear_deflection or TOL.lineardeflection
-        angular_deflection = angular_deflection or TOL.angulardeflection
+        if not isinstance(strategy, Deflection):
+            raise TypeError("OCC BRep tessellation requires a Deflection strategy.")
+
+        linear_deflection = strategy.linear
+        angular_deflection = radians(strategy.angular)
 
         vertices = []
         triangles = []
@@ -1399,10 +1390,10 @@ class OCCBrep(Data):
                 for edge in loop.edges:
                     if any(edge.is_same(e) for e in seen):
                         continue
-                    seen.append(edge)
                     pot = bt.PolygonOnTriangulation(edge.occ_edge, triangulation, location)
                     if pot is None:
                         continue
+                    seen.append(edge)
                     points = []
                     nodes = pot.Nodes()
                     for i in range(1, pot.NbNodes() + 1):
@@ -1410,65 +1401,31 @@ class OCCBrep(Data):
                         points.append(face_vertices[node - 1])
                     polylines.append(points)
 
-        # This might not be necssary
+        # Edges without polygon-on-triangulation data use the curve's default
+        # sampling rather than the BRep deflection strategy.
         lines = []
         for edge in self.edges:
             if any(edge.is_same(e) for e in seen):
                 continue
+            points = None
             if edge.is_line:
-                lines.append([edge.vertices[0].point, edge.vertices[-1].point])
+                points = [edge.vertices[0].point, edge.vertices[-1].point]
             elif edge.is_circle:
-                lines.append(edge.curve.to_polyline().points)
+                points = edge.curve.to_polyline().points
             elif edge.is_ellipse:
-                lines.append(edge.curve.to_polyline().points)
+                points = edge.curve.to_polyline().points
             elif edge.is_bspline:
-                lines.append(edge.curve.to_polyline().points)
+                points = edge.curve.to_polyline().points
+            if points is not None:
+                seen.append(edge)
+                lines.append(points)
 
         polylines += lines
         return Tessellation(vertices, triangles, polylines=polylines)
 
-    def to_tessellation(
-        self,
-        linear_deflection: Optional[float] = None,
-        angular_deflection: Optional[float] = None,
-    ) -> Tessellation:
-        """Return a triangular tessellation of the BRep boundary."""
-        return self.compute_tessellation(linear_deflection, angular_deflection)
-
-    def to_tesselation(
-        self,
-        linear_deflection: Optional[float] = None,
-        angular_deflection: Optional[float] = None,
-    ) -> tuple[Mesh, list[Polyline]]:
-        """Return the legacy mesh and polyline tessellation representation."""
-        tessellation = self.compute_tessellation(linear_deflection, angular_deflection)
-        polylines = [Polyline(points) for points in tessellation.polylines]
-        return tessellation.to_mesh(), polylines
-
-    def to_meshes(self, u: int = 16, v: int = 16) -> list[Mesh]:
-        """
-        Convert the faces of the BRep shape to meshes.
-
-        Parameters
-        ----------
-        u
-            The number of mesh faces in the U direction of the underlying surface geometry of every face of the Brep.
-        v
-            The number of mesh faces in the V direction of the underlying surface geometry of every face of the Brep.
-
-        Returns
-        -------
-        list[Mesh]
-
-        """
-        converter = BRepBuilderAPI.BRepBuilderAPI_NurbsConvert(self.occ_shape, False)
-        brep = OCCBrep.from_shape(converter.Shape())
-        meshes = []
-        for face in brep.faces:
-            srf = OCCNurbsSurface.from_face(face.occ_face)
-            mesh = srf.compute_mesh(nu=u, nv=v)
-            meshes.append(mesh)
-        return meshes
+    def polygonize(self, strategy: Deflection) -> compas.geometry.PolygonalSurface:
+        """Create a polygonal representation of the trimmed BRep boundary."""
+        return self.tessellate(strategy).to_polygonal_surface()
 
     def to_polygons(self) -> list[Polygon]:
         """
@@ -1486,27 +1443,6 @@ class OCCBrep(Data):
                 points.append(vertex.point)
             polygons.append(Polygon(points))
         return polygons
-
-    def to_viewmesh(
-        self,
-        linear_deflection: Optional[float] = None,
-        angular_deflection: Optional[float] = None,
-    ) -> tuple[compas.datastructures.Mesh, list[compas.geometry.Polyline]]:
-        """
-        Convert the BRep to a view mesh.
-
-        Parameters
-        ----------
-        linear_deflection
-            Allowable "distance" deviation between curved geometry and mesh discretisation.
-        angular_deflection
-            Allowable "curvature" deviation between curved geometry and mesh discretisation.
-
-        Returns
-        -------
-        tuple[Mesh, list[Polyline]]
-        """
-        return self.to_tesselation(linear_deflection=linear_deflection, angular_deflection=angular_deflection)
 
     # ==============================================================================
     # Relationships

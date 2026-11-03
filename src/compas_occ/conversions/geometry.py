@@ -1191,8 +1191,7 @@ def bezier_to_compas(bezier: Geom_BezierCurve) -> Bezier:
 
 
 def bspline_to_compas(bspline: Geom_BSplineCurve) -> NurbsCurve:
-    """Construct a COMPAS NURBS curve from an OCC B-spline curve.
-    """
+    """Construct a COMPAS NURBS curve from an OCC B-spline curve."""
     return NurbsCurve.from_native(bspline)
 
 
@@ -1250,8 +1249,7 @@ def sphere_to_compas(
 
 
 def obb_to_compas(obb: Bnd_OBB) -> Box:
-    """Convert an OCC oriented bounding box to a COMPAS box.
-    """
+    """Convert an OCC oriented bounding box to a COMPAS box."""
     frame = ax3_to_compas(obb.Position())
     xsize = 2 * obb.XHSize()
     ysize = 2 * obb.YHSize()
@@ -1260,6 +1258,5 @@ def obb_to_compas(obb: Bnd_OBB) -> Box:
 
 
 def aabb_to_compas(aabb: Bnd_Box) -> Box:
-    """Convert an OCC oriented bounding box to a COMPAS box.
-    """
+    """Convert an OCC oriented bounding box to a COMPAS box."""
     return Box.from_diagonal([point_to_compas(aabb.CornerMin()), point_to_compas(aabb.CornerMax())])

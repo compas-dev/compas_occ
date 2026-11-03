@@ -4,6 +4,7 @@ from compas_viewer import Viewer
 
 from compas.geometry import Brep
 from compas.geometry import Circle
+from compas.geometry import Deflection
 from compas.geometry import Frame
 from compas.geometry import NurbsCurve
 from compas.geometry import NurbsSurface
@@ -46,6 +47,16 @@ face = OCCBrepFace.from_surface(surface)
 face.add_loop(loop)
 
 brep = Brep.from_brepfaces([face])
+
+# Approximation policy is explicit. The triangle result is ephemeral, while the
+# polygonal result is an independent serializable geometry object.
+strategy = Deflection(linear=0.05, angular=10.0)
+tessellation = brep.tessellate(strategy)
+polygonal = brep.polygonize(strategy)
+
+# OCC supplies discretized topological boundaries alongside the triangle buffers.
+assert tessellation.polylines
+print(tessellation.number_of_triangles, len(tessellation.polylines))
 
 # =============================================================================
 # Visualization

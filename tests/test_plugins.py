@@ -16,7 +16,7 @@ def test_entry_point_exposes_factory_plugins():
     manager = PluginManager(entry_points_provider=lambda *, group: entry_points)
     occ_modules = {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")}
 
-    assert manager.load_plugins() == 108
+    assert manager.load_plugins() == 109
     assert {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")} == occ_modules
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-factories", "from_box") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "from_boolean_union") in manager.registry
@@ -24,6 +24,8 @@ def test_entry_point_exposes_factory_plugins():
     assert ExtensionPoint("https://plugins.compas.dev/", "nurbssurface-factories", "from_points") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "nurbssurface-queries", "surface_points") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-queries", "brep_area") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_tessellate") in manager.registry
+    assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_polygonize") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-io", "brep_to_step") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "intersections", "intersection_surface_brep") in manager.registry
 
@@ -31,6 +33,9 @@ def test_entry_point_exposes_factory_plugins():
 def test_brep_plugins_use_stable_wrapper():
     from compas.geometry import Box
     from compas.geometry import Brep
+    from compas.geometry import Deflection
+    from compas.geometry import PolygonalSurface
+    from compas.geometry import Tessellation
 
     brep = Brep.from_box(Box(1))
 
@@ -43,6 +48,13 @@ def test_brep_plugins_use_stable_wrapper():
     assert len(brep.faces) == 6
     assert brep.area == 6.0
     assert brep.volume == pytest.approx(1.0)
+
+    strategy = Deflection(0.01, 12.0)
+    tessellation = brep.tessellate(strategy)
+    polygonal = brep.polygonize(strategy)
+
+    assert isinstance(tessellation, Tessellation)
+    assert isinstance(polygonal, PolygonalSurface)
 
     restored = Brep.from_jsonstring(brep.to_jsonstring())
     assert type(restored) is Brep

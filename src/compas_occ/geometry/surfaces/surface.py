@@ -78,7 +78,6 @@ class OCCSurface(Surface):
     @native_surface.setter
     def native_surface(self, surface: Geom_Surface) -> None:
         self._native_surface = surface
-        self._invalidate_discretization()
 
     @property
     def occ_surface(self) -> Geom_Surface:
@@ -241,7 +240,6 @@ class OCCSurface(Surface):
         _T = gp_Trsf()
         _T.SetValues(*T.list[:12])
         self.native_surface.Transform(_T)
-        self._invalidate_discretization()
 
     def isocurve_u(self, u: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter u.
