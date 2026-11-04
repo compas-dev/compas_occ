@@ -206,7 +206,7 @@ wheels = [
 [[package]]
 name = "compas"
 version = "2.15.0"
-source = { git = "https://github.com/compas-dev/compas.git?rev=92dfa6a5a53c9448584b68ac08bce30779b8d476#92dfa6a5a53c9448584b68ac08bce30779b8d476" }
+source = { git = "https://github.com/compas-dev/compas.git?rev=76fc544d7e00bf2ec4ada18e46738525632a879f#76fc544d7e00bf2ec4ada18e46738525632a879f" }
 dependencies = [
     { name = "mapbox-earcut" },
     { name = "networkx" },
@@ -272,7 +272,7 @@ viz = [
 requires-dist = [
     { name = "build", marker = "extra == 'dev'" },
     { name = "bump-my-version", marker = "extra == 'dev'" },
-    { name = "compas", git = "https://github.com/compas-dev/compas.git?rev=92dfa6a5a53c9448584b68ac08bce30779b8d476" },
+    { name = "compas", git = "https://github.com/compas-dev/compas.git?rev=76fc544d7e00bf2ec4ada18e46738525632a879f" },
     { name = "compas-invocations2", marker = "extra == 'dev'" },
     { name = "compas-viewer", marker = "extra == 'viz'" },
     { name = "invoke", marker = "extra == 'dev'", specifier = ">=0.14" },

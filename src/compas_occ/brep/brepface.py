@@ -856,9 +856,12 @@ class OCCBrepFace(BrepFace):
         ----------
         loop
             The additional loop.
-        reverse
-            If provided, force the loop orientation. By default, the valid
-            orientation for an inner boundary is selected automatically.
+
+        Notes
+        -----
+        The backend-specific ``reverse`` option may be supplied positionally
+        or by keyword to force the loop orientation. By default, the valid
+        orientation for an inner boundary is selected automatically.
 
         Returns
         -------
@@ -881,9 +884,12 @@ class OCCBrepFace(BrepFace):
         ----------
         loops
             The additional loops.
-        reverse
-            If provided, force the loop orientation. By default, the valid
-            orientation for every inner boundary is selected automatically.
+
+        Notes
+        -----
+        The backend-specific ``reverse`` option may be supplied positionally
+        or by keyword to force the loop orientation. By default, the valid
+        orientation for every inner boundary is selected automatically.
 
         Returns
         -------

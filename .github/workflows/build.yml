@@ -45,7 +45,6 @@ jobs:
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff check .
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff format --check .
       - name: Type check
-        continue-on-error: true # Remove when the recorded OCC override debt reaches zero.
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pyright
 

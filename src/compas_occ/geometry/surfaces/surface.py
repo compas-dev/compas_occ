@@ -243,7 +243,7 @@ class OCCSurface(Surface):
 
         Parameters
         ----------
-        T
+        transformation
             A transformation.
 
         Returns

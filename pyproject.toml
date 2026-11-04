@@ -162,4 +162,4 @@ pythonVersion = "3.12"
 typeCheckingMode = "standard"
 
 [tool.uv.sources]
-compas = { git = "https://github.com/compas-dev/compas.git", rev = "92dfa6a5a53c9448584b68ac08bce30779b8d476" }
+compas = { git = "https://github.com/compas-dev/compas.git", rev = "76fc544d7e00bf2ec4ada18e46738525632a879f" }
