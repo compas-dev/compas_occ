@@ -2,7 +2,7 @@ name: verify-pr
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
-    branches: [main]
+    branches: [main, c3-upgrade]
 
 permissions:
   contents: read
