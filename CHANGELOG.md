@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Modernized the development, documentation, packaging, and release workflows around locked `uv` environments and immutable shared-action revisions.
 * Adopted explicit `Deflection` strategies for trimmed BRep tessellation and polygonization, with degree-to-radian conversion at the OCC boundary.
 * Added optional end caps to BRep extrusions and aligned the default with COMPAS.
 * Redesigned BRep face boundaries with outer-first ordering, automatic hole orientation, atomic validation, and constructor-level `holes` support.
