@@ -2,10 +2,7 @@ name: occ-dev
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python >=3.12,<3.13
   - pip
   - pythonocc-core
-  - compas >=2.4
-  - compas_viewer
-  - pip:
-      - -e .[dev,docs]
+  - uv

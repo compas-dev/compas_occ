@@ -210,10 +210,6 @@ def line_to_occ(line: Line) -> gp_Lin:
 def line_to_occ2d(line: Line) -> gp_Lin2d:
     """Convert a COMPAS line to a 2D OCC line.
 
-    See Also
-    --------
-    * [`axis_to_occ2d`][axis_to_occ2d]
-
     Examples
     --------
     >>> from compas.geometry import Line
@@ -1200,10 +1196,6 @@ def cylinder_to_compas(
     cls: Optional[Type[Cylinder]] = None,
 ) -> Cylinder:
     """Convert an OCC cylinder to a COMPAS cylinder.
-
-    See Also
-    --------
-    * [`compas_sphere_from_occ_sphere`][compas_sphere_from_occ_sphere]
 
     Examples
     --------

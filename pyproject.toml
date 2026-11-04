@@ -17,15 +17,13 @@ authors = [
 ]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12,<3.13"
 dynamic = ["version"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = ["compas>=3.0.0,<4"]
@@ -36,6 +34,7 @@ dev = [
     "bump-my-version",
     "compas_invocations2",
     "invoke >=0.14",
+    "pyright==1.1.414",
     "pytest",
     "ruff",
     "twine",
@@ -131,7 +130,9 @@ replace = "[{new_version}] {now:%Y-%m-%d}"
 [tool.ruff]
 line-length = 179
 indent-width = 4
-target-version = "py39"
+target-version = "py312"
+# Ruff rewrites MkDocs `---8<---` snippet directives as Python operators.
+extend-exclude = ["docs/examples/**/*.md", "docs/tutorial.md"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
@@ -154,3 +155,11 @@ max-doc-length = 179
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+[tool.pyright]
+include = ["src/compas_occ"]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
+
+[tool.uv.sources]
+compas = { git = "https://github.com/compas-dev/compas.git", rev = "92dfa6a5a53c9448584b68ac08bce30779b8d476" }

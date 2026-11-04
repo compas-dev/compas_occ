@@ -419,7 +419,7 @@ class OCCNurbsSurface(OCCSurface):
             The multiplicities of the knots in the U direction.
         mults_v
             The multiplicities of the knots in the V direction.
-        u_dergee
+        degree_u
             Degree in the U direction.
         degree_v
             Degree in the V direction.

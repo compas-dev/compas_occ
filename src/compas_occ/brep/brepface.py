@@ -385,8 +385,9 @@ class OCCBrepFace(BrepFace):
 
         Parameters
         ----------
-        polygon
-        holes
+        points : Polygon
+            The boundary polygon.
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
 
         Returns
@@ -423,13 +424,13 @@ class OCCBrepFace(BrepFace):
             U parameter minimum and maximum.
         domain_v : tuple[float, float], optional
             V parameter minimum and maximum.
-        loop, optional
+        loop : OCCBrepLoop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
-        holes
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
-        boundary
+        boundary : OCCBrepLoop, optional
             The external boundary loop. This is the preferred name for
             the legacy `loop` parameter.
 
@@ -467,13 +468,13 @@ class OCCBrepFace(BrepFace):
         ----------
         cylinder
             The cylinder.
-        loop, optional
+        loop : OCCBrepLoop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
-        holes
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
-        boundary
+        boundary : OCCBrepLoop, optional
             The external boundary loop. This is the preferred name for
             the legacy `loop` parameter.
 
@@ -509,13 +510,13 @@ class OCCBrepFace(BrepFace):
         ----------
         cone
             The cone.
-        loop, optional
+        loop : OCCBrepLoop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
-        holes
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
-        boundary
+        boundary : OCCBrepLoop, optional
             The external boundary loop. This is the preferred name for
             the legacy `loop` parameter.
 
@@ -551,13 +552,13 @@ class OCCBrepFace(BrepFace):
         ----------
         sphere
             The sphere.
-        loop, optional
+        loop : OCCBrepLoop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
-        holes
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
-        boundary
+        boundary : OCCBrepLoop, optional
             The external boundary loop. This is the preferred name for
             the legacy `loop` parameter.
 
@@ -589,13 +590,13 @@ class OCCBrepFace(BrepFace):
         ----------
         torus
             The torus.
-        loop, optional
+        loop : OCCBrepLoop, optional
             A boundary loop.
         inside : bool, optional
             If True, the face is inside the boundary loop.
-        holes
+        holes : list[OCCBrepLoop], optional
             Inner boundary loops.
-        boundary
+        boundary : OCCBrepLoop, optional
             The external boundary loop. This is the preferred name for
             the legacy `loop` parameter.
 
