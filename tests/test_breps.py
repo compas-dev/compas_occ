@@ -1,7 +1,6 @@
 import pytest
 import random
 from math import radians
-from pathlib import Path
 
 from compas.geometry import Box
 from compas.geometry import Circle
@@ -32,10 +31,6 @@ from compas_occ.files import write_step
 from compas_occ.files import write_iges
 from compas_occ.files import write_brep
 from compas_occ.geometry import OCCNurbsCurve
-
-
-HERE = Path(__file__).parent
-IGES = HERE.parent / "docs" / "examples" / "breps" / "booleans.iges"
 
 
 @pytest.mark.parametrize(
@@ -218,8 +213,11 @@ def test_brep_face_tessellates_through_single_face_brep():
     assert len(polygonal.faces) == 2
 
 
-def test_brep_from_iges_accepts_shape_sequences():
-    brep = OCCBrep.from_iges(IGES, solid=False)
+def test_brep_from_iges_accepts_shape_sequences(tmp_path):
+    filepath = tmp_path / "multiple.iges"
+    write_iges(filepath, [OCCBrep.from_box(Box(1)), OCCBrep.from_sphere(Sphere(0.5))])
+
+    brep = OCCBrep.from_iges(filepath, solid=False)
 
     assert brep.occ_shape.ShapeType() >= 0
     assert brep.faces
