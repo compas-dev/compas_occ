@@ -348,7 +348,7 @@ def test_edge_from_stable_curve_embedded_on_surface():
     face.add_loop(loop)
 
     assert loop.is_valid
-    assert face.is_valid()
+    assert face.is_valid
     assert len(face.loops) == 2
 
 
@@ -358,7 +358,7 @@ def test_inner_loop_orientation_is_selected_automatically():
 
     face.add_loop(hole)
 
-    assert face.is_valid()
+    assert face.is_valid
     assert face.area == pytest.approx(100 - 3.141592653589793)
     assert face.loops[0].is_same(face.outerloop)
     assert len(face.innerloops) == 1
@@ -372,7 +372,7 @@ def test_inner_loops_can_be_added_during_face_construction():
 
     face = OCCBrepFace.from_plane(Plane.worldXY(), domain_u=(-5, 5), domain_v=(-5, 5), holes=holes)
 
-    assert face.is_valid()
+    assert face.is_valid
     assert len(face.loops) == 3
     assert face.area == pytest.approx(100 - 1.25 * 3.141592653589793)
 
@@ -386,7 +386,7 @@ def test_invalid_inner_loop_does_not_modify_face():
         face.add_loop(off_surface)
 
     assert face.occ_face.IsSame(original)
-    assert face.is_valid()
+    assert face.is_valid
     assert len(face.loops) == 1
 
 
@@ -409,7 +409,7 @@ def test_face_can_be_constructed_with_boundary_and_holes():
 
     face = OCCBrepFace.from_plane(Plane.worldXY(), boundary=boundary, holes=[hole])
 
-    assert face.is_valid()
+    assert face.is_valid
     assert len(face.loops) == 2
     assert face.area == pytest.approx(3.75 * 3.141592653589793)
 
@@ -430,7 +430,7 @@ def test_serialized_face_rebuild_preserves_boundary_roles():
     brep = OCCBrepBuilder(make_solid=False).build([face.__data__])
     rebuilt = brep.faces[0]
 
-    assert rebuilt.is_valid()
+    assert rebuilt.is_valid
     assert rebuilt.loops[0].is_same(rebuilt.outerloop)
     assert len(rebuilt.innerloops) == 1
     assert rebuilt.area == pytest.approx(face.area)

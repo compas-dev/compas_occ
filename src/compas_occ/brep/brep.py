@@ -2,6 +2,7 @@ from math import radians
 from os import PathLike
 from typing import Optional
 from typing import Union
+from typing import cast
 
 from OCC.Core import Bnd
 from OCC.Core import BOPAlgo
@@ -708,7 +709,7 @@ class OCCBrep(Data):
         builder = BRep.BRep_Builder()
         builder.MakeShell(shell)
         for face in faces:
-            if not face.is_valid():
+            if not face.is_valid:
                 face.fix()
             builder.Add(shell, face.occ_face)
         brep = cls.from_native(shell)
@@ -827,7 +828,8 @@ class OCCBrep(Data):
                 builder = BRep.BRep_Builder()
                 builder.MakeCompound(shape)
                 for loop in profile.loops:
-                    builder.Add(shape, loop.occ_wire)
+                    occ_loop = cast(OCCBrepLoop, loop)
+                    builder.Add(shape, occ_loop.occ_wire)
         else:
             if isinstance(profile, Polyline):
                 wire = OCCBrepLoop.from_polyline(profile).occ_wire
@@ -1388,12 +1390,13 @@ class OCCBrep(Data):
             # process the face loops to produce edges with the same discretisation as the faces
             for loop in face.loops:
                 for edge in loop.edges:
-                    if any(edge.is_same(e) for e in seen):
+                    occ_edge = cast(OCCBrepEdge, edge)
+                    if any(occ_edge.is_same(e) for e in seen):
                         continue
-                    pot = bt.PolygonOnTriangulation(edge.occ_edge, triangulation, location)
+                    pot = bt.PolygonOnTriangulation(occ_edge.occ_edge, triangulation, location)
                     if pot is None:
                         continue
-                    seen.append(edge)
+                    seen.append(occ_edge)
                     points = []
                     nodes = pot.Nodes()
                     for i in range(1, pot.NbNodes() + 1):

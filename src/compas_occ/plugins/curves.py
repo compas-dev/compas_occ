@@ -107,7 +107,7 @@ def curve_domain(curve):
 
 @plugin(category="nurbscurve-queries", requires=["OCC"])
 def curve_length(curve):
-    return _occ(curve).length()
+    return _occ(curve).length
 
 
 @plugin(category="nurbscurve-queries", requires=["OCC"])

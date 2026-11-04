@@ -1,3 +1,5 @@
+from typing import cast
+
 from OCC.Core.Geom import Geom_Curve
 from OCC.Core.Geom import Geom_SurfaceOfLinearExtrusion
 
@@ -34,12 +36,13 @@ class OCCExtrusionSurface(OCCSurface):
     """
 
     def __init__(self, curve, vector=None, **kwargs):
-        super().__init__(**kwargs)
         self._curve = None
         self._vector = None
         self.curve = curve
         self.vector = vector
-        self.compute()
+        direction = direction_to_occ(cast(Vector, self.vector))
+        surface = Geom_SurfaceOfLinearExtrusion(self.curve.occ_curve, direction)
+        super().__init__(surface, **kwargs)
 
     @property
     def curve(self):
@@ -73,4 +76,4 @@ class OCCExtrusionSurface(OCCSurface):
         """
         direction = direction_to_occ(self.vector)
         surface = Geom_SurfaceOfLinearExtrusion(self.curve.occ_curve, direction)  # type: ignore
-        self.occ_surface = surface
+        self.native_surface = surface

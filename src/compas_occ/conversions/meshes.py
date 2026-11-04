@@ -79,7 +79,7 @@ def quad_to_face(quad: Quad) -> TopoDS_Face:
     if len(quad) != 4:
         raise ValueError("The number of input points should be four.")
 
-    points = [Point(*point) for point in quad]
+    points = [Point(point[0], point[1], point[2]) for point in quad]
     curve1 = GeomAPI_PointsToBSpline(array1_from_points1([points[0], points[1]])).Curve()
     curve2 = GeomAPI_PointsToBSpline(array1_from_points1([points[3], points[2]])).Curve()
     srf = geomfill.Surface(curve1, curve2)

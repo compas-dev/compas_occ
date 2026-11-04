@@ -1,5 +1,10 @@
+import os
+from typing import Literal
 from typing import Optional
+from typing import Self
 from typing import Union
+from typing import cast
+from typing import overload
 
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.Bnd import Bnd_OBB
@@ -20,7 +25,11 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
+from compas._typing import CoordinateType
+from compas._typing import FilePath
+from compas.data import Data
 from compas.geometry import Box
+from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Line
 from compas.geometry import Point
@@ -139,12 +148,12 @@ class OCCSurface(Surface):
         return cls.from_native(srf)
 
     @classmethod
-    def from_native(cls, native_surface: Geom_Surface) -> "OCCSurface":
+    def from_native(cls, surface: object) -> Self:
         """Construct a surface from an existing OCC Surface.
 
         Parameters
         ----------
-        native_surface
+        surface
             An OCC surface.
 
         Returns
@@ -153,7 +162,7 @@ class OCCSurface(Surface):
             The constructed surface.
 
         """
-        return cls(native_surface)
+        return cls(cast(Geom_Surface, surface))
 
     @classmethod
     def from_occ(cls, native_surface: Geom_Surface) -> "OCCSurface":
@@ -181,7 +190,7 @@ class OCCSurface(Surface):
     # Conversions
     # ==============================================================================
 
-    def to_step(self, filepath: str, schema: str = "AP203") -> None:
+    def to_step(self, filepath: FilePath, schema: str = "AP203") -> None:
         """Write the surface geometry to a STP file.
 
         Parameters
@@ -204,7 +213,7 @@ class OCCSurface(Surface):
         step_writer = STEPControl_Writer()
         Interface_Static.SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_face, STEPControl_AsIs)  # type: ignore
-        status = step_writer.Write(filepath)
+        status = step_writer.Write(os.fspath(filepath))
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
@@ -212,7 +221,7 @@ class OCCSurface(Surface):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> "OCCSurface":
+    def copy(self, cls: type[Data] | None = None, copy_guid: bool = False) -> Self:
         """Make an independent copy of the current surface.
 
         Returns
@@ -220,11 +229,16 @@ class OCCSurface(Surface):
         OCCSurface
 
         """
-        cls = type(self)
+        surface_cls = cast(type[OCCSurface], cls or type(self))
         native_surface = self.native_surface.Copy()
-        return cls.from_native(native_surface)  # type: ignore
+        surface = surface_cls.from_native(native_surface)
+        if self._name is not None:
+            surface._name = self.name
+        if copy_guid:
+            surface._guid = self.guid
+        return cast(Self, surface)
 
-    def transform(self, T: Transformation) -> None:
+    def transform(self, transformation: Transformation) -> None:
         """Transform this surface.
 
         Parameters
@@ -238,7 +252,7 @@ class OCCSurface(Surface):
 
         """
         _T = gp_Trsf()
-        _T.SetValues(*T.list[:12])
+        _T.SetValues(*transformation.list[:12])
         self.native_surface.Transform(_T)
 
     def isocurve_u(self, u: float) -> OCCCurve:
@@ -273,7 +287,7 @@ class OCCSurface(Surface):
         occ_curve = self.native_surface.VIso(v)
         return OCCCurve.from_native(occ_curve)
 
-    def boundary(self) -> list[OCCCurve]:
+    def boundary(self) -> list[Union[Curve, Line]]:
         """Compute the boundary curves of the surface.
 
         Returns
@@ -290,7 +304,7 @@ class OCCSurface(Surface):
         ]
         curves[-2].reverse()
         curves[-1].reverse()
-        return curves
+        return cast(list[Union[Curve, Line]], curves)
 
     def point_at(self, u: float, v: float) -> Point:
         """Compute a point on the surface.
@@ -407,27 +421,11 @@ class OCCSurface(Surface):
             vector_to_compas(vvec),
         )
 
-    def aabb(self, precision: float = 0.0, optimal: bool = False) -> Box:
-        """Compute the axis aligned bounding box of the surface.
-
-        Parameters
-        ----------
-        precision
-            The precision for the bounding box computation.
-        optimal
-            Whether to compute an optimal bounding box.
-
-        Returns
-        -------
-        Box
-
-        """
+    @property
+    def aabb(self) -> Box:
+        """Compute the axis aligned bounding box of the surface."""
         box = Bnd_Box()
-        if optimal:
-            add = BndLib_AddSurface.AddOptimal
-        else:
-            add = BndLib_AddSurface.Add
-        add(GeomAdaptor_Surface(self.native_surface), precision, box)
+        BndLib_AddSurface.Add(GeomAdaptor_Surface(self.native_surface), 0.0, box)
         return Box.from_diagonal(
             (
                 point_to_compas(box.CornerMin()),
@@ -435,11 +433,21 @@ class OCCSurface(Surface):
             )
         )
 
+    @overload
+    def closest_point(self, point: CoordinateType, return_parameters: Literal[False] = False) -> Optional[Point]: ...
+
+    @overload
     def closest_point(
         self,
-        point: Point,
+        point: CoordinateType,
+        return_parameters: Literal[True],
+    ) -> Optional[tuple[Point, tuple[float, float]]]: ...
+
+    def closest_point(
+        self,
+        point: CoordinateType,
         return_parameters: bool = False,
-    ) -> Union[Point, tuple[Point, tuple[float, float]]]:
+    ) -> Optional[Union[Point, tuple[Point, tuple[float, float]]]]:
         """Compute the closest point on the curve to a given point.
 
         Parameters
@@ -451,27 +459,27 @@ class OCCSurface(Surface):
 
         Returns
         -------
-        Point | tuple[Point, tuple[float, float]]
+        Point | tuple[Point, tuple[float, float]] | None
             If `return_parameters` is False, the nearest point on the surface.
             If `return_parameters` is True, the UV parameters in addition to the nearest point on the surface.
+            If the projection fails, `None`.
 
         """
         projector = GeomAPI_ProjectPointOnSurf(
-            point_to_occ(point),
+            point_to_occ(cast(Point, point)),
             self.native_surface,
         )
+        if projector.NbPoints() == 0:
+            return None
         point = point_to_compas(projector.NearestPoint())
         if not return_parameters:
             return point
-        return point, projector.LowerDistanceParameters()
+        u, v = projector.LowerDistanceParameters()
+        return point, (u, v)
 
-    def obb(self, precision: float = 0.0) -> Box:
+    @property
+    def obb(self) -> Box:
         """Compute the oriented bounding box of the surface.
-
-        Parameters
-        ----------
-        precision
-            The precision for the bounding box computation.
 
         Returns
         -------

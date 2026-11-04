@@ -1,7 +1,9 @@
 from copy import deepcopy
 from math import sqrt
 from typing import Optional
+from typing import Self
 from typing import Union
+from typing import cast
 
 # from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.Geom import Geom_BSplineCurve
@@ -11,6 +13,7 @@ from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.TColStd import TColStd_Array1OfInteger
 from OCC.Core.TColStd import TColStd_Array1OfReal
 
+from compas.data import Data
 from compas.geometry import Arc
 from compas.geometry import Circle
 from compas.geometry import Ellipse
@@ -95,9 +98,6 @@ class OCCNurbsCurve(OCCCurve):
 
     """
 
-    _native_curve: Geom_BSplineCurve
-    native_curve: Geom_BSplineCurve
-
     @property
     def __data__(self) -> dict:
         return {
@@ -135,30 +135,30 @@ class OCCNurbsCurve(OCCCurve):
 
     @property
     def occ_curve(self) -> Geom_BSplineCurve:
-        return self.native_curve
+        return cast(Geom_BSplineCurve, self.native_curve)
 
     @property
     def occ_points(self) -> TColgp_Array1OfPnt:
-        return self.native_curve.Poles()
+        return self.occ_curve.Poles()
 
     @property
     def occ_weights(self) -> TColStd_Array1OfReal:
-        weights = self.native_curve.Weights()
+        weights = self.occ_curve.Weights()
         if weights:
             return weights
         return array1_from_floats1([1.0] * len(self.occ_points))
 
     @property
     def occ_knots(self) -> TColStd_Array1OfReal:
-        return self.native_curve.Knots()
+        return self.occ_curve.Knots()
 
     @property
     def occ_knotsequence(self) -> TColStd_Array1OfReal:
-        return self.native_curve.KnotSequence()
+        return self.occ_curve.KnotSequence()
 
     @property
     def occ_multiplicities(self) -> TColStd_Array1OfInteger:
-        return self.native_curve.Multiplicities()
+        return self.occ_curve.Multiplicities()
 
     # ==============================================================================
     # Properties
@@ -166,12 +166,12 @@ class OCCNurbsCurve(OCCCurve):
 
     @property
     def start(self) -> Point:
-        pnt = self.native_curve.StartPoint()
+        pnt = self.occ_curve.StartPoint()
         return point_to_compas(pnt)
 
     @property
     def end(self) -> Point:
-        pnt = self.native_curve.EndPoint()
+        pnt = self.occ_curve.EndPoint()
         return point_to_compas(pnt)
 
     @property
@@ -196,11 +196,11 @@ class OCCNurbsCurve(OCCCurve):
 
     @property
     def continuity(self) -> int:
-        return self.native_curve.Continuity()
+        return self.occ_curve.Continuity()
 
     @property
     def degree(self) -> int:
-        return self.native_curve.Degree()
+        return self.occ_curve.Degree()
 
     @property
     def order(self) -> int:
@@ -208,7 +208,7 @@ class OCCNurbsCurve(OCCCurve):
 
     @property
     def is_rational(self) -> bool:
-        return self.native_curve.IsRational()
+        return self.occ_curve.IsRational()
 
     # ==============================================================================
     # Constructors
@@ -363,12 +363,12 @@ class OCCNurbsCurve(OCCCurve):
         )
 
     @classmethod
-    def from_native(cls, native_curve: Geom_BSplineCurve) -> "OCCNurbsCurve":
+    def from_native(cls, curve: object) -> "OCCNurbsCurve":
         """Construct a NURBS curve from an existing OCC BSplineCurve.
 
         Parameters
         ----------
-        native_curve
+        curve
 
 
         Returns
@@ -376,7 +376,7 @@ class OCCNurbsCurve(OCCCurve):
         OCCNurbsCurve
 
         """
-        return cls(native_curve)
+        return cls(cast(Geom_BSplineCurve, curve))
 
     @classmethod
     def from_parameters(
@@ -466,7 +466,7 @@ class OCCNurbsCurve(OCCCurve):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> "OCCNurbsCurve":
+    def copy(self, cls: type[Data] | None = None, copy_guid: bool = False) -> Self:
         """Make an independent copy of the current curve.
 
         Returns
@@ -474,8 +474,12 @@ class OCCNurbsCurve(OCCCurve):
         OCCNurbsCurve
 
         """
-        cls = type(self)
-        return cls.__from_data__(deepcopy(self.__data__))
+        cls = cast(type[OCCNurbsCurve], cls or type(self))
+        copy = cls.__from_data__(deepcopy(self.__data__))
+        copy.name = self.name
+        if copy_guid:
+            copy._guid = self.guid
+        return cast(Self, copy)
 
     def segment(self, u: float, v: float, precision: float = 1e-3) -> None:
         """Modifies this curve by segmenting it between the parameters u and v.
@@ -501,7 +505,7 @@ class OCCNurbsCurve(OCCCurve):
             raise ValueError("At least one of the given parameters is outside the curve domain.")
         if u == v:
             raise ValueError("The given domain is zero length.")
-        self.native_curve.Segment(u, v, precision)
+        self.occ_curve.Segment(u, v, precision)
 
     def segmented(self, u: float, v: float, precision: float = 1e-3) -> "OCCNurbsCurve":
         """Returns a copy of this curve by segmenting it between the parameters u and v.
@@ -539,8 +543,8 @@ class OCCNurbsCurve(OCCCurve):
         None
 
         """
-        converter = GeomConvert_CompCurveToBSplineCurve(self.native_curve)
-        success = converter.Add(curve.native_curve, precision)
+        converter = GeomConvert_CompCurveToBSplineCurve(self.occ_curve)
+        success = converter.Add(curve.occ_curve, precision)
         if success:
             self.native_curve = converter.BSplineCurve()
 
@@ -564,8 +568,8 @@ class OCCNurbsCurve(OCCCurve):
 
         """
         copy = self.copy()
-        converter = GeomConvert_CompCurveToBSplineCurve(self.native_curve)
-        success = converter.Add(curve.native_curve, precision)
+        converter = GeomConvert_CompCurveToBSplineCurve(self.occ_curve)
+        success = converter.Add(curve.occ_curve, precision)
         if success:
             copy.native_curve = converter.BSplineCurve()
             return copy

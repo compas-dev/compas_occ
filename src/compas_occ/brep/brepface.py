@@ -1,5 +1,7 @@
-from typing import TYPE_CHECKING
+from collections.abc import Sequence
+from typing import Literal
 from typing import Optional
+from typing import cast
 
 from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
@@ -17,7 +19,11 @@ from OCC.Core import gp
 
 import compas.geometry
 import compas_occ.conversions
+from compas.geometry import Brep
+from compas.geometry import BrepEdge
 from compas.geometry import BrepFace
+from compas.geometry import BrepLoop
+from compas.geometry import BrepVertex
 from compas.geometry import Cone
 from compas.geometry import Cylinder
 from compas.geometry import Frame
@@ -42,9 +48,6 @@ from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
-
-if TYPE_CHECKING:
-    from compas_occ.brep import OCCBrep
 
 
 class OCCBrepFace(BrepFace):
@@ -75,8 +78,10 @@ class OCCBrepFace(BrepFace):
     def __data__(self) -> dict:
         loops = []
         for loop in self.loops:
+            loop = cast(OCCBrepLoop, loop)
             edges = []
             for edge in loop.edges:
+                edge = cast(OCCBrepEdge, edge)
                 edgedata = {
                     "type": edge.type,
                     "curve": edge.curve,
@@ -157,10 +162,10 @@ class OCCBrepFace(BrepFace):
         self._occ_adaptor = None
         self._occ_face = occ_face
 
-    def __eq__(self, other: "OCCBrepFace") -> bool:
+    def __eq__(self, other: object) -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepFace") -> bool:
+    def is_same(self, other: object) -> bool:
         """Check if this face is the same as another face.
 
         Two faces are the same if they have the same location.
@@ -180,7 +185,7 @@ class OCCBrepFace(BrepFace):
             return False
         return self.occ_face.IsSame(other.occ_face)
 
-    def is_equal(self, other: "OCCBrepFace") -> bool:
+    def is_equal(self, other: object) -> bool:
         """Check if this face is equal to another face.
 
         Two faces are equal if they have the same location and orientation.
@@ -200,11 +205,11 @@ class OCCBrepFace(BrepFace):
             return False
         return self.occ_face.IsEqual(other.occ_face)
 
-    def as_brep(self) -> "OCCBrep":
+    def as_brep(self) -> Brep:
         """Return an OCC BRep containing only this face."""
         from compas_occ.brep import OCCBrep
 
-        return OCCBrep.from_brepfaces([self], solid=False)
+        return cast(Brep, OCCBrep.from_brepfaces([self], solid=False))
 
     # ==============================================================================
     # OCC Properties
@@ -216,6 +221,10 @@ class OCCBrepFace(BrepFace):
 
     @property
     def occ_face(self) -> TopoDS.TopoDS_Face:
+        return self._occ_face
+
+    @property
+    def native_face(self) -> TopoDS.TopoDS_Face:
         return self._occ_face
 
     @occ_face.setter
@@ -237,11 +246,11 @@ class OCCBrepFace(BrepFace):
 
     # remove this if possible
     @property
-    def nurbssurface(self) -> OCCNurbsSurface:
+    def nurbssurface(self) -> NurbsSurface:
         if not self._nurbssurface:
             occ_surface = self.occ_adaptor.BSpline()
             self._nurbssurface = OCCNurbsSurface(occ_surface)
-        return self._nurbssurface
+        return cast(NurbsSurface, self._nurbssurface)
 
     @property
     def surface(self):
@@ -264,8 +273,8 @@ class OCCBrepFace(BrepFace):
     # ==============================================================================
 
     @property
-    def type(self) -> int:
-        return self.occ_adaptor.GetType()
+    def type(self) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
+        return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], self.occ_adaptor.GetType())
 
     @property
     def is_plane(self) -> bool:
@@ -303,8 +312,8 @@ class OCCBrepFace(BrepFace):
     # other
 
     @property
-    def vertices(self) -> list[OCCBrepVertex]:
-        vertices = []
+    def vertices(self) -> list[BrepVertex]:
+        vertices: list[BrepVertex] = []
         explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_VERTEX)  # type: ignore
         while explorer.More():
             vertex = explorer.Current()
@@ -313,8 +322,8 @@ class OCCBrepFace(BrepFace):
         return vertices
 
     @property
-    def edges(self) -> list[OCCBrepEdge]:
-        edges = []
+    def edges(self) -> list[BrepEdge]:
+        edges: list[BrepEdge] = []
         explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_EDGE)  # type: ignore
         while explorer.More():
             edge = explorer.Current()
@@ -323,9 +332,9 @@ class OCCBrepFace(BrepFace):
         return edges
 
     @property
-    def loops(self) -> list[OCCBrepLoop]:
+    def loops(self) -> list[BrepLoop]:
         outerloop = self.outerloop
-        loops = [outerloop]
+        loops: list[BrepLoop] = [outerloop]
         explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)  # type: ignore
         while explorer.More():
             wire = explorer.Current()
@@ -345,6 +354,7 @@ class OCCBrepFace(BrepFace):
         outerloop = self.outerloop
         inner = []
         for loop in self.loops:
+            loop = cast(OCCBrepLoop, loop)
             if not loop.is_same(outerloop):
                 inner.append(loop)
         return inner
@@ -695,7 +705,7 @@ class OCCBrepFace(BrepFace):
         list[Polygon]
 
         """
-        return [loop.to_polygon() for loop in self.loops]
+        return [cast(OCCBrepLoop, loop).to_polygon() for loop in self.loops]
 
     def to_plane(self) -> Plane:
         """
@@ -792,7 +802,7 @@ class OCCBrepFace(BrepFace):
         maxdegree_v=5,
         maxsegments_u=1,
         maxsegments_v=1,
-    ) -> OCCNurbsSurface:
+    ) -> NurbsSurface | None:
         """
         Try to convert the underlying geometry to a Nurbs surface.
 
@@ -811,8 +821,9 @@ class OCCBrepFace(BrepFace):
                 maxsegments_v,
             )  # type: ignore
             occ_surface = convert.Surface()
-        return OCCNurbsSurface(occ_surface)
+        return cast(NurbsSurface, OCCNurbsSurface(occ_surface))
 
+    @property
     def is_valid(self) -> bool:
         """
         Verify that the face is valid.
@@ -837,7 +848,7 @@ class OCCBrepFace(BrepFace):
         fixer.Perform()
         self.occ_face = fixer.Face()
 
-    def add_loop(self, loop: OCCBrepLoop, reverse: Optional[bool] = None) -> None:
+    def add_loop(self, loop: BrepLoop, *args: object, **kwargs: object) -> None:
         """
         Add an inner loop to the face.
 
@@ -854,9 +865,15 @@ class OCCBrepFace(BrepFace):
         None
 
         """
+        reverse = self._reverse_option(args, kwargs)
         self.occ_face = self._face_with_inner_loop(self.occ_face, loop, reverse)
 
-    def add_loops(self, loops: list[OCCBrepLoop], reverse: Optional[bool] = None) -> None:
+    def add_loops(
+        self,
+        loops: Sequence[BrepLoop],
+        *args: object,
+        **kwargs: object,
+    ) -> None:
         """
         Add an inner loop to the face.
 
@@ -873,21 +890,32 @@ class OCCBrepFace(BrepFace):
         None
 
         """
+        reverse = self._reverse_option(args, kwargs)
         face = self.occ_face
         for loop in loops:
             face = self._face_with_inner_loop(face, loop, reverse)
         self.occ_face = face
 
     @staticmethod
+    def _reverse_option(args: tuple[object, ...], kwargs: dict[str, object]) -> Optional[bool]:
+        if len(args) > 1 or any(key != "reverse" for key in kwargs) or (args and "reverse" in kwargs):
+            raise TypeError("Only the backend-specific 'reverse' option is supported.")
+        reverse = args[0] if args else kwargs.get("reverse")
+        if reverse is not None and not isinstance(reverse, bool):
+            raise TypeError("The 'reverse' option must be a bool or None.")
+        return reverse
+
+    @staticmethod
     def _face_with_inner_loop(
         face: TopoDS.TopoDS_Face,
-        loop: OCCBrepLoop,
+        loop: BrepLoop,
         reverse: Optional[bool],
     ) -> TopoDS.TopoDS_Face:
         orientations = [reverse] if reverse is not None else [False, True]
         for should_reverse in orientations:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(face)
-            wire = loop.occ_wire.Reversed() if should_reverse else loop.occ_wire
+            native_loop = cast(TopoDS.TopoDS_Wire, loop.native_loop)
+            wire = native_loop.Reversed() if should_reverse else native_loop
             builder.Add(wire)  # type: ignore
             if builder.IsDone():
                 candidate = builder.Face()
@@ -904,7 +932,7 @@ class OCCBrepFace(BrepFace):
         if not builder.IsDone():
             raise ValueError("The external boundary does not define a face on the surface.")
         face = cls(builder.Face())
-        if not face.is_valid():
+        if not face.is_valid:
             raise ValueError("The external boundary does not define a valid face on the surface.")
         if holes:
             face.add_loops(holes)

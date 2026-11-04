@@ -1,9 +1,12 @@
 import warnings
+from collections.abc import Iterator
+from collections.abc import Sequence
 from copy import deepcopy
-from typing import Iterable
 from typing import Literal
 from typing import Optional
 from typing import Union
+from typing import cast
+from typing import overload
 
 from OCC.Core.Geom import Geom_BSplineSurface
 from OCC.Core.GeomAbs import GeomAbs_C2
@@ -13,6 +16,8 @@ from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 
+from compas._typing import CoordinateType
+from compas.data import Data
 from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Plane
@@ -36,13 +41,19 @@ from .surface import OCCSurface
 class ControlPoints:
     def __init__(self, surface: "OCCNurbsSurface") -> None:
         self.surface = surface
-        self.native_surface = surface.native_surface
+        self.native_surface = surface._bspline_surface
 
     @property
     def points(self) -> list[list[Point]]:
         return points2_from_array2(self.native_surface.Poles())
 
-    def __getitem__(self, index: Union[int, tuple[int, int]]) -> Point:
+    @overload
+    def __getitem__(self, index: int) -> list[Point]: ...
+
+    @overload
+    def __getitem__(self, index: tuple[int, int]) -> Point: ...
+
+    def __getitem__(self, index: Union[int, tuple[int, int]]) -> Union[Point, list[Point]]:
         try:
             u, v = index  # type: ignore
         except TypeError:
@@ -58,7 +69,7 @@ class ControlPoints:
     def __len__(self) -> int:
         return self.native_surface.NbVPoles()
 
-    def __iter__(self) -> Iterable:
+    def __iter__(self) -> Iterator[list[Point]]:
         return iter(self.points)
 
 
@@ -141,8 +152,9 @@ class OCCNurbsSurface(OCCSurface):
 
     """
 
-    _native_surface: Geom_BSplineSurface
-    native_surface: Geom_BSplineSurface
+    @property
+    def _bspline_surface(self) -> Geom_BSplineSurface:
+        return cast(Geom_BSplineSurface, self.native_surface)
 
     @property
     def __data__(self) -> dict:
@@ -184,22 +196,34 @@ class OCCNurbsSurface(OCCSurface):
             is_periodic_v,
         )
 
-    def __eq__(self, other: "OCCNurbsSurface") -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, OCCNurbsSurface):
+            return False
         for a, b in zip(flatten(self.points), flatten(other.points)):
             if a != b:
                 return False
         for a, b in zip(flatten(self.weights), flatten(other.weights)):
             if a != b:
                 return False
-        for a, b in zip(self.knots_u, self.knots_v):
+        for a, b in zip(self.knots_u, other.knots_u):
             if a != b:
                 return False
-        for a, b in zip(self.mults_u, self.mults_v):
+        for a, b in zip(self.knots_v, other.knots_v):
             if a != b:
                 return False
-        if self.degree_u != self.degree_v:
+        for a, b in zip(self.mults_u, other.mults_u):
+            if a != b:
+                return False
+        for a, b in zip(self.mults_v, other.mults_v):
+            if a != b:
+                return False
+        if self.degree_u != other.degree_u:
             return False
-        if self.is_periodic_u != self.is_periodic_v:
+        if self.degree_v != other.degree_v:
+            return False
+        if self.is_periodic_u != other.is_periodic_u:
+            return False
+        if self.is_periodic_v != other.is_periodic_v:
             return False
         return True
 
@@ -215,7 +239,7 @@ class OCCNurbsSurface(OCCSurface):
 
     @property
     def weights(self) -> list[list[float]]:
-        weights = self.native_surface.Weights()
+        weights = self._bspline_surface.Weights()
         if not weights:
             rows = len(self.points)
             cols = len(self.points[0])
@@ -226,27 +250,27 @@ class OCCNurbsSurface(OCCSurface):
 
     @property
     def degree_u(self) -> int:
-        return self.native_surface.UDegree()
+        return self._bspline_surface.UDegree()
 
     @property
     def degree_v(self) -> int:
-        return self.native_surface.VDegree()
+        return self._bspline_surface.VDegree()
 
     @property
     def knots_u(self) -> list[float]:
-        return list(self.native_surface.UKnots())
+        return list(self._bspline_surface.UKnots())
 
     @property
     def knots_v(self) -> list[float]:
-        return list(self.native_surface.VKnots())
+        return list(self._bspline_surface.VKnots())
 
     @property
     def mults_u(self) -> list[int]:
-        return list(self.native_surface.UMultiplicities())
+        return list(self._bspline_surface.UMultiplicities())
 
     @property
     def mults_v(self) -> list[int]:
-        return list(self.native_surface.VMultiplicities())
+        return list(self._bspline_surface.VMultiplicities())
 
     # ==============================================================================
     # Constructors
@@ -348,7 +372,7 @@ class OCCNurbsSurface(OCCSurface):
         return cls.from_native(native_surface)
 
     @classmethod
-    def from_interpolation(cls, points: list[list[Point]], precision: float = 1e-3) -> "OCCNurbsSurface":
+    def from_interpolation(cls, points: Sequence[Sequence[CoordinateType]], precision: float = 1e-3) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
         Parameters
@@ -364,7 +388,7 @@ class OCCNurbsSurface(OCCSurface):
 
         """
         native_surface = GeomAPI_PointsToBSplineSurface(
-            array2_from_points2(points),
+            array2_from_points2(cast(list[list[Point]], points)),
             3,
             8,
             GeomAbs_C2,
@@ -373,12 +397,12 @@ class OCCNurbsSurface(OCCSurface):
         return cls(native_surface)
 
     @classmethod
-    def from_native(cls, native_surface: Geom_BSplineSurface) -> "OCCNurbsSurface":
+    def from_native(cls, surface: object) -> "OCCNurbsSurface":
         """Construct a NURBS surface from an existing OCC Surface.
 
         Parameters
         ----------
-        native_surface
+        surface
             An OCC surface.
 
         Returns
@@ -387,17 +411,17 @@ class OCCNurbsSurface(OCCSurface):
             The constructed surface.
 
         """
-        return cls(native_surface)
+        return cls(cast(Geom_BSplineSurface, surface))
 
     @classmethod
     def from_parameters(
         cls,
-        points: list[list[Point]],
-        weights: list[list[float]],
-        knots_u: list[float],
-        knots_v: list[float],
-        mults_u: list[int],
-        mults_v: list[int],
+        points: Sequence[Sequence[CoordinateType]],
+        weights: Sequence[Sequence[float]],
+        knots_u: Sequence[float],
+        knots_v: Sequence[float],
+        mults_u: Sequence[int],
+        mults_v: Sequence[int],
         degree_u: int,
         degree_v: int,
         is_periodic_u: bool = False,
@@ -434,12 +458,12 @@ class OCCNurbsSurface(OCCSurface):
 
         """
         native_surface = Geom_BSplineSurface(
-            array2_from_points2(points),
-            array2_from_floats2(weights),
-            array1_from_floats1(knots_u),
-            array1_from_floats1(knots_v),
-            array1_from_integers1(mults_u),
-            array1_from_integers1(mults_v),
+            array2_from_points2(cast(list[list[Point]], points)),
+            array2_from_floats2(cast(list[list[float]], weights)),
+            array1_from_floats1(cast(list[float], knots_u)),
+            array1_from_floats1(cast(list[float], knots_v)),
+            array1_from_integers1(cast(list[int], mults_u)),
+            array1_from_integers1(cast(list[int], mults_v)),
             degree_u,
             degree_v,
             is_periodic_u,
@@ -475,7 +499,7 @@ class OCCNurbsSurface(OCCSurface):
     @classmethod
     def from_points(
         cls,
-        points: list[list[Point]],
+        points: Sequence[Sequence[CoordinateType]],
         degree_u: int = 3,
         degree_v: int = 3,
     ) -> "OCCNurbsSurface":
@@ -537,7 +561,7 @@ class OCCNurbsSurface(OCCSurface):
     # Methods
     # ==============================================================================
 
-    def copy(self) -> "OCCNurbsSurface":
+    def copy(self, cls: type[Data] | None = None, copy_guid: bool = False) -> "OCCNurbsSurface":
         """Make an independent copy of the current surface.
 
         Returns
@@ -545,5 +569,12 @@ class OCCNurbsSurface(OCCSurface):
         OCCNurbsSurface
 
         """
-        cls = type(self)
-        return cls.__from_data__(deepcopy(self.__data__))
+        surface_cls = cast(type[OCCNurbsSurface], cls or type(self))
+        if not issubclass(surface_cls, OCCNurbsSurface):
+            return cast(OCCNurbsSurface, super().copy(cls=cls, copy_guid=copy_guid))
+        surface = surface_cls.__from_data__(deepcopy(self.__data__))
+        if self._name is not None:
+            surface._name = self.name
+        if copy_guid:
+            surface._guid = self.guid
+        return surface

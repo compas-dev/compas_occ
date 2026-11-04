@@ -1,10 +1,14 @@
+from typing import Literal
 from typing import Optional
+from typing import Protocol
+from typing import cast
 
 from OCC.Core import BRepAdaptor
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepGProp
 from OCC.Core import BRepLib
+from OCC.Core import Geom
 from OCC.Core import GProp
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
@@ -14,6 +18,7 @@ import compas.geometry
 import compas_occ.conversions
 from compas.geometry import Bezier
 from compas.geometry import BrepEdge
+from compas.geometry import BrepVertex
 from compas.geometry import Circle
 from compas.geometry import Ellipse
 from compas.geometry import Hyperbola
@@ -47,6 +52,11 @@ class CurveType:
     BSPLINE = 6
     OTHER = 7
     CURVE2D = 8
+
+
+class _NativeCurve(Protocol):
+    @property
+    def native_curve(self) -> Geom.Geom_Curve: ...
 
 
 class OCCBrepEdge(BrepEdge):
@@ -104,10 +114,10 @@ class OCCBrepEdge(BrepEdge):
         self._occ_edge = occ_edge
         self.is_2d = False
 
-    def __eq__(self, other: "OCCBrepEdge") -> bool:
+    def __eq__(self, other: object) -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepEdge") -> bool:
+    def is_same(self, other: object) -> bool:
         """Check if this edge is the same as another edge.
 
         Two edges are the same if they have the same location.
@@ -127,7 +137,7 @@ class OCCBrepEdge(BrepEdge):
             return False
         return self.occ_edge.IsSame(other.occ_edge)
 
-    def is_equal(self, other: "OCCBrepEdge") -> bool:
+    def is_equal(self, other: object) -> bool:
         """Check if this edge is equal to another edge.
 
         Two edges are equal if they have the same location and orientation.
@@ -159,6 +169,10 @@ class OCCBrepEdge(BrepEdge):
     def occ_edge(self) -> TopoDS.TopoDS_Edge:
         return self._occ_edge
 
+    @property
+    def native_edge(self) -> TopoDS.TopoDS_Edge:
+        return self._occ_edge
+
     @occ_edge.setter
     def occ_edge(self, edge: TopoDS.TopoDS_Edge) -> None:
         self._occ_adaptor = None
@@ -173,8 +187,8 @@ class OCCBrepEdge(BrepEdge):
         return self._occ_adaptor
 
     @property
-    def orientation(self) -> TopAbs.TopAbs_Orientation:
-        return self.occ_edge.Orientation()
+    def orientation(self) -> Literal[0, 1, 2, 3]:
+        return cast(Literal[0, 1, 2, 3], self.occ_edge.Orientation())
 
     @property
     def curve(self) -> compas.geometry.Curve:
@@ -216,8 +230,8 @@ class OCCBrepEdge(BrepEdge):
     # ==============================================================================
 
     @property
-    def type(self) -> int:
-        return self.occ_adaptor.GetType()
+    def type(self) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8]:
+        return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8], self.occ_adaptor.GetType())
 
     @property
     def is_curve2d(self) -> bool:
@@ -260,8 +274,8 @@ class OCCBrepEdge(BrepEdge):
         return BRepAlgo.brepalgo.IsValid(self.occ_edge)
 
     @property
-    def vertices(self) -> list[OCCBrepVertex]:
-        vertices = []
+    def vertices(self) -> list[BrepVertex]:
+        vertices: list[BrepVertex] = []
         explorer = TopExp.TopExp_Explorer(self.occ_edge, TopAbs.TopAbs_VERTEX)  # type: ignore
         while explorer.More():
             vertex = explorer.Current()
@@ -441,7 +455,7 @@ class OCCBrepEdge(BrepEdge):
     @classmethod
     def from_curve(
         cls,
-        curve: OCCCurve,
+        curve: compas.geometry.Curve,
         params: Optional[tuple[float, float]] = None,
         points: Optional[tuple[Point, Point]] = None,
         vertices: Optional[tuple[OCCBrepVertex, OCCBrepVertex]] = None,
@@ -465,25 +479,26 @@ class OCCBrepEdge(BrepEdge):
             The constructed edge.
 
         """
+        native_curve = cast(_NativeCurve, curve).native_curve
         if points:
             p1 = point_to_occ(points[0])
             p2 = point_to_occ(points[1])
             if params:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2, *params)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve, p1, p2, *params)
             else:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, p1, p2)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve, p1, p2)
         elif vertices:
             v1 = vertices[0].occ_vertex
             v2 = vertices[1].occ_vertex
             if params:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2, *params)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve, v1, v2, *params)
             else:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, v1, v2)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve, v1, v2)
         else:
             if params:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve, *params)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve, *params)
             else:
-                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(curve.occ_curve)
+                builder = BRepBuilderAPI.BRepBuilderAPI_MakeEdge(native_curve)
 
         return cls(builder.Edge())
 

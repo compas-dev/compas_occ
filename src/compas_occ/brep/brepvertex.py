@@ -36,10 +36,10 @@ class OCCBrepVertex(BrepVertex):
         super().__init__()
         self._occ_vertex = occ_vertex
 
-    def __eq__(self, other: "OCCBrepVertex") -> bool:
+    def __eq__(self, other: object) -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepVertex") -> bool:
+    def is_same(self, other: object) -> bool:
         """Check if this vertex is the same as another vertex.
 
         Two vertices are the same if they have the same location.
@@ -59,7 +59,7 @@ class OCCBrepVertex(BrepVertex):
             return False
         return self.occ_vertex.IsSame(other.occ_vertex)
 
-    def is_equal(self, other: "OCCBrepVertex") -> bool:
+    def is_equal(self, other: object) -> bool:
         """Check if this vertex is equal to another vertex.
 
         Two vertices are equal if they have the same location and orientation.
@@ -85,6 +85,10 @@ class OCCBrepVertex(BrepVertex):
 
     @property
     def occ_vertex(self) -> TopoDS.TopoDS_Vertex:
+        return self._occ_vertex
+
+    @property
+    def native_vertex(self) -> TopoDS.TopoDS_Vertex:
         return self._occ_vertex
 
     @occ_vertex.setter

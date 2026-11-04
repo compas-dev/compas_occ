@@ -1,3 +1,7 @@
+from os import PathLike
+from typing import Self
+from typing import cast
+
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import Geom2d
 from OCC.Core import IFSelect
@@ -6,6 +10,7 @@ from OCC.Core import STEPControl
 from OCC.Core import TopoDS
 from OCC.Core import gp
 
+from compas.data import Data
 from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Point
@@ -41,14 +46,13 @@ class OCCCurve2d(Curve):
     """
 
     _native_curve: Geom2d.Geom2d_Curve
-    native_curve: Geom2d.Geom2d_Curve
 
     def __init__(self, native_curve: Geom2d.Geom2d_Curve, name=None):
         super().__init__(name=name)
         self._dimension = 2
         self._native_curve = native_curve
 
-    def __eq__(self, other: "OCCCurve2d") -> bool:
+    def __eq__(self, other: object) -> bool:
         raise NotImplementedError
 
     # ==============================================================================
@@ -58,6 +62,10 @@ class OCCCurve2d(Curve):
     # ==============================================================================
     # OCC Properties
     # ==============================================================================
+
+    @property
+    def native_curve(self) -> Geom2d.Geom2d_Curve:
+        return self._native_curve
 
     @property
     def occ_curve(self) -> Geom2d.Geom2d_Curve:
@@ -104,12 +112,12 @@ class OCCCurve2d(Curve):
     # ==============================================================================
 
     @classmethod
-    def from_native(cls, native_curve: Geom2d.Geom2d_Curve) -> "OCCCurve2d":
+    def from_native(cls, curve: object) -> "OCCCurve2d":
         """Construct a NURBS curve from an existing OCC BSplineCurve.
 
         Parameters
         ----------
-        native_curve
+        curve
             An OCC Geom2d_Curve object.
 
         Returns
@@ -117,7 +125,7 @@ class OCCCurve2d(Curve):
         OCCCurve2d
 
         """
-        return cls(native_curve)
+        return cls(cast(Geom2d.Geom2d_Curve, curve))
 
     @classmethod
     def from_occ(cls, native_curve: Geom2d.Geom2d_Curve) -> "OCCCurve2d":
@@ -144,7 +152,7 @@ class OCCCurve2d(Curve):
     # Conversions
     # ==============================================================================
 
-    def to_step(self, filepath: str, schema: str = "AP203") -> None:
+    def to_step(self, filepath: str | PathLike[str], schema: str = "AP203") -> None:
         """Write the curve geometry to a STP file.
 
         Parameters
@@ -162,30 +170,32 @@ class OCCCurve2d(Curve):
         step_writer = STEPControl.STEPControl_Writer()
         Interface.Interface_Static.SetCVal("write.step.schema", schema)
         step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)  # type: ignore
-        status = step_writer.Write(filepath)
+        status = step_writer.Write(str(filepath))
         if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
 
-    def to_polyline(self, n: int = 100) -> Polyline:
+    def to_polyline(self, n: int = 128, domain: tuple[float, float] | None = None) -> Polyline:
         """Convert the curve to a polyline.
 
         Parameters
         ----------
         n
-            The number of polyline points.
+            The number of polyline segments.
+        domain
+            The subset of the curve domain to discretize.
 
         Returns
         -------
         Polyline
 
         """
-        return Polyline(self.to_points(n=n))
+        return Polyline(self.to_points(n=n + 1, domain=domain))
 
     # ==============================================================================
     # Methods
     # ==============================================================================
 
-    def copy(self) -> "OCCCurve2d":
+    def copy(self, cls: type[Data] | None = None, copy_guid: bool = False) -> Self:
         """Make an independent copy of the current curve.
 
         Returns
@@ -193,17 +203,23 @@ class OCCCurve2d(Curve):
         OCCCurve2d
 
         """
-        cls = type(self)
+        cls = cast(type[Self], cls or type(self))
         native_curve = self.native_curve.Copy()
-        return cls(native_curve)  # type: ignore (Copy returns Geom2d_Geometry)
+        copy = cls(native_curve, name=self.name)  # type: ignore (Copy returns Geom2d_Geometry)
+        if copy_guid:
+            copy._guid = self.guid
+        return copy
 
-    def point_at(self, t: float) -> Point:
+    def point_at(self, t: float, world: bool = True) -> Point:
         """Compute the point at a curve parameter.
 
         Parameters
         ----------
         t
             The curve parameter.
+        world
+            If `True`, return the point in world coordinates.
+            If `False`, return it in coordinates relative to the curve frame.
 
         Returns
         -------
@@ -219,16 +235,21 @@ class OCCCurve2d(Curve):
         if t < start or t > end:
             raise ValueError("The parameter is not in the domain of the curve. t = {}, domain: {}".format(t, self.domain))
 
-        point = self.native_curve.Value(t)
-        return point2d_to_compas(point)
+        point = point2d_to_compas(self.native_curve.Value(t))
+        if not world:
+            point.transform(self.transformation.inverse())
+        return point
 
-    def tangent_at(self, t: float) -> Vector:
+    def tangent_at(self, t: float, world: bool = True) -> Vector:
         """Compute the tangent vector at a curve parameter.
 
         Parameters
         ----------
         t
             The curve parameter.
+        world
+            If `True`, return the tangent in world coordinates.
+            If `False`, return it in coordinates relative to the curve frame.
 
         Returns
         -------
@@ -247,7 +268,10 @@ class OCCCurve2d(Curve):
         point = gp.gp_Pnt2d()
         uvec = gp.gp_Vec2d()
         self.native_curve.D1(t, point, uvec)
-        return vector2d_to_compas(uvec)
+        tangent = vector2d_to_compas(uvec)
+        if not world:
+            tangent.transform(self.transformation.inverse())
+        return tangent
 
     def curvature_at(self, t: float) -> Vector:
         """Compute the curvature vector at a curve parameter.

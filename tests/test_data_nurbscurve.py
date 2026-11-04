@@ -66,7 +66,7 @@ def test_occ_curve_is_a_standalone_backend_adapter():
     assert not isinstance(curve, NurbsCurve)
     assert curve.degree == 2
     assert len(curve.points) == 3
-    assert curve.length() > 0.0
+    assert curve.length > 0.0
 
 
 def test_curve_step_roundtrip_uses_stable_wrapper(tmp_path):

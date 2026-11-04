@@ -1,3 +1,5 @@
+from typing import cast
+
 from OCC.Core.Geom import Geom_Curve
 from OCC.Core.Geom import Geom_SurfaceOfRevolution
 
@@ -37,14 +39,15 @@ class OCCRevolutionSurface(OCCSurface):
     """
 
     def __init__(self, curve, point=None, vector=None, **kwargs):
-        super().__init__(**kwargs)
         self._curve = None
         self._point = None
         self._vector = None
         self.curve = curve
         self.point = point
         self.vector = vector
-        self.compute()
+        axis = axis_to_occ((cast(Point, self.point), cast(Vector, self.vector)))
+        surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)
+        super().__init__(surface, **kwargs)
 
     @property
     def curve(self):
@@ -63,10 +66,10 @@ class OCCRevolutionSurface(OCCSurface):
         return self._point
 
     @point.setter
-    def point(self, value):
-        if value:
-            value = Point(*value)
-        self._point = value
+    def point(self, point):
+        if point:
+            point = Point(*point)
+        self._point = point
 
     @property
     def vector(self):
@@ -90,4 +93,4 @@ class OCCRevolutionSurface(OCCSurface):
         """
         axis = axis_to_occ((self.point, self.vector))
         surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)  # type: ignore
-        self.occ_surface = surface
+        self.native_surface = surface

@@ -1,10 +1,14 @@
+from collections.abc import Sequence
+
 from OCC.Core import BRepAlgo
 from OCC.Core import BRepBuilderAPI
 from OCC.Core import BRepTools
 from OCC.Core import ShapeFix
 from OCC.Core import TopoDS
 
+from compas.geometry import BrepEdge
 from compas.geometry import BrepLoop
+from compas.geometry import BrepVertex
 from compas.geometry import Curve
 from compas.geometry import Polygon
 from compas.geometry import Polyline
@@ -14,7 +18,7 @@ from compas_occ.brep import OCCBrepEdge
 from compas_occ.brep import OCCBrepVertex
 
 
-def wire_from_edges(edges: list[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
+def wire_from_edges(edges: Sequence[BrepEdge]) -> TopoDS.TopoDS_Wire:
     """Construct a wire from a list of edges.
 
     Parameters
@@ -29,7 +33,7 @@ def wire_from_edges(edges: list[OCCBrepEdge]) -> TopoDS.TopoDS_Wire:
     """
     builder = BRepBuilderAPI.BRepBuilderAPI_MakeWire()
     for edge in edges:
-        builder.Add(edge.occ_edge)
+        builder.Add(edge.native_edge)
     return builder.Wire()
 
 
@@ -64,10 +68,10 @@ class OCCBrepLoop(BrepLoop):
         super().__init__()
         self._occ_wire = occ_wire
 
-    def __eq__(self, other: "OCCBrepLoop") -> bool:
+    def __eq__(self, other: object) -> bool:
         return self.is_equal(other)
 
-    def is_same(self, other: "OCCBrepLoop") -> bool:
+    def is_same(self, other: object) -> bool:
         """Check if this loop is the same as another loop.
 
         Two loops are the same if they have the same location.
@@ -87,7 +91,7 @@ class OCCBrepLoop(BrepLoop):
             return False
         return self.occ_wire.IsSame(other.occ_wire)
 
-    def is_equal(self, other: "OCCBrepLoop") -> bool:
+    def is_equal(self, other: object) -> bool:
         """Check if this loop is equal to another loop.
 
         Two loops are equal if they have the same location and orientation.
@@ -119,6 +123,10 @@ class OCCBrepLoop(BrepLoop):
     def occ_wire(self) -> TopoDS.TopoDS_Wire:
         return self._occ_wire
 
+    @property
+    def native_loop(self) -> TopoDS.TopoDS_Wire:
+        return self._occ_wire
+
     @occ_wire.setter
     def occ_wire(self, loop: TopoDS.TopoDS_Wire) -> None:
         self._occ_wire = loop
@@ -132,8 +140,8 @@ class OCCBrepLoop(BrepLoop):
         return BRepAlgo.brepalgo.IsValid(self.occ_wire)
 
     @property
-    def vertices(self) -> list[OCCBrepVertex]:
-        vertices = []
+    def vertices(self) -> list[BrepVertex]:
+        vertices: list[BrepVertex] = []
         explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
             vertex = explorer.CurrentVertex()
@@ -142,8 +150,8 @@ class OCCBrepLoop(BrepLoop):
         return vertices
 
     @property
-    def edges(self) -> list[OCCBrepEdge]:
-        edges = []
+    def edges(self) -> list[BrepEdge]:
+        edges: list[BrepEdge] = []
         explorer = BRepTools.BRepTools_WireExplorer(self.occ_wire)
         while explorer.More():
             edge = explorer.Current()
@@ -152,7 +160,7 @@ class OCCBrepLoop(BrepLoop):
         return edges
 
     @edges.setter
-    def edges(self, edges: list[OCCBrepEdge]) -> None:
+    def edges(self, edges: list[BrepEdge]) -> None:
         self.occ_wire = wire_from_edges(edges)
 
     # ==============================================================================
@@ -160,7 +168,7 @@ class OCCBrepLoop(BrepLoop):
     # ==============================================================================
 
     @classmethod
-    def from_edges(cls, edges: list[OCCBrepEdge]) -> "OCCBrepLoop":
+    def from_edges(cls, edges: Sequence[BrepEdge]) -> "OCCBrepLoop":
         """Construct a loop from a collection of edges.
 
         Parameters

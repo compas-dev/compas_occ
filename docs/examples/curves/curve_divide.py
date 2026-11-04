@@ -12,7 +12,7 @@ params, points = curve.divide(N, return_points=True)  # type: ignore
 
 for u, v in pairwise(params):
     segment = curve.segmented(u, v)
-    print(segment.length())
+    print(segment.length)
 
 # =============================================================================
 # Visualization
