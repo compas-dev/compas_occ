@@ -1,9 +1,22 @@
 from importlib.metadata import EntryPoint
+import inspect
 import sys
 
 import pytest
 from compas.plugins import ExtensionPoint
 from compas.plugins import PluginManager
+
+
+INTERSECTION_PLUGIN_NAMES = [
+    "intersection_line_surface",
+    "intersection_plane_surface",
+    "intersection_curve_surface",
+    "intersection_surface_surface",
+    "intersection_line_brep",
+    "intersection_plane_brep",
+    "intersection_curve_brep",
+    "intersection_surface_brep",
+]
 
 
 def test_entry_point_exposes_factory_plugins():
@@ -32,6 +45,22 @@ def test_entry_point_exposes_factory_plugins():
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "brep_transform") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-io", "brep_to_step") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "intersections", "intersection_surface_brep") in manager.registry
+
+
+@pytest.mark.parametrize("name", INTERSECTION_PLUGIN_NAMES)
+def test_intersection_plugin_signature_matches_core_pluggable(name):
+    from compas.geometry import intersections as core_intersections
+    from compas_occ.plugins import intersections as occ_intersections
+
+    core_signature = inspect.signature(getattr(core_intersections, name))
+    plugin_signature = inspect.signature(getattr(occ_intersections, name))
+
+    assert tuple(plugin_signature.parameters) == tuple(core_signature.parameters)
+    for plugin_parameter, core_parameter in zip(plugin_signature.parameters.values(), core_signature.parameters.values()):
+        assert plugin_parameter.kind == core_parameter.kind
+        assert plugin_parameter.default == core_parameter.default
+        assert plugin_parameter.annotation == core_parameter.annotation
+    assert plugin_signature.return_annotation == core_signature.return_annotation
 
 
 def test_brep_plugins_use_stable_wrapper():
