@@ -1,13 +1,24 @@
 """Surface plugin registrations for COMPAS."""
 
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
+from typing import cast
+
+from compas.geometry.surfaces.nurbs_operations import ControlPointGrid
+from compas.geometry.surfaces.nurbs_operations import WeightGrid
+from compas.geometry.surfaces.surface import SurfaceType
 from compas.plugins import plugin
+
+if TYPE_CHECKING:
+    from compas.geometry import NurbsSurface
+    from compas.geometry import Plane
 
 
 @plugin(category="factories", requires=["OCC"])
-def surface_from_native(cls, *args, **kwargs):
+def surface_from_native(cls: type[SurfaceType], *args: object, **kwargs: object) -> SurfaceType:
     from compas_occ.geometry import OCCSurface
 
-    return OCCSurface.from_native(*args, **kwargs)
+    return cast(SurfaceType, OCCSurface.from_native(*args, **kwargs))
 
 
 def _occ(surface):
@@ -52,8 +63,8 @@ def from_fill(curve1, curve2, curve3=None, curve4=None, style="stretch"):
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
-def from_interpolation(*args, **kwargs):
-    return _new("from_interpolation", *args, **kwargs)
+def from_interpolation(points: ControlPointGrid, precision: float = 1e-3) -> "NurbsSurface":
+    return _new("from_interpolation", points, precision=precision)
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
@@ -64,23 +75,46 @@ def from_frame(frame):
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
-def from_native(*args, **kwargs):
-    return _new("from_native", *args, **kwargs)
+def from_native(native_surface: object) -> "NurbsSurface":
+    return _new("from_native", native_surface)
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
-def from_parameters(*args, **kwargs):
-    return _new("from_parameters", *args, **kwargs)
+def from_parameters(
+    points: ControlPointGrid,
+    weights: WeightGrid,
+    knots_u: Sequence[float],
+    knots_v: Sequence[float],
+    mults_u: Sequence[int],
+    mults_v: Sequence[int],
+    degree_u: int,
+    degree_v: int,
+    is_periodic_u: bool = False,
+    is_periodic_v: bool = False,
+) -> "NurbsSurface":
+    return _new(
+        "from_parameters",
+        points,
+        weights,
+        knots_u,
+        knots_v,
+        mults_u,
+        mults_v,
+        degree_u,
+        degree_v,
+        is_periodic_u=is_periodic_u,
+        is_periodic_v=is_periodic_v,
+    )
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
-def from_plane(*args, **kwargs):
-    return _new("from_plane", *args, **kwargs)
+def from_plane(plane: "Plane") -> "NurbsSurface":
+    return _new("from_plane", plane)
 
 
 @plugin(category="nurbssurface-factories", requires=["OCC"])
-def from_points(*args, **kwargs):
-    return _new("from_points", *args, **kwargs)
+def from_points(points: ControlPointGrid, degree_u: int = 3, degree_v: int = 3) -> "NurbsSurface":
+    return _new("from_points", points, degree_u=degree_u, degree_v=degree_v)
 
 
 @plugin(category="nurbssurface-io", requires=["OCC"])

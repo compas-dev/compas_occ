@@ -29,7 +29,7 @@ def test_entry_point_exposes_factory_plugins():
     manager = PluginManager(entry_points_provider=lambda *, group: entry_points)
     occ_modules = {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")}
 
-    assert manager.load_plugins() == 113
+    assert manager.load_plugins() == 131
     assert {name for name in sys.modules if name == "OCC" or name.startswith("OCC.")} == occ_modules
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-factories", "from_box") in manager.registry
     assert ExtensionPoint("https://plugins.compas.dev/", "brep-operations", "from_boolean_union") in manager.registry

@@ -1,13 +1,22 @@
 """Curve plugin registrations for COMPAS."""
 
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
+from typing import cast
+
+from compas._typing import CoordinateType
+from compas.geometry.curves.curve import CurveType
 from compas.plugins import plugin
+
+if TYPE_CHECKING:
+    from compas.geometry import NurbsCurve
 
 
 @plugin(category="factories", requires=["OCC"])
-def curve_from_native(cls, *args, **kwargs):
+def curve_from_native(cls: type[CurveType], *args: object, **kwargs: object) -> CurveType:
     from compas_occ.geometry import OCCCurve
 
-    return OCCCurve.from_native(*args, **kwargs)
+    return cast(CurveType, OCCCurve.from_native(*args, **kwargs))
 
 
 def _occ(curve):
@@ -29,23 +38,30 @@ def _new(method, *args, **kwargs):
 
 
 @plugin(category="nurbscurve-factories", requires=["OCC"])
-def from_native(*args, **kwargs):
-    return _new("from_native", *args, **kwargs)
+def from_native(native_curve: object) -> "NurbsCurve":
+    return _new("from_native", native_curve)
 
 
 @plugin(category="nurbscurve-factories", requires=["OCC"])
-def from_interpolation(*args, **kwargs):
-    return _new("from_interpolation", *args, **kwargs)
+def from_interpolation(points: Sequence[CoordinateType], precision: float = 1e-3) -> "NurbsCurve":
+    return _new("from_interpolation", points, precision=precision)
 
 
 @plugin(category="nurbscurve-factories", requires=["OCC"])
-def from_parameters(*args, **kwargs):
-    return _new("from_parameters", *args, **kwargs)
+def from_parameters(
+    points: Sequence[CoordinateType],
+    weights: Sequence[float],
+    knots: Sequence[float],
+    multiplicities: Sequence[int],
+    degree: int,
+    is_periodic: bool = False,
+) -> "NurbsCurve":
+    return _new("from_parameters", points, weights, knots, multiplicities, degree, is_periodic=is_periodic)
 
 
 @plugin(category="nurbscurve-factories", requires=["OCC"])
-def from_points(*args, **kwargs):
-    return _new("from_points", *args, **kwargs)
+def from_points(points: Sequence[CoordinateType], degree: int = 3, is_periodic: bool = False) -> "NurbsCurve":
+    return _new("from_points", points, degree=degree, is_periodic=is_periodic)
 
 
 @plugin(category="nurbscurve-io", requires=["OCC"])

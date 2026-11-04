@@ -219,27 +219,68 @@ class OCCBrep(Data):
 
     @property
     def is_orientable(self) -> bool:
-        return self.occ_shape.Orientable()
+        """Whether the BRep is orientable.
+
+        Raises
+        ------
+        NotImplementedError
+            OCC does not currently compute this semantic property.
+
+        """
+        raise NotImplementedError("OCC does not compute whether a BRep is orientable.")
 
     @property
     def is_closed(self) -> bool:
-        return self.occ_shape.Closed()
+        """Whether the BRep has no naked boundaries.
+
+        Raises
+        ------
+        NotImplementedError
+            OCC does not currently compute this semantic property.
+
+        """
+        raise NotImplementedError("OCC does not compute whether a BRep has naked boundaries.")
 
     @property
     def is_infinite(self) -> bool:
-        return self.occ_shape.Infinite()
+        """Whether the BRep is infinite.
+
+        Raises
+        ------
+        NotImplementedError
+            OCC does not currently compute this semantic property.
+
+        """
+        raise NotImplementedError("OCC does not compute whether a BRep is infinite.")
 
     @property
     def is_convex(self) -> bool:
-        return self.occ_shape.Convex()
+        """Whether the BRep is convex.
+
+        Raises
+        ------
+        NotImplementedError
+            OCC does not currently compute this semantic property.
+
+        """
+        raise NotImplementedError("OCC does not compute whether a BRep is convex.")
 
     @property
     def is_manifold(self) -> bool:
-        return False
+        """Whether the BRep is manifold.
+
+        Raises
+        ------
+        NotImplementedError
+            OCC does not currently compute this semantic property.
+
+        """
+        raise NotImplementedError("OCC does not compute whether a BRep is manifold.")
 
     @property
     def is_surface(self) -> bool:
-        return False
+        """Whether the BRep consists of a single face."""
+        return self.type == TopAbs.TopAbs_FACE
 
     # ==============================================================================
     # Geometric Components
@@ -1918,7 +1959,7 @@ class OCCBrep(Data):
         None
 
         """
-        if self.is_closed:
+        if self.occ_shape.Closed():
             if self.volume < 0.0:
                 self.native_brep.Reverse()
 
