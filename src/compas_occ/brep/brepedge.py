@@ -27,7 +27,6 @@ from compas.geometry import LineCurve
 from compas.geometry import NurbsCurve
 from compas.geometry import Parabola
 from compas.geometry import Point
-from compas_occ.brep import OCCBrepVertex
 from compas_occ.conversions import bezier_to_compas
 from compas_occ.conversions import bspline_to_compas
 from compas_occ.conversions import circle_to_compas
@@ -40,6 +39,8 @@ from compas_occ.conversions import point_to_occ
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCCurve2d
 from compas_occ.geometry import OCCSurface
+
+from .brepvertex import OCCBrepVertex
 
 
 class CurveType:

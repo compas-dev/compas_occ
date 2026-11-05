@@ -14,8 +14,9 @@ from compas.geometry import Polygon
 from compas.geometry import Polyline
 from compas.geometry import Surface
 from compas.itertools import pairwise
-from compas_occ.brep import OCCBrepEdge
-from compas_occ.brep import OCCBrepVertex
+
+from .brepedge import OCCBrepEdge
+from .brepvertex import OCCBrepVertex
 
 
 def wire_from_edges(edges: Sequence[BrepEdge]) -> TopoDS.TopoDS_Wire:

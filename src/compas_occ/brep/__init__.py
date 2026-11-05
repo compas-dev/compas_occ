@@ -1,8 +1,8 @@
-from .brep import OCCBrep
-from .brepedge import OCCBrepEdge
-from .brepface import OCCBrepFace
-from .breploop import OCCBrepLoop
 from .brepvertex import OCCBrepVertex
+from .brepedge import OCCBrepEdge
+from .breploop import OCCBrepLoop
+from .brepface import OCCBrepFace
+from .brep import OCCBrep
 
 __all__ = [
     "OCCBrep",

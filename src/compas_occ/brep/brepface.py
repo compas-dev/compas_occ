@@ -33,10 +33,6 @@ from compas.geometry import Polygon
 from compas.geometry import Sphere
 from compas.geometry import SurfaceType
 from compas.geometry import Torus
-from compas_occ.brep import OCCBrepEdge
-from compas_occ.brep import OCCBrepLoop
-from compas_occ.brep import OCCBrepVertex
-from compas_occ.brep.brepedge import CurveType
 from compas_occ.conversions import cone_to_occ
 from compas_occ.conversions import cylinder_to_compas
 from compas_occ.conversions import cylinder_to_occ
@@ -48,6 +44,11 @@ from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
+
+from .brepedge import CurveType
+from .brepedge import OCCBrepEdge
+from .breploop import OCCBrepLoop
+from .brepvertex import OCCBrepVertex
 
 
 class OCCBrepFace(BrepFace):
@@ -207,7 +208,7 @@ class OCCBrepFace(BrepFace):
 
     def as_brep(self) -> Brep:
         """Return an OCC BRep containing only this face."""
-        from compas_occ.brep import OCCBrep
+        from .brep import OCCBrep
 
         return cast(Brep, OCCBrep.from_brepfaces([self], solid=False))
 
