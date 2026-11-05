@@ -29,11 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Registered COMPAS plugins through separate Brep, curve, and surface entry-point modules and deferred OCC imports until plugin invocation.
 * Migrated supported NURBS curve factories and operations to the stable `compas.geometry.NurbsCurve` wrapper.
 * Migrated supported NURBS surface and BRep factories and operations to stable COMPAS wrappers.
+* Completed the public type signatures of all supported NURBS curve and surface plugin implementations.
 
 ### Fixed
 
 * Normalized shape sequences returned by `pythonocc-core` when reading IGES files.
 * Restored curve-on-surface edge construction for stable COMPAS geometry wrappers.
+* Accepted raw transformation matrices through the NURBS surface plugin, normalized Python and NumPy real scalars at the pythonocc ABI boundary, explicitly rejected shear and non-uniform scaling that `gp_Trsf` cannot represent, and returned the stable `compas.geometry.Brep` wrapper from surface conversion.
 
 ### Removed
 

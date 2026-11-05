@@ -9,6 +9,30 @@ import pytest
 
 ROOT = Path(__file__).parents[1]
 CURVE_FACTORY_NAMES = ["from_native", "from_interpolation", "from_parameters", "from_points"]
+CURVE_OPERATION_NAMES = [
+    "from_step",
+    "curve_points",
+    "curve_weights",
+    "curve_knots",
+    "curve_multiplicities",
+    "curve_continuity",
+    "curve_degree",
+    "curve_is_rational",
+    "curve_domain",
+    "curve_length",
+    "curve_is_closed",
+    "curve_is_periodic",
+    "curve_point_at",
+    "curve_normal_at",
+    "curve_tangent_at",
+    "curve_curvature_at",
+    "curve_transform",
+    "curve_reverse",
+    "curve_closest_point",
+    "curve_divide_by_count",
+    "curve_divide_by_length",
+    "curve_to_step",
+]
 
 
 def _assert_signatures_match(plugin, core):
@@ -32,6 +56,14 @@ def test_curve_from_native_plugin_signature_matches_core_pluggable():
 
 @pytest.mark.parametrize("name", CURVE_FACTORY_NAMES)
 def test_nurbscurve_factory_plugin_signature_matches_core_pluggable(name):
+    from compas.geometry.curves import nurbs_operations
+    from compas_occ.plugins import curves
+
+    _assert_signatures_match(getattr(curves, name), getattr(nurbs_operations, name))
+
+
+@pytest.mark.parametrize("name", CURVE_OPERATION_NAMES)
+def test_nurbscurve_operation_plugin_signature_matches_core_pluggable(name):
     from compas.geometry.curves import nurbs_operations
     from compas_occ.plugins import curves
 
@@ -81,3 +113,23 @@ def test_curve_factories_forward_defaults_and_arguments(monkeypatch):
         ("from_points", (points,), {"degree": 3, "is_periodic": False}),
         ("from_parameters", (points, [1.0, 1.0], [0.0, 1.0], [2, 2], 1), {"is_periodic": False}),
     ]
+
+
+def test_stable_curve_facade_rejects_unsupported_affine_without_mutation():
+    from compas.geometry import NurbsCurve
+
+    curve = NurbsCurve.from_points([(0.0, 0.0, 0.0), (1.0, 0.0, 0.0)], degree=1)
+    parameter = curve.domain[0]
+    point = curve.point_at(parameter)
+
+    with pytest.raises(ValueError, match="gp_Trsf cannot represent"):
+        curve.transform(
+            [
+                [1.0, 0.5, 0.0, 0.0],
+                [0.0, 1.0, 0.0, 0.0],
+                [0.0, 0.0, 1.0, 0.0],
+                [0.0, 0.0, 0.0, 1.0],
+            ]
+        )
+
+    assert curve.point_at(parameter) == point

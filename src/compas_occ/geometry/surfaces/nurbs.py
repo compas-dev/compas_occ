@@ -16,7 +16,6 @@ from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 
-from compas._typing import CoordinateType
 from compas.data import Data
 from compas.geometry import Curve
 from compas.geometry import Frame
@@ -25,6 +24,7 @@ from compas.geometry import Point
 from compas.geometry import Translation
 from compas.geometry import Vector
 from compas.itertools import flatten
+from compas.typing import PointLike
 from compas_occ.conversions import array1_from_floats1
 from compas_occ.conversions import array1_from_integers1
 from compas_occ.conversions import array2_from_floats2
@@ -372,7 +372,7 @@ class OCCNurbsSurface(OCCSurface):
         return cls.from_native(native_surface)
 
     @classmethod
-    def from_interpolation(cls, points: Sequence[Sequence[CoordinateType]], precision: float = 1e-3) -> "OCCNurbsSurface":
+    def from_interpolation(cls, points: Sequence[Sequence[PointLike]], precision: float = 1e-3) -> "OCCNurbsSurface":
         """Construct a NURBS surface by approximating or interpolating a 2D collection of points.
 
         Parameters
@@ -416,7 +416,7 @@ class OCCNurbsSurface(OCCSurface):
     @classmethod
     def from_parameters(
         cls,
-        points: Sequence[Sequence[CoordinateType]],
+        points: Sequence[Sequence[PointLike]],
         weights: Sequence[Sequence[float]],
         knots_u: Sequence[float],
         knots_v: Sequence[float],
@@ -499,7 +499,7 @@ class OCCNurbsSurface(OCCSurface):
     @classmethod
     def from_points(
         cls,
-        points: Sequence[Sequence[CoordinateType]],
+        points: Sequence[Sequence[PointLike]],
         degree_u: int = 3,
         degree_v: int = 3,
     ) -> "OCCNurbsSurface":

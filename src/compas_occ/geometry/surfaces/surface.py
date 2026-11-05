@@ -1,4 +1,5 @@
 import os
+from collections.abc import Sequence
 from typing import Literal
 from typing import Optional
 from typing import Self
@@ -19,14 +20,11 @@ from OCC.Core.GeomAPI import GeomAPI_IntCS
 from OCC.Core.GeomAPI import GeomAPI_ProjectPointOnSurf
 from OCC.Core.GeomLProp import GeomLProp_SLProps
 from OCC.Core.gp import gp_Pnt
-from OCC.Core.gp import gp_Trsf
 from OCC.Core.gp import gp_Vec
 from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
-from compas._typing import CoordinateType
-from compas._typing import FilePath
 from compas.data import Data
 from compas.geometry import Box
 from compas.geometry import Curve
@@ -36,7 +34,10 @@ from compas.geometry import Point
 from compas.geometry import Surface
 from compas.geometry import Transformation
 from compas.geometry import Vector
+from compas.typing import FilePath
+from compas.typing import PointLike
 from compas_occ.conversions import ax3_to_compas
+from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import direction_to_compas
 from compas_occ.conversions import line_to_occ
 from compas_occ.conversions import point_to_compas
@@ -238,22 +239,22 @@ class OCCSurface(Surface):
             surface._guid = self.guid
         return cast(Self, surface)
 
-    def transform(self, transformation: Transformation) -> None:
+    def transform(self, transformation: Union[Transformation, Sequence[Sequence[float]]]) -> None:
         """Transform this surface.
 
         Parameters
         ----------
         transformation
-            A transformation.
+            A transformation or a nested transformation matrix.
 
-        Returns
-        -------
-        None
+        Raises
+        ------
+        ValueError
+            If the transformation contains shear, nonuniform scaling, or a
+            projective component that Open CASCADE cannot represent.
 
         """
-        _T = gp_Trsf()
-        _T.SetValues(*transformation.list[:12])
-        self.native_surface.Transform(_T)
+        self.native_surface.Transform(compas_transformation_to_trsf(transformation))
 
     def isocurve_u(self, u: float) -> OCCCurve:
         """Compute the isoparametric curve at parameter u.
@@ -434,18 +435,18 @@ class OCCSurface(Surface):
         )
 
     @overload
-    def closest_point(self, point: CoordinateType, return_parameters: Literal[False] = False) -> Optional[Point]: ...
+    def closest_point(self, point: PointLike, return_parameters: Literal[False] = False) -> Optional[Point]: ...
 
     @overload
     def closest_point(
         self,
-        point: CoordinateType,
+        point: PointLike,
         return_parameters: Literal[True],
     ) -> Optional[tuple[Point, tuple[float, float]]]: ...
 
     def closest_point(
         self,
-        point: CoordinateType,
+        point: PointLike,
         return_parameters: bool = False,
     ) -> Optional[Union[Point, tuple[Point, tuple[float, float]]]]:
         """Compute the closest point on the curve to a given point.

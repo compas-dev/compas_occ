@@ -25,7 +25,6 @@ from OCC.Core.TopoDS import TopoDS_Edge
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.TopoDS import topods
 
-from compas._typing import CoordinateType
 from compas.data import Data
 from compas.geometry import Box
 from compas.geometry import Curve
@@ -35,6 +34,7 @@ from compas.geometry import Polyline
 from compas.geometry import Transformation
 from compas.geometry import Vector
 from compas.geometry import distance_point_point
+from compas.typing import PointLike
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import direction_to_occ
 from compas_occ.conversions import point_to_compas
@@ -244,15 +244,16 @@ class OCCCurve(Curve):
         Parameters
         ----------
         transformation
-            A transformation matrix.
+            A transformation or a nested transformation matrix.
 
-        Returns
-        -------
-        None
+        Raises
+        ------
+        ValueError
+            If the transformation contains shear, nonuniform scaling, or a
+            projective component that Open CASCADE cannot represent.
 
         """
-        matrix = getattr(transformation, "matrix", transformation)
-        self.native_curve.Transform(compas_transformation_to_trsf(Transformation(list(map(list, matrix)))))
+        self.native_curve.Transform(compas_transformation_to_trsf(transformation))
 
     def reverse(self) -> None:
         """Reverse the parametrisation of the curve.
@@ -448,14 +449,14 @@ class OCCCurve(Curve):
         return GCPnts_AbscissaPoint.Length(GeomAdaptor_Curve(self.native_curve), 1e-3)
 
     @overload
-    def closest_point(self, point: CoordinateType, return_parameter: Literal[False] = False) -> Point: ...
+    def closest_point(self, point: PointLike, return_parameter: Literal[False] = False) -> Point: ...
 
     @overload
-    def closest_point(self, point: CoordinateType, return_parameter: Literal[True]) -> tuple[Point, float]: ...
+    def closest_point(self, point: PointLike, return_parameter: Literal[True]) -> tuple[Point, float]: ...
 
     def closest_point(
         self,
-        point: CoordinateType,
+        point: PointLike,
         return_parameter: bool = False,
     ) -> Union[Point, tuple[Point, float]]:
         """
