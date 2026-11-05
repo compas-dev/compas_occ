@@ -1,6 +1,13 @@
-from .curves import OCCCurve2d  # noqa: F401
-from .curves import OCCCurve  # noqa: F401
-from .curves import OCCNurbsCurve  # noqa: F401
+from .curves import OCCCurve
+from .curves import OCCCurve2d
+from .curves import OCCNurbsCurve
+from .surfaces import OCCNurbsSurface
+from .surfaces import OCCSurface
 
-from .surfaces import OCCSurface  # noqa: F401
-from .surfaces import OCCNurbsSurface  # noqa: F401
+__all__ = [
+    "OCCCurve",
+    "OCCCurve2d",
+    "OCCNurbsCurve",
+    "OCCNurbsSurface",
+    "OCCSurface",
+]

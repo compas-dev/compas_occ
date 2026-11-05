@@ -47,6 +47,23 @@ jobs:
       - name: Type check
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pyright
+      - name: Verify typed wheel and installed consumer
+        if: runner.os == 'Linux'
+        shell: bash -el {0}
+        run: |
+          mkdir -p "$RUNNER_TEMP/compas-occ-source"
+          mkdir -p "$RUNNER_TEMP/compas-occ-dist"
+          mkdir -p "$RUNNER_TEMP/compas-core-source"
+          mkdir -p "$RUNNER_TEMP/compas-core-dist"
+          git archive --format=tar HEAD | tar -xf - -C "$RUNNER_TEMP/compas-occ-source"
+          git clone --filter=blob:none --no-checkout https://github.com/compas-dev/compas.git "$RUNNER_TEMP/compas-core-source"
+          git -C "$RUNNER_TEMP/compas-core-source" fetch --depth 1 origin 9b1518f74fe7d0315626954d8b893756f8dae06d
+          git -C "$RUNNER_TEMP/compas-core-source" checkout --detach 9b1518f74fe7d0315626954d8b893756f8dae06d
+          cd "$RUNNER_TEMP/compas-core-source"
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -m build --wheel --outdir "$RUNNER_TEMP/compas-core-dist"
+          cd "$RUNNER_TEMP/compas-occ-source"
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -m build --wheel --outdir "$RUNNER_TEMP/compas-occ-dist"
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python .github/scripts/verify_typed_wheel.py --check-consumer --core-wheel "$RUNNER_TEMP"/compas-core-dist/*.whl "$RUNNER_TEMP"/compas-occ-dist/*.whl
 
   docs:
     runs-on: ubuntu-latest

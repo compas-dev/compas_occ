@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added PEP 561 typed-package metadata and installed-wheel consumer verification.
 * Added a versioned, backend-neutral BRep JSON schema with optional Base64-encoded native OCC payloads and legacy-data loading.
 * Added OCC providers for line, plane, curve, surface, and BRep intersection pluggables.
 * Added STEP document, reader, and writer APIs for exchanging multiple geometries.
