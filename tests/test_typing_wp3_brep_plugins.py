@@ -18,7 +18,7 @@ ROOT = Path(__file__).parents[1]
 def test_registered_brep_plugin_signatures_match_core_contracts():
     registered = {name: function for name, function in vars(occ_brep).items() if callable(function) and hasattr(function, "__plugin_spec__")}
 
-    assert len(registered) == 64
+    assert len(registered) == 63
     for name, function in registered.items():
         assert inspect.signature(function) == inspect.signature(getattr(core_brep, name)), name
 
@@ -95,6 +95,37 @@ def test_brep_overlap_forwards_options_and_preserves_pair_structure(monkeypatch)
     )
 
     assert result is expected
+
+
+def test_brep_tessellation_forwards_concrete_public_units(monkeypatch):
+    captured = {}
+
+    class FakeBrep:
+        def to_tessellation(self, *, linear_deflection, angular_deflection):
+            captured.update(
+                linear_deflection=linear_deflection,
+                angular_deflection=angular_deflection,
+            )
+            return "tessellation"
+
+    monkeypatch.setattr(occ_brep, "_occ", lambda brep: FakeBrep())
+
+    result = occ_brep.brep_to_tessellation(
+        object(),
+        linear_deflection=0.01,
+        angular_deflection=12.0,
+    )
+
+    assert result == "tessellation"
+    assert captured == {
+        "linear_deflection": 0.01,
+        "angular_deflection": 12.0,
+    }
+
+
+def test_removed_brep_conversion_hooks_are_absent():
+    assert not hasattr(occ_brep, "brep_tessellate")
+    assert not hasattr(occ_brep, "brep_polygonize")
 
 
 def test_brep_fillet_materializes_excluded_edge_sequence_once(monkeypatch):

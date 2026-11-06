@@ -1,13 +1,13 @@
 from compas_viewer import Viewer
 
 from compas.colors import Color
-from compas.geometry import NurbsCurve
 from compas.geometry import Point
 from compas.geometry import Vector
-from compas_occ.geometry import OCCRevolutionSurface
+from compas_occ.geometry import OCCNurbsCurve
+from compas_occ.geometry.surfaces.__temp.revolution import OCCRevolutionSurface
 
 points = [Point(0, 0, 0), Point(0, -6, 3), Point(0, 2, 6), Point(0, -2, 9)]
-curve = NurbsCurve.from_points(points)
+curve = OCCNurbsCurve.from_points(points)
 point = Point(0, 0, 0)
 vector = Vector(0, 0, 1)
 
@@ -23,5 +23,5 @@ viewer = Viewer()
 # viewer.renderer.camera.target = [0, 0, 5]
 
 viewer.scene.add(curve.to_polyline(), linewidth=5, linecolor=Color.red())
-viewer.scene.add(surface.to_mesh())
+viewer.scene.add(surface)
 viewer.show()

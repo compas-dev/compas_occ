@@ -10,7 +10,6 @@ from OCC.Core import BRepGProp
 from OCC.Core import BRepLib
 from OCC.Core import Geom
 from OCC.Core import GProp
-from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopoDS
 
@@ -39,6 +38,7 @@ from compas_occ.conversions import point_to_occ
 from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCCurve2d
 from compas_occ.geometry import OCCSurface
+from compas_occ.occ import occ_shape_find_vertices
 
 from .brepvertex import OCCBrepVertex
 
@@ -276,21 +276,15 @@ class OCCBrepEdge(BrepEdge):
 
     @property
     def vertices(self) -> list[BrepVertex]:
-        vertices: list[BrepVertex] = []
-        explorer = TopExp.TopExp_Explorer(self.occ_edge, TopAbs.TopAbs_VERTEX)  # type: ignore
-        while explorer.More():
-            vertex = explorer.Current()
-            vertices.append(OCCBrepVertex(vertex))  # type: ignore
-            explorer.Next()
-        return vertices
+        return [OCCBrepVertex(vertex) for vertex in occ_shape_find_vertices(self.occ_edge)]
 
     @property
     def first_vertex(self) -> OCCBrepVertex:
-        return OCCBrepVertex(TopExp.topexp.FirstVertex(self.occ_edge))
+        return OCCBrepVertex(TopExp.topexp.FirstVertex(self.occ_edge, True))
 
     @property
     def last_vertex(self) -> OCCBrepVertex:
-        return OCCBrepVertex(TopExp.topexp.LastVertex(self.occ_edge))
+        return OCCBrepVertex(TopExp.topexp.LastVertex(self.occ_edge, True))
 
     @property
     def length(self) -> float:

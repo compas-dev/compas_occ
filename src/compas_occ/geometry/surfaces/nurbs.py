@@ -14,10 +14,10 @@ from OCC.Core.GeomAPI import GeomAPI_PointsToBSplineSurface
 from OCC.Core.GeomFill import GeomFill_BSplineCurves
 from OCC.Core.GeomFill import GeomFill_CoonsStyle
 from OCC.Core.GeomFill import GeomFill_CurvedStyle
+from OCC.Core.GeomFill import GeomFill_FillingStyle
 from OCC.Core.GeomFill import GeomFill_StretchStyle
 
 from compas.data import Data
-from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Plane
 from compas.geometry import Point
@@ -55,12 +55,11 @@ class ControlPoints:
 
     def __getitem__(self, index: Union[int, tuple[int, int]]) -> Union[Point, list[Point]]:
         try:
-            u, v = index  # type: ignore
+            u, v = cast(tuple[int, int], index)
         except TypeError:
-            return self.points[index]  # type: ignore
-        else:
-            pnt = self.native_surface.Pole(u + 1, v + 1)
-            return point_to_compas(pnt)
+            return self.points[cast(int, index)]
+        pnt = self.native_surface.Pole(u + 1, v + 1)
+        return point_to_compas(pnt)
 
     def __setitem__(self, index: tuple[int, int], point: Point) -> None:
         u, v = index
@@ -159,7 +158,7 @@ class OCCNurbsSurface(OCCSurface):
     @property
     def __data__(self) -> dict:
         return {
-            "points": [[point.__data__ for point in row] for row in self.points],  # type: ignore (this seems to be a mypy bug)
+            "points": [[point.__data__ for point in row] for row in self.points],
             "weights": self.weights,
             "knots_u": self.knots_u,
             "knots_v": self.knots_v,
@@ -238,15 +237,13 @@ class OCCNurbsSurface(OCCSurface):
         return self._points
 
     @property
-    def weights(self) -> list[list[float]]:
-        weights = self._bspline_surface.Weights()
-        if not weights:
+    def weights(self) -> Sequence[Sequence[float]]:
+        native_weights = self._bspline_surface.Weights()
+        if not native_weights:
             rows = len(self.points)
             cols = len(self.points[0])
-            weights = [[1.0] * cols for _ in range(rows)]
-        else:
-            weights = floats2_from_array2(weights)
-        return weights  # type: ignore (not sure what this is about)
+            return [[1.0] * cols for _ in range(rows)]
+        return floats2_from_array2(native_weights)
 
     @property
     def degree_u(self) -> int:
@@ -277,7 +274,7 @@ class OCCNurbsSurface(OCCSurface):
     # ==============================================================================
 
     @classmethod
-    def from_extrusion(cls, curve: Curve, vector: Vector) -> "OCCNurbsSurface":
+    def from_extrusion(cls, curve: OCCNurbsCurve, vector: Vector) -> "OCCNurbsSurface":
         """Construct a NURBS surface from an extrusion of a basis curve.
 
         Note that the extrusion surface is constructed by generating an infill
@@ -296,7 +293,7 @@ class OCCNurbsSurface(OCCSurface):
 
         """
         other = curve.transformed(Translation.from_vector(vector))
-        return cls.from_fill(curve, other)  # type: ignore (not sure how to solve this)
+        return cls.from_fill(curve, other)
 
     @classmethod
     def from_fill(
@@ -338,14 +335,14 @@ class OCCNurbsSurface(OCCSurface):
         """
 
         if style == "stretch":
-            occ_style = GeomFill_StretchStyle
+            occ_style = GeomFill_FillingStyle(GeomFill_StretchStyle)
         elif style == "coons":
-            occ_style = GeomFill_CoonsStyle
+            occ_style = GeomFill_FillingStyle(GeomFill_CoonsStyle)
         elif style == "curved":
-            occ_style = GeomFill_CurvedStyle
+            occ_style = GeomFill_FillingStyle(GeomFill_CurvedStyle)
         else:
             warnings.warn('This fill style is not supported: {}. We will use GeomFill_StretchStyle ("stretch") instead.'.format(style))
-            occ_style = GeomFill_StretchStyle
+            occ_style = GeomFill_FillingStyle(GeomFill_StretchStyle)
 
         if curve3 and curve4:
             occ_fill = GeomFill_BSplineCurves(
@@ -353,20 +350,20 @@ class OCCNurbsSurface(OCCSurface):
                 curve2.occ_curve,
                 curve3.occ_curve,
                 curve4.occ_curve,
-                occ_style,  # type: ignore
+                occ_style,
             )
         elif curve3:
             occ_fill = GeomFill_BSplineCurves(
                 curve1.occ_curve,
                 curve2.occ_curve,
                 curve3.occ_curve,
-                occ_style,  # type: ignore
+                occ_style,
             )
         else:
             occ_fill = GeomFill_BSplineCurves(
                 curve1.occ_curve,
                 curve2.occ_curve,
-                occ_style,  # type: ignore
+                occ_style,
             )
         native_surface = occ_fill.Surface()
         return cls.from_native(native_surface)

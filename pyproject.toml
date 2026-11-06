@@ -132,6 +132,7 @@ replace = "[{new_version}] {now:%Y-%m-%d}"
 line-length = 179
 indent-width = 4
 target-version = "py312"
+extend-include = ["docs/examples/**/*.py"]
 # Ruff rewrites MkDocs `---8<---` snippet directives as Python operators.
 extend-exclude = ["docs/examples/**/*.md", "docs/tutorial.md"]
 
@@ -158,7 +159,7 @@ docstring-code-format = true
 docstring-code-line-length = "dynamic"
 
 [tool.pyright]
-include = ["src/compas_occ"]
+include = ["src/compas_occ", "docs/examples"]
 pythonVersion = "3.12"
 typeCheckingMode = "standard"
 

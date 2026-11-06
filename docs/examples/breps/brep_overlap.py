@@ -10,7 +10,7 @@ box = Box(1)
 box.translate([1, 0.3, 0.5])
 B = Brep.from_box(box)
 
-FA, FB = A.overlap(B)  # type: ignore
+FA, FB = A.overlap(B)
 
 # =============================================================================
 # Visualization

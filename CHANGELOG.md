@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Modernized the development, documentation, packaging, and release workflows around locked `uv` environments and immutable shared-action revisions.
-* Adopted explicit `Deflection` strategies for trimmed BRep tessellation and polygonization, with degree-to-radian conversion at the OCC boundary.
+* Adopted `to_tessellation` with explicit linear and angular deflection keywords for trimmed BRep tessellation, with degree-to-radian conversion at the OCC boundary.
 * Added optional end caps to BRep extrusions and aligned the default with COMPAS.
 * Redesigned BRep face boundaries with outer-first ordering, automatic hole orientation, atomic validation, and constructor-level `holes` support.
 * Aligned OCC BRep and surface tessellation with fresh, explicit `compas.geometry.Tessellation` output, including edge polylines, surface normals, and texture coordinates, without public caches or legacy aliases.
@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-* Removed cached and scalar BRep tessellation APIs in favor of `tessellate(strategy)` and `polygonize(strategy)`.
+* Removed BRep `tessellate` and `polygonize` methods, strategy objects, and the old `brep_tessellate` and `brep_polygonize` hooks in favor of the sole `to_tessellation` conversion and `brep_to_tessellation` hook.
 
 ## [1.5.0] 2025-12-11
 

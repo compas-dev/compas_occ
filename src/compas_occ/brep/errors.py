@@ -14,3 +14,9 @@ class BrepBooleanError(BrepError):
     """Exception raised for errors in (re-)building breps."""
 
     pass
+
+
+class BrepTessellationError(BrepError):
+    """Exception raised when Open CASCADE cannot tessellate a BRep completely."""
+
+    pass

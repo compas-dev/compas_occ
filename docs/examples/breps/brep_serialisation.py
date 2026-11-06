@@ -1,6 +1,7 @@
 from compas_viewer import Viewer
 
-import compas
+from compas.data import json_dumps
+from compas.data import json_loads
 from compas.geometry import Box
 from compas.geometry import Circle
 from compas.geometry import Cylinder
@@ -17,7 +18,7 @@ from compas_occ.brep import OCCBrepFace
 from compas_occ.brep import OCCBrepLoop
 
 
-def brep_with_hole():
+def brep_with_hole() -> OCCBrep:
     points = [
         [Point(0, 0, 0), Point(1, 0, 0), Point(2, 0, 0), Point(3, 0, 0)],
         [Point(0, 1, 0), Point(1, 1, 2), Point(2, 1, 2), Point(3, 1, 0)],
@@ -41,7 +42,7 @@ def brep_with_hole():
     return brep
 
 
-def brep_with_holes():
+def brep_with_holes() -> OCCBrep:
     circle1 = Circle(1.0, frame=Frame([2, 2, 0]))
     circle2 = Circle(2.0, frame=Frame([-2, -2, 0]))
     circle3 = Circle(0.5, frame=Frame([2, -2, 0]))
@@ -57,15 +58,15 @@ def brep_with_holes():
     return brep
 
 
-def brep_from_booleans():
+def brep_from_booleans() -> OCCBrep:
     R = 1.4
 
-    box = Box(2 * R).to_brep()
-    sphere = Sphere(radius=1.25 * R).to_brep()
+    box = OCCBrep.from_box(Box(2 * R))
+    sphere = OCCBrep.from_sphere(Sphere(radius=1.25 * R))
 
-    cylx = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldYZ()).to_brep()
-    cyly = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldZX()).to_brep()
-    cylz = Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldXY()).to_brep()
+    cylx = OCCBrep.from_cylinder(Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldYZ()))
+    cyly = OCCBrep.from_cylinder(Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldZX()))
+    cylz = OCCBrep.from_cylinder(Cylinder(radius=0.7 * R, height=3 * R, frame=Frame.worldXY()))
 
     brep = OCCBrep.from_boolean_intersection(box, sphere)
     brep = OCCBrep.from_boolean_difference(brep, cylz)
@@ -85,7 +86,8 @@ brep = brep_from_booleans()
 # brep = brep_with_hole()
 # brep = brep_with_holes()
 
-brep: OCCBrep = compas.json_loads(compas.json_dumps(brep))  # type: ignore
+brep = json_loads(json_dumps(brep))
+assert isinstance(brep, OCCBrep)
 
 # =============================================================================
 # Viz

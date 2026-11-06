@@ -208,11 +208,12 @@ class OCCSurface(Surface):
         from OCC.Core.IFSelect import IFSelect_RetDone
         from OCC.Core.Interface import Interface_Static
         from OCC.Core.STEPControl import STEPControl_AsIs
+        from OCC.Core.STEPControl import STEPControl_StepModelType
         from OCC.Core.STEPControl import STEPControl_Writer
 
         step_writer = STEPControl_Writer()
         Interface_Static.SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_face, STEPControl_AsIs)  # type: ignore
+        step_writer.Transfer(self.occ_face, STEPControl_StepModelType(STEPControl_AsIs))
         status = step_writer.Write(os.fspath(filepath))
         if status != IFSelect_RetDone:
             raise AssertionError("Operation failed.")

@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 from OCC.Core import TopAbs
 from OCC.Core import TopExp
 from OCC.Core import TopoDS
@@ -12,7 +14,7 @@ from compas.geometry import Point
 from .conversions import point_to_compas
 
 
-def split_shapes(arguments: list[TopoDS.TopoDS_Shape], tools: list[TopoDS.TopoDS_Shape]) -> list[TopoDS.TopoDS_Shape]:
+def split_shapes(arguments: Sequence[TopoDS.TopoDS_Shape], tools: Sequence[TopoDS.TopoDS_Shape]) -> list[TopoDS.TopoDS_Shape]:
     """Split a group of breps by another group of breps.
 
     Parameters
@@ -85,10 +87,9 @@ def occ_shape_find_vertices(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoD
 
     """
     vertices: list[TopoDS.TopoDS_Vertex] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_VERTEX)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_VERTEX))
     while explorer.More():
-        vertex = explorer.Current()
-        vertices.append(vertex)  # type: ignore
+        vertices.append(TopoDS.topods.Vertex(explorer.Current()))
         explorer.Next()
     return vertices
 
@@ -107,10 +108,9 @@ def occ_shape_find_edges(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoDS_E
 
     """
     edges: list[TopoDS.TopoDS_Edge] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_EDGE)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_EDGE))
     while explorer.More():
-        edge = explorer.Current()
-        edges.append(edge)  # type: ignore
+        edges.append(TopoDS.topods.Edge(explorer.Current()))
         explorer.Next()
     return edges
 
@@ -129,10 +129,9 @@ def occ_shape_find_loops(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoDS_W
 
     """
     wires: list[TopoDS.TopoDS_Wire] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_WIRE)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_WIRE))
     while explorer.More():
-        wire = explorer.Current()
-        wires.append(wire)  # type: ignore
+        wires.append(TopoDS.topods.Wire(explorer.Current()))
         explorer.Next()
     return wires
 
@@ -151,10 +150,9 @@ def occ_shape_find_faces(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoDS_F
 
     """
     faces: list[TopoDS.TopoDS_Face] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_FACE)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_FACE))
     while explorer.More():
-        face = explorer.Current()
-        faces.append(face)  # type: ignore
+        faces.append(TopoDS.topods.Face(explorer.Current()))
         explorer.Next()
     return faces
 
@@ -173,10 +171,9 @@ def occ_shape_find_shells(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoDS_
 
     """
     shells: list[TopoDS.TopoDS_Shell] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_SHELL)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_SHELL))
     while explorer.More():
-        shell = explorer.Current()
-        shells.append(shell)  # type: ignore
+        shells.append(TopoDS.topods.Shell(explorer.Current()))
         explorer.Next()
     return shells
 
@@ -195,9 +192,8 @@ def occ_shape_find_solids(occ_shape: TopoDS.TopoDS_Shape) -> list[TopoDS.TopoDS_
 
     """
     solids: list[TopoDS.TopoDS_Solid] = []
-    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_SOLID)  # type: ignore
+    explorer = TopExp.TopExp_Explorer(occ_shape, TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_SOLID))
     while explorer.More():
-        solid = explorer.Current()
-        solids.append(solid)  # type: ignore
+        solids.append(TopoDS.topods.Solid(explorer.Current()))
         explorer.Next()
     return solids

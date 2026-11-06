@@ -169,7 +169,8 @@ class OCCCurve2d(Curve):
         """
         step_writer = STEPControl.STEPControl_Writer()
         Interface.Interface_Static.SetCVal("write.step.schema", schema)
-        step_writer.Transfer(self.occ_edge, STEPControl.STEPControl_AsIs)  # type: ignore
+        mode = STEPControl.STEPControl_StepModelType(STEPControl.STEPControl_AsIs)
+        step_writer.Transfer(self.occ_edge, mode)
         status = step_writer.Write(str(filepath))
         if status != IFSelect.IFSelect_RetDone:
             raise AssertionError("Operation failed.")
@@ -204,8 +205,8 @@ class OCCCurve2d(Curve):
 
         """
         cls = cast(type[Self], cls or type(self))
-        native_curve = self.native_curve.Copy()
-        copy = cls(native_curve, name=self.name)  # type: ignore (Copy returns Geom2d_Geometry)
+        native_curve = cast(Geom2d.Geom2d_Curve, self.native_curve.Copy())
+        copy = cls(native_curve, name=self.name)
         if copy_guid:
             copy._guid = self.guid
         return copy

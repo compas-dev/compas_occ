@@ -35,7 +35,7 @@ box = surface.aabb
 
 viewer = Viewer()
 
-points = list(surface.points)
+points = surface.control_points
 u_direction = [Polyline(row) for row in points]
 v_direction = [Polyline(col) for col in zip(*points)]
 

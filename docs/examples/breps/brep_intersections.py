@@ -1,4 +1,3 @@
-# type: ignore
 from compas_viewer import Viewer
 
 from compas.geometry import NurbsSurface

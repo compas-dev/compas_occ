@@ -1,6 +1,8 @@
 from compas_viewer import Viewer
 from compas_viewer.scene import Collection
 
+from compas.datastructures import Mesh
+from compas.geometry import Geometry
 from compas.geometry import NurbsSurface
 from compas.geometry import Point
 from compas.itertools import flatten
@@ -21,7 +23,7 @@ surface = NurbsSurface.from_points(points=points)
 # ==============================================================================
 
 U, V = meshgrid(linspace(*surface.domain_u), linspace(*surface.domain_v), "ij")
-frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
+frames: list[Geometry | Mesh] = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 
 # ==============================================================================
 # Visualisation
@@ -30,6 +32,6 @@ frames = [surface.frame_at(u, v) for u, v in zip(flatten(U), flatten(V))]
 viewer = Viewer()
 
 viewer.scene.add(surface, show_lines=False)
-viewer.scene.add(Collection(frames), size=0.1, pointsize=0.25)  # type: ignore
+viewer.scene.add(Collection(frames), size=0.1, pointsize=0.25)
 
 viewer.show()

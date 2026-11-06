@@ -101,7 +101,8 @@ class STEPWriter:
 
         for geometry in document.geometries:
             shape = shape_from_geometry(geometry, "STEP")
-            status = writer.Transfer(shape, STEPControl.STEPControl_StepModelType.STEPControl_AsIs)  # type: ignore[arg-type]
+            mode = STEPControl.STEPControl_StepModelType(STEPControl.STEPControl_AsIs)
+            status = writer.Transfer(shape, mode)
             if status != IFSelect.IFSelect_RetDone:
                 raise ValueError("A geometry could not be transferred to the STEP document.")
 

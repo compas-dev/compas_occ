@@ -15,13 +15,17 @@ from zipfile import ZipFile
 MARKER = "compas_occ/py.typed"
 CONSUMER = """from typing import assert_type
 
+from compas.geometry import Brep
+from compas.geometry import Tessellation
 from compas_occ.brep import OCCBrep
 from compas_occ.geometry import OCCNurbsCurve
 from compas_occ.geometry import OCCNurbsSurface
 
 
-def consume(brep: OCCBrep, curve: OCCNurbsCurve, surface: OCCNurbsSurface) -> None:
-    assert_type(brep.area, float)
+def consume(brep: Brep, occ_brep: OCCBrep, curve: OCCNurbsCurve, surface: OCCNurbsSurface) -> None:
+    assert_type(brep.to_tessellation(linear_deflection=0.01, angular_deflection=12.0), Tessellation)
+    assert_type(occ_brep.to_tessellation(linear_deflection=0.01, angular_deflection=12.0), Tessellation)
+    assert_type(occ_brep.area, float)
     assert_type(curve.degree, int)
     assert_type(surface.degree_u, int)
 """

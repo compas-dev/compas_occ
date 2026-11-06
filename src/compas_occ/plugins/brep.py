@@ -20,12 +20,10 @@ if TYPE_CHECKING:
     from compas.geometry import BrepVertex
     from compas.geometry import Curve
     from compas.geometry import Cylinder
-    from compas.geometry import Deflection
     from compas.geometry import Frame
     from compas.geometry import Plane
     from compas.geometry import Point
     from compas.geometry import Polygon
-    from compas.geometry import PolygonalSurface
     from compas.geometry import Polyline
     from compas.geometry import Sphere
     from compas.geometry import Tessellation
@@ -319,13 +317,16 @@ def brep_solids(brep: "Brep") -> list["Brep"]:
 
 
 @plugin(category="brep-operations", requires=["OCC"])
-def brep_tessellate(brep: "Brep", strategy: "Deflection") -> "Tessellation":
-    return _occ(brep).tessellate(strategy)
-
-
-@plugin(category="brep-operations", requires=["OCC"])
-def brep_polygonize(brep: "Brep", strategy: "Deflection") -> "PolygonalSurface":
-    return _occ(brep).polygonize(strategy)
+def brep_to_tessellation(
+    brep: "Brep",
+    *,
+    linear_deflection: float,
+    angular_deflection: float,
+) -> "Tessellation":
+    return _occ(brep).to_tessellation(
+        linear_deflection=linear_deflection,
+        angular_deflection=angular_deflection,
+    )
 
 
 @plugin(category="brep-operations", requires=["OCC"])

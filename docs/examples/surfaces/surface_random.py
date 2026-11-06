@@ -3,13 +3,17 @@ import random
 from compas_viewer import Viewer
 
 from compas.colors import Color
-from compas.geometry import NurbsSurface
+from compas.geometry import Point
 from compas.geometry import Polyline
+from compas.itertools import linspace
+from compas.itertools import meshgrid
+from compas_occ.geometry import OCCNurbsSurface
 
 U = 10
 V = 20
 
-surface = NurbsSurface.from_meshgrid(nu=U, nv=V)
+UU, VV = meshgrid(linspace(0.0, float(U), U + 1), linspace(0.0, float(V), V + 1))
+surface = OCCNurbsSurface.from_points([[Point(u, v, 0.0) for u, v in zip(row_u, row_v)] for row_u, row_v in zip(UU, VV)])
 
 # ==============================================================================
 # Update
@@ -39,11 +43,11 @@ viewer.scene.add(points, pointsize=10)
 # isocurves
 
 u_curves = []
-for u in surface.space_u(53):  # type: ignore
+for u in surface.space_u(53):
     u_curves.append(surface.isocurve_u(u).to_polyline())
 
 v_curves = []
-for v in surface.space_v(53):  # type: ignore
+for v in surface.space_v(53):
     v_curves.append(surface.isocurve_v(v).to_polyline())
 
 viewer.scene.add(u_curves, linecolor=Color(0.8, 0.8, 0.8), linewidth=3)

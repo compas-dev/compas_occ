@@ -92,5 +92,6 @@ class OCCRevolutionSurface(OCCSurface):
 
         """
         axis = axis_to_occ((self.point, self.vector))
-        surface = Geom_SurfaceOfRevolution(self.curve.occ_curve, axis)  # type: ignore
+        curve = cast(OCCCurve, self.curve)
+        surface = Geom_SurfaceOfRevolution(curve.occ_curve, axis)
         self.native_surface = surface

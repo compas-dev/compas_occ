@@ -4,7 +4,6 @@ import compas
 from compas.geometry import Frame
 from compas.geometry import NurbsSurface
 from compas.geometry import Tessellation
-from compas.geometry import UVGrid
 from compas.geometry import Translation
 from compas.tolerance import TOL
 from compas_occ.geometry import OCCNurbsSurface
@@ -15,7 +14,7 @@ FILEPATH = HERE / "surface_from_rhino.json"
 
 
 def test_surface_from_rhino():
-    surface: NurbsSurface = compas.json_load(FILEPATH)  # type: ignore
+    surface: NurbsSurface = compas.json_load(FILEPATH)
 
     assert type(surface) is NurbsSurface
 
@@ -25,7 +24,7 @@ def test_surface_from_rhino():
             assert TOL.is_close(point[0], v * 18 / 3)
             assert TOL.is_close(point[1], u * 10 / 3)
 
-    after: NurbsSurface = NurbsSurface.from_jsonstring(surface.to_jsonstring())  # type: ignore
+    after: NurbsSurface = NurbsSurface.from_jsonstring(surface.to_jsonstring())
 
     assert type(after) is NurbsSurface
     assert surface.control_points == after.control_points
@@ -89,7 +88,7 @@ def test_occ_surface_uses_compas_tessellation_infrastructure():
         degree_v=1,
     )
 
-    tessellation = surface.tessellate(UVGrid(2, 3))
+    tessellation = surface.to_tessellation(nu=2, nv=3)
 
     assert isinstance(tessellation, Tessellation)
     assert tessellation.number_of_vertices == 12

@@ -7,7 +7,6 @@ from compas.geometry import Box
 from compas.geometry import Brep
 from compas.geometry import Plane
 from compas.geometry import Rotation
-from compas.geometry import is_point_infrontof_plane
 
 box = Box(1).to_brep()
 
@@ -29,8 +28,8 @@ viewer.renderer.camera.position = [2, -4, 1]
 
 viewer.scene.add(splitter, linewidth=2, opacity=0.3)
 
-for brep in result:  # type: ignore
-    if is_point_infrontof_plane(brep.centroid, plane):
+for brep in result:
+    if plane.normal.dot(brep.centroid - plane.point) > 0:
         viewer.scene.add(
             brep,
             surfacecolor=Color.red().lightened(50),

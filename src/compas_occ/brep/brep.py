@@ -1,3 +1,4 @@
+from math import isfinite
 from math import radians
 from os import PathLike
 from typing import Optional
@@ -33,8 +34,8 @@ import compas.geometry
 from compas.data import Data
 from compas.datastructures import Mesh
 from compas.geometry import Box
+from compas.geometry import BrepVertex
 from compas.geometry import Curve
-from compas.geometry import Deflection
 from compas.geometry import Frame
 from compas.geometry import Plane
 from compas.geometry import Point
@@ -59,6 +60,12 @@ from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
 from compas_occ.occ import compute_shape_centreofmass
+from compas_occ.occ import occ_shape_find_edges
+from compas_occ.occ import occ_shape_find_faces
+from compas_occ.occ import occ_shape_find_loops
+from compas_occ.occ import occ_shape_find_shells
+from compas_occ.occ import occ_shape_find_solids
+from compas_occ.occ import occ_shape_find_vertices
 from compas_occ.occ import split_shapes
 
 from .brepedge import OCCBrepEdge
@@ -67,8 +74,43 @@ from .breploop import OCCBrepLoop
 from .brepvertex import OCCBrepVertex
 from .errors import BrepBooleanError
 from .errors import BrepFilletError
+from .errors import BrepTessellationError
 
 FilePath = Union[str, PathLike[str]]
+
+
+def _fallback_edge_polyline(edge: OCCBrepEdge, segments: int = 128) -> list[Point]:
+    """Sample an edge over its finite topological parameter domain."""
+    try:
+        supported = edge.is_line or edge.is_circle or edge.is_ellipse or edge.is_hyperbola or edge.is_parabola or edge.is_bezier or edge.is_bspline
+        edge_type = edge.type
+    except Exception as error:
+        raise BrepTessellationError("Open CASCADE could not identify an edge for boundary sampling.") from error
+
+    if not supported:
+        raise BrepTessellationError(f"Open CASCADE boundary sampling does not support edge curve type {edge_type}.")
+
+    try:
+        start, end = edge.domain
+        if not isfinite(start) or not isfinite(end):
+            raise ValueError("The edge parameter domain is not finite.")
+        count = 1 if edge.is_line else segments
+        points = [point_to_compas(edge.occ_adaptor.Value(start + (end - start) * index / count)) for index in range(count + 1)]
+        first = edge.first_vertex.point
+        last = edge.last_vertex.point
+    except Exception as error:
+        raise BrepTessellationError(f"Open CASCADE could not sample boundary edge curve type {edge_type}.") from error
+
+    distance_to_first = sum((a - b) ** 2 for a, b in zip(points[0], first))
+    reverse_distance_to_first = sum((a - b) ** 2 for a, b in zip(points[-1], first))
+    if TOL.is_close(distance_to_first, reverse_distance_to_first):
+        if edge.orientation == TopAbs.TopAbs_REVERSED:
+            points.reverse()
+    elif reverse_distance_to_first < distance_to_first:
+        points.reverse()
+    points[0] = first
+    points[-1] = last
+    return points
 
 
 class OCCBrep(Data):
@@ -321,75 +363,37 @@ class OCCBrep(Data):
         # that means, the vertices, the vertices of the edges, the vertices of the faces, ...
         # many of those vertices are duplicates
         if self._vertices is None:
-            vertices = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_VERTEX)  # type: ignore
-            while explorer.More():
-                vertex = explorer.Current()
-                vertices.append(OCCBrepVertex(vertex))  # type: ignore
-                explorer.Next()
-            self._vertices = vertices
+            self._vertices = [OCCBrepVertex(vertex) for vertex in occ_shape_find_vertices(self.occ_shape)]
         return self._vertices
 
     @property
     def edges(self) -> list[OCCBrepEdge]:
         if self._edges is None:
-            edges = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_EDGE)  # type: ignore
-            while explorer.More():
-                edge = explorer.Current()
-                edges.append(OCCBrepEdge(edge))  # type: ignore
-                explorer.Next()
-            self._edges = edges
+            self._edges = [OCCBrepEdge(edge) for edge in occ_shape_find_edges(self.occ_shape)]
         return self._edges
 
     @property
     def loops(self) -> list[OCCBrepLoop]:
         if self._loops is None:
-            loops = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_WIRE)  # type: ignore
-            while explorer.More():
-                wire = explorer.Current()
-                loops.append(OCCBrepLoop(wire))  # type: ignore
-                explorer.Next()
-            self._loops = loops
+            self._loops = [OCCBrepLoop(wire) for wire in occ_shape_find_loops(self.occ_shape)]
         return self._loops
 
     @property
     def faces(self) -> list[OCCBrepFace]:
         if self._faces is None:
-            faces = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_FACE)  # type: ignore
-            while explorer.More():
-                face = explorer.Current()
-                faces.append(OCCBrepFace(face))  # type: ignore
-                explorer.Next()
-            self._faces = faces
+            self._faces = [OCCBrepFace(face) for face in occ_shape_find_faces(self.occ_shape)]
         return self._faces
 
     @property
     def shells(self) -> list["OCCBrep"]:
         if self._shells is None:
-            shells = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_SHELL)  # type: ignore
-            while explorer.More():
-                shell = explorer.Current()
-                brep: OCCBrep = OCCBrep.from_native(shell)
-                shells.append(brep)
-                explorer.Next()
-            self._shells = shells
+            self._shells = [OCCBrep.from_native(shell) for shell in occ_shape_find_shells(self.occ_shape)]
         return self._shells
 
     @property
     def solids(self) -> list["OCCBrep"]:
         if self._solids is None:
-            solids = []
-            explorer = TopExp.TopExp_Explorer(self.occ_shape, TopAbs.TopAbs_SOLID)  # type: ignore
-            while explorer.More():
-                solid = explorer.Current()
-                brep: OCCBrep = OCCBrep.from_native(solid)
-                solids.append(brep)
-                explorer.Next()
-            self._solids = solids
+            self._solids = [OCCBrep.from_native(solid) for solid in occ_shape_find_solids(self.occ_shape)]
         return self._solids
 
     # ==============================================================================
@@ -1150,7 +1154,7 @@ class OCCBrep(Data):
 
         """
         face = OCCBrepFace.from_surface(
-            surface,  # type: ignore
+            surface,
             domain_u=domain_u,
             domain_v=domain_v,
             precision=precision,
@@ -1380,40 +1384,77 @@ class OCCBrep(Data):
     # Converters
     # ==============================================================================
 
-    def tessellate(self, strategy: Deflection) -> Tessellation:
+    def to_tessellation(
+        self,
+        *,
+        linear_deflection: float,
+        angular_deflection: float,
+    ) -> Tessellation:
         """Create a triangular tessellation of the trimmed BRep boundary.
 
         Parameters
         ----------
-        strategy
-            The linear and angular deflection targets. Angular deflection is
-            expressed in public degrees.
+        linear_deflection
+            The positive finite linear deflection in model units.
+        angular_deflection
+            The positive finite angular deflection in degrees, no greater
+            than 180.
 
         Returns
         -------
         Tessellation
             The indexed triangles and discretized BRep edges.
 
-        """
-        if not isinstance(strategy, Deflection):
-            raise TypeError("OCC BRep tessellation requires a Deflection strategy.")
+        Notes
+        -----
+        The core `Brep.to_tessellation` facade resolves defaults and validates
+        both values before plugin dispatch. This native adapter converts the
+        angular value to radians exactly once at the Open CASCADE boundary.
+        Boundary polylines use the face triangulation where available; edges
+        without that native data are sampled over their topological parameter
+        domains.
 
-        linear_deflection = strategy.linear
-        angular_deflection = radians(strategy.angular)
+        Raises
+        ------
+        BrepTessellationError
+            If Open CASCADE raises while meshing or retrieving a face
+            triangulation, does not complete meshing, omits a face
+            triangulation, or cannot sample a boundary edge fallback. Native
+            exceptions are available as the exception cause.
+
+        """
+        angular_deflection_radians = radians(angular_deflection)
 
         vertices = []
         triangles = []
         polylines = []
         seen = []
 
-        BRepMesh.BRepMesh_IncrementalMesh(self.occ_shape, linear_deflection, False, angular_deflection, False)
+        try:
+            copy_builder = BRepBuilderAPI.BRepBuilderAPI_Copy(self.occ_shape, True, False)
+            meshing_brep = type(self).from_native(copy_builder.Shape())
+            mesher = BRepMesh.BRepMesh_IncrementalMesh(meshing_brep.occ_shape, linear_deflection, False, angular_deflection_radians, False)
+        except Exception as error:
+            raise BrepTessellationError("Open CASCADE could not start BRep meshing.") from error
+
+        try:
+            meshing_is_done = mesher.IsDone()
+            meshing_status = mesher.GetStatusFlags()
+        except Exception as error:
+            raise BrepTessellationError("Open CASCADE could not report BRep meshing status.") from error
+
+        if not meshing_is_done:
+            raise BrepTessellationError(f"Open CASCADE BRep meshing failed with status {meshing_status}.")
         bt = BRep.BRep_Tool()
 
-        for face in self.faces:
+        for face_index, face in enumerate(meshing_brep.faces):
             location = TopLoc.TopLoc_Location()
-            triangulation = bt.Triangulation(face.occ_face, location)
+            try:
+                triangulation = bt.Triangulation(face.occ_face, location)
+            except Exception as error:
+                raise BrepTessellationError(f"Open CASCADE could not retrieve triangulation for BRep face {face_index}.") from error
             if triangulation is None:
-                continue
+                raise BrepTessellationError(f"Open CASCADE produced no triangulation for BRep face {face_index}; meshing status {meshing_status}.")
             nodes = []
             trsf = location.Transformation()
             for i in range(1, triangulation.NbNodes() + 1):
@@ -1445,31 +1486,18 @@ class OCCBrep(Data):
                         points.append(face_vertices[node - 1])
                     polylines.append(points)
 
-        # Edges without polygon-on-triangulation data use the curve's default
-        # sampling rather than the BRep deflection strategy.
+        # Edges without polygon-on-triangulation data are sampled over the
+        # actual topological parameter domain.
         lines = []
-        for edge in self.edges:
+        for edge in meshing_brep.edges:
             if any(edge.is_same(e) for e in seen):
                 continue
-            points = None
-            if edge.is_line:
-                points = [edge.vertices[0].point, edge.vertices[-1].point]
-            elif edge.is_circle:
-                points = edge.curve.to_polyline().points
-            elif edge.is_ellipse:
-                points = edge.curve.to_polyline().points
-            elif edge.is_bspline:
-                points = edge.curve.to_polyline().points
-            if points is not None:
-                seen.append(edge)
-                lines.append(points)
+            occ_edge = cast(OCCBrepEdge, edge)
+            lines.append(_fallback_edge_polyline(occ_edge))
+            seen.append(occ_edge)
 
         polylines += lines
         return Tessellation(vertices, triangles, polylines=polylines)
-
-    def polygonize(self, strategy: Deflection) -> compas.geometry.PolygonalSurface:
-        """Create a polygonal representation of the trimmed BRep boundary."""
-        return self.tessellate(strategy).to_polygonal_surface()
 
     def to_polygons(self) -> list[Polygon]:
         """
@@ -1492,7 +1520,7 @@ class OCCBrep(Data):
     # Relationships
     # ==============================================================================
 
-    def vertex_neighbors(self, vertex: OCCBrepVertex) -> list[OCCBrepVertex]:
+    def vertex_neighbors(self, vertex: BrepVertex) -> list[OCCBrepVertex]:
         """
         Identify the neighbouring vertices of a given vertex.
 
@@ -1508,21 +1536,23 @@ class OCCBrep(Data):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)  # type: ignore
-        results = map.FindFromKey(vertex.occ_vertex)
-        iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
+        TopExp.topexp.MapShapesAndUniqueAncestors(
+            self.occ_shape,
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_VERTEX),
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_EDGE),
+            map,
+        )
+        results = map.FindFromKey(vertex.native_vertex)
         vertices = []
-        while iterator.More():
-            edge = TopoDS.topods.Edge(iterator.Value())
-            edge = OCCBrepEdge(edge)
-            iterator.Next()
-            if not edge.first_vertex.occ_vertex.IsSame(vertex.occ_vertex):
+        for shape in results:
+            edge = OCCBrepEdge(TopoDS.topods.Edge(shape))
+            if not edge.first_vertex.occ_vertex.IsSame(vertex.native_vertex):
                 vertices.append(edge.first_vertex)
             else:
                 vertices.append(edge.last_vertex)
         return vertices
 
-    def vertex_edges(self, vertex: OCCBrepVertex) -> list[OCCBrepEdge]:
+    def vertex_edges(self, vertex: BrepVertex) -> list[OCCBrepEdge]:
         """
         Identify the edges connected to a given vertex.
 
@@ -1538,14 +1568,16 @@ class OCCBrep(Data):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_EDGE, map)  # type: ignore
-        results = map.FindFromKey(vertex.occ_vertex)
-        iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
+        TopExp.topexp.MapShapesAndUniqueAncestors(
+            self.occ_shape,
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_VERTEX),
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_EDGE),
+            map,
+        )
+        results = map.FindFromKey(vertex.native_vertex)
         edges = []
-        while iterator.More():
-            edge = iterator.Value()
-            edges.append(OCCBrepEdge(edge))
-            iterator.Next()
+        for shape in results:
+            edges.append(OCCBrepEdge(TopoDS.topods.Edge(shape)))
         return edges
 
     def vertex_faces(self, vertex: OCCBrepVertex) -> list[OCCBrepFace]:
@@ -1564,14 +1596,16 @@ class OCCBrep(Data):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_VERTEX, TopAbs.TopAbs_FACE, map)  # type: ignore
+        TopExp.topexp.MapShapesAndUniqueAncestors(
+            self.occ_shape,
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_VERTEX),
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_FACE),
+            map,
+        )
         results = map.FindFromKey(vertex.occ_vertex)
-        iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
-        while iterator.More():
-            face = iterator.Value()
-            faces.append(OCCBrepFace(face))
-            iterator.Next()
+        for shape in results:
+            faces.append(OCCBrepFace(TopoDS.topods.Face(shape)))
         return faces
 
     def edge_faces(self, edge: OCCBrepEdge) -> list[OCCBrepFace]:
@@ -1590,14 +1624,16 @@ class OCCBrep(Data):
 
         """
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_FACE, map)  # type: ignore
+        TopExp.topexp.MapShapesAndUniqueAncestors(
+            self.occ_shape,
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_EDGE),
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_FACE),
+            map,
+        )
         results = map.FindFromKey(edge.occ_edge)
-        iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         faces = []
-        while iterator.More():
-            face = iterator.Value()
-            faces.append(OCCBrepFace(face))
-            iterator.Next()
+        for shape in results:
+            faces.append(OCCBrepFace(TopoDS.topods.Face(shape)))
         return faces
 
     def edge_loops(self, edge: OCCBrepEdge) -> list[OCCBrepLoop]:
@@ -1616,14 +1652,16 @@ class OCCBrep(Data):
         """
 
         map = TopTools.TopTools_IndexedDataMapOfShapeListOfShape()
-        TopExp.topexp.MapShapesAndUniqueAncestors(self.occ_shape, TopAbs.TopAbs_EDGE, TopAbs.TopAbs_WIRE, map)  # type: ignore
+        TopExp.topexp.MapShapesAndUniqueAncestors(
+            self.occ_shape,
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_EDGE),
+            TopAbs.TopAbs_ShapeEnum(TopAbs.TopAbs_WIRE),
+            map,
+        )
         results = map.FindFromKey(edge.occ_edge)
-        iterator = TopTools.TopTools_ListIteratorOfListOfShape(results)  # type: ignore
         loops = []
-        while iterator.More():
-            wire = iterator.Value()
-            loops.append(OCCBrepLoop(wire))
-            iterator.Next()
+        for shape in results:
+            loops.append(OCCBrepLoop(TopoDS.topods.Wire(shape)))
         return loops
 
     # ==============================================================================
@@ -1784,7 +1822,7 @@ class OCCBrep(Data):
 
         """
         if self.type == TopAbs.TopAbs_SHELL:
-            check = BRepCheck.BRepCheck_Shell(self.occ_shape)  # type: ignore
+            check = BRepCheck.BRepCheck_Shell(TopoDS.topods.Shell(self.occ_shape))
             print(BRepCheck.BRepCheck_Status(check.Closed()))
             print(BRepCheck.BRepCheck_Status(check.Orientation()))
 
@@ -1914,7 +1952,7 @@ class OCCBrep(Data):
 
         """
         if self.type == TopAbs.TopAbs_SHELL:
-            fixer = ShapeFix.ShapeFix_Shell(self.occ_shape)  # type: ignore
+            fixer = ShapeFix.ShapeFix_Shell(TopoDS.topods.Shell(self.occ_shape))
             fixer.Perform()
             self.occ_shape = fixer.Shell()
 
@@ -1973,9 +2011,8 @@ class OCCBrep(Data):
 
         """
         if self.type == TopAbs.TopAbs_SHELL:
-            # self.occ_shape = BRepBuilderAPI.BRepBuilderAPI_MakeSolid(self.occ_shape).Shape()  # type: ignore
             fixer = ShapeFix.ShapeFix_Solid()
-            self.occ_shape = fixer.SolidFromShell(self.occ_shape)  # type: ignore
+            self.occ_shape = fixer.SolidFromShell(TopoDS.topods.Shell(self.occ_shape))
 
     def overlap(
         self,
@@ -2025,14 +2062,14 @@ class OCCBrep(Data):
         faces1 = []
         for key in keys1:
             face = proximity.GetSubShape1(key)
-            faces1.append(OCCBrepFace(face))  # type: ignore
+            faces1.append(OCCBrepFace(TopoDS.topods.Face(face)))
 
         overlaps2 = proximity.OverlapSubShapes2()
         keys2 = overlaps2.Keys()
         faces2 = []
         for key in keys2:
             face = proximity.GetSubShape2(key)
-            faces2.append(OCCBrepFace(face))  # type: ignore
+            faces2.append(OCCBrepFace(TopoDS.topods.Face(face)))
 
         return faces1, faces2
 
@@ -2198,7 +2235,7 @@ class OCCBrep(Data):
 
         arguments = [self.occ_shape]
         tools = [OCCBrepFace.from_plane(plane).occ_shape]
-        results = split_shapes(arguments, tools)  # type: ignore
+        results = split_shapes(arguments, tools)
 
         shapes = []
         for test in results:

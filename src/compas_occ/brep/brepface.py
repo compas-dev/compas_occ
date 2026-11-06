@@ -13,7 +13,6 @@ from OCC.Core import GeomConvert
 from OCC.Core import GProp
 from OCC.Core import ShapeFix
 from OCC.Core import TopAbs
-from OCC.Core import TopExp
 from OCC.Core import TopoDS
 from OCC.Core import gp
 
@@ -44,6 +43,9 @@ from compas_occ.conversions import sphere_to_occ
 from compas_occ.conversions import torus_to_occ
 from compas_occ.geometry import OCCNurbsSurface
 from compas_occ.geometry import OCCSurface
+from compas_occ.occ import occ_shape_find_edges
+from compas_occ.occ import occ_shape_find_loops
+from compas_occ.occ import occ_shape_find_vertices
 
 from .brepedge import CurveType
 from .brepedge import OCCBrepEdge
@@ -207,10 +209,18 @@ class OCCBrepFace(BrepFace):
         return self.occ_face.IsEqual(other.occ_face)
 
     def as_brep(self) -> Brep:
-        """Return an OCC BRep containing only this face."""
+        """Return a backend-neutral BRep containing only this face.
+
+        Returns
+        -------
+        Brep
+            A stable COMPAS wrapper around the native single-face shape.
+
+        """
         from .brep import OCCBrep
 
-        return cast(Brep, OCCBrep.from_brepfaces([self], solid=False))
+        brep = OCCBrep.from_brepfaces([self], solid=False)
+        return Brep(native_brep=brep.native_brep)
 
     # ==============================================================================
     # OCC Properties
@@ -314,35 +324,20 @@ class OCCBrepFace(BrepFace):
 
     @property
     def vertices(self) -> list[BrepVertex]:
-        vertices: list[BrepVertex] = []
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_VERTEX)  # type: ignore
-        while explorer.More():
-            vertex = explorer.Current()
-            vertices.append(OCCBrepVertex(vertex))  # type: ignore
-            explorer.Next()
-        return vertices
+        return [OCCBrepVertex(vertex) for vertex in occ_shape_find_vertices(self.occ_face)]
 
     @property
     def edges(self) -> list[BrepEdge]:
-        edges: list[BrepEdge] = []
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_EDGE)  # type: ignore
-        while explorer.More():
-            edge = explorer.Current()
-            edges.append(OCCBrepEdge(edge))  # type: ignore
-            explorer.Next()
-        return edges
+        return [OCCBrepEdge(edge) for edge in occ_shape_find_edges(self.occ_face)]
 
     @property
     def loops(self) -> list[BrepLoop]:
         outerloop = self.outerloop
         loops: list[BrepLoop] = [outerloop]
-        explorer = TopExp.TopExp_Explorer(self.occ_face, TopAbs.TopAbs_WIRE)  # type: ignore
-        while explorer.More():
-            wire = explorer.Current()
-            loop = OCCBrepLoop(wire)  # type: ignore
+        for wire in occ_shape_find_loops(self.occ_face):
+            loop = OCCBrepLoop(wire)
             if not loop.is_same(outerloop):
                 loops.append(loop)
-            explorer.Next()
         return loops
 
     @property
@@ -814,13 +809,13 @@ class OCCBrepFace(BrepFace):
             convert = GeomConvert.GeomConvert_ApproxSurface(
                 self.occ_adaptor.Surface().Surface(),
                 precision,
-                GeomAbs.GeomAbs_Shape.GeomAbs_C1,  # type: ignore
-                GeomAbs.GeomAbs_Shape.GeomAbs_C1,  # type: ignore
+                GeomAbs.GeomAbs_Shape(GeomAbs.GeomAbs_C1),
+                GeomAbs.GeomAbs_Shape(GeomAbs.GeomAbs_C1),
                 maxdegree_u,
                 maxdegree_v,
                 maxsegments_u,
                 maxsegments_v,
-            )  # type: ignore
+            )
             occ_surface = convert.Surface()
         return cast(NurbsSurface, OCCNurbsSurface(occ_surface))
 
@@ -922,8 +917,8 @@ class OCCBrepFace(BrepFace):
         for should_reverse in orientations:
             builder = BRepBuilderAPI.BRepBuilderAPI_MakeFace(face)
             native_loop = cast(TopoDS.TopoDS_Wire, loop.native_loop)
-            wire = native_loop.Reversed() if should_reverse else native_loop
-            builder.Add(wire)  # type: ignore
+            wire = TopoDS.topods.Wire(native_loop.Reversed()) if should_reverse else native_loop
+            builder.Add(wire)
             if builder.IsDone():
                 candidate = builder.Face()
                 if BRepAlgo.brepalgo.IsValid(candidate):

@@ -71,7 +71,9 @@ def test_consumer_check_requires_core_wheel(tmp_path: Path) -> None:
 def test_consumer_checks_public_result_types() -> None:
     source = verify_typed_wheel.CONSUMER
 
-    assert "assert_type(brep.area, float)" in source
+    assert "assert_type(brep.to_tessellation" in source
+    assert "assert_type(occ_brep.to_tessellation" in source
+    assert "assert_type(occ_brep.area, float)" in source
     assert "assert_type(curve.degree, int)" in source
     assert "assert_type(surface.degree_u, int)" in source
 

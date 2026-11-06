@@ -4,6 +4,7 @@ from compas.geometry import Circle
 from compas.geometry import Frame
 from compas.tolerance import TOL
 from compas_occ.brep import OCCBrep
+from compas_occ.geometry import OCCCurve
 from compas_occ.geometry import OCCNurbsCurve
 
 frame = Frame.worldYZ()
@@ -21,14 +22,14 @@ frame = Frame.worldYZ()
 frame.point = [9, 0, 0]
 c4 = Circle(3.0, frame=frame)
 
-curves = [
+curves: list[OCCCurve] = [
     OCCNurbsCurve.from_circle(c1),
     OCCNurbsCurve.from_circle(c2),
     OCCNurbsCurve.from_circle(c3),
     OCCNurbsCurve.from_circle(c4),
 ]
 
-brep = OCCBrep.from_loft(curves)  # type: ignore
+brep = OCCBrep.from_loft(curves)
 
 TOL.lineardeflection = 1
 

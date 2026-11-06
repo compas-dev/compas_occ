@@ -289,6 +289,7 @@ class OCCBrepLoop(BrepLoop):
         None
 
         """
-        fixer = ShapeFix.ShapeFix_Wire(self.occ_wire)  # type: ignore
+        fixer = ShapeFix.ShapeFix_Wire()
+        fixer.Load(self.occ_wire)
         fixer.Perform()
         self.occ_wire = fixer.Wire()

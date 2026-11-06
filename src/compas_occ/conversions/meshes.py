@@ -1,4 +1,4 @@
-from typing import Annotated
+from collections.abc import Sequence
 from typing import Union
 
 from OCC.Core.BRep import BRep_Builder
@@ -6,6 +6,7 @@ from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeFace
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon
 from OCC.Core.BRepFill import BRepFill_Filling
 from OCC.Core.GeomAbs import GeomAbs_C0
+from OCC.Core.GeomAbs import GeomAbs_Shape
 from OCC.Core.GeomAPI import GeomAPI_PointsToBSpline
 from OCC.Core.GeomFill import geomfill
 from OCC.Core.gp import gp_Pnt
@@ -13,16 +14,16 @@ from OCC.Core.TopoDS import TopoDS_Face
 from OCC.Core.TopoDS import TopoDS_Shell
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
-import compas.geometry
 from compas.datastructures import Mesh
 from compas.geometry import Point
 from compas.geometry import Polygon
+from compas.typing import PointLike
 
 from .arrays import array1_from_points1
 
-Triangle = Union[Polygon, Annotated[list[Union[Annotated[list[float], 3], compas.geometry.Point]], 3]]
-Quad = Union[Polygon, Annotated[list[Union[Annotated[list[float], 3], compas.geometry.Point]], 4]]
-NGon = Union[Polygon, list[Union[Annotated[list[float], 3], compas.geometry.Point]]]
+Triangle = Union[Polygon, Sequence[PointLike]]
+Quad = Union[Polygon, Sequence[PointLike]]
+NGon = Union[Polygon, Sequence[PointLike]]
 
 
 def triangle_to_face(triangle: Triangle) -> TopoDS_Face:
@@ -104,7 +105,7 @@ def ngon_to_face(ngon: NGon) -> TopoDS_Face:
     edges = TopologyExplorer(poly.Wire()).edges()
     nsided = BRepFill_Filling()
     for edge in edges:
-        nsided.Add(edge, GeomAbs_C0)  # type: ignore
+        nsided.Add(edge, GeomAbs_Shape(GeomAbs_C0))
     nsided.Build()
     return nsided.Face()
 
@@ -132,7 +133,7 @@ def compas_trimesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, triangle_to_face(points))  # type: ignore
+        builder.Add(shell, triangle_to_face(points))
 
     return shell
 
@@ -160,7 +161,7 @@ def compas_quadmesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
 
     for face in mesh.faces():
         points = mesh.face_coordinates(face)
-        builder.Add(shell, quad_to_face(points))  # type: ignore
+        builder.Add(shell, quad_to_face(points))
 
     return shell
 
@@ -182,10 +183,10 @@ def compas_mesh_to_occ_shell(mesh: Mesh) -> TopoDS_Shell:
         points = mesh.face_coordinates(face)
 
         if len(points) == 3:
-            builder.Add(shell, triangle_to_face(points))  # type: ignore
+            builder.Add(shell, triangle_to_face(points))
         elif len(points) == 4:
-            builder.Add(shell, quad_to_face(points))  # type: ignore
+            builder.Add(shell, quad_to_face(points))
         else:
-            builder.Add(shell, ngon_to_face(points))  # type: ignore
+            builder.Add(shell, ngon_to_face(points))
 
     return shell

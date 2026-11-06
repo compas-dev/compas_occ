@@ -11,7 +11,7 @@ filepath = here / "curve_from_rhino.json"
 
 
 def test_curve_from_rhino():
-    curve: NurbsCurve = compas.json_load(filepath)  # type: ignore
+    curve: NurbsCurve = compas.json_load(filepath)
 
     assert type(curve) is NurbsCurve
 
@@ -22,7 +22,7 @@ def test_curve_from_rhino():
     assert curve.points[4] == [8.0, -3.0, 0.0]
     assert curve.points[-1] == [10.0, 0.0, 0.0]
 
-    after: NurbsCurve = NurbsCurve.from_jsonstring(curve.to_jsonstring())  # type: ignore
+    after: NurbsCurve = NurbsCurve.from_jsonstring(curve.to_jsonstring())
 
     assert type(after) is NurbsCurve
 

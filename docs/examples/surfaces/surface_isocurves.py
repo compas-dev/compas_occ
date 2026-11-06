@@ -20,12 +20,12 @@ surface = NurbsSurface.from_points(points=points)
 viewer = Viewer()
 
 u_curves = []
-for u in surface.space_u(17):  # type: ignore
-    u_curves.append(surface.isocurve_u(u).to_polyline())
+for u in surface.space_u(17):
+    u_curves.append(surface.isocurve_u(u))
 
 v_curves = []
-for v in surface.space_v(17):  # type: ignore
-    v_curves.append(surface.isocurve_v(v).to_polyline())
+for v in surface.space_v(17):
+    v_curves.append(surface.isocurve_v(v))
 
 viewer.scene.add(u_curves, linecolor=Color.red(), linewidth=3)
 viewer.scene.add(v_curves, linecolor=Color.green(), linewidth=3)

@@ -75,5 +75,6 @@ class OCCExtrusionSurface(OCCSurface):
 
         """
         direction = direction_to_occ(self.vector)
-        surface = Geom_SurfaceOfLinearExtrusion(self.curve.occ_curve, direction)  # type: ignore
+        curve = cast(OCCCurve, self.curve)
+        surface = Geom_SurfaceOfLinearExtrusion(curve.occ_curve, direction)
         self.native_surface = surface

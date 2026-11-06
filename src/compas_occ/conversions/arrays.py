@@ -199,12 +199,10 @@ def points2_from_array2(array: TColgp_Array2OfPnt) -> list[list[Point]]:
     Point(x=2.0, y=1.0, z=0.0)
 
     """
-    points = [[None for j in range(array.NbRows())] for i in range(array.NbColumns())]
-    for i in range(array.LowerCol(), array.UpperCol() + 1):
-        for j in range(array.LowerRow(), array.UpperRow() + 1):
-            pnt = array.Value(j, i)
-            points[i - 1][j - 1] = Point(pnt.X(), pnt.Y(), pnt.Z())  # type: ignore
-    return points  # type: ignore
+    return [
+        [Point(pnt.X(), pnt.Y(), pnt.Z()) for pnt in (array.Value(j, i) for j in range(array.LowerRow(), array.UpperRow() + 1))]
+        for i in range(array.LowerCol(), array.UpperCol() + 1)
+    ]
 
 
 def array1_from_integers1(numbers: list[int]) -> TColStd_Array1OfInteger:

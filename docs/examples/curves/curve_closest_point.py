@@ -8,7 +8,7 @@ points = [Point(0, 0, 0), Point(3, 0, 2), Point(6, 0, -3), Point(8, 0, 0)]
 curve = NurbsCurve.from_interpolation(points)
 
 point = Point(2, -1, 0)
-closest, t = curve.closest_point(point, return_parameter=True)  # type: ignore
+closest, t = curve.closest_point(point, return_parameter=True)
 
 # =============================================================================
 # Visualization

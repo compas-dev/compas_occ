@@ -10,6 +10,7 @@ from compas.geometry import BrepFace
 from compas.geometry import BrepLoop
 from compas.geometry import BrepTrim
 from compas.geometry import BrepVertex
+from compas.geometry import Tessellation
 from compas_occ.plugins.brep import brep_area
 from compas_occ.plugins.brep import brep_edges
 from compas_occ.plugins.brep import brep_faces
@@ -20,6 +21,7 @@ from compas_occ.plugins.brep import brep_overlap
 from compas_occ.plugins.brep import brep_shells
 from compas_occ.plugins.brep import brep_solids
 from compas_occ.plugins.brep import brep_to_data
+from compas_occ.plugins.brep import brep_to_tessellation
 from compas_occ.plugins.brep import brep_trims
 from compas_occ.plugins.brep import brep_type
 from compas_occ.plugins.brep import brep_vertices
@@ -33,6 +35,8 @@ assert_type(from_box(Box(1)), Brep)
 assert_type(from_native(cast(Any, object())), Brep)
 assert_type(brep_area(brep), float)
 assert_type(brep_to_data(brep), dict[str, Any])
+assert_type(brep_to_tessellation(brep, linear_deflection=0.01, angular_deflection=12.0), Tessellation)
+assert_type(brep.to_tessellation(linear_deflection=0.01, angular_deflection=12.0), Tessellation)
 assert_type(brep_orientation(brep), Literal[0, 1, 2, 3])
 assert_type(brep_type(brep), Literal[0, 1, 2, 3, 4, 5, 6, 7, 8])
 assert_type(brep_is_closed(brep), bool)

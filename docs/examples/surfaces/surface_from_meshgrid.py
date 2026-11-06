@@ -39,7 +39,7 @@ viewer.scene.add(surface)
 
 # control polygon
 
-points = list(surface.points)
+points = surface.control_points
 viewer.scene.add([Polyline(row) for row in points], linewidth=1, linecolor=Color(0.3, 0.3, 0.3))
 viewer.scene.add([Polyline(col) for col in zip(*points)], linewidth=1, linecolor=Color(0.3, 0.3, 0.3))
 viewer.scene.add(points, pointsize=10)
@@ -47,12 +47,12 @@ viewer.scene.add(points, pointsize=10)
 # isocurves
 
 u_curves = []
-for u in surface.space_u(17):  # type: ignore
-    u_curves.append(surface.isocurve_u(u).to_polyline())
+for u in surface.space_u(17):
+    u_curves.append(surface.isocurve_u(u))
 
 v_curves = []
-for v in surface.space_v(17):  # type: ignore
-    v_curves.append(surface.isocurve_v(v).to_polyline())
+for v in surface.space_v(17):
+    v_curves.append(surface.isocurve_v(v))
 
 viewer.scene.add(u_curves, linecolor=Color(0.8, 0.8, 0.8), linewidth=3)
 viewer.scene.add(v_curves, linecolor=Color(0.8, 0.8, 0.8), linewidth=3)
