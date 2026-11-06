@@ -40,6 +40,7 @@ jobs:
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync invoke test
       - name: Verify typed wheel and installed consumer
+        id: candidate
         if: runner.os == 'Linux'
         shell: bash -el {0}
         run: |
@@ -56,6 +57,24 @@ jobs:
           cd "$RUNNER_TEMP/compas-occ-source"
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -m build --wheel --outdir "$RUNNER_TEMP/compas-occ-dist"
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python .github/scripts/verify_typed_wheel.py --check-consumer --core-wheel "$RUNNER_TEMP"/compas-core-dist/*.whl "$RUNNER_TEMP"/compas-occ-dist/*.whl
+          candidate_wheels=("$RUNNER_TEMP"/compas-occ-dist/*.whl)
+          if [[ ${#candidate_wheels[@]} -ne 1 || ! -f "${candidate_wheels[0]}" ]]; then
+            echo "::error::Expected exactly one COMPAS OCC candidate wheel"
+            exit 1
+          fi
+          if [[ "${candidate_wheels[0]}" != *-py3-none-any.whl ]]; then
+            echo "::error::COMPAS OCC candidate must be a py3-none-any wheel"
+            exit 1
+          fi
+          echo "wheel=${candidate_wheels[0]}" >> "$GITHUB_OUTPUT"
+      - name: Upload verified candidate wheel
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: candidate-linux-py312
+          path: ${{ steps.candidate.outputs.wheel }}
+          if-no-files-found: error
+          retention-days: 7
 
   quality:
     runs-on: ubuntu-latest

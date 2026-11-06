@@ -194,6 +194,7 @@ nav:
           - OCCBrep: api/compas_occ.brep.OCCBrep.md
       - Conversions: api/compas_occ.conversions.md
   - Other:
+      - Candidate Artifacts: release.md
       - License: license.md
       - Acknowledgements: acknowledgements.md
       - changelog.md
