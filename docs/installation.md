@@ -24,11 +24,24 @@ git clone https://github.com/compas-dev/compas_occ.git
 cd compas_occ
 conda env create -f environment.yml
 conda activate occ-dev
-VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev --extra docs
+VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev
 ```
 
 The Conda environment supplies the PythonOCC runtime. Python dependencies are
-resolved by the committed uv lock. The direct commands are canonical:
+resolved by the committed uv lock. This base development environment is
+sufficient for the runtime tests, wheel checks, Ruff, and source tooling.
+
+Documentation tools and the optional viewer used by visualization examples are
+installed only for the checks that need them:
+
+```bash
+VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev --extra docs --extra viz
+```
+
+`compas_viewer` is not an OCC runtime or test dependency. The `viz` extra is
+needed only in the documentation environment because the authoritative
+visualization examples are included in its Pyright gate. The direct commands
+are canonical:
 
 ```bash
 VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pytest
@@ -51,12 +64,6 @@ VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync invoke check
 
 These tasks do not provision PythonOCC. Create or activate the Conda environment
 before running them.
-
-!!! warning "Migration status"
-
-    The Pyright gate is temporarily advisory while the recorded OCC/core
-    override debt is resolved. The repository is not considered modernised
-    until Pyright passes and the workflow gate is blocking.
 
 Formatting and lint fixes are separate, explicit local operations:
 

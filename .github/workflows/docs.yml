@@ -1,0 +1,40 @@
+name: docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main, c3-upgrade]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: compas-dev/compas-actions/ci@5c64e6e2b576a1232d28fed47d9478ca8eb63b2d # v2 candidate
+        with:
+          python-version: "3.12"
+          management-tool: conda
+          conda-environment: occ-docs
+          environment-file: environment.yml
+          invoke-tasks: ""
+      - name: Synchronize locked documentation dependencies
+        shell: bash -el {0}
+        # Viewer is needed only for static checks of the authoritative
+        # visualization examples. It is not an OCC runtime dependency.
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev --extra docs --extra viz
+      - name: Check documentation examples
+        shell: bash -el {0}
+        run: |
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff check docs/examples
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff format --check docs/examples
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pyright docs/examples
+      - name: Strict documentation
+        shell: bash -el {0}
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync mkdocs build --strict

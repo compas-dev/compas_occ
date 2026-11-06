@@ -32,21 +32,13 @@ jobs:
           invoke-tasks: ""
       - name: Synchronize locked Python dependencies
         shell: bash -el {0}
-        run: VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev --extra docs
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev
       - name: Verify PythonOCC
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -c "from OCC.Core.BRep import BRep_Tool"
       - name: Test
         shell: bash -el {0}
         run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync invoke test
-      - name: Lint and format
-        shell: bash -el {0}
-        run: |
-          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff check .
-          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff format --check .
-      - name: Type check
-        shell: bash -el {0}
-        run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pyright
       - name: Verify typed wheel and installed consumer
         if: runner.os == 'Linux'
         shell: bash -el {0}
@@ -65,19 +57,27 @@ jobs:
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -m build --wheel --outdir "$RUNNER_TEMP/compas-occ-dist"
           VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python .github/scripts/verify_typed_wheel.py --check-consumer --core-wheel "$RUNNER_TEMP"/compas-core-dist/*.whl "$RUNNER_TEMP"/compas-occ-dist/*.whl
 
-  docs:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: compas-dev/compas-actions/ci@5c64e6e2b576a1232d28fed47d9478ca8eb63b2d # v2 candidate
         with:
           python-version: "3.12"
           management-tool: conda
-          conda-environment: occ-docs
+          conda-environment: occ-quality
           environment-file: environment.yml
           invoke-tasks: ""
-      - name: Synchronize locked documentation dependencies
+      - name: Synchronize locked quality dependencies
         shell: bash -el {0}
-        run: VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra docs
-      - name: Strict documentation
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv sync --active --inexact --frozen --extra dev
+      - name: Verify PythonOCC
         shell: bash -el {0}
-        run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync mkdocs build --strict
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync python -c "from OCC.Core.BRep import BRep_Tool"
+      - name: Lint and format
+        shell: bash -el {0}
+        run: |
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff check .
+          VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync ruff format --check .
+      - name: Type check source
+        shell: bash -el {0}
+        run: VIRTUAL_ENV="$CONDA_PREFIX" uv run --active --no-sync pyright src/compas_occ

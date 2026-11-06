@@ -15,7 +15,8 @@ authors = [
     { name = "Lotte Aldinger", email = "aldinger@arch.ethz.ch" },
     { name = "Chen Kasirer", email = "kasirer@arch.ethz.ch" },
 ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dynamic = ["version"]
@@ -165,3 +166,4 @@ typeCheckingMode = "standard"
 
 [tool.uv.sources]
 compas = { git = "https://github.com/compas-dev/compas.git", rev = "3c1a2e8e0e5c4c14292ecf4bb38c82e5b977273e" }
+compas-viewer = { git = "https://github.com/compas-dev/compas_viewer.git", rev = "cf5a5195bda840a511319d6b7201978af68c15e3" }
