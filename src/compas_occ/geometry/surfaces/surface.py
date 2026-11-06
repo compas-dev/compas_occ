@@ -1,5 +1,4 @@
 import os
-from collections.abc import Sequence
 from typing import Literal
 from typing import Optional
 from typing import Self
@@ -32,8 +31,8 @@ from compas.geometry import Frame
 from compas.geometry import Line
 from compas.geometry import Point
 from compas.geometry import Surface
-from compas.geometry import Transformation
 from compas.geometry import Vector
+from compas.geometry._typing import TransformationType
 from compas.typing import FilePath
 from compas.typing import PointLike
 from compas_occ.conversions import ax3_to_compas
@@ -239,7 +238,7 @@ class OCCSurface(Surface):
             surface._guid = self.guid
         return cast(Self, surface)
 
-    def transform(self, transformation: Union[Transformation, Sequence[Sequence[float]]]) -> None:
+    def transform(self, transformation: TransformationType) -> None:
         """Transform this surface.
 
         Parameters

@@ -1,7 +1,6 @@
 from os import PathLike
 from typing import Literal
 from typing import Self
-from typing import Sequence
 from typing import Union
 from typing import cast
 from typing import overload
@@ -31,9 +30,9 @@ from compas.geometry import Curve
 from compas.geometry import Frame
 from compas.geometry import Point
 from compas.geometry import Polyline
-from compas.geometry import Transformation
 from compas.geometry import Vector
 from compas.geometry import distance_point_point
+from compas.geometry._typing import TransformationType
 from compas.typing import PointLike
 from compas_occ.conversions import compas_transformation_to_trsf
 from compas_occ.conversions import direction_to_occ
@@ -238,7 +237,7 @@ class OCCCurve(Curve):
             copy._guid = self.guid
         return copy
 
-    def transform(self, transformation: Transformation | Sequence[Sequence[float]]) -> None:
+    def transform(self, transformation: TransformationType) -> None:
         """Transform this curve.
 
         Parameters
